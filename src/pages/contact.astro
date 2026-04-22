@@ -1,0 +1,26 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import LeadForm from "@components/LeadForm.astro";
+import { BRAND } from "~/lib/brand";
+import { telHref, smsHref, formatPhoneDisplay } from "~/lib/phone";
+---
+<BaseLayout seo={{ title: "Book a free inspection", description: "Text, call, or fill out the form. You'll hear back in under 60 seconds between 8am and 9pm CT.", pathname: "/contact" }}>
+  <section class="mx-auto grid max-w-6xl gap-12 px-4 py-12 md:grid-cols-2">
+    <div>
+      <h1 class="text-4xl md:text-5xl">Text us. Call us. Fill out the form.</h1>
+      <p class="mt-4 text-lg">Whichever is fastest for you. You'll hear back in under 60 seconds between 8am and 9pm CT, or first thing in the morning.</p>
+      <div class="mt-8 grid gap-4">
+        <a class="btn btn-primary" href={smsHref(BRAND.phoneE164, "Hi — I'd like to book a free roof inspection.")} data-cta-id="contact-sms">
+          Text {formatPhoneDisplay(BRAND.phoneE164)}
+        </a>
+        <a class="btn btn-ghost" href={telHref(BRAND.phoneE164)} data-cta-id="contact-call">
+          Call {formatPhoneDisplay(BRAND.phoneE164)}
+        </a>
+      </div>
+      <p class="mt-6 text-sm text-[color:var(--color-ink-500)]">{BRAND.hoursSummary}</p>
+    </div>
+    <div>
+      <LeadForm source="contact-page" />
+    </div>
+  </section>
+</BaseLayout>

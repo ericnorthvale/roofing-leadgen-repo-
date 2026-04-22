@@ -1,0 +1,37 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import CTAButton from "@components/CTAButton.astro";
+import LeadForm from "@components/LeadForm.astro";
+import TrustBar from "@components/TrustBar.astro";
+import type { SeoInput } from "~/lib/seo";
+import type { ServiceArea } from "~/lib/service-areas";
+
+interface Props { seo: SeoInput; area: ServiceArea; }
+const { seo, area } = Astro.props;
+---
+<BaseLayout seo={seo}>
+  <section class="mx-auto max-w-6xl px-4 py-10">
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: area.name }]} />
+    <h1 class="mt-6 text-4xl md:text-5xl">Roofing in {area.name}, {area.county} County</h1>
+    <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-800)]">{area.intro}</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <CTAButton href="/contact" label="Book inspection" ctaId={`area-${area.slug}-book`} />
+      <CTAButton href="/storm-response" variant="ghost" label="Storm today?" />
+    </div>
+  </section>
+
+  <TrustBar />
+
+  <section class="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[1fr_400px]">
+    <article class="prose-northvale">
+      <h2>{area.name} neighborhoods we've worked in</h2>
+      <ul>{area.landmarks.map((l) => <li>{l}</li>)}</ul>
+      <p>{area.storyHook}</p>
+      <slot />
+    </article>
+    <aside class="md:sticky md:top-10 md:self-start">
+      <LeadForm source={`area:${area.slug}`} defaultCity={area.name} />
+    </aside>
+  </section>
+</BaseLayout>

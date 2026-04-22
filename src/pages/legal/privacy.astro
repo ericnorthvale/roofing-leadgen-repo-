@@ -1,0 +1,43 @@
+---
+import LegalLayout from "@layouts/LegalLayout.astro";
+import { BRAND } from "~/lib/brand";
+import { LEGAL } from "~/lib/legal";
+---
+<LegalLayout
+  seo={{ title: "Privacy Policy", description: "How Northvale Roofing collects, uses, and protects your information. TDPSA-aligned.", pathname: "/legal/privacy" }}
+  title="Privacy Policy"
+  effectiveDate="2026-04-22"
+>
+  <p>{BRAND.legalName} ("we," "us," "our") operates {BRAND.domain} and associated services. This policy describes what we collect, why, and how Texas residents can exercise their rights under the Texas Data Privacy and Security Act (TDPSA, Tex. Bus. &amp; Com. Code ch. 541).</p>
+  <h2>Information we collect</h2>
+  <ul>
+    <li><strong>Contact info you give us</strong> — name, phone, email, address, and any notes you add on forms or texts.</li>
+    <li><strong>Call + text metadata</strong> — via CallRail, we log call timestamps, duration, source, and may record calls with notice.</li>
+    <li><strong>Website usage</strong> — GA4 + server-side GTM track page views, form interactions, and UTM parameters.</li>
+    <li><strong>Marketing identifiers</strong> — cookies like <code>_ga</code>, <code>_fbp</code>, and our own <code>nv_utm</code> first-party localStorage key.</li>
+  </ul>
+  <h2>How we use it</h2>
+  <ul>
+    <li>To respond to your inspection / estimate request and follow up by phone, text, and email.</li>
+    <li>To attribute marketing spend to leads (Google Ads, Meta, organic, referral).</li>
+    <li>To document jobs we complete and hand a copy to you + your insurance carrier if applicable.</li>
+    <li>To send transactional updates (appointment confirmations, job schedule, closeout).</li>
+  </ul>
+  <h2>Your Texas privacy rights</h2>
+  <ul>
+    <li>The right to confirm whether we process your personal data.</li>
+    <li>The right to access a copy.</li>
+    <li>The right to correct inaccuracies.</li>
+    <li>The right to delete data we collected from you.</li>
+    <li>The right to opt out of sale, targeted advertising, or profiling for decisions with legal effect.</li>
+  </ul>
+  <p>To exercise any of these rights, email {BRAND.email} with "TDPSA Request" in the subject line. We'll confirm within 45 days.</p>
+  <h2>Sharing</h2>
+  <p>We share data with: HighLevel (CRM), CallRail (call tracking), Google (Ads + Analytics), Meta (advertising), Vercel (hosting), and insurance partners you authorize us to coordinate with. We do not sell your data. We do not share with data brokers.</p>
+  <h2>SMS</h2>
+  <p>{LEGAL.smsDisclaimer} See our <a href="/legal/tcpa">TCPA notice</a> for the full consent framework.</p>
+  <h2>Retention</h2>
+  <p>Lead + customer records: 7 years (Texas statute of limitations for contract + TDPSA compliance). Analytics identifiers: up to 26 months (GA4 default). You can request earlier deletion per the rights above.</p>
+  <h2>Changes</h2>
+  <p>We update this policy as we add tools. Material changes are date-stamped above.</p>
+</LegalLayout>

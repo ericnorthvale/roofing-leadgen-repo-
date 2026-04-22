@@ -1,0 +1,40 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import LeadForm from "@components/LeadForm.astro";
+import { BRAND } from "~/lib/brand";
+import { telHref, smsHref, formatPhoneDisplay } from "~/lib/phone";
+---
+<BaseLayout seo={{ title: "Storm response — same-day inspection", description: "Storm today? We're already dialing. Same-day inspection, documented for your insurance claim, zero pressure.", pathname: "/storm-response" }}>
+  <section class="bg-[color:var(--color-navy-900)] text-white">
+    <div class="mx-auto max-w-4xl px-4 py-16">
+      <p class="text-sm font-semibold uppercase tracking-widest text-[color:var(--color-gold-300)]">Storm response</p>
+      <h1 class="mt-3 text-4xl text-white md:text-6xl">We move when the storm moves.</h1>
+      <p class="mt-4 text-lg">Same-day inspection. Forty-photo documentation packet for your insurance claim. No pressure, no door-knocking, no deductible games.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a class="btn btn-primary" href={telHref(BRAND.phoneE164)} data-cta-id="storm-call">Call {formatPhoneDisplay(BRAND.phoneE164)}</a>
+        <a class="btn btn-ghost" style="border-color:rgba(255,255,255,0.3);color:white;" href={smsHref(BRAND.phoneE164, "Storm hit — need inspection.")} data-cta-id="storm-sms">Text us</a>
+      </div>
+    </div>
+  </section>
+  <section class="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[1fr_420px]">
+    <article class="prose-northvale">
+      <h2>What we do in the 48 hours after a storm</h2>
+      <ol>
+        <li><strong>Same-day roof inspection</strong> — photo every slope, ridge, valley, and penetration.</li>
+        <li><strong>Tarp + temporary dry-in</strong> if active leaking — free, no commitment to full repair.</li>
+        <li><strong>Documentation packet</strong> — forty photos, hail/wind impact notes, and a claim-ready scope of loss.</li>
+        <li><strong>Adjuster meet</strong> — we meet your adjuster on-site. You don't have to be there.</li>
+        <li><strong>Written estimate + scope</strong> — matches the insurance carrier's Xactimate line items.</li>
+      </ol>
+      <h2>What we will not do</h2>
+      <ul>
+        <li>We will not waive or absorb your deductible. It's insurance fraud. Anyone offering it is setting you up for a denied claim and potential criminal exposure.</li>
+        <li>We will not door-knock. If a stranger showed up uninvited after the storm, that's a Texas Bus. & Com. Code § 27.02 "Residential Roof Repair Contract" concern — you have a 3-day rescission right on any contract signed at the door.</li>
+        <li>We will not act as a public adjuster. That's a regulated role (Tex. Ins. Code §§ 4102, 701) and we aren't licensed for it. We're the contractor.</li>
+      </ul>
+    </article>
+    <aside>
+      <LeadForm source="storm-response" defaultService="storm" />
+    </aside>
+  </section>
+</BaseLayout>

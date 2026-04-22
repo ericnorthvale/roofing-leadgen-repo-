@@ -1,0 +1,75 @@
+---
+import "~/styles/globals.css";
+import { BRAND } from "~/lib/brand";
+import { buildSeo, localBusinessJsonLd } from "~/lib/seo";
+import SiteHeader from "@components/SiteHeader.astro";
+import SiteFooter from "@components/SiteFooter.astro";
+import type { SeoInput } from "~/lib/seo";
+
+interface Props {
+  seo: SeoInput;
+  /** Skip chrome (header/footer) for funnel or utility pages. */
+  bare?: boolean;
+}
+
+const { seo, bare = false } = Astro.props;
+const siteUrl = Astro.site?.toString() ?? "https://northvaleroofing.com";
+const s = buildSeo(seo, siteUrl);
+const biz = localBusinessJsonLd(siteUrl);
+const gtmId = import.meta.env.PUBLIC_GTM_ID;
+const ga4Id = import.meta.env.PUBLIC_GA4_ID;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{s.titleWithBrand}</title>
+    <meta name="description" content={s.description} />
+    <link rel="canonical" href={s.canonical} />
+    {s.noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" />
+
+    <meta property="og:site_name" content={BRAND.name} />
+    <meta property="og:title" content={s.titleWithBrand} />
+    <meta property="og:description" content={s.description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={s.canonical} />
+    <meta property="og:image" content={s.ogImageAbsolute} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#172f52" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(biz)} />
+    {Array.isArray(s.jsonLd)
+      ? s.jsonLd.map((block) => <script type="application/ld+json" set:html={JSON.stringify(block)} />)
+      : s.jsonLd && <script type="application/ld+json" set:html={JSON.stringify(s.jsonLd)} />}
+
+    {gtmId && (
+      <script is:inline set:html={`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtmId}');`} />
+    )}
+  </head>
+  <body class="min-h-dvh bg-white">
+    {gtmId && (
+      <noscript>
+        <iframe src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`} height="0" width="0" style="display:none;visibility:hidden" />
+      </noscript>
+    )}
+
+    {!bare && <SiteHeader />}
+    <main id="main">
+      <slot />
+    </main>
+    {!bare && <SiteFooter />}
+
+    {ga4Id && (
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
+    )}
+    {ga4Id && (
+      <script is:inline set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${ga4Id}',{send_page_view:true});`} />
+    )}
+  </body>
+</html>

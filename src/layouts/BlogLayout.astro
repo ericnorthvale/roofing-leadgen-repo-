@@ -1,0 +1,29 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import type { SeoInput } from "~/lib/seo";
+
+interface Props {
+  seo: SeoInput;
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  author: string;
+}
+const { seo, title, description, pubDate, updatedDate, author } = Astro.props;
+---
+<BaseLayout seo={seo}>
+  <article class="mx-auto max-w-3xl px-4 py-10">
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Blog", href: "/blog" }, { label: title }]} />
+    <header class="mt-6">
+      <h1 class="text-4xl leading-tight md:text-5xl">{title}</h1>
+      <p class="mt-3 text-lg text-[color:var(--color-ink-500)]">{description}</p>
+      <p class="mt-3 text-sm text-[color:var(--color-ink-500)]">
+        By {author} · Published <time datetime={pubDate.toISOString()}>{pubDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</time>
+        {updatedDate && <> · Updated <time datetime={updatedDate.toISOString()}>{updatedDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</time></>}
+      </p>
+    </header>
+    <section class="prose-northvale mt-8"><slot /></section>
+  </article>
+</BaseLayout>

@@ -1,0 +1,7 @@
+dist
+node_modules
+.astro
+.vercel
+pnpm-lock.yaml
+public/brand
+public/og

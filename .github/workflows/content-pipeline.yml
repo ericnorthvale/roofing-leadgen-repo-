@@ -1,0 +1,94 @@
+name: Content Pipeline (brief → draft → PR)
+
+on:
+  schedule:
+    - cron: "0 12 * * 1"         # Mondays 07:00 CT (UTC 12:00) — weekly brief + draft
+  workflow_dispatch:
+    inputs:
+      only_draft:
+        description: "If true, skip brief-gen; expect an existing brief path in --brief flag."
+        type: boolean
+        required: false
+        default: false
+      brief_path:
+        description: "Path to existing brief (used when only_draft=true)"
+        type: string
+        required: false
+
+concurrency:
+  group: content-pipeline
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  pipeline:
+    name: Generate brief + draft MDX + open PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: "9.15.0" }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.18.0"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Generate keyword brief
+        id: brief
+        if: github.event.inputs.only_draft != 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          BRIEF_PATH=$(pnpm tsx src/scripts/keyword-brief-generator.ts)
+          echo "brief_path=$BRIEF_PATH" >> "$GITHUB_OUTPUT"
+          echo "Generated brief: $BRIEF_PATH"
+
+      - name: Draft MDX post
+        id: draft
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          BRIEF_PATH: ${{ github.event.inputs.only_draft == 'true' && github.event.inputs.brief_path || steps.brief.outputs.brief_path }}
+        run: |
+          MDX_PATH=$(pnpm tsx src/scripts/content-draft.ts --brief=$BRIEF_PATH)
+          echo "mdx_path=$MDX_PATH" >> "$GITHUB_OUTPUT"
+          SLUG=$(basename "$MDX_PATH" .mdx)
+          echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
+          echo "Generated draft: $MDX_PATH"
+
+      - name: Validate draft builds
+        env:
+          PUBLIC_SITE_URL: https://northvaleroofing.com
+        run: pnpm astro check
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: content/draft-${{ steps.draft.outputs.slug }}
+          base: main
+          draft: true
+          title: "[draft] ${{ steps.draft.outputs.slug }}"
+          commit-message: "content: draft ${{ steps.draft.outputs.slug }}"
+          body: |
+            Auto-generated draft from the content pipeline.
+
+            - Brief: `${{ steps.brief.outputs.brief_path || github.event.inputs.brief_path }}`
+            - Draft: `${{ steps.draft.outputs.mdx_path }}`
+
+            Human review required before merge:
+            - [ ] Read the post end-to-end.
+            - [ ] Verify any claimed facts (materials, warranties, pricing, local references).
+            - [ ] Check for brand-voice anti-patterns listed in `/docs/brand-voice.md`.
+            - [ ] Ensure internal links render correctly.
+            - [ ] Flip `status: draft` → `status: published` in frontmatter when ready.
+            - [ ] Remove the `[draft]` prefix from this PR title before merging.
+          labels: |
+            content
+            needs-human-review
+            ai-assisted

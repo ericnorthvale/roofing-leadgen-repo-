@@ -1,0 +1,20 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import type { SeoInput } from "~/lib/seo";
+
+interface Props {
+  seo: SeoInput;
+  title: string;
+  effectiveDate: string;
+}
+const { seo, title, effectiveDate } = Astro.props;
+---
+<BaseLayout seo={seo}>
+  <section class="mx-auto max-w-3xl px-4 py-10">
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Legal", href: "/legal/privacy" }, { label: title }]} />
+    <h1 class="mt-6 text-4xl">{title}</h1>
+    <p class="mt-2 text-sm text-[color:var(--color-ink-500)]">Effective: {effectiveDate}</p>
+    <article class="prose-northvale mt-8"><slot /></article>
+  </section>
+</BaseLayout>

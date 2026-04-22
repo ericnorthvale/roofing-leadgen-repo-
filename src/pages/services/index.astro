@@ -1,0 +1,17 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ServiceCard from "@components/ServiceCard.astro";
+---
+<BaseLayout seo={{ title: "Services", description: "Roof replacement, repair, inspection, storm damage, insurance claim support. Every job, every service, signed off by a named project manager.", pathname: "/services" }}>
+  <section class="mx-auto max-w-6xl px-4 py-12">
+    <h1 class="text-4xl md:text-5xl">Services</h1>
+    <p class="mt-4 max-w-2xl text-lg">Every job, every service, signed off by a named project manager. Forty-photo documentation packet at close.</p>
+    <div class="mt-10 grid gap-6 md:grid-cols-2">
+      <ServiceCard href="/services/roof-replacement" title="Roof replacement" blurb="GAF Timberline HDZ standard. 50-year non-prorated warranty. Class-4 IR available." />
+      <ServiceCard href="/services/roof-repair" title="Roof repair" blurb="Leaks, lifted shingles, flashing, patching. Usually same-day or next-day." />
+      <ServiceCard href="/services/roof-inspection" title="Roof inspection" badge="Free" blurb="Forty-photo packet. Written findings within 24 hours. No obligation." />
+      <ServiceCard href="/services/storm-damage" title="Storm damage" blurb="Hail, wind, tree-impact. We document everything your adjuster will ask for." />
+      <ServiceCard href="/services/insurance-claims" title="Insurance claims" blurb="Process-literate. Xactimate-ready scopes. Claim close velocity is the game." />
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,12 @@
+---
+import { SIGNATURE_PHRASES } from "~/lib/brand";
+---
+<section class="border-y border-[color:var(--color-navy-100)] bg-white">
+  <div class="mx-auto max-w-6xl px-4 py-6">
+    <ul class="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 text-sm font-medium text-[color:var(--color-navy-900)]">
+      {SIGNATURE_PHRASES.slice(0, 4).map((phrase) => (
+        <li>{phrase}</li>
+      ))}
+    </ul>
+  </div>
+</section>

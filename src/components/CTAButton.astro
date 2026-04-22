@@ -1,0 +1,21 @@
+---
+interface Props {
+  href: string;
+  variant?: "primary" | "ghost";
+  label: string;
+  /** Optional data-cta-id for GTM to scope conversion intent by button. */
+  ctaId?: string;
+  target?: "_self" | "_blank";
+  rel?: string;
+}
+const { href, variant = "primary", label, ctaId, target, rel } = Astro.props;
+---
+<a
+  class:list={["btn", variant === "primary" ? "btn-primary" : "btn-ghost"]}
+  href={href}
+  data-cta-id={ctaId}
+  target={target}
+  rel={rel}
+>
+  {label}
+</a>
