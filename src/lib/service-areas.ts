@@ -43,7 +43,13 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     slug: "spring",
     name: "Spring",
     county: "Harris",
-    landmarks: ["Klein", "Gleannloch Farms", "Old Town Spring", "Louetta Road corridor", "Champions Forest"],
+    landmarks: [
+      "Klein",
+      "Gleannloch Farms",
+      "Old Town Spring",
+      "Louetta Road corridor",
+      "Champions Forest",
+    ],
     intro: "Based off I-45 in Spring. Most jobs are within a 20-minute drive.",
     storyHook:
       "Spring took a direct path in several 2024–2025 hailstorm tracks; a significant share of homes still have unopened claim evidence on the roof.",
@@ -52,8 +58,15 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     slug: "tomball",
     name: "Tomball",
     county: "Harris",
-    landmarks: ["Rose Hill", "Lakewood Crossing", "Willowcreek Ranch", "Vintage Oaks", "Downtown Tomball"],
-    intro: "We cover Tomball on the way up FM 2920 from Spring — same-day response is rarely more than a short drive.",
+    landmarks: [
+      "Rose Hill",
+      "Lakewood Crossing",
+      "Willowcreek Ranch",
+      "Vintage Oaks",
+      "Downtown Tomball",
+    ],
+    intro:
+      "We cover Tomball on the way up FM 2920 from Spring — same-day response is rarely more than a short drive.",
     storyHook:
       "Tomball has large new-build subdivisions where builder-grade 3-tab shingles are already showing granule loss at the 10-year mark.",
   },
@@ -62,7 +75,8 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     name: "Magnolia",
     county: "Montgomery",
     landmarks: ["High Meadow Ranch", "Mostyn Manor", "FM 1488 corridor", "Magnolia Ridge"],
-    intro: "Magnolia homes are larger, more exposed, and more hail-hit than almost any other NW Houston sub-market.",
+    intro:
+      "Magnolia homes are larger, more exposed, and more hail-hit than almost any other NW Houston sub-market.",
     storyHook:
       "Open-lot Magnolia properties take the full brunt of supercell tracks coming off Lake Conroe — insurance-claim volume here is outsized.",
   },
@@ -80,7 +94,8 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     name: "Cypress",
     county: "Harris",
     landmarks: ["Bridgeland", "Towne Lake", "Fairfield", "Cypress Creek Lakes", "Blackhorse Ranch"],
-    intro: "Bridgeland and Towne Lake lead our Cypress work — master-planned HOAs with very specific shingle and color approvals.",
+    intro:
+      "Bridgeland and Towne Lake lead our Cypress work — master-planned HOAs with very specific shingle and color approvals.",
     storyHook:
       "Cypress master-planned communities have strict architectural review; we keep the approved-shingle list on file for Bridgeland, Towne Lake, and Fairfield.",
   },

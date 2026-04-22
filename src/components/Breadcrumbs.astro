@@ -3,7 +3,9 @@ interface Crumb {
   label: string;
   href?: string;
 }
-interface Props { items: Crumb[]; }
+interface Props {
+  items: Crumb[];
+}
 const { items } = Astro.props;
 
 const jsonLd = {
@@ -17,14 +19,21 @@ const jsonLd = {
   })),
 };
 ---
+
 <nav aria-label="Breadcrumbs" class="text-sm text-[color:var(--color-ink-500)]">
   <ol class="flex flex-wrap items-center gap-2">
-    {items.map((c, i) => (
-      <li class="flex items-center gap-2">
-        {c.href && i < items.length - 1 ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}
-        {i < items.length - 1 && <span aria-hidden="true">/</span>}
-      </li>
-    ))}
+    {
+      items.map((c, i) => (
+        <li class="flex items-center gap-2">
+          {c.href && i < items.length - 1 ? (
+            <a href={c.href}>{c.label}</a>
+          ) : (
+            <span aria-current="page">{c.label}</span>
+          )}
+          {i < items.length - 1 && <span aria-hidden="true">/</span>}
+        </li>
+      ))
+    }
   </ol>
 </nav>
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />

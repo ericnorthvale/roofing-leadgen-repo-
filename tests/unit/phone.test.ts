@@ -11,9 +11,7 @@ describe("phone helpers", () => {
   });
 
   it("returns an sms: href with encoded body", () => {
-    expect(smsHref("+12815551234", "Hi & thanks")).toBe(
-      "sms:+12815551234?body=Hi%20%26%20thanks",
-    );
+    expect(smsHref("+12815551234", "Hi & thanks")).toBe("sms:+12815551234?body=Hi%20%26%20thanks");
   });
 
   it("falls back to the raw string when format fails", () => {

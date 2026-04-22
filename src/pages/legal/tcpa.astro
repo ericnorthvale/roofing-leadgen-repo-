@@ -3,8 +3,14 @@ import LegalLayout from "@layouts/LegalLayout.astro";
 import { BRAND } from "~/lib/brand";
 import { LEGAL, COMPLIANCE_STATUTE_REFS } from "~/lib/legal";
 ---
+
 <LegalLayout
-  seo={{ title: "TCPA consent + compliance notice", description: "How consent works for calls and texts from Northvale Roofing — TCPA, CAN-SPAM, Texas §27.02, §701, §4102.", pathname: "/legal/tcpa" }}
+  seo={{
+    title: "TCPA consent + compliance notice",
+    description:
+      "How consent works for calls and texts from Northvale Roofing — TCPA, CAN-SPAM, Texas §27.02, §701, §4102.",
+    pathname: "/legal/tcpa",
+  }}
   title="TCPA + compliance notice"
   effectiveDate="2026-04-22"
 >
@@ -13,8 +19,14 @@ import { LEGAL, COMPLIANCE_STATUTE_REFS } from "~/lib/legal";
   <h2>What you consent to by submitting a form</h2>
   <p>{LEGAL.consentDisclaimer}</p>
   <ul>
-    <li>You can revoke consent at any time by replying STOP to a text, asking a caller to stop, or emailing {BRAND.email}.</li>
-    <li>Revocation applies to marketing messages. We may still send service-related texts about an open job (appointment confirmations, schedule changes) until that job is closed.</li>
+    <li>
+      You can revoke consent at any time by replying STOP to a text, asking a caller to stop, or
+      emailing {BRAND.email}.
+    </li>
+    <li>
+      Revocation applies to marketing messages. We may still send service-related texts about an
+      open job (appointment confirmations, schedule changes) until that job is closed.
+    </li>
   </ul>
 
   <h2>SMS terms</h2>
@@ -22,19 +34,36 @@ import { LEGAL, COMPLIANCE_STATUTE_REFS } from "~/lib/legal";
 
   <h2>Statutes we operate under</h2>
   <ul>
-    {COMPLIANCE_STATUTE_REFS.map((s) => (
-      <li><strong>{s.code}</strong> — {s.label}</li>
-    ))}
+    {
+      COMPLIANCE_STATUTE_REFS.map((s) => (
+        <li>
+          <strong>{s.code}</strong> — {s.label}
+        </li>
+      ))
+    }
   </ul>
 
   <h2>Door-to-door and storm-response solicitation</h2>
-  <p>We do not door-knock. If someone claiming to represent {BRAND.name} knocks your door uninvited, they aren't us — please tell us at {BRAND.email}. Under Tex. Bus. &amp; Com. Code § 27.02, any residential roof repair contract signed at your home after an insurable weather event can be rescinded within 3 days.</p>
+  <p>
+    We do not door-knock. If someone claiming to represent {BRAND.name} knocks your door uninvited, they
+    aren't us — please tell us at {BRAND.email}. Under Tex. Bus. &amp; Com. Code § 27.02, any
+    residential roof repair contract signed at your home after an insurable weather event can be
+    rescinded within 3 days.
+  </p>
 
   <h2>We are not a public adjuster</h2>
-  <p>Under Tex. Ins. Code §§ 4102 and 701, "public adjuster" is a regulated role. We are a licensed-where-required roofing contractor. We can document loss and provide Xactimate-aligned scopes; we can't negotiate your claim on your behalf. If you need that, hire a separately-licensed public adjuster.</p>
+  <p>
+    Under Tex. Ins. Code §§ 4102 and 701, "public adjuster" is a regulated role. We are a
+    licensed-where-required roofing contractor. We can document loss and provide Xactimate-aligned
+    scopes; we can't negotiate your claim on your behalf. If you need that, hire a
+    separately-licensed public adjuster.
+  </p>
 
   <h2>CAN-SPAM</h2>
-  <p>Every marketing email we send includes a one-click unsubscribe + our physical address. We honor unsubscribes within 10 business days.</p>
+  <p>
+    Every marketing email we send includes a one-click unsubscribe + our physical address. We honor
+    unsubscribes within 10 business days.
+  </p>
 
   <h2>Contact</h2>
   <p>{BRAND.email} — compliance questions welcome.</p>

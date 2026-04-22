@@ -1,14 +1,24 @@
 # build
 dist/
-.astro/
 .output/
 .vercel/
+.turbo/
+.vite/
+.astro/
 
 # deps
 node_modules/
 .pnp.*
-.yarn/*
-!.yarn/releases
+
+# runtime generated
+*.tsbuildinfo
+
+# test + coverage
+coverage/
+.nyc_output/
+.lighthouseci/
+playwright-report/
+test-results/
 
 # env + secrets
 .env
@@ -18,28 +28,19 @@ node_modules/
 
 # editor + os
 .DS_Store
+Thumbs.db
 .idea/
 .vscode/*
-!.vscode/settings.json
 !.vscode/extensions.json
-*.swp
-*.swo
-Thumbs.db
+!.vscode/settings.json
+.yarn/*
+!.yarn/releases
 
 # logs
 npm-debug.log*
+pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-
-# test + coverage
-coverage/
-.nyc_output/
-playwright-report/
-test-results/
-.lighthouseci/
-
-# runtime generated
-*.tsbuildinfo
-.vite/
-.turbo/
+*.log
+*.swp
+*.swo

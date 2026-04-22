@@ -17,7 +17,14 @@ const CLUSTERS = [
   "inspector-peers",
 ] as const;
 
-const SERVICE_AREA_SLUGS = ["the-woodlands", "spring", "tomball", "magnolia", "conroe", "cypress"] as const;
+const SERVICE_AREA_SLUGS = [
+  "the-woodlands",
+  "spring",
+  "tomball",
+  "magnolia",
+  "conroe",
+  "cypress",
+] as const;
 
 const blog = defineCollection({
   loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/blog" }),

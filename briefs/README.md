@@ -39,17 +39,20 @@ briefs/
 ## Running the pipeline manually
 
 ### Option 1 — generate a brief + draft in one shot
+
 ```bash
 BRIEF_PATH=$(pnpm tsx src/scripts/keyword-brief-generator.ts)
 pnpm tsx src/scripts/content-draft.ts --brief="$BRIEF_PATH"
 ```
 
 ### Option 2 — draft from an existing brief
+
 ```bash
 pnpm tsx src/scripts/content-draft.ts --brief=briefs/sample-class-4-shingle.json
 ```
 
 ### Option 3 — write a one-off brief by hand
+
 1. Copy `sample-class-4-shingle.json` to a new file in this directory.
 2. Edit the fields (see schema below).
 3. Run: `pnpm tsx src/scripts/content-draft.ts --brief=briefs/your-new-brief.json`.
@@ -82,6 +85,7 @@ Make sure your env has `ANTHROPIC_API_KEY` set. The drafter uses Claude Sonnet b
 ## Quality gates
 
 Every draft MDX writes with `status: "draft"`, so it won't ship to production until a human flips it to `published`. Enforcement at:
+
 1. `src/content.config.ts` — schema has `status` defaulting to `"draft"`.
 2. `src/pages/blog/index.astro` — filters out non-published.
 3. `src/pages/blog/[...slug].astro` — `getStaticPaths` only includes `status === "published"`.

@@ -29,6 +29,19 @@ function readForm(form: FormData): FormShape {
 }
 
 export const POST: APIRoute = async ({ request, redirect, locals }) => {
+  // Vercel geo — only meaningful at request time, so captured here rather than
+  // in middleware (where prerender emits a build-time warning).
+  const h = request.headers;
+  const geo = {
+    city: h.get("x-vercel-ip-city") ?? undefined,
+    region: h.get("x-vercel-ip-country-region") ?? undefined,
+    country: h.get("x-vercel-ip-country") ?? undefined,
+    zip: h.get("x-vercel-ip-postal-code") ?? undefined,
+  };
+  if (geo.city || geo.region || geo.country || geo.zip) {
+    locals.geo = { ...geo, city: geo.city ? decodeURIComponent(geo.city) : undefined };
+  }
+
   let body: FormShape;
   try {
     const contentType = request.headers.get("content-type") ?? "";

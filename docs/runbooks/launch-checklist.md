@@ -3,12 +3,14 @@
 Run through before flipping northvaleroofing.com public. Each row either ships or explicitly explains why it's punted.
 
 ## Brand + legal
+
 - [ ] `Northvale Roofing LLC` registered with TX SOS.
 - [ ] USPTO TEAS 1(b) ITU application filed (IC 037).
 - [ ] Domain purchased at Cloudflare Registrar; DNS pointed to Vercel.
 - [ ] SSL certificate issued (Vercel automatic).
 
 ## Site
+
 - [ ] `PUBLIC_SITE_URL` set in Vercel to `https://northvaleroofing.com`.
 - [ ] All six neighborhood pages render with unique content.
 - [ ] All five service pages render with unique content.
@@ -20,6 +22,7 @@ Run through before flipping northvaleroofing.com public. Each row either ships o
 - [ ] Sitemap + robots.txt live; `/thank-you` disallowed.
 
 ## Analytics + tracking
+
 - [ ] GA4 property live; `PUBLIC_GA4_ID` set.
 - [ ] Server-side GTM container live; `PUBLIC_GTM_ID` set.
 - [ ] Meta pixel + CAPI token wired and firing.
@@ -28,12 +31,14 @@ Run through before flipping northvaleroofing.com public. Each row either ships o
 - [ ] Google Ads conversion tag linked; offline conversion import working.
 
 ## Forms + CRM
+
 - [ ] `/api/lead` POSTs to HighLevel successfully (test with real contact).
 - [ ] HighLevel location configured with nurture workflows (see HighLevel runbook).
 - [ ] TCPA consent checkbox language matches `src/lib/legal.ts::LEGAL.consentDisclaimer`.
 - [ ] Honeypot field blocks synthetic bot submissions (confirmed in log review).
 
 ## Compliance
+
 - [ ] Privacy + Terms + TCPA + Accessibility pages reviewed by counsel.
 - [ ] Consent disclaimer includes: caller ID, purpose, automated systems, opt-out path.
 - [ ] Email templates include physical address + unsubscribe link.
@@ -41,11 +46,13 @@ Run through before flipping northvaleroofing.com public. Each row either ships o
 - [ ] `weekly-compliance.yml` workflow green for 2 consecutive runs.
 
 ## Paid channels
+
 - [ ] Google Ads brand campaign live (pause-ready).
 - [ ] Meta conversion campaign on hold for 14 days post-launch (need event volume first).
 - [ ] Nextdoor / Yelp profiles claimed and filled.
 
 ## Day-of-launch
+
 - [ ] DNS cut live.
 - [ ] Smoke test all 20+ pages on mobile + desktop.
 - [ ] Submit root URL to Google Search Console + Bing Webmaster Tools.

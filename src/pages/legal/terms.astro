@@ -2,20 +2,43 @@
 import LegalLayout from "@layouts/LegalLayout.astro";
 import { BRAND } from "~/lib/brand";
 ---
+
 <LegalLayout
-  seo={{ title: "Terms of Service", description: "Terms governing use of northvaleroofing.com. Service contracts are separate signed documents.", pathname: "/legal/terms" }}
+  seo={{
+    title: "Terms of Service",
+    description:
+      "Terms governing use of northvaleroofing.com. Service contracts are separate signed documents.",
+    pathname: "/legal/terms",
+  }}
   title="Terms of Service"
   effectiveDate="2026-04-22"
 >
-  <p>These terms govern your use of {BRAND.domain} (the "Site"). A contract for roofing services is a separate signed document between you and {BRAND.legalName}. Nothing on this Site is itself a service contract.</p>
+  <p>
+    These terms govern your use of {BRAND.domain} (the "Site"). A contract for roofing services is a separate
+    signed document between you and {BRAND.legalName}. Nothing on this Site is itself a service
+    contract.
+  </p>
   <h2>Site content</h2>
-  <p>Pricing ranges, timelines, and material descriptions are informational and subject to change. The only binding numbers are the ones on your signed estimate.</p>
+  <p>
+    Pricing ranges, timelines, and material descriptions are informational and subject to change.
+    The only binding numbers are the ones on your signed estimate.
+  </p>
   <h2>Intellectual property</h2>
-  <p>All content, design, and logos are © {BRAND.legalName}. You may share links or short quotes with attribution; republication requires written permission.</p>
+  <p>
+    All content, design, and logos are © {BRAND.legalName}. You may share links or short quotes with
+    attribution; republication requires written permission.
+  </p>
   <h2>No warranty of Site content</h2>
-  <p>Site content is provided "as is." We don't warrant that it's error-free or complete. Rely on the written estimate and contract for binding commitments.</p>
+  <p>
+    Site content is provided "as is." We don't warrant that it's error-free or complete. Rely on the
+    written estimate and contract for binding commitments.
+  </p>
   <h2>Limitation of liability</h2>
-  <p>To the maximum extent allowed by law, {BRAND.legalName}'s liability arising from Site use is limited to the greater of $100 or the amount you paid us in the twelve months before the event giving rise to the claim. Services-contract liability is governed by the signed contract itself.</p>
+  <p>
+    To the maximum extent allowed by law, {BRAND.legalName}'s liability arising from Site use is
+    limited to the greater of $100 or the amount you paid us in the twelve months before the event
+    giving rise to the claim. Services-contract liability is governed by the signed contract itself.
+  </p>
   <h2>Governing law</h2>
   <p>Texas. Any dispute arising from Site use is venued in Montgomery or Harris County, Texas.</p>
   <h2>Contact</h2>

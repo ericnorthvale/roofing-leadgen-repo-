@@ -4,7 +4,5 @@
   "singleQuote": false,
   "trailingComma": "all",
   "tailwindFunctions": ["clsx", "cva"],
-  "overrides": [
-    { "files": "*.astro", "options": { "parser": "astro" } }
-  ]
+  "overrides": [{ "files": "*.astro", "options": { "parser": "astro" } }]
 }

@@ -13,18 +13,26 @@ interface Props {
 }
 const { seo, title, subhead, serviceTag } = Astro.props;
 ---
+
 <BaseLayout seo={seo}>
   <section class="mx-auto max-w-6xl px-4 py-10">
-    <Breadcrumbs items={[
-      { label: "Home", href: "/" },
-      { label: "Services", href: "/services" },
-      { label: title },
-    ]} />
+    <Breadcrumbs
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Services", href: "/services" },
+        { label: title },
+      ]}
+    />
     <h1 class="mt-6 text-4xl md:text-5xl">{title}</h1>
     <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-800)]">{subhead}</p>
     <div class="mt-6 flex flex-wrap gap-3">
       <CTAButton href="/contact" label="Book inspection" ctaId={`service-${serviceTag}-book`} />
-      <CTAButton href="/storm-response" variant="ghost" label="Storm today?" ctaId={`service-${serviceTag}-storm`} />
+      <CTAButton
+        href="/storm-response"
+        variant="ghost"
+        label="Storm today?"
+        ctaId={`service-${serviceTag}-storm`}
+      />
     </div>
   </section>
   <section class="mx-auto grid max-w-6xl gap-10 px-4 py-10 md:grid-cols-[1fr_400px]">

@@ -52,7 +52,10 @@ export async function pushLeadToHighLevel(
         locationId: env.HIGHLEVEL_LOCATION_ID,
         source: lead.source,
         tags: lead.tags ?? [],
-        customFields: Object.entries(lead.customFields ?? {}).map(([key, value]) => ({ key, field_value: value })),
+        customFields: Object.entries(lead.customFields ?? {}).map(([key, value]) => ({
+          key,
+          field_value: value,
+        })),
       }),
     });
     if (!res.ok) return { ok: false, error: `HighLevel ${res.status}` };

@@ -18,6 +18,7 @@ const {
   submitLabel = "Book my inspection",
 } = Astro.props;
 ---
+
 <form
   method="POST"
   action="/api/lead"
@@ -30,45 +31,84 @@ const {
   <div class="grid gap-4 md:grid-cols-2">
     <label class="grid gap-1 text-sm">
       <span class="font-medium">First name</span>
-      <input required name="firstName" type="text" autocomplete="given-name"
-        class="rounded border border-[color:var(--color-navy-200)] px-3 py-2" />
+      <input
+        required
+        name="firstName"
+        type="text"
+        autocomplete="given-name"
+        class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+      />
     </label>
     <label class="grid gap-1 text-sm">
       <span class="font-medium">Last name</span>
-      <input name="lastName" type="text" autocomplete="family-name"
-        class="rounded border border-[color:var(--color-navy-200)] px-3 py-2" />
+      <input
+        name="lastName"
+        type="text"
+        autocomplete="family-name"
+        class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+      />
     </label>
   </div>
 
   <label class="grid gap-1 text-sm">
     <span class="font-medium">Phone</span>
-    <input required name="phone" type="tel" autocomplete="tel" inputmode="tel"
+    <input
+      required
+      name="phone"
+      type="tel"
+      autocomplete="tel"
+      inputmode="tel"
       pattern="[\d\s\(\)\-+]{10,}"
-      class="rounded border border-[color:var(--color-navy-200)] px-3 py-2" />
+      class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+    />
   </label>
 
   <label class="grid gap-1 text-sm">
-    <span class="font-medium">Email <span class="text-[color:var(--color-ink-500)]">(optional)</span></span>
-    <input name="email" type="email" autocomplete="email"
-      class="rounded border border-[color:var(--color-navy-200)] px-3 py-2" />
+    <span class="font-medium"
+      >Email <span class="text-[color:var(--color-ink-500)]">(optional)</span></span
+    >
+    <input
+      name="email"
+      type="email"
+      autocomplete="email"
+      class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+    />
   </label>
 
   <label class="grid gap-1 text-sm">
     <span class="font-medium">Street address</span>
-    <input required name="address" type="text" autocomplete="street-address"
-      class="rounded border border-[color:var(--color-navy-200)] px-3 py-2" />
+    <input
+      required
+      name="address"
+      type="text"
+      autocomplete="street-address"
+      class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+    />
   </label>
 
   <div class="grid gap-4 md:grid-cols-2">
     <label class="grid gap-1 text-sm">
       <span class="font-medium">City</span>
-      <input required name="city" value={defaultCity} type="text" autocomplete="address-level2"
-        class="rounded border border-[color:var(--color-navy-200)] px-3 py-2" />
+      <input
+        required
+        name="city"
+        value={defaultCity}
+        type="text"
+        autocomplete="address-level2"
+        class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+      />
     </label>
     <label class="grid gap-1 text-sm">
       <span class="font-medium">ZIP</span>
-      <input required name="zip" type="text" autocomplete="postal-code" inputmode="numeric" pattern="\d{5}"
-        class="rounded border border-[color:var(--color-navy-200)] px-3 py-2" />
+      <input
+        required
+        name="zip"
+        type="text"
+        autocomplete="postal-code"
+        inputmode="numeric"
+        pattern="\d{5}"
+        class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+      />
     </label>
   </div>
 
@@ -77,15 +117,25 @@ const {
     <select name="service" class="rounded border border-[color:var(--color-navy-200)] px-3 py-2">
       <option value="inspection" selected={defaultService === "inspection"}>Free inspection</option>
       <option value="repair" selected={defaultService === "repair"}>Roof repair</option>
-      <option value="replacement" selected={defaultService === "replacement"}>Roof replacement</option>
+      <option value="replacement" selected={defaultService === "replacement"}
+        >Roof replacement</option
+      >
       <option value="storm" selected={defaultService === "storm"}>Storm damage check</option>
-      <option value="insurance" selected={defaultService === "insurance"}>Insurance claim help</option>
+      <option value="insurance" selected={defaultService === "insurance"}
+        >Insurance claim help</option
+      >
     </select>
   </label>
 
   <label class="grid gap-1 text-sm">
-    <span class="font-medium">Anything we should know? <span class="text-[color:var(--color-ink-500)]">(optional)</span></span>
-    <textarea name="notes" rows="3" class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"></textarea>
+    <span class="font-medium"
+      >Anything we should know? <span class="text-[color:var(--color-ink-500)]">(optional)</span
+      ></span
+    >
+    <textarea
+      name="notes"
+      rows="3"
+      class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"></textarea>
   </label>
 
   {/* Honeypot — bots fill it, humans don't see it. */}
@@ -120,7 +170,15 @@ const {
       const saved = localStorage.getItem("nv_utm");
       const live = new URL(window.location.href);
       const payload: Record<string, string> = saved ? JSON.parse(saved) : {};
-      for (const k of ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "fbclid"]) {
+      for (const k of [
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_content",
+        "utm_term",
+        "gclid",
+        "fbclid",
+      ]) {
         const v = live.searchParams.get(k);
         if (v) payload[k.replace(/^utm_/, "")] = v;
       }

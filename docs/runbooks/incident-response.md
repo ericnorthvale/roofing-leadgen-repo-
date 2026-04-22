@@ -10,7 +10,7 @@
 ## Lead API (/api/lead) returning 5xx
 
 1. Check if HighLevel API is the culprit (status page / curl their `/ping`).
-2. If HighLevel: the endpoint falls through to a redirect anyway — leads *do not get lost*, they're only missing from CRM for the window. Manually backfill from Vercel logs.
+2. If HighLevel: the endpoint falls through to a redirect anyway — leads _do not get lost_, they're only missing from CRM for the window. Manually backfill from Vercel logs.
 3. If Vercel function-level: check recent deploys, roll back if needed.
 
 ## CallRail webhook returning 4xx/5xx

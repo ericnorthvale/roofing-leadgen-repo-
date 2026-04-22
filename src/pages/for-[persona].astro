@@ -3,27 +3,21 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import CTAButton from "@components/CTAButton.astro";
 import LeadForm from "@components/LeadForm.astro";
-import { PERSONAS } from "~/lib/personas";
-
-const PUBLIC_PERSONAS = ["homeowners", "agents", "insurance-partners", "hoa", "inspectors"] as const;
-
-const PERSONA_MAP: Record<(typeof PUBLIC_PERSONAS)[number], keyof typeof PERSONAS> = {
-  homeowners: "homeowner",
-  agents: "agent",
-  "insurance-partners": "insurance",
-  hoa: "hoa",
-  inspectors: "inspector",
-};
+import {
+  PERSONAS,
+  PUBLIC_PERSONA_SLUGS,
+  PUBLIC_PERSONA_MAP,
+  type PublicPersonaSlug,
+} from "~/lib/personas";
 
 export async function getStaticPaths() {
-  return PUBLIC_PERSONAS.map((p) => ({ params: { persona: p } }));
+  return PUBLIC_PERSONA_SLUGS.map((p) => ({ params: { persona: p } }));
 }
 
-const { persona } = Astro.params;
-const key = persona as keyof typeof PERSONA_MAP;
-const data = PERSONAS[PERSONA_MAP[key]];
-if (!data) return Astro.redirect("/404");
+const persona = Astro.params.persona as PublicPersonaSlug;
+const data = PERSONAS[PUBLIC_PERSONA_MAP[persona]];
 ---
+
 <BaseLayout
   seo={{
     title: `For ${data.label.toLowerCase()}`,
@@ -32,69 +26,104 @@ if (!data) return Astro.redirect("/404");
   }}
 >
   <section class="mx-auto max-w-6xl px-4 py-10">
-    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: `For ${data.label.toLowerCase()}` }]} />
+    <Breadcrumbs
+      items={[{ label: "Home", href: "/" }, { label: `For ${data.label.toLowerCase()}` }]}
+    />
     <h1 class="mt-6 text-4xl md:text-5xl">For {data.label.toLowerCase()}</h1>
     <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-800)]">{data.promise}</p>
     <p class="mt-2 text-sm text-[color:var(--color-ink-500)]">Tone: {data.tone}</p>
-    <div class="mt-6"><CTAButton href="/contact" label={data.ctaLabel} ctaId={`persona-${persona}-cta`} /></div>
+    <div class="mt-6">
+      <CTAButton href="/contact" label={data.ctaLabel} ctaId={`persona-${persona}-cta`} />
+    </div>
   </section>
   <section class="mx-auto grid max-w-6xl gap-10 px-4 py-10 md:grid-cols-[1fr_420px]">
     <article class="prose-northvale">
-      {data.slug === "agent" && (
-        <>
-          <h2>Why agents refer us</h2>
-          <ul>
-            <li>Same-day inspection during the option period — usually within 4 hours of your call.</li>
-            <li>Plain-English written finding you can forward to the buyer.</li>
-            <li>We never position you out of a deal. If the roof is fine, we'll say so.</li>
-            <li>Commission-protection language available where we do a replacement as a condition of close.</li>
-          </ul>
-        </>
-      )}
-      {data.slug === "insurance" && (
-        <>
-          <h2>For insurance agents and adjusters</h2>
-          <ul>
-            <li>Xactimate-aligned scopes of loss. Code-required supplements documented with photos.</li>
-            <li>Named project manager + single-contact escalation for every claim we handle.</li>
-            <li>Claim-close velocity is our game — faster install, faster depreciation release.</li>
-            <li>We are not a public adjuster (Tex. Ins. Code § 4102). We are the contractor of record.</li>
-          </ul>
-        </>
-      )}
-      {data.slug === "hoa" && (
-        <>
-          <h2>For HOA boards and property managers</h2>
-          <ul>
-            <li>Multi-property + multi-phase pricing for community-wide roof programs.</li>
-            <li>ARC-approved shingle/color lists maintained for Bridgeland, Towne Lake, Alden Bridge, Timarron, and others.</li>
-            <li>Board-ready reporting: per-home scope, photos, warranty registration, closeout certificate.</li>
-            <li>Insurance certificate + W-9 packet available immediately.</li>
-          </ul>
-        </>
-      )}
-      {data.slug === "inspector" && (
-        <>
-          <h2>For home inspectors</h2>
-          <ul>
-            <li>We close the loop with the buyer without stepping on your findings.</li>
-            <li>Peer-level documentation so your report stays the source of truth.</li>
-            <li>No quid-pro-quo referral fees — TREC (Tex. Occ. Code § 1102) has specific views and we respect them.</li>
-            <li>Invitation-only inspector partner network with education-first collaboration.</li>
-          </ul>
-        </>
-      )}
-      {data.slug === "homeowner" && (
-        <>
-          <h2>What a homeowner should expect</h2>
-          <ul>
-            <li>Same-day inspection. No "one of our team members will reach out."</li>
-            <li>Written estimate before we leave the driveway.</li>
-            <li>A named project manager on the job — not a dispatcher.</li>
-            <li>Forty-photo documentation packet at job close.</li>
-          </ul>
-        </>
-      )}
+      {
+        data.slug === "agent" && (
+          <>
+            <h2>Why agents refer us</h2>
+            <ul>
+              <li>
+                Same-day inspection during the option period — usually within 4 hours of your call.
+              </li>
+              <li>Plain-English written finding you can forward to the buyer.</li>
+              <li>We never position you out of a deal. If the roof is fine, we'll say so.</li>
+              <li>
+                Commission-protection language available where we do a replacement as a condition of
+                close.
+              </li>
+            </ul>
+          </>
+        )
+      }
+      {
+        data.slug === "insurance" && (
+          <>
+            <h2>For insurance agents and adjusters</h2>
+            <ul>
+              <li>
+                Xactimate-aligned scopes of loss. Code-required supplements documented with photos.
+              </li>
+              <li>Named project manager + single-contact escalation for every claim we handle.</li>
+              <li>
+                Claim-close velocity is our game — faster install, faster depreciation release.
+              </li>
+              <li>
+                We are not a public adjuster (Tex. Ins. Code § 4102). We are the contractor of
+                record.
+              </li>
+            </ul>
+          </>
+        )
+      }
+      {
+        data.slug === "hoa" && (
+          <>
+            <h2>For HOA boards and property managers</h2>
+            <ul>
+              <li>Multi-property + multi-phase pricing for community-wide roof programs.</li>
+              <li>
+                ARC-approved shingle/color lists maintained for Bridgeland, Towne Lake, Alden
+                Bridge, Timarron, and others.
+              </li>
+              <li>
+                Board-ready reporting: per-home scope, photos, warranty registration, closeout
+                certificate.
+              </li>
+              <li>Insurance certificate + W-9 packet available immediately.</li>
+            </ul>
+          </>
+        )
+      }
+      {
+        data.slug === "inspector" && (
+          <>
+            <h2>For home inspectors</h2>
+            <ul>
+              <li>We close the loop with the buyer without stepping on your findings.</li>
+              <li>Peer-level documentation so your report stays the source of truth.</li>
+              <li>
+                No quid-pro-quo referral fees — TREC (Tex. Occ. Code § 1102) has specific views and
+                we respect them.
+              </li>
+              <li>Invitation-only inspector partner network with education-first collaboration.</li>
+            </ul>
+          </>
+        )
+      }
+      {
+        data.slug === "homeowner" && (
+          <>
+            <h2>What a homeowner should expect</h2>
+            <ul>
+              <li>Same-day inspection. No "one of our team members will reach out."</li>
+              <li>Written estimate before we leave the driveway.</li>
+              <li>A named project manager on the job — not a dispatcher.</li>
+              <li>Forty-photo documentation packet at job close.</li>
+            </ul>
+          </>
+        )
+      }
     </article>
     <aside>
       <LeadForm source={`persona:${persona}`} submitLabel={data.ctaLabel} />

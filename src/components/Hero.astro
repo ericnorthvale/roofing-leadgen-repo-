@@ -10,25 +10,34 @@ interface Props {
 }
 const { eyebrow, headline, subhead, primaryCta, secondaryCta } = Astro.props;
 ---
+
 <section class="relative overflow-hidden bg-[color:var(--color-navy-50)]">
   <div class="mx-auto max-w-6xl px-4 py-16 md:py-24">
-    {eyebrow && (
-      <p class="mb-3 text-sm font-semibold uppercase tracking-widest text-[color:var(--color-gold-700)]">
-        {eyebrow}
-      </p>
-    )}
-    <h1 class="max-w-3xl text-4xl font-semibold leading-[1.05] md:text-6xl">{headline}</h1>
+    {
+      eyebrow && (
+        <p class="mb-3 text-sm font-semibold tracking-widest text-[color:var(--color-gold-700)] uppercase">
+          {eyebrow}
+        </p>
+      )
+    }
+    <h1 class="max-w-3xl text-4xl leading-[1.05] font-semibold md:text-6xl">{headline}</h1>
     <p class="mt-5 max-w-2xl text-lg text-[color:var(--color-ink-800)]">{subhead}</p>
     <div class="mt-8 flex flex-wrap gap-3">
-      <CTAButton href={primaryCta.href} label={primaryCta.label} ctaId={primaryCta.ctaId ?? "hero-primary"} />
-      {secondaryCta && (
-        <CTAButton
-          href={secondaryCta.href}
-          label={secondaryCta.label}
-          ctaId={secondaryCta.ctaId ?? "hero-secondary"}
-          variant="ghost"
-        />
-      )}
+      <CTAButton
+        href={primaryCta.href}
+        label={primaryCta.label}
+        ctaId={primaryCta.ctaId ?? "hero-primary"}
+      />
+      {
+        secondaryCta && (
+          <CTAButton
+            href={secondaryCta.href}
+            label={secondaryCta.label}
+            ctaId={secondaryCta.ctaId ?? "hero-secondary"}
+            variant="ghost"
+          />
+        )
+      }
     </div>
   </div>
 </section>

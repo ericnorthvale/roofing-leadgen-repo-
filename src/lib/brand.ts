@@ -10,7 +10,8 @@ export const BRAND = {
   email: "hello@northvaleroofing.com",
   hoursSummary: "8am–9pm CT, 7 days a week",
   foundedYear: 2026,
-  licenseNote: "Texas does not license residential roofing contractors. We are RCAT-certified and GAF Master Elite applicants.",
+  licenseNote:
+    "Texas does not license residential roofing contractors. We are RCAT-certified and GAF Master Elite applicants.",
   addressLine1: "",
   city: "Spring",
   region: "TX",

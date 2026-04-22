@@ -1,10 +1,4 @@
-export type PersonaSlug =
-  | "homeowner"
-  | "agent"
-  | "insurance"
-  | "storm"
-  | "hoa"
-  | "inspector";
+export type PersonaSlug = "homeowner" | "agent" | "insurance" | "storm" | "hoa" | "inspector";
 
 export interface Persona {
   slug: PersonaSlug;
@@ -64,10 +58,30 @@ export const PERSONAS: Record<PersonaSlug, Persona> = {
     slug: "inspector",
     path: "/for-inspectors",
     label: "Home inspectors",
-    promise: "Peer-level reports. We close the loop with the buyer without stepping on your findings.",
+    promise:
+      "Peer-level reports. We close the loop with the buyer without stepping on your findings.",
     ctaLabel: "Join our inspector network",
     tone: "Peer-professional. Referral partnership, reputation framing.",
   },
 };
 
 export const PERSONA_SLUGS = Object.keys(PERSONAS) as PersonaSlug[];
+
+/** URL slugs for the public /for-[persona] dynamic route. */
+export const PUBLIC_PERSONA_SLUGS = [
+  "homeowners",
+  "agents",
+  "insurance-partners",
+  "hoa",
+  "inspectors",
+] as const;
+
+export type PublicPersonaSlug = (typeof PUBLIC_PERSONA_SLUGS)[number];
+
+export const PUBLIC_PERSONA_MAP: Record<PublicPersonaSlug, PersonaSlug> = {
+  homeowners: "homeowner",
+  agents: "agent",
+  "insurance-partners": "insurance",
+  hoa: "hoa",
+  inspectors: "inspector",
+};

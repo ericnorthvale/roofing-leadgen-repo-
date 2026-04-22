@@ -2,7 +2,7 @@ name: Content Pipeline (brief → draft → PR)
 
 on:
   schedule:
-    - cron: "0 12 * * 1"         # Mondays 07:00 CT (UTC 12:00) — weekly brief + draft
+    - cron: "0 12 * * 1" # Mondays 07:00 CT (UTC 12:00) — weekly brief + draft
   workflow_dispatch:
     inputs:
       only_draft:

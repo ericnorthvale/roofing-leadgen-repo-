@@ -10,6 +10,7 @@ interface Props {
 }
 const { href, variant = "primary", label, ctaId, target, rel } = Astro.props;
 ---
+
 <a
   class:list={["btn", variant === "primary" ? "btn-primary" : "btn-ghost"]}
   href={href}

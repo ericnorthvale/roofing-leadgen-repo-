@@ -5,6 +5,7 @@
 Scaffold mirrored from `ebleck55/bleck-deal-engine@claude/roofing-lead-engine-plan-wPc6X` (the `roofing-leadgen/` subtree) into this repo's root, then extended.
 
 ### What shipped
+
 - Astro 5 + Tailwind 4 + TypeScript strict.
 - Vercel hybrid adapter + ISR.
 - Locked brand voice (see `docs/brand-voice.md`).
@@ -24,6 +25,7 @@ Scaffold mirrored from `ebleck55/bleck-deal-engine@claude/roofing-lead-engine-pl
 - Prettier, Playwright, Vitest configs + starter tests.
 
 ### What's stubbed (intentional — real humans required)
+
 - HighLevel Private Integration token not yet issued.
 - CallRail webhook secret not yet rotated.
 - GA4 + GTM IDs not yet provisioned.
@@ -33,4 +35,5 @@ Scaffold mirrored from `ebleck55/bleck-deal-engine@claude/roofing-lead-engine-pl
 - LLC + USPTO filings pending — see `docs/trademark-clearance.md`.
 
 ### Next phase
+
 See `TASKS_FOR_ERIC.md` for the ordered list of open asks.

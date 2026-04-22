@@ -2,7 +2,7 @@ name: Nightly E2E Lead Test
 
 on:
   schedule:
-    - cron: "0 7 * * *"          # 02:00 CT year-round-ish (UTC 07:00)
+    - cron: "0 7 * * *" # 02:00 CT year-round-ish (UTC 07:00)
   workflow_dispatch:
 
 concurrency:

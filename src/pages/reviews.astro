@@ -4,22 +4,40 @@ import { getCollection } from "astro:content";
 
 const reviews = await getCollection("reviews");
 ---
-<BaseLayout seo={{ title: "Reviews from Woodlands + Spring neighbors", description: "Verified Google and direct customer reviews from homeowners across The Woodlands, Spring, Tomball, Magnolia, Conroe, and Cypress.", pathname: "/reviews" }}>
+
+<BaseLayout
+  seo={{
+    title: "Reviews from Woodlands + Spring neighbors",
+    description:
+      "Verified Google and direct customer reviews from homeowners across The Woodlands, Spring, Tomball, Magnolia, Conroe, and Cypress.",
+    pathname: "/reviews",
+  }}
+>
   <section class="mx-auto max-w-5xl px-4 py-12">
     <h1 class="text-4xl">Reviews</h1>
-    <p class="mt-3 text-lg text-[color:var(--color-ink-500)]">Google Business Profile reviews auto-sync daily. Direct customer reviews are added by a project manager after job close.</p>
-    {reviews.length === 0 ? (
-      <p class="mt-8">Reviews will surface here once the Google Places pull is wired — see <code>TASKS_FOR_ERIC.md</code>.</p>
-    ) : (
-      <div class="mt-8 grid gap-6 md:grid-cols-2">
-        {reviews.map((r) => (
-          <article class="rounded-[var(--radius-card)] bg-white p-6 shadow-[var(--shadow-card)]">
-            <p>{r.data.text}</p>
-            <p class="mt-4 font-semibold">{r.data.author}</p>
-            <p class="text-xs text-[color:var(--color-ink-500)]">{r.data.source} · {r.data.relativeTime}</p>
-          </article>
-        ))}
-      </div>
-    )}
+    <p class="mt-3 text-lg text-[color:var(--color-ink-500)]">
+      Google Business Profile reviews auto-sync daily. Direct customer reviews are added by a
+      project manager after job close.
+    </p>
+    {
+      reviews.length === 0 ? (
+        <p class="mt-8">
+          Reviews will surface here once the Google Places pull is wired — see{" "}
+          <code>TASKS_FOR_ERIC.md</code>.
+        </p>
+      ) : (
+        <div class="mt-8 grid gap-6 md:grid-cols-2">
+          {reviews.map((r) => (
+            <article class="rounded-[var(--radius-card)] bg-white p-6 shadow-[var(--shadow-card)]">
+              <p>{r.data.text}</p>
+              <p class="mt-4 font-semibold">{r.data.author}</p>
+              <p class="text-xs text-[color:var(--color-ink-500)]">
+                {r.data.source} · {r.data.relativeTime}
+              </p>
+            </article>
+          ))}
+        </div>
+      )
+    }
   </section>
 </BaseLayout>

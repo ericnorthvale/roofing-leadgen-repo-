@@ -3,7 +3,9 @@ import { parseUtmFromUrl, hasAnyUtm, serializeUtm, deserializeUtm } from "~/lib/
 
 describe("utm helpers", () => {
   it("parses standard utm keys + gclid + fbclid", () => {
-    const url = new URL("https://example.com/?utm_source=google&utm_medium=cpc&utm_campaign=brand&gclid=abc");
+    const url = new URL(
+      "https://example.com/?utm_source=google&utm_medium=cpc&utm_campaign=brand&gclid=abc",
+    );
     const out = parseUtmFromUrl(url);
     expect(out.source).toBe("google");
     expect(out.medium).toBe("cpc");
