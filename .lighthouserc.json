@@ -1,7 +1,7 @@
 {
   "ci": {
     "collect": {
-      "staticDistDir": "./dist",
+      "staticDistDir": "./dist/client",
       "url": [
         "http://localhost/index.html",
         "http://localhost/the-woodlands/index.html",
@@ -10,7 +10,6 @@
       ],
       "numberOfRuns": 3,
       "settings": {
-        "preset": "desktop",
         "formFactor": "mobile",
         "throttlingMethod": "simulate",
         "throttling": {
