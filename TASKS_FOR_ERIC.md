@@ -21,6 +21,17 @@ Ordered by the point in the launch path where they're blocking. Check off as the
 - [ ] **Google Business Profile**: claim and verify. Request Place ID (see comment in `.env.example`). Set `GOOGLE_PLACE_ID`.
 - [ ] **Google Places API key** issued and scoped for reviews pull. Set `GOOGLE_PLACES_API_KEY`.
 
+## Tier 3a — performance + accessibility (Lighthouse 0.95 budgets)
+
+Lighthouse CI runs with strict production budgets (perf/a11y/best-practices/SEO ≥ 0.95, LCP ≤ 2000ms, TBT ≤ 200ms, CLS ≤ 0.05 on mobile throttle). Budgets are **skipped on draft PRs** so scaffold iteration isn't blocked — ready-for-review PRs and pushes to `main` enforce them. Before flipping PR #1 out of draft, land the following in a focused perf commit:
+
+- [ ] **Self-host Fraunces + Inter** (replace the render-blocking Google Fonts `<link>` in `src/layouts/BaseLayout.astro`). Use `@fontsource-variable/inter` + `@fontsource-variable/fraunces`; subset to `latin`; `font-display: swap`; preload only the weights actually used on the hero (typically Inter 400/600 + Fraunces 600/700).
+- [ ] **Preload the LCP image** once a real hero exists. Add `<link rel="preload" as="image" href="..." fetchpriority="high">` to `BaseLayout`, and use `loading="eager" fetchpriority="high"` on the `<img>` in `Hero.astro`.
+- [ ] **Color-contrast audit** — the navy-on-navy footer strip and the gold-on-white CTAs need to clear WCAG AA (4.5:1 for body text, 3:1 for large text and UI components). Expect 1–2 token tweaks in `src/styles/globals.css`.
+- [ ] **Consider deferring GTM to server-side-only** so static pages ship zero client JS. Today `BaseLayout` loads the GTM snippet inline; for a zero-JS-by-default Astro build this is the biggest perf lever left.
+- [ ] **Verify a11y landmarks + heading hierarchy** — run `@axe-core/cli` locally against `dist/client/**/*.html` and fix anything flagged.
+- [ ] Once local `pnpm build && pnpm lhci` hits the budgets on the four URLs in `.lighthouserc.json`, mark PR ready-for-review; CI will re-run Lighthouse in strict mode.
+
 ## Tier 3 — legal + compliance
 
 - [ ] **USPTO TEAS 1(b) ITU application** for NORTHVALE ROOFING in IC 037 (after LLC is filed). ~$350 gov't fee; ~$800 with attorney (recommended).
