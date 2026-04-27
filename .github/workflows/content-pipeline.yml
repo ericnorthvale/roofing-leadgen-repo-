@@ -1,8 +1,13 @@
 name: Content Pipeline (brief → draft → PR)
 
 on:
-  schedule:
-    - cron: "0 12 * * 1" # Mondays 07:00 CT (UTC 12:00) — weekly brief + draft
+  # Scheduled run disabled until launch prerequisites land:
+  #   - src/scripts/keyword-brief-generator.ts implemented (Tier 4)
+  #   - src/scripts/content-draft.ts implemented (Tier 4)
+  #   - ANTHROPIC_API_KEY + OPENAI_API_KEY in repo secrets
+  # Re-enable by uncommenting the schedule block below.
+  # schedule:
+  #   - cron: "0 12 * * 1" # Mondays 07:00 CT (UTC 12:00) — weekly brief + draft
   workflow_dispatch:
     inputs:
       only_draft:
