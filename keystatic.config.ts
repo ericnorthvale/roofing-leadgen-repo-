@@ -11,8 +11,21 @@ import { config, fields, collection, singleton } from "@keystatic/core";
  * (NAP/cert/experience/warranties/financing) and Reviews (REAL only). City &
  * service SEO pages stay Claude-crafted. Blog/photos can be added later.
  */
+// GitHub storage in production (edits commit via the Keystatic GitHub App →
+// Vercel preview/deploy); local filesystem in dev so day-to-day development
+// never writes to the repo.
+//
+// ONE-TIME SETUP: Keystatic's GitHub App is created by a guided wizard that only
+// appears when storage is GitHub mode. Set PUBLIC_KEYSTATIC_GITHUB_SETUP=true in
+// .env and run `pnpm dev`, then open /keystatic — the wizard creates the App and
+// writes KEYSTATIC_GITHUB_CLIENT_ID/SECRET, KEYSTATIC_SECRET, and
+// PUBLIC_KEYSTATIC_GITHUB_APP_SLUG into your .env. Copy those into Vercel and
+// remove the flag. See docs/setup-admin-panel.md.
+const keystaticGithubMode =
+  import.meta.env.PROD || import.meta.env.PUBLIC_KEYSTATIC_GITHUB_SETUP === "true";
+
 export default config({
-  storage: import.meta.env.PROD
+  storage: keystaticGithubMode
     ? { kind: "github", repo: "ericnorthvale/roofing-leadgen-repo-" }
     : { kind: "local" },
   ui: {

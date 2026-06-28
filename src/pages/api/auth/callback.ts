@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { evaluateEmailAccess } from "~/lib/admin-auth";
 import { createSessionToken, SESSION_COOKIE, SESSION_MAX_AGE_SECONDS } from "~/lib/admin-session";
+import { publicOrigin } from "~/lib/site-url";
 
 export const prerender = false;
 
@@ -65,7 +66,7 @@ export const GET: APIRoute = async ({ request, cookies, redirect }) => {
       code,
       client_id: clientId,
       client_secret: clientSecret,
-      redirect_uri: `${url.origin}/api/auth/callback`,
+      redirect_uri: `${publicOrigin(request)}/api/auth/callback`,
       grant_type: "authorization_code",
     }),
   });

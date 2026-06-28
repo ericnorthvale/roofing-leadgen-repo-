@@ -50,15 +50,46 @@ request, so it takes effect immediately even if their cookie is still valid.
 
 ## Layer 2 — Saving (who can WRITE): Keystatic GitHub App
 
-This is what lets the panel commit your edits to the repo.
+This is what lets the panel commit your edits to the repo. **You do not create the
+GitHub App by hand** — Keystatic has a **guided wizard** that builds it for you and
+generates the secrets. The catch: that wizard only appears when Keystatic is in
+"GitHub mode," and we keep dev in local mode by default — so you flip it on with a
+flag just for setup.
 
-1. Go to **keystatic.com → connect to GitHub** (or create a GitHub App manually) for
-   the repo `ericnorthvale/roofing-leadgen-repo-`. It generates three values.
-2. In **Vercel → Settings → Environment Variables**, add:
+### Generate the credentials (one time, ~10 min, on a computer with the repo)
+
+> This step needs the repo checked out and `pnpm dev` — it's a developer-ish task.
+> If you're not comfortable in a terminal, hand this section to whoever set up the
+> repo (or ask Claude to walk you through it live). You'll still be the one clicking
+> "Create app" on GitHub, because it must be created under an account with access to
+> `ericnorthvale/roofing-leadgen-repo-`.
+
+1. In the project's `.env`, set `PUBLIC_KEYSTATIC_GITHUB_SETUP=true`.
+2. Run `pnpm dev` and open <http://localhost:4321/keystatic>.
+3. Keystatic shows a **"Create GitHub App"** button. Click it, **name the app**
+   (anything, e.g. `northvale-roofing-cms`), and proceed. GitHub walks you through
+   creating it and **installing it on the `ericnorthvale/roofing-leadgen-repo-`
+   repo** (grant it access to that repo).
+4. GitHub redirects back and Keystatic **writes four values into your `.env`**:
    - `KEYSTATIC_GITHUB_CLIENT_ID`
    - `KEYSTATIC_GITHUB_CLIENT_SECRET`
    - `KEYSTATIC_SECRET`
-3. Redeploy. Now "Save" in the panel writes a commit (you authorize GitHub once).
+   - `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`
+5. Remove (or set to empty) `PUBLIC_KEYSTATIC_GITHUB_SETUP` — it was only for setup.
+
+### Turn it on in production
+
+6. In **Vercel → Settings → Environment Variables**, add the **four** values from
+   step 4 (all four — `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` is required and is the one
+   most setups forget). Do **not** set `PUBLIC_KEYSTATIC_GITHUB_SETUP` in Vercel —
+   production is already in GitHub mode.
+7. Redeploy. Now signing in at `/keystatic` and hitting **Save** writes a commit to
+   the repo (which triggers a Vercel deploy of your change).
+
+> The GitHub App's **callback URL** must match the site it runs on. The wizard sets
+> it for localhost during setup; for production, open the app at
+> **GitHub → Settings → Developer settings → GitHub Apps → (your app) → Callback URL**
+> and add `https://<your-prod-domain>/api/keystatic/github/oauth/callback`.
 
 ## Optional env (Vercel)
 

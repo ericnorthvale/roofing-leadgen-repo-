@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { publicOrigin } from "~/lib/site-url";
 
 export const prerender = false;
 
@@ -27,7 +28,9 @@ export const GET: APIRoute = ({ request, cookies, redirect }) => {
   }
 
   const url = new URL(request.url);
-  const redirectUri = `${url.origin}/api/auth/callback`;
+  // Build the callback from the PUBLIC host (Vercel forwards it), not request.url
+  // which is https://localhost on the serverless runtime.
+  const redirectUri = `${publicOrigin(request)}/api/auth/callback`;
   const state = crypto.randomUUID();
   const returnTo = safeReturnTo(url.searchParams.get("returnTo"));
 
