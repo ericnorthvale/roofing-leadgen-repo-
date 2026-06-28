@@ -12,12 +12,12 @@ Run through before flipping northvaleroofing.com public. Each row either ships o
 ## Site
 
 - [ ] `PUBLIC_SITE_URL` set in Vercel to `https://northvaleroofing.com`.
-- [ ] All six neighborhood pages render with unique content.
+- [ ] All eight service-area (city) pages render — complete ones indexable, drafts `noindex` + NEEDS-DATA per the quality gate.
 - [ ] All five service pages render with unique content.
 - [ ] `/blog` has at least 3 published posts (not drafts).
 - [ ] `/reviews` pulls from live Google Business Profile.
 - [ ] 404, thank-you, and storm-response pages render.
-- [ ] Lighthouse CI: perf/a11y/best-practices/SEO all ≥ 0.95 on mobile throttle.
+- [ ] Lighthouse CI passes on mobile throttle: a11y/best-practices/SEO ≥ 0.95, performance ≥ 0.90, and Google "good" CWV (LCP ≤ 2500ms, TBT ≤ 200ms, CLS ≤ 0.10).
 - [ ] Broken-link check (linkinator) passes.
 - [ ] Sitemap + robots.txt live; `/thank-you` disallowed.
 
