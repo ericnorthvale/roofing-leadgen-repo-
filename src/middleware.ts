@@ -57,6 +57,30 @@ export const onRequest = defineMiddleware(async (context, next) => {
           },
         );
       }
+
+      // Keystatic runs in GitHub storage mode in production, which crashes the
+      // serverless function if its GitHub App credentials aren't set yet (the
+      // App is created via a one-time local setup, then the vars are copied to
+      // Vercel). Until that's done, show a friendly "not configured" page to the
+      // signed-in admin instead of a raw FUNCTION_INVOCATION_FAILED crash.
+      if (!import.meta.env.PUBLIC_KEYSTATIC_GITHUB_APP_SLUG) {
+        return new Response(
+          `<!doctype html><meta charset="utf-8"><title>Admin panel — setup not finished</title>` +
+            `<div style="font-family:system-ui;max-width:34rem;margin:4rem auto;padding:0 1rem;line-height:1.5">` +
+            `<h1>Admin panel isn't set up yet</h1>` +
+            `<p>You're signed in as <strong>${session.email}</strong> — that part works. The editor ` +
+            `still needs its one-time <strong>Keystatic GitHub connection</strong> completed before it ` +
+            `can load and save.</p>` +
+            `<p>Follow <code>docs/setup-admin-panel.md</code> to create the GitHub App and add its ` +
+            `four values (including <code>PUBLIC_KEYSTATIC_GITHUB_APP_SLUG</code>) to Vercel, then ` +
+            `redeploy. This page will turn into the editor automatically once those are set.</p>` +
+            `<p style="color:#888;font-size:.85rem">(keystatic-not-configured)</p></div>`,
+          {
+            status: 503,
+            headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
+          },
+        );
+      }
     }
   }
 
