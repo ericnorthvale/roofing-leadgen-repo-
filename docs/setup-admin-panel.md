@@ -91,6 +91,25 @@ flag just for setup.
 > **GitHub → Settings → Developer settings → GitHub Apps → (your app) → Callback URL**
 > and add `https://<your-prod-domain>/api/keystatic/github/oauth/callback`.
 
+### Production gotchas (learned the hard way — match the exact host you serve)
+
+The single biggest trap: **OAuth callbacks must use the EXACT host the site serves
+on.** Our site serves `www.northvaleroofing.com` (not the bare apex), so **both** of
+these must be registered with the `www` form:
+
+- **Google OAuth client → Authorized redirect URIs:**
+  `https://www.northvaleroofing.com/api/auth/callback`
+- **Keystatic GitHub App → Callback URL:**
+  `https://www.northvaleroofing.com/api/keystatic/github/oauth/callback`
+
+If you ever switch the canonical domain (e.g. drop `www`), update both. If sign-in
+shows `redirect_uri_mismatch` (Google) or "redirect_uri is not associated with this
+application" (GitHub), the registered URL doesn't match the host — read the actual
+`redirect_uri` in the error page's address bar and register that exact value.
+
+The code already derives the right host from Vercel's forwarding headers (so it sends
+the `www` callback automatically) — your only job is to register the matching URL.
+
 ## Optional env (Vercel)
 
 - `ADMIN_ALLOWED_DOMAINS` — comma-separated (default `northvaleroofing.com`)
