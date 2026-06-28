@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Northvale Roofing — primary wordmark + glyph.
+  Intent: premium serif (Fraunces-like ligature), pentagonal roofline glyph
+  in brand navy, single gold accent on the compass-rose vertical.
+  Designed to render cleanly from 40px tall up to 400px.
+
+  This is a placeholder until Eric commissions a real logo. Real one should:
+    - Replace the <text> with an outlined/pathed version of "NORTHVALE" in the
+      final typeface so it renders identically across devices without font
+      loading.
+    - Possibly rework the glyph proportions once we have final brand guidelines.
+
+  Width 360 × Height 80. Clip-safe at all sizes.
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 360 80"
+     role="img"
+     aria-label="Northvale Roofing"
+     preserveAspectRatio="xMidYMid meet">
+  <!-- Glyph -->
+  <g transform="translate(8, 14)">
+    <path d="M26 2 L48 17 L48 50 L4 50 L4 17 Z"
+          fill="none"
+          stroke="#172f52"
+          stroke-width="3"
+          stroke-linejoin="round"/>
+    <path d="M26 10 L26 42 M10 26 L42 26"
+          stroke="#172f52"
+          stroke-width="1.75"
+          stroke-linecap="round"
+          opacity="0.55"/>
+    <path d="M26 14 L26 38"
+          stroke="#d98a1f"
+          stroke-width="2.25"
+          stroke-linecap="round"/>
+  </g>
+
+  <!-- Wordmark (temporary; uses CSS-fallback stack until outlined version ships) -->
+  <text x="72" y="52"
+        font-family="'Fraunces', 'Iowan Old Style', Georgia, serif"
+        font-size="34"
+        font-weight="500"
+        letter-spacing="2"
+        fill="#172f52">NORTHVALE</text>
+
+  <!-- Tagline line (optional, small) -->
+  <text x="72" y="68"
+        font-family="'Inter', system-ui, sans-serif"
+        font-size="10"
+        letter-spacing="3.5"
+        fill="#4b5c75"
+        text-transform="uppercase">ROOFING &#183; NW HOUSTON</text>
+</svg>

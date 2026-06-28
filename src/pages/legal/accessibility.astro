@@ -1,0 +1,34 @@
+---
+import LegalLayout from "@layouts/LegalLayout.astro";
+import { LEGAL } from "~/lib/legal";
+---
+
+<LegalLayout
+  seo={{
+    title: "Accessibility statement",
+    description:
+      "Our approach to WCAG 2.2 AA compliance and how to reach us for accessibility support.",
+    pathname: "/legal/accessibility",
+  }}
+  title="Accessibility"
+  effectiveDate="2026-04-22"
+>
+  <p>
+    We target <strong>WCAG 2.2 Level AA</strong> across northvaleroofing.com. Automated checks run on
+    every build via Lighthouse CI (accessibility ≥ 0.95), and we test manually with screen readers and
+    keyboard-only navigation for major user flows.
+  </p>
+  <h2>Known gaps</h2>
+  <ul>
+    <li>
+      Some PDF lead magnets may not yet be fully tagged. We're converting to accessible HTML where
+      possible; PDF tagging is a rolling task.
+    </li>
+    <li>
+      Third-party embeds (Google Maps, CallRail call widget) may not meet AA in all edge cases — we
+      report issues upstream.
+    </li>
+  </ul>
+  <h2>How to reach us</h2>
+  <p>{LEGAL.accessibilityContact}</p>
+</LegalLayout>

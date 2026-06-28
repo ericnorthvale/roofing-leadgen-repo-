@@ -1,0 +1,194 @@
+---
+import { LEGAL } from "~/lib/legal";
+
+interface Props {
+  /** GTM/HighLevel source tag; appears in the hidden `source` field. */
+  source: string;
+  /** Optional city/service pre-selection. */
+  defaultCity?: string;
+  defaultService?: "inspection" | "repair" | "replacement" | "storm" | "insurance";
+  /** Submit button label; defaults to the direct, imperative form. */
+  submitLabel?: string;
+}
+
+const {
+  source,
+  defaultCity = "",
+  defaultService = "inspection",
+  submitLabel = "Book my inspection",
+} = Astro.props;
+---
+
+<form
+  method="POST"
+  action="/api/lead"
+  class="grid gap-4 rounded-[var(--radius-card)] bg-white p-6 shadow-[var(--shadow-card)]"
+  novalidate
+>
+  <input type="hidden" name="source" value={source} />
+  <input type="hidden" name="utm" value="" data-utm-field />
+
+  <div class="grid gap-4 md:grid-cols-2">
+    <label class="grid gap-1 text-sm">
+      <span class="font-medium">First name</span>
+      <input
+        required
+        name="firstName"
+        type="text"
+        autocomplete="given-name"
+        class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+      />
+    </label>
+    <label class="grid gap-1 text-sm">
+      <span class="font-medium">Last name</span>
+      <input
+        name="lastName"
+        type="text"
+        autocomplete="family-name"
+        class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+      />
+    </label>
+  </div>
+
+  <label class="grid gap-1 text-sm">
+    <span class="font-medium">Phone</span>
+    <input
+      required
+      name="phone"
+      type="tel"
+      autocomplete="tel"
+      inputmode="tel"
+      pattern="[\d\s\(\)\-+]{10,}"
+      class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+    />
+  </label>
+
+  <label class="grid gap-1 text-sm">
+    <span class="font-medium"
+      >Email <span class="text-[color:var(--color-ink-500)]">(optional)</span></span
+    >
+    <input
+      name="email"
+      type="email"
+      autocomplete="email"
+      class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+    />
+  </label>
+
+  <label class="grid gap-1 text-sm">
+    <span class="font-medium">Street address</span>
+    <input
+      required
+      name="address"
+      type="text"
+      autocomplete="street-address"
+      class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+    />
+  </label>
+
+  <div class="grid gap-4 md:grid-cols-2">
+    <label class="grid gap-1 text-sm">
+      <span class="font-medium">City</span>
+      <input
+        required
+        name="city"
+        value={defaultCity}
+        type="text"
+        autocomplete="address-level2"
+        class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+      />
+    </label>
+    <label class="grid gap-1 text-sm">
+      <span class="font-medium">ZIP</span>
+      <input
+        required
+        name="zip"
+        type="text"
+        autocomplete="postal-code"
+        inputmode="numeric"
+        pattern="\d{5}"
+        class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
+      />
+    </label>
+  </div>
+
+  <label class="grid gap-1 text-sm">
+    <span class="font-medium">What do you need?</span>
+    <select name="service" class="rounded border border-[color:var(--color-navy-200)] px-3 py-2">
+      <option value="inspection" selected={defaultService === "inspection"}>Free inspection</option>
+      <option value="repair" selected={defaultService === "repair"}>Roof repair</option>
+      <option value="replacement" selected={defaultService === "replacement"}
+        >Roof replacement</option
+      >
+      <option value="storm" selected={defaultService === "storm"}>Storm damage check</option>
+      <option value="insurance" selected={defaultService === "insurance"}
+        >Insurance claim help</option
+      >
+    </select>
+  </label>
+
+  {/* Optional notes — hidden on mobile to cut form length; still submitted on desktop. */}
+  <label class="hidden gap-1 text-sm md:grid">
+    <span class="font-medium"
+      >Anything we should know? <span class="text-[color:var(--color-ink-500)]">(optional)</span
+      ></span
+    >
+    <textarea
+      name="notes"
+      rows="3"
+      class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"></textarea>
+  </label>
+
+  {/* Honeypot — bots fill it, humans don't see it. */}
+  <label class="sr-only" aria-hidden="true">
+    <span>Website</span>
+    <input name="website" type="text" tabindex="-1" autocomplete="off" />
+  </label>
+
+  <label class="flex items-start gap-2 text-xs text-[color:var(--color-ink-500)]">
+    <input required name="consent" type="checkbox" class="mt-1" />
+    <span>{LEGAL.consentDisclaimer}</span>
+  </label>
+
+  <button type="submit" class="btn btn-primary justify-self-start">{submitLabel}</button>
+
+  <p class="text-xs text-[color:var(--color-ink-500)]">
+    You'll hear back in under 60 seconds, 8am–9pm CT, or first thing in the morning.
+  </p>
+</form>
+
+<script>
+  // Keep the hidden `utm` field in sync with whatever the server middleware
+  // captured, by reading the cookie/storage mirror if present. Client-first
+  // UTM persistence (30-day) lives here so cross-session attribution works
+  // even if the first visit didn't convert.
+  (() => {
+    const form = document.querySelector("form[action='/api/lead']");
+    if (!form) return;
+    const field = form.querySelector<HTMLInputElement>("[data-utm-field]");
+    if (!field) return;
+    try {
+      const saved = localStorage.getItem("nv_utm");
+      const live = new URL(window.location.href);
+      const payload: Record<string, string> = saved ? JSON.parse(saved) : {};
+      for (const k of [
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_content",
+        "utm_term",
+        "gclid",
+        "fbclid",
+      ]) {
+        const v = live.searchParams.get(k);
+        if (v) payload[k.replace(/^utm_/, "")] = v;
+      }
+      if (!payload.firstTouchAt) payload.firstTouchAt = new Date().toISOString();
+      if (!payload.landingPath) payload.landingPath = live.pathname;
+      localStorage.setItem("nv_utm", JSON.stringify(payload));
+      field.value = JSON.stringify(payload);
+    } catch {
+      /* no-op */
+    }
+  })();
+</script>

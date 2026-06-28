@@ -1,0 +1,128 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Hero from "@components/Hero.astro";
+import TrustBar from "@components/TrustBar.astro";
+import ServiceCard from "@components/ServiceCard.astro";
+import LeadForm from "@components/LeadForm.astro";
+import Reviews from "@components/Reviews.astro";
+import { BRAND } from "~/lib/brand";
+import { SERVICE_AREAS } from "~/lib/service-areas";
+
+// Data-driven so the eyebrow always reflects every city we actually serve —
+// add a service area and it appears here automatically (no hardcoded list to
+// drift out of sync).
+const areasLine = Object.values(SERVICE_AREAS)
+  .map((a) => a.name)
+  .join(" · ");
+---
+
+<BaseLayout
+  seo={{
+    title: "Premium residential roofing in The Woodlands + NW Houston",
+    description:
+      "Same-day inspection, written estimate before we leave the driveway. A named project manager on every job. Forty-photo documentation packet.",
+    pathname: "/",
+  }}
+>
+  <Hero
+    eyebrow={areasLine}
+    headline="Same day. In writing."
+    subhead={`Premium residential roofing for North Houston. Written estimate before we leave the driveway. A named project manager on every job.`}
+    primaryCta={{ href: "/contact", label: "Book my inspection", ctaId: "home-book" }}
+    secondaryCta={{ href: "/storm-response", label: "Storm today?", ctaId: "home-storm" }}
+  />
+
+  <TrustBar />
+
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <h2 class="text-3xl">What we do</h2>
+    <div class="mt-8 grid gap-6 md:grid-cols-3">
+      <ServiceCard
+        href="/services/roof-replacement"
+        title="Roof replacement"
+        blurb="GAF Timberline HDZ + 50-year non-prorated warranty. Class-4 IR upgrade available."
+      />
+      <ServiceCard
+        href="/services/roof-repair"
+        title="Roof repair"
+        blurb="Leaks, lifted shingles, storm patching — usually same-day or next-day."
+      />
+      <ServiceCard
+        href="/services/roof-inspection"
+        title="Roof inspection"
+        badge="Free"
+        blurb="Forty-photo packet. Written findings within 24 hours. No obligation, no pressure."
+      />
+      <ServiceCard
+        href="/services/storm-damage"
+        title="Storm damage"
+        blurb="Hail, wind, fallen-limb impact. We document everything your adjuster will ask for."
+      />
+      <ServiceCard
+        href="/services/insurance-claims"
+        title="Insurance claims"
+        blurb="Process-literate support. Not a public adjuster — we're the contractor of record."
+      />
+      <ServiceCard
+        href="/the-woodlands"
+        title="Neighborhoods"
+        blurb="ARC-approved shingle lists on file for Bridgeland, Towne Lake, Alden Bridge, Timarron, more."
+      />
+    </div>
+  </section>
+
+  <section class="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-[1fr_420px]">
+    <div class="prose-northvale">
+      <h2>Why homeowners in Creekside Park and Grogan's Mill call us</h2>
+      <p>
+        We live here. We drive through The Woodlands on the way to work. When a thunderstorm rolls
+        in off Lake Conroe, we're already loading ladders.
+      </p>
+      <p>
+        Quality work in this market isn't the cheapest, and we don't pretend to be — we're the ones
+        you call when you want it done right the first time. If someone quoted you a rock-bottom
+        number for a full replacement, call us. We'll tell you what they're cutting.
+      </p>
+      <ul>
+        <li>
+          <strong>Same-day inspection</strong> — booked when you call. No "one of our team members will
+          reach out."
+        </li>
+        <li>
+          <strong>Written estimate</strong> — before we leave the driveway. Not "within 24–48 hours."
+        </li>
+        <li>
+          <strong>Named project manager</strong> — you'll have a cell number and a name. Not a dispatcher.
+        </li>
+        <li>
+          <strong>Forty-photo documentation packet</strong> — especially useful for insurance claims.
+        </li>
+        <li><strong>Under-60-second response</strong> — text us 8am–9pm CT and hear back fast.</li>
+      </ul>
+      <p><a href="/about">Read our story →</a></p>
+    </div>
+    <div>
+      <LeadForm source="home-hero-sidebar" />
+    </div>
+  </section>
+
+  <Reviews />
+
+  <section class="bg-[color:var(--color-navy-900)] text-white">
+    <div class="mx-auto max-w-6xl px-4 py-16 text-center">
+      <h2 class="text-3xl text-white">Ready when you are.</h2>
+      <p class="mx-auto mt-3 max-w-xl">{BRAND.promise}</p>
+      <div class="mt-6 flex justify-center gap-3">
+        <a class="btn btn-primary" href="/contact" data-cta-id="footer-band-book"
+          >Book my inspection</a
+        >
+        <a
+          class="btn btn-ghost"
+          style="border-color:rgba(255,255,255,0.3);color:white;"
+          href="/storm-response"
+          data-cta-id="footer-band-storm">Storm today?</a
+        >
+      </div>
+    </div>
+  </section>
+</BaseLayout>

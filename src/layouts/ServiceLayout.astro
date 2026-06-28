@@ -1,0 +1,123 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import CTAButton from "@components/CTAButton.astro";
+import PhoneCTAButton from "@components/PhoneCTAButton.astro";
+import LeadForm from "@components/LeadForm.astro";
+import TrustBar from "@components/TrustBar.astro";
+import Faq from "@components/Faq.astro";
+import RelatedLinks from "@components/RelatedLinks.astro";
+import { buildSeo, serviceJsonLd, faqPageJsonLd } from "~/lib/seo";
+import { evaluateService } from "~/lib/quality-gate";
+import { SERVICE_LIST, type Service } from "~/lib/services";
+
+interface Props {
+  service: Service;
+}
+const { service } = Astro.props;
+
+const siteUrl = Astro.site?.toString() ?? "https://northvaleroofing.com";
+const verdict = evaluateService(service);
+
+const jsonLd: Record<string, unknown>[] = [serviceJsonLd(siteUrl, service)];
+if (service.faqs && service.faqs.length > 0) jsonLd.push(faqPageJsonLd(service.faqs));
+
+const seo = buildSeo(
+  {
+    title: service.seoTitle,
+    description: service.seoDescription,
+    pathname: `/services/${service.slug}`,
+    noindex: !verdict.indexable,
+    jsonLd,
+  },
+  siteUrl,
+);
+
+const relatedServices = SERVICE_LIST.filter((s) => s.serviceTag !== service.serviceTag).map(
+  (s) => ({
+    href: `/services/${s.slug}`,
+    label: s.title,
+    description: s.summary,
+  }),
+);
+---
+
+<BaseLayout seo={seo}>
+  <section class="mx-auto max-w-6xl px-4 py-10">
+    <Breadcrumbs
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Services", href: "/services" },
+        { label: service.title },
+      ]}
+    />
+    <h1 class="mt-6 text-4xl md:text-5xl">{service.title}</h1>
+    <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-800)]">{service.summary}</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <CTAButton
+        href="/contact"
+        label="Book inspection"
+        ctaId={`service-${service.serviceTag}-book`}
+      />
+      <PhoneCTAButton ctaId={`service-${service.serviceTag}-call`} />
+      <CTAButton
+        href="/storm-response"
+        variant="ghost"
+        label="Storm today?"
+        ctaId={`service-${service.serviceTag}-storm`}
+      />
+    </div>
+  </section>
+
+  <TrustBar />
+
+  <section class="mx-auto grid max-w-6xl gap-10 px-4 py-10 md:grid-cols-[1fr_400px]">
+    <article class="prose-northvale">
+      {
+        service.sections.map((section) => (
+          <Fragment>
+            <h2>{section.heading}</h2>
+            {section.body && <p>{section.body}</p>}
+            {section.bullets &&
+              (section.ordered ? (
+                <ol>
+                  {section.bullets.map((b) =>
+                    b.html ? (
+                      <li set:html={b.html} />
+                    ) : (
+                      <li>
+                        {b.lead && <strong>{b.lead}</strong>}
+                        {b.lead && b.text ? " — " : ""}
+                        {b.text}
+                      </li>
+                    ),
+                  )}
+                </ol>
+              ) : (
+                <ul>
+                  {section.bullets.map((b) =>
+                    b.html ? (
+                      <li set:html={b.html} />
+                    ) : (
+                      <li>
+                        {b.lead && <strong>{b.lead}</strong>}
+                        {b.lead && b.text ? " — " : ""}
+                        {b.text}
+                      </li>
+                    ),
+                  )}
+                </ul>
+              ))}
+          </Fragment>
+        ))
+      }
+    </article>
+    <aside class="md:sticky md:top-10 md:self-start">
+      <LeadForm source={`service:${service.serviceTag}`} defaultService={service.serviceTag} />
+    </aside>
+  </section>
+
+  {service.faqs && <Faq items={service.faqs} />}
+
+  <RelatedLinks heading="Other services" links={relatedServices} />
+</BaseLayout>

@@ -1,0 +1,38 @@
+---
+import { BRAND } from "~/lib/brand";
+import { telHref, formatPhoneDisplay } from "~/lib/phone";
+import CTAButton from "@components/CTAButton.astro";
+
+const phone = formatPhoneDisplay(BRAND.phoneE164);
+---
+
+<header class="border-b border-[color:var(--color-navy-100)] bg-white">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4">
+    <a href="/" class="flex items-center gap-3" aria-label={`${BRAND.name} — home`}>
+      <img src="/brand/logo.svg" alt="" width="40" height="40" loading="eager" decoding="async" />
+      <span class="font-serif text-xl font-semibold text-[color:var(--color-navy-900)]"
+        >{BRAND.name}</span
+      >
+    </a>
+
+    <nav class="hidden items-center gap-6 md:flex" aria-label="Main">
+      <a href="/services" class="text-sm font-medium">Services</a>
+      <a href="/the-woodlands" class="text-sm font-medium">The Woodlands</a>
+      <a href="/storm-response" class="text-sm font-medium">Storm Response</a>
+      <a href="/reviews" class="text-sm font-medium">Reviews</a>
+      <a href="/about" class="text-sm font-medium">About</a>
+      <a href="/blog" class="text-sm font-medium">Blog</a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={telHref(BRAND.phoneE164)}
+        data-cra-phone
+        class="hidden text-sm font-semibold text-[color:var(--color-navy-900)] md:inline"
+      >
+        {phone}
+      </a>
+      <CTAButton href="/contact" label="Book inspection" ctaId="header-book" />
+    </div>
+  </div>
+</header>

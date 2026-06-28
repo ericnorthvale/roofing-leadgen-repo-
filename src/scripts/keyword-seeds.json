@@ -1,0 +1,60 @@
+{
+  "_comment": "Seed keywords the weekly content pipeline expands into briefs. Format locked by src/scripts/keyword-brief-generator.ts (Eric to implement).",
+  "clusters": {
+    "inspection": [
+      "free roof inspection the woodlands",
+      "roof inspection before selling house texas",
+      "what does a roof inspector look for"
+    ],
+    "replacement": [
+      "roof replacement cost the woodlands tx",
+      "gaf timberline hdz vs certainteed landmark",
+      "how long does roof replacement take"
+    ],
+    "repair": [
+      "roof leak repair spring tx",
+      "pipe boot replacement cost",
+      "ridge cap repair after wind"
+    ],
+    "storm-damage": [
+      "hail damage roof insurance claim texas",
+      "how to tell if my roof has hail damage",
+      "wind damage roof repair houston"
+    ],
+    "insurance-claims": [
+      "roof insurance claim texas process",
+      "adjuster denied roof claim texas what to do",
+      "homeowners insurance roof replacement",
+      "roof depreciation recoverable"
+    ],
+    "materials": [
+      "class 4 impact resistant shingle texas",
+      "gaf master elite vs certainteed shingle master",
+      "metal roof vs shingle the woodlands"
+    ],
+    "maintenance": [
+      "how often should a roof be inspected texas",
+      "roof algae black streaks treatment",
+      "spring roof maintenance checklist"
+    ],
+    "buyer-seller": [
+      "does a new roof add value to a home texas",
+      "should i replace the roof before selling",
+      "roof life expectancy texas heat"
+    ],
+    "local-weather": [
+      "when is hail season houston",
+      "houston hurricane roof preparation",
+      "woodlands tree damage roof hurricane"
+    ],
+    "hoa": [
+      "the woodlands hoa shingle approved list",
+      "bridgeland arc roof color",
+      "towne lake arc roof approval process"
+    ],
+    "inspector-peers": [
+      "home inspection roof deficiencies texas",
+      "how do roofers and inspectors work together"
+    ]
+  }
+}

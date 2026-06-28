@@ -1,0 +1,13 @@
+---
+import NeighborhoodLayout from "@layouts/NeighborhoodLayout.astro";
+import { SERVICE_AREAS, SERVICE_AREA_SLUGS, type ServiceAreaSlug } from "~/lib/service-areas";
+
+export async function getStaticPaths() {
+  return SERVICE_AREA_SLUGS.map((slug) => ({ params: { area: slug } }));
+}
+
+const area = Astro.params.area as ServiceAreaSlug;
+const data = SERVICE_AREAS[area];
+---
+
+<NeighborhoodLayout area={data} />

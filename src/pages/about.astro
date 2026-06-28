@@ -1,0 +1,62 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import CTAButton from "@components/CTAButton.astro";
+import { BRAND } from "~/lib/brand";
+---
+
+<BaseLayout
+  seo={{
+    title: "About Northvale Roofing",
+    description:
+      "Founder story, crew philosophy, and why we're different from every other roofer in the Yellow Pages.",
+    pathname: "/about",
+  }}
+>
+  <section class="mx-auto max-w-3xl px-4 py-12">
+    <h1 class="text-4xl md:text-5xl">
+      We built Northvale because we were tired of how roofing usually goes.
+    </h1>
+    <article class="prose-northvale mt-8">
+      <p>
+        Most roofing sales look the same: a stranger in a truck, a verbal number, a pressure close
+        before the neighbor next door signs with someone else. The homeowner ends up either
+        overpaying for what they got, or underpaying for something that fails in year seven.
+      </p>
+      <p>
+        We built {BRAND.name} to do it the way we'd want it done to our own houses. <strong
+          >Same-day inspection. Written estimate before we leave the driveway. A named project
+          manager on every job.</strong
+        > No dispatcher, no "one of our team members will reach out."
+      </p>
+      <h2>What you get</h2>
+      <ul>
+        <li>A 10+ year foreman on every crew — not a first-week helper running a nail gun.</li>
+        <li>
+          A forty-photo documentation packet at job close. It's yours; we also send a copy to your
+          insurance file.
+        </li>
+        <li>
+          GAF Timberline HDZ as the default — a 50-year non-prorated warranty when installed to
+          spec, which we do.
+        </li>
+        <li>No subcontracting the foreman role. Crews are our people.</li>
+      </ul>
+      <h2>What we won't do</h2>
+      <ul>
+        <li>
+          We don't knock doors after a storm. That's a Texas Bus. & Com. Code § 27.02 minefield, and
+          more importantly, it's how neighbors get burned.
+        </li>
+        <li>We don't waive deductibles. It's insurance fraud — not a gray area.</li>
+        <li>
+          We don't bid against $7K full-replacement numbers. If that's the price you need, we're not
+          your roofer. We'll happily tell you what's missing in that bid.
+        </li>
+      </ul>
+    </article>
+    <div class="mt-10 flex gap-3">
+      <CTAButton href="/contact" label="Book my inspection" ctaId="about-book" />
+      <CTAButton href="/reviews" variant="ghost" label="Read reviews" />
+    </div>
+  </section>
+</BaseLayout>

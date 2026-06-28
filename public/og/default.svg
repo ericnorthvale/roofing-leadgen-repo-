@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Default Open Graph social preview. 1200×630 — the dimensions FB/LinkedIn/X crop from.
+  Placeholder until Eric commissions a designed one. See TASKS_FOR_ERIC for replacement task.
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1200 630"
+     role="img"
+     aria-label="Northvale Roofing — Premium residential roofing, The Woodlands &amp; NW Houston"
+     preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f1f37"/>
+      <stop offset="100%" stop-color="#172f52"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Decorative roofline across the top -->
+  <path d="M0 90 L150 50 L300 80 L450 40 L600 70 L750 30 L900 65 L1050 35 L1200 60 L1200 0 L0 0 Z"
+        fill="#1e3e69" opacity="0.5"/>
+
+  <!-- Glyph -->
+  <g transform="translate(90, 190)">
+    <path d="M60 10 L110 40 L110 120 L10 120 L10 40 Z"
+          fill="none" stroke="#fcfbf7" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M60 30 L60 100 M20 65 L100 65"
+          stroke="#fcfbf7" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+    <path d="M60 38 L60 92"
+          stroke="#e8a547" stroke-width="4.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="230" y="260"
+        font-family="'Fraunces', 'Iowan Old Style', Georgia, serif"
+        font-size="100"
+        font-weight="500"
+        letter-spacing="5"
+        fill="#fcfbf7">NORTHVALE</text>
+
+  <text x="230" y="310"
+        font-family="'Fraunces', 'Iowan Old Style', Georgia, serif"
+        font-size="50"
+        font-weight="400"
+        letter-spacing="3"
+        fill="#b8cfe7">Roofing</text>
+
+  <!-- Tagline -->
+  <text x="90" y="450"
+        font-family="'Inter', system-ui, sans-serif"
+        font-size="42"
+        font-weight="500"
+        fill="#fcfbf7">Same day. In writing.</text>
+
+  <text x="90" y="500"
+        font-family="'Inter', system-ui, sans-serif"
+        font-size="26"
+        font-weight="400"
+        fill="#dce7f3">Premium residential roofing · The Woodlands &amp; NW Houston</text>
+
+  <!-- Accent line -->
+  <rect x="90" y="540" width="100" height="4" fill="#e8a547"/>
+
+  <!-- URL -->
+  <text x="90" y="580"
+        font-family="'Inter', system-ui, sans-serif"
+        font-size="22"
+        font-weight="500"
+        letter-spacing="1"
+        fill="#b8cfe7">northvaleroofing.com</text>
+</svg>

@@ -1,0 +1,114 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { SERVICE_AREAS, SERVICE_AREA_SLUGS } from "~/lib/service-areas";
+import { SERVICE_LIST } from "~/lib/services";
+import { PERSONAS, PERSONA_SLUGS } from "~/lib/personas";
+import { evaluateArea } from "~/lib/quality-gate";
+
+const corePages = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/services", label: "Services" },
+  { href: "/reviews", label: "Reviews" },
+  { href: "/contact", label: "Contact" },
+  { href: "/storm-response", label: "Storm response" },
+];
+
+const legalPages = [
+  { href: "/legal/privacy", label: "Privacy Policy" },
+  { href: "/legal/terms", label: "Terms of Service" },
+  { href: "/legal/tcpa", label: "TCPA Notice" },
+  { href: "/legal/accessibility", label: "Accessibility" },
+];
+
+// Only list service areas that pass the quality gate (live pages).
+const liveAreas = SERVICE_AREA_SLUGS.map((slug) => SERVICE_AREAS[slug]).filter(
+  (area) => evaluateArea(area).indexable,
+);
+---
+
+<BaseLayout
+  seo={{
+    title: "Sitemap",
+    description: "Browse every page on the Northvale Roofing site.",
+    pathname: "/sitemap",
+  }}
+>
+  <section class="mx-auto max-w-6xl px-4 py-12">
+    <h1 class="text-4xl md:text-5xl">Sitemap</h1>
+
+    <div class="mt-10 grid gap-10 md:grid-cols-2">
+      <div>
+        <h2 class="font-serif text-2xl">Main pages</h2>
+        <ul class="mt-4 space-y-2">
+          {
+            corePages.map((p) => (
+              <li>
+                <a href={p.href}>{p.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-serif text-2xl">Services</h2>
+        <ul class="mt-4 space-y-2">
+          {
+            SERVICE_LIST.map((s) => (
+              <li>
+                <a href={`/services/${s.slug}`}>{s.title}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-serif text-2xl">Service areas</h2>
+        {
+          liveAreas.length > 0 ? (
+            <ul class="mt-4 space-y-2">
+              {liveAreas.map((a) => (
+                <li>
+                  <a href={`/${a.slug}`}>{a.name}</a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="mt-4 text-[color:var(--color-ink-500)]">
+              Service-area pages are being built with real local detail and will appear here as they
+              go live.
+            </p>
+          )
+        }
+      </div>
+
+      <div>
+        <h2 class="font-serif text-2xl">For your situation</h2>
+        <ul class="mt-4 space-y-2">
+          {
+            PERSONA_SLUGS.map((slug) => (
+              <li>
+                <a href={PERSONAS[slug].path}>{PERSONAS[slug].label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="font-serif text-2xl">Legal</h2>
+        <ul class="mt-4 space-y-2">
+          {
+            legalPages.map((p) => (
+              <li>
+                <a href={p.href}>{p.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

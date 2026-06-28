@@ -1,0 +1,50 @@
+name: Nightly E2E Lead Test
+
+on:
+  # Scheduled run disabled until launch prerequisites land:
+  #   - src/scripts/e2e-lead-test.ts implemented
+  #   - northvaleroofing.com deployed (or E2E_TARGET secret set to staging)
+  #   - HighLevel API credentials rotated in repo secrets
+  # Re-enable by uncommenting the schedule block below.
+  # schedule:
+  #   - cron: "0 7 * * *" # 02:00 CT year-round-ish (UTC 07:00)
+  workflow_dispatch:
+
+concurrency:
+  group: nightly-e2e
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: Submit synthetic leads
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: "9.15.0" }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.18.0"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Run e2e lead test
+        env:
+          E2E_TARGET: ${{ secrets.E2E_TARGET || 'https://northvaleroofing.com' }}
+          HIGHLEVEL_API_KEY: ${{ secrets.HIGHLEVEL_API_KEY }}
+          HIGHLEVEL_LOCATION_ID: ${{ secrets.HIGHLEVEL_LOCATION_ID }}
+        run: pnpm tsx src/scripts/e2e-lead-test.ts
+
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const now = new Date().toISOString();
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `[E2E] Nightly lead-test failed — ${now.slice(0,10)}`,
+              body: `Nightly e2e lead test failed at ${now}. Check the workflow run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n\nInvestigation checklist:\n- Is the site reachable? (uptime check)\n- Is /api/lead returning 200?\n- Are HighLevel API creds rotated/valid?\n- Did Vercel deploy a broken version?`,
+              labels: ['e2e-failure', 'incident'],
+            });

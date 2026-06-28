@@ -1,0 +1,145 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import CTAButton from "@components/CTAButton.astro";
+import PhoneCTAButton from "@components/PhoneCTAButton.astro";
+import LeadForm from "@components/LeadForm.astro";
+import TrustBar from "@components/TrustBar.astro";
+import RelatedLinks from "@components/RelatedLinks.astro";
+import { buildSeo } from "~/lib/seo";
+import { evaluateArea } from "~/lib/quality-gate";
+import { SERVICE_LIST } from "~/lib/services";
+import type { ServiceArea } from "~/lib/service-areas";
+
+interface Props {
+  area: ServiceArea;
+}
+const { area } = Astro.props;
+
+const siteUrl = Astro.site?.toString() ?? "https://northvaleroofing.com";
+const verdict = evaluateArea(area);
+
+const seo = buildSeo(
+  {
+    title: `Roofing in ${area.name}, TX`,
+    description: `${area.intro} Free inspection, written estimate, forty-photo documentation packet.`,
+    pathname: `/${area.slug}`,
+    noindex: !verdict.indexable,
+  },
+  siteUrl,
+);
+
+const relatedServices = SERVICE_LIST.map((s) => ({
+  href: `/services/${s.slug}`,
+  label: s.title,
+  description: s.summary,
+}));
+---
+
+<BaseLayout seo={seo}>
+  {
+    !verdict.indexable && (
+      <div class="border-b-2 border-[color:var(--color-gold-500)] bg-[color:var(--color-gold-50)] px-4 py-3 text-sm text-[color:var(--color-ink-800)]">
+        <div class="mx-auto max-w-6xl">
+          <strong>NEEDS REAL DATA — draft, not indexed.</strong> This page is set to{" "}
+          <code>noindex</code> and is excluded from the sitemap until a human adds real local
+          content.
+          {verdict.missing.length > 0 && <> Required: {verdict.missing.join("; ")}.</>}
+          {verdict.recommended.length > 0 && <> Recommended: {verdict.recommended.join("; ")}.</>}
+        </div>
+      </div>
+    )
+  }
+
+  <section class="mx-auto max-w-6xl px-4 py-10">
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: area.name }]} />
+    <h1 class="mt-6 text-4xl md:text-5xl">Roofing in {area.name}, {area.county} County</h1>
+    <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-800)]">{area.intro}</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <CTAButton href="/contact" label="Book inspection" ctaId={`area-${area.slug}-book`} />
+      <PhoneCTAButton ctaId={`area-${area.slug}-call`} />
+      <CTAButton href="/storm-response" variant="ghost" label="Storm today?" />
+    </div>
+  </section>
+
+  <TrustBar />
+
+  <section class="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[1fr_400px]">
+    <article class="prose-northvale">
+      <p>{area.localContext}</p>
+
+      <h2>{area.name} neighborhoods we serve</h2>
+      <ul>{area.neighborhoods.map((n) => <li>{n}</li>)}</ul>
+
+      {
+        area.climateNote && (
+          <Fragment>
+            <h2>Local climate &amp; storm exposure</h2>
+            <p>{area.climateNote}</p>
+          </Fragment>
+        )
+      }
+
+      {
+        area.permitHoaNote && (
+          <Fragment>
+            <h2>Permits &amp; HOA approvals in {area.name}</h2>
+            <p>{area.permitHoaNote}</p>
+          </Fragment>
+        )
+      }
+
+      {
+        area.commonRoofTypes && area.commonRoofTypes.length > 0 && (
+          <Fragment>
+            <h2>Roof types we see in {area.name}</h2>
+            <ul>
+              {area.commonRoofTypes.map((t) => (
+                <li>{t}</li>
+              ))}
+            </ul>
+          </Fragment>
+        )
+      }
+
+      {
+        area.projects && area.projects.length > 0 && (
+          <Fragment>
+            <h2>Recent {area.name} projects</h2>
+            <ul>
+              {area.projects.map((p) => (
+                <li>
+                  {p.summary}
+                  {p.neighborhood ? ` (${p.neighborhood})` : ""}
+                </li>
+              ))}
+            </ul>
+          </Fragment>
+        )
+      }
+
+      {
+        area.testimonials && area.testimonials.length > 0 && (
+          <Fragment>
+            <h2>What {area.name} homeowners say</h2>
+            {area.testimonials.map((t) => (
+              <blockquote>
+                <p>"{t.quote}"</p>
+                <cite>
+                  — {t.author}, via {t.source}
+                </cite>
+              </blockquote>
+            ))}
+          </Fragment>
+        )
+      }
+
+      <slot />
+    </article>
+    <aside class="md:sticky md:top-10 md:self-start">
+      <LeadForm source={`area:${area.slug}`} defaultCity={area.name} />
+    </aside>
+  </section>
+
+  <RelatedLinks heading="Our roofing services" links={relatedServices} />
+</BaseLayout>
