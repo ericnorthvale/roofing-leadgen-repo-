@@ -53,8 +53,10 @@ spine and knowledge base were moved up.
       onboarding, CRM hygiene, reviews) + `docs/decision-log.md` + Major Decision template.
 - [x] **Attribution spine (start):** canonical `lead_source` (`src/lib/lead-source.ts`)
       → HighLevel field + tag; maps 1:1 into JobNimbus/QBO when live.
-- [ ] **D2 — Admin panel:** Keystatic at `/admin` behind Google Workspace SSO.
+- [x] **D2 — Admin panel:** Keystatic at `/keystatic` behind an in-app Google
+      sign-in (OAuth → signed session cookie, domain/email allowlist; no Cloudflare).
       Editable: Business Info, Photos, Reviews, Blog. City/service SEO pages stay Claude-crafted.
+      Owner provisions the Google OAuth client + secrets (`docs/setup-admin-panel.md`).
 
 **Phase 2 — Automation (30–90d):**
 
