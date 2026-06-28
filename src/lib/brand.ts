@@ -10,8 +10,10 @@ export const BRAND = {
   email: "hello@northvaleroofing.com",
   hoursSummary: "8am–9pm CT, 7 days a week",
   foundedYear: 2026,
+  // NEEDS OWNER CONFIRMATION: only state certifications the company actually
+  // holds. "Applicant" is honest aspiration; do not claim "certified" until earned.
   licenseNote:
-    "Texas does not license residential roofing contractors. We are RCAT-certified and GAF Master Elite applicants.",
+    "Texas does not license residential roofing contractors. Northvale Roofing LLC is a GAF Master Elite applicant.",
   addressLine1: "",
   city: "Spring",
   region: "TX",

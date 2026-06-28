@@ -18,6 +18,7 @@ const s = buildSeo(seo, siteUrl);
 const biz = localBusinessJsonLd(siteUrl);
 const gtmId = import.meta.env.PUBLIC_GTM_ID;
 const ga4Id = import.meta.env.PUBLIC_GA4_ID;
+const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
 ---
 
 <!doctype html>
@@ -29,6 +30,7 @@ const ga4Id = import.meta.env.PUBLIC_GA4_ID;
     <meta name="description" content={s.description} />
     <link rel="canonical" href={s.canonical} />
     {s.noindex && <meta name="robots" content="noindex,nofollow" />}
+    {gscVerification && <meta name="google-site-verification" content={gscVerification} />}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />

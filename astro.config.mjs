@@ -4,6 +4,7 @@ import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
+import { isAllowedInSitemap } from "./src/lib/routes";
 
 // Keep SITE in one place. Eric will set PUBLIC_SITE_URL in Vercel env after domain purchase.
 const SITE = process.env.PUBLIC_SITE_URL || "https://northvaleroofing.com";
@@ -22,7 +23,8 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
-      filter: (page) => !page.includes("/draft/") && !page.includes("/_"),
+      // Quality gate: pages failing the gate (noindex) are auto-excluded.
+      filter: (page) => isAllowedInSitemap(page),
       changefreq: "weekly",
       priority: 0.7,
       lastmod: new Date(),
@@ -66,6 +68,12 @@ export default defineConfig({
       PUBLIC_SITE_URL: envField.string({ context: "client", access: "public", default: SITE }),
       PUBLIC_GA4_ID: envField.string({ context: "client", access: "public", optional: true }),
       PUBLIC_GTM_ID: envField.string({ context: "client", access: "public", optional: true }),
+      // Google Search Console HTML-tag verification token (no DNS needed).
+      PUBLIC_GSC_VERIFICATION: envField.string({
+        context: "client",
+        access: "public",
+        optional: true,
+      }),
       PUBLIC_CALLRAIL_COMPANY_ID: envField.string({
         context: "client",
         access: "public",

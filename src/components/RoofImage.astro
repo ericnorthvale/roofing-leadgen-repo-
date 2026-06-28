@@ -1,0 +1,33 @@
+---
+/**
+ * Image wrapper that makes descriptive alt text mandatory (TypeScript will not
+ * let you omit it) and applies sensible loading defaults. Use this instead of a
+ * raw <img> so every image is accessible and SEO-friendly.
+ *
+ * `alt` must describe the actual image (e.g. "Hail-dented aluminum gutter apron
+ * on a Spring, TX home"). Never use a city/keyword-stuffed alt that doesn't
+ * match the photo.
+ */
+interface Props {
+  src: string;
+  /** Required, specific, truthful description of the image. */
+  alt: string;
+  width?: number;
+  height?: number;
+  /** Use eager + high priority for above-the-fold hero images only. */
+  priority?: boolean;
+  class?: string;
+}
+const { src, alt, width, height, priority = false, class: className } = Astro.props;
+---
+
+<img
+  src={src}
+  alt={alt}
+  width={width}
+  height={height}
+  loading={priority ? "eager" : "lazy"}
+  decoding={priority ? "auto" : "async"}
+  fetchpriority={priority ? "high" : "auto"}
+  class={className}
+/>

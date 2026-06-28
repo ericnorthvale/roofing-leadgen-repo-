@@ -1,6 +1,7 @@
 # PLAN.md — Northvale Roofing SEO Engine
 
 ## Why this exists
+
 We are building a fast, trustworthy local-roofing website for the Houston metro
 plus an SEO engine that can **scale safely**. The thing we are deliberately
 avoiding is the doorway-page / scaled-content-abuse pattern that Google's
@@ -15,6 +16,7 @@ gated data model, and proves quality on one flagship city before any scaled
 expansion.
 
 ## Owner decisions (locked)
+
 - **Service areas (8):** Houston, Spring, Cypress, The Woodlands, Kingwood,
   Tomball, Magnolia, Conroe.
 - **Flagship city (Phase 2):** The Woodlands.
@@ -27,6 +29,7 @@ expansion.
 ## Phases
 
 ### Phase 0 — Audit (done)
+
 Findings are in git history / the team plan. Stack: Astro 5 static + Tailwind 4
 on Vercel, pnpm/Node 20, CI with Lighthouse budgets. Solid SEO base (canonical,
 LocalBusiness + Breadcrumb JSON-LD, sitemap/robots). Gaps: no rich data model,
@@ -34,6 +37,7 @@ no quality gate, no Service/FAQ schema, sitemap doesn't exclude noindex pages,
 doorway-shaped city boilerplate, and some invented facts already in copy.
 
 ### Phase 1 — Foundation / SEO harness (this PR; builds the system, not new pages)
+
 1. Root `CLAUDE.md` — brand/NAP, hard rules, SEO standards, review workflow.
 2. **Data model** — `src/lib/service-areas.ts` (8 cities, rich fields,
    `dataCompleteness`) + new `src/lib/services.ts` (the 5 services as records).
@@ -58,12 +62,14 @@ doorway-shaped city boilerplate, and some invented facts already in copy.
 > indexed. Service pages stay indexable once their copy is scrubbed.
 
 ### Phase 2 — Flagship city: The Woodlands (needs owner's real data)
+
 City hub + core service-in-city pages, each genuinely unique and locally
 specific, with real photos, trust signals, full schema, breadcrumbs, internal
 links, fast mobile CWV. This becomes the quality template. PR → pause for
 preview review.
 
 ### Phase 3 — Gated expansion
+
 City by city / neighborhood by neighborhood, in small batches (5–20 pages).
 Only build pages with real, distinct data; data-less pages are `noindex`
 "NEEDS REAL DATA" drafts. After each batch: build + quality gate + schema
@@ -71,6 +77,7 @@ validation + broken-link check, then a fresh reviewer subagent checks the batch
 against this plan and the Phase-2 bar. Update TASKS.md every batch.
 
 ## Hard rules (also in CLAUDE.md — never break)
+
 - No page that differs only by a swapped city/neighborhood/service name. Every
   indexable page carries substantial, real, page-specific content.
 - Never fabricate any fact (addresses, phones, projects, stats, certs, reviews).

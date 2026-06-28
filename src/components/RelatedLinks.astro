@@ -1,0 +1,43 @@
+---
+/**
+ * Internal linking block ("related services / areas"). Keep links relevant and
+ * few — this is a navigation aid, not a link-stuffing surface.
+ */
+interface RelatedLink {
+  href: string;
+  label: string;
+  description?: string;
+}
+interface Props {
+  links: RelatedLink[];
+  heading?: string;
+}
+const { links, heading = "Related" } = Astro.props;
+---
+
+{
+  links.length > 0 && (
+    <nav aria-label={heading} class="mx-auto max-w-6xl px-4 py-12">
+      <h2 class="text-2xl md:text-3xl">{heading}</h2>
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="block rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] p-5 transition hover:border-[color:var(--color-gold-500)]"
+            >
+              <span class="font-serif text-lg text-[color:var(--color-navy-900)]">
+                {link.label}
+              </span>
+              {link.description && (
+                <span class="mt-1 block text-sm text-[color:var(--color-ink-500)]">
+                  {link.description}
+                </span>
+              )}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

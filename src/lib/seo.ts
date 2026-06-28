@@ -1,4 +1,5 @@
 import { BRAND } from "./brand";
+import { SERVICE_AREAS, SERVICE_AREA_SLUGS } from "./service-areas";
 
 export interface SeoInput {
   title: string;
@@ -42,6 +43,11 @@ export function buildSeo(input: SeoInput, siteUrl: string): SeoOutput {
   };
 }
 
+/** Service areas surfaced in structured data. Single source = the data model. */
+export function areaServedNames(): string[] {
+  return SERVICE_AREA_SLUGS.map((slug) => `${SERVICE_AREAS[slug].name}, TX`);
+}
+
 export function localBusinessJsonLd(siteUrl: string): Record<string, unknown> {
   const base = siteUrl.replace(/\/+$/, "");
   return {
@@ -62,14 +68,40 @@ export function localBusinessJsonLd(siteUrl: string): Record<string, unknown> {
       addressRegion: BRAND.region,
       addressCountry: BRAND.country,
     },
-    areaServed: [
-      "The Woodlands, TX",
-      "Spring, TX",
-      "Tomball, TX",
-      "Magnolia, TX",
-      "Conroe, TX",
-      "Cypress, TX",
-    ],
+    areaServed: areaServedNames(),
     sameAs: [] as string[],
+  };
+}
+
+/**
+ * Service + areaServed structured data for a service page. `provider` references
+ * the sitewide LocalBusiness node so Google links them.
+ */
+export function serviceJsonLd(
+  siteUrl: string,
+  service: { title: string; seoDescription: string; slug: string },
+): Record<string, unknown> {
+  const base = siteUrl.replace(/\/+$/, "");
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    serviceType: service.title,
+    description: service.seoDescription,
+    url: `${base}/services/${service.slug}`,
+    provider: { "@id": `${base}#business` },
+    areaServed: areaServedNames().map((name) => ({ "@type": "City", name })),
+  };
+}
+
+/** FAQPage structured data. Only emit when there is real, on-page Q&A. */
+export function faqPageJsonLd(faqs: { q: string; a: string }[]): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
   };
 }

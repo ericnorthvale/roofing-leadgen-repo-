@@ -4,12 +4,14 @@ Lean operating guide for anyone (human or AI) working in this repo. Read this
 before adding pages or content. Full plan: `PLAN.md`. Progress: `TASKS.md`.
 
 ## What this is
+
 A local-roofing website + safe-to-scale SEO engine for the Houston metro.
 Pages render **from data records**, never from name-swapped boilerplate.
 Astro 5 (static) + Tailwind 4 on Vercel. pnpm + Node 20.
 
 ## Brand + NAP
-- **Name:** Northvale Roofing  ·  **Legal:** Northvale Roofing LLC
+
+- **Name:** Northvale Roofing · **Legal:** Northvale Roofing LLC
 - **Domain:** northvaleroofing.com
 - **NAP must be byte-for-byte identical everywhere.** Single source:
   `src/lib/brand.ts`. Never hardcode phone/address in a page or component.
@@ -21,6 +23,7 @@ Astro 5 (static) + Tailwind 4 on Vercel. pnpm + Node 20.
   defensible claims** (see Hard Rules).
 
 ## Hard rules (never break)
+
 1. **No doorway pages.** Never create a page that differs from another only by a
    swapped city/neighborhood/service name. Every indexable page must contain
    substantial, real, page-specific content no other page already covers.
@@ -38,15 +41,17 @@ Astro 5 (static) + Tailwind 4 on Vercel. pnpm + Node 20.
 7. **Confirm before** any bulk delete / move / rename.
 
 ## Positioning: how to "look established" without lying
+
 Allowed: confident premium voice; the operator's and crews' REAL experience
 (once owner supplies numbers); strong warranties / written-estimate promise /
 financing the company will honor; serving all 8 cities; true regional
-climate/storm facts (sourced, e.g. NOAA); accurate certification *status*
+climate/storm facts (sourced, e.g. NOAA); accurate certification _status_
 (e.g. "GAF Master Elite applicant", not "GAF Master Elite" unless held).
 Forbidden: fake reviews, invented specific numbers presented as fact, false
 certs, fake address/GBP. When in doubt, flag it for the owner — don't invent.
 
 ## SEO standards
+
 - Unique `<title>` + meta description per page (`buildSeo`, `src/lib/seo.ts`).
   Never reuse a templated title across pages.
 - Explicit canonical on every page (handled by `buildSeo` / `BaseLayout`).
@@ -59,6 +64,7 @@ certs, fake address/GBP. When in doubt, flag it for the owner — don't invent.
   add a page to the sitemap by hand.
 
 ## Data model + quality gate
+
 - Locations: `src/lib/service-areas.ts`. Services: `src/lib/services.ts`.
   Each record has a `dataCompleteness` flag.
 - `src/lib/quality-gate.ts` `isIndexable(record)` decides index vs. `noindex`.
@@ -68,13 +74,15 @@ certs, fake address/GBP. When in doubt, flag it for the owner — don't invent.
   on invented content.
 
 ## Review workflow
+
 1. Branch (never `main`) → small, self-contained commits.
 2. `pnpm build` (runs `astro check`) + `pnpm test` + `pnpm lint` must pass.
 3. Open a **draft PR**; owners review the Vercel preview link.
 4. Keep `PLAN.md` / `TASKS.md` current so progress survives a context reset.
 
 ## Commands
+
 - `pnpm dev` — local server (http://localhost:4321)
-- `pnpm build` — typecheck + build  ·  `pnpm preview` — preview the build
-- `pnpm test` — unit tests  ·  `pnpm lint` — prettier + astro check
-- `pnpm test:e2e` — Playwright  ·  `pnpm lhci` — Lighthouse CI
+- `pnpm build` — typecheck + build · `pnpm preview` — preview the build
+- `pnpm test` — unit tests · `pnpm lint` — prettier + astro check
+- `pnpm test:e2e` — Playwright · `pnpm lhci` — Lighthouse CI

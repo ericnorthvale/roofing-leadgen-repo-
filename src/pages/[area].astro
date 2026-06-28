@@ -10,37 +10,4 @@ const area = Astro.params.area as ServiceAreaSlug;
 const data = SERVICE_AREAS[area];
 ---
 
-<NeighborhoodLayout
-  seo={{
-    title: `Roofing in ${data.name}, TX`,
-    description: `${data.intro} Free inspection, written estimate, forty-photo documentation packet.`,
-    pathname: `/${data.slug}`,
-  }}
-  area={data}
->
-  <h2>Why homeowners in {data.name} call us</h2>
-  <p>
-    We're close by. Most {data.name} addresses are inside a 20-minute drive of our base off I-45. When
-    we say same-day, we mean today.
-  </p>
-  <h2>Local materials + HOA context</h2>
-  <p>
-    Every master-planned community has its own architectural review committee (ARC) shingle list. If
-    you're in {data.landmarks[0]}, {data.landmarks[1]}, or {data.landmarks[2]}, we already know
-    what's on it — including the specific GAF and CertainTeed color codes your HOA will approve.
-  </p>
-  <h2>What to expect from us in {data.name}</h2>
-  <ul>
-    <li><strong>Same-day inspection</strong> — and yes, that includes Saturday.</li>
-    <li>
-      <strong>Written estimate</strong> — before we leave the driveway. Not "within 24–48 hours."
-    </li>
-    <li><strong>Named project manager</strong> — a real cell number, not a dispatcher.</li>
-    <li>
-      <strong>Forty-photo documentation packet</strong> — yours to keep, plus a copy for insurance.
-    </li>
-    <li>
-      <strong>ARC submittal handled</strong> — if your HOA needs color + shingle approval, we do the paperwork.
-    </li>
-  </ul>
-</NeighborhoodLayout>
+<NeighborhoodLayout area={data} />

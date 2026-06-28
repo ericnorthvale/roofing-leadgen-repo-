@@ -1,13 +1,14 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import ServiceCard from "@components/ServiceCard.astro";
+import { SERVICE_LIST } from "~/lib/services";
 ---
 
 <BaseLayout
   seo={{
     title: "Services",
     description:
-      "Roof replacement, repair, inspection, storm damage, insurance claim support. Every job, every service, signed off by a named project manager.",
+      "Roof replacement, repair, inspection, storm damage, and insurance claim support. Every job signed off by a named project manager.",
     pathname: "/services",
   }}
 >
@@ -18,32 +19,16 @@ import ServiceCard from "@components/ServiceCard.astro";
       packet at close.
     </p>
     <div class="mt-10 grid gap-6 md:grid-cols-2">
-      <ServiceCard
-        href="/services/roof-replacement"
-        title="Roof replacement"
-        blurb="GAF Timberline HDZ standard. 50-year non-prorated warranty. Class-4 IR available."
-      />
-      <ServiceCard
-        href="/services/roof-repair"
-        title="Roof repair"
-        blurb="Leaks, lifted shingles, flashing, patching. Usually same-day or next-day."
-      />
-      <ServiceCard
-        href="/services/roof-inspection"
-        title="Roof inspection"
-        badge="Free"
-        blurb="Forty-photo packet. Written findings within 24 hours. No obligation."
-      />
-      <ServiceCard
-        href="/services/storm-damage"
-        title="Storm damage"
-        blurb="Hail, wind, tree-impact. We document everything your adjuster will ask for."
-      />
-      <ServiceCard
-        href="/services/insurance-claims"
-        title="Insurance claims"
-        blurb="Process-literate. Xactimate-ready scopes. Claim close velocity is the game."
-      />
+      {
+        SERVICE_LIST.map((service) => (
+          <ServiceCard
+            href={`/services/${service.slug}`}
+            title={service.title}
+            badge={service.serviceTag === "inspection" ? "Free" : undefined}
+            blurb={service.summary}
+          />
+        ))
+      }
     </div>
   </section>
 </BaseLayout>

@@ -18,12 +18,14 @@ const CLUSTERS = [
 ] as const;
 
 const SERVICE_AREA_SLUGS = [
-  "the-woodlands",
+  "houston",
   "spring",
+  "cypress",
+  "the-woodlands",
+  "kingwood",
   "tomball",
   "magnolia",
   "conroe",
-  "cypress",
 ] as const;
 
 const blog = defineCollection({
