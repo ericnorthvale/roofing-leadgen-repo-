@@ -8,6 +8,23 @@ Format: date · decision · why · who.
 
 ## 2026 — Operating-system & website build
 
+- **Production runs on the `xvp3` Vercel project; `northvaleroofing.com` moved onto it.**
+  There were two Vercel projects for this repo — `roofing-leadgen-repo-xvp3` (correct,
+  connected to `ericnorthvale/roofing-leadgen-repo-`) and an older duplicate (tied to a
+  legacy repo) that was holding the custom domain. The domain was transferred to `xvp3`;
+  the old project is to be deleted. Reminder: set `PUBLIC_SITE_URL=https://northvaleroofing.com`
+  on `xvp3`. · Owner + Claude · 2026-06-28
+- **Admin sign-in hardening (post-launch fixes).** Two production bugs found while wiring
+  the panel live: (1) on Vercel `request.url` is `https://localhost`, so the Google OAuth
+  `redirect_uri` was built wrong — now derived from `x-forwarded-host`/`-proto` via
+  `src/lib/site-url.ts` `publicOrigin()`; (2) Vercel edge-cached the `/api/auth/login`
+  redirect, sharing one CSRF `state` across users — all auth redirects now use
+  `noStoreRedirect()` (`Cache-Control: no-store`). · Claude · 2026-06-28
+- **Keystatic = GitHub storage mode via its guided setup wizard.** The GitHub App is
+  created by Keystatic's built-in wizard (needs `PUBLIC_KEYSTATIC_GITHUB_SETUP=true` to
+  surface in dev), which generates 4 env vars incl. `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`.
+  Decided to keep Keystatic + Google sign-in (vs dropping the panel or GitHub-only login)
+  because Workspace-Google login is lowest-friction for non-technical owners. · Owner + Claude · 2026-06-28
 - **Admin auth implemented as IN-APP Google sign-in, not Cloudflare Access.** Why:
   the Cloudflare path required putting the domain on Cloudflare DNS (the owner hit a
   setup wall), and trusting an injected identity header is spoofable without a proxy
