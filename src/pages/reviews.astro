@@ -1,8 +1,24 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { fetchGoogleReviews } from "~/lib/google-reviews";
 
-const reviews = await getCollection("reviews");
+// Admin-managed reviews (added via the /keystatic panel) + live Google reviews
+// (when GOOGLE_PLACES_API_KEY + GOOGLE_PLACE_ID are set). Real reviews only.
+const managed = (await getCollection("reviews")).map((r) => ({
+  author: r.data.author,
+  rating: r.data.rating,
+  relativeTime: r.data.relativeTime,
+  text: r.data.text,
+  source: r.data.source as string,
+}));
+
+const google = await fetchGoogleReviews({
+  GOOGLE_PLACES_API_KEY: import.meta.env.GOOGLE_PLACES_API_KEY,
+  GOOGLE_PLACE_ID: import.meta.env.GOOGLE_PLACE_ID,
+});
+
+const reviews = [...google, ...managed];
 ---
 
 <BaseLayout
@@ -16,23 +32,23 @@ const reviews = await getCollection("reviews");
   <section class="mx-auto max-w-5xl px-4 py-12">
     <h1 class="text-4xl">Reviews</h1>
     <p class="mt-3 text-lg text-[color:var(--color-ink-500)]">
-      Google Business Profile reviews auto-sync daily. Direct customer reviews are added by a
-      project manager after job close.
+      Verified Google reviews plus direct customer reviews added after job close. We only ever
+      publish real reviews.
     </p>
     {
       reviews.length === 0 ? (
         <p class="mt-8">
-          Reviews will surface here once the Google Places pull is wired — see{" "}
-          <code>TASKS_FOR_ERIC.md</code>.
+          Reviews will appear here as they come in — Google reviews sync automatically once the
+          Business Profile is connected, and direct reviews are added in the admin panel.
         </p>
       ) : (
         <div class="mt-8 grid gap-6 md:grid-cols-2">
           {reviews.map((r) => (
             <article class="rounded-[var(--radius-card)] bg-white p-6 shadow-[var(--shadow-card)]">
-              <p>{r.data.text}</p>
-              <p class="mt-4 font-semibold">{r.data.author}</p>
+              <p>{r.text}</p>
+              <p class="mt-4 font-semibold">{r.author}</p>
               <p class="text-xs text-[color:var(--color-ink-500)]">
-                {r.data.source} · {r.data.relativeTime}
+                {r.source} · {r.relativeTime}
               </p>
             </article>
           ))}

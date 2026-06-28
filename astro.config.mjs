@@ -61,6 +61,7 @@ export default defineConfig({
         optional: true,
       }),
       GOOGLE_PLACE_ID: envField.string({ context: "server", access: "secret", optional: true }),
+      COMPANYCAM_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
       META_CAPI_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),
       // Lead alerts (SMS via Twilio + email via Resend). Day-one safety net — see docs/setup-leads.md.
       TWILIO_ACCOUNT_SID: envField.string({ context: "server", access: "secret", optional: true }),
