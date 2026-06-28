@@ -119,14 +119,30 @@ Website (Vercel) → **HighLevel** (leads/automation) → **JobNimbus** (jobs) �
 glues the gaps + scheduled jobs. Source of truth per domain: content = GitHub;
 leads = HighLevel; jobs = JobNimbus; money = QuickBooks; photos = CompanyCam.
 
-## Build sequencing (operations kit)
+## Build sequencing (3-phase, post-BOS-audit)
+
+A BOS audit (recorded in `docs/decision-log.md`) re-prioritized the work to attack
+the two cheapest risk reducers first: the **attribution spine** (so ad spend isn't
+blind) and the **knowledge base** (so ops knowledge leaves one person's head).
+
+**Phase 1 — Foundation (0–30d): stop the leaks**
 
 1. **D1 — Lead alerts + safety net** ✅ (PR #3): instant SMS/email so no lead is lost.
-2. **D2 — Admin panel** (Keystatic + Google SSO): owners edit Business Info, photos,
+2. **Knowledge Base + Decision Log** ✅ (`docs/sops/`, `docs/decision-log.md`,
+   `docs/major-decision-request-template.md`): SOPs for sales, supplements, sub/rep
+   onboarding, CRM hygiene, reviews. Mirror into Google Workspace.
+3. **Attribution spine** ✅ (start): canonical `lead_source` (`src/lib/lead-source.ts`)
+   carried website → HighLevel (field + tag); maps 1:1 into JobNimbus/QBO as they go live.
+4. **D2 — Admin panel** (Keystatic + Google SSO): owners edit Business Info, photos,
    reviews, blog. City/service SEO pages stay Claude-crafted.
-3. **D3/D4 — CompanyCam photos + Google reviews** (env-gated).
-4. **D5 (later) — n8n**: revenue-attribution loop + scheduled owner reports; then
-   pre-scale security/testing hardening.
+
+**Phase 2 — Automation (30–90d): run unattended.** n8n (cheap cloud): revenue-
+attribution loop, auto-assembled monthly owner report, review-request engine,
+CompanyCam→site (D3/D4 fold in here).
+
+**Phase 3 — Scale (90+d): make adding people cheap.** Role-based access + lead
+routing for the §3508 team; AI layers (HighLevel SMS responder, lead scoring,
+Claude-drafted supplements); per-rep/channel dashboards; security/testing hardening.
 
 ## Security baseline (phased)
 

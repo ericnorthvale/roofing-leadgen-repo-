@@ -42,14 +42,29 @@ production CRM, added later (no AccuLynx); **Google Workspace SSO** for the admi
 panel; **CompanyCam** auto-pull for photos; **n8n on cheap cloud** for custom glue
 later (Mac mini for dev); **lightweight security now, harden before scaling**.
 
-- [x] **D1 — Lead alerts + safety net:** SMS (Twilio) + email (Resend) on every
-      lead, env-gated; rate limit; `docs/setup-leads.md`. → PR #3
+Re-sequenced after the BOS audit (see `docs/decision-log.md`): the attribution
+spine and knowledge base were moved up.
+
+**Phase 1 — Foundation (stop the leaks):**
+
+- [x] **D1 — Lead alerts + safety net:** SMS (Twilio) + email (Resend), env-gated;
+      rate limit; `docs/setup-leads.md`. → PR #3
+- [x] **Knowledge Base + Decision Log:** `docs/sops/*` (sales, supplements, sub/rep
+      onboarding, CRM hygiene, reviews) + `docs/decision-log.md` + Major Decision template.
+- [x] **Attribution spine (start):** canonical `lead_source` (`src/lib/lead-source.ts`)
+      → HighLevel field + tag; maps 1:1 into JobNimbus/QBO when live.
 - [ ] **D2 — Admin panel:** Keystatic at `/admin` behind Google Workspace SSO.
-      Editable: Business Info (NAP/cert/experience/warranties/financing/hours),
-      Photos, Reviews, Blog. City/service SEO pages stay Claude-crafted.
-- [ ] **D3/D4 — CompanyCam photo pull + Google reviews** (env-gated).
-- [ ] **D5 (later) — n8n:** revenue-attribution loop (lead→job→revenue) +
-      scheduled monthly/quarterly owner report; then security/testing hardening.
+      Editable: Business Info, Photos, Reviews, Blog. City/service SEO pages stay Claude-crafted.
+
+**Phase 2 — Automation (30–90d):**
+
+- [ ] n8n (cheap cloud): revenue-attribution loop (lead→job→revenue), auto monthly
+      owner report (QBO+HighLevel+GA4), review-request engine, CompanyCam→site (D3/D4).
+
+**Phase 3 — Scale (90+d):**
+
+- [ ] Role-based access + lead routing (§3508 team); AI layers (SMS responder, lead
+      scoring, Claude-drafted supplements); per-rep/channel dashboards; security/testing hardening.
 
 ## Owner to-dos
 

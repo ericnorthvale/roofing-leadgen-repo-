@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { pushLeadToHighLevel } from "~/lib/highlevel";
 import { notifyNewLead } from "~/lib/notify";
 import { rateLimit, clientKey } from "~/lib/rate-limit";
+import { canonicalLeadSource } from "~/lib/lead-source";
 import { deserializeUtm } from "~/lib/utm";
 
 export const prerender = false;
@@ -73,7 +74,17 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
 
   const utm = { ...deserializeUtm(body.utm), ...(locals.utm ?? {}) };
 
+  // Canonical Lead Source — one normalized attribution field carried across every
+  // system (HighLevel → JobNimbus → QuickBooks). See src/lib/lead-source.ts.
+  const leadSource = canonicalLeadSource({
+    utmSource: utm.source,
+    gclid: utm.gclid,
+    fbclid: utm.fbclid,
+    formSource: body.source,
+  });
+
   const tags = [
+    `lead_source:${leadSource}`,
     `source:${body.source ?? "unknown"}`,
     `service:${body.service ?? "inspection"}`,
     utm.source ? `utm_source:${utm.source}` : "utm_source:direct",
@@ -94,6 +105,7 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
       customFields: {
         service: body.service ?? "inspection",
         notes: body.notes ?? "",
+        lead_source: leadSource,
         utm_source: utm.source ?? "",
         utm_medium: utm.medium ?? "",
         utm_campaign: utm.campaign ?? "",
