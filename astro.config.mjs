@@ -2,6 +2,8 @@
 import { defineConfig, envField } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
+import react from "@astrojs/react";
+import keystatic from "@keystatic/astro";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import { isAllowedInSitemap } from "./src/lib/routes";
@@ -22,6 +24,8 @@ export default defineConfig({
   }),
   integrations: [
     mdx(),
+    react(),
+    keystatic(),
     sitemap({
       // Quality gate: pages failing the gate (noindex) are auto-excluded.
       filter: (page) => isAllowedInSitemap(page),
@@ -66,6 +70,17 @@ export default defineConfig({
       RESEND_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
       LEAD_ALERT_EMAIL_TO: envField.string({ context: "server", access: "secret", optional: true }),
       LEAD_ALERT_EMAIL_FROM: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      // Admin panel access (Google Workspace SSO via edge provider) — see docs/setup-admin-panel.md.
+      ADMIN_ALLOWED_DOMAINS: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      ADMIN_ALLOWED_EMAILS: envField.string({
         context: "server",
         access: "secret",
         optional: true,

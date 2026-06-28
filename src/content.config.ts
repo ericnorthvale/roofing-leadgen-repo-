@@ -71,7 +71,8 @@ const reviews = defineCollection({
     relativeTime: z.string(),
     text: z.string(),
     serviceTag: z.string().optional(),
-    cityTag: z.enum(SERVICE_AREA_SLUGS).optional(),
+    // Free-text (not enum) so a value typed in the admin panel can't break the build.
+    cityTag: z.string().optional(),
   }),
 });
 

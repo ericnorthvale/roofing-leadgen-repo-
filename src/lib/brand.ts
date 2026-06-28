@@ -1,25 +1,36 @@
+import businessInfo from "../data/business-info.json";
+
+// Brand IDENTITY stays in code (rarely changes). Operational FACTS — NAP, certs,
+// experience, warranties, financing — live in src/data/business-info.json, which
+// the owners edit in the /keystatic admin panel. This keeps NAP single-source and
+// byte-identical everywhere while making it owner-editable without touching code.
+// NEEDS OWNER CONFIRMATION: only state certifications actually held/applied for.
 export const BRAND = {
   name: "Northvale Roofing",
   legalName: "Northvale Roofing LLC",
   domain: "northvaleroofing.com",
   tagline: "Same day. In writing.",
   promise: "Written estimate before we leave the driveway.",
-  phoneDisplay: "(281) 000-0000",
-  phoneE164: "+12810000000",
-  smsDisplay: "(281) 000-0000",
-  email: "hello@northvaleroofing.com",
-  hoursSummary: "8am–9pm CT, 7 days a week",
-  foundedYear: 2026,
-  // NEEDS OWNER CONFIRMATION: only state certifications the company actually
-  // holds. "Applicant" is honest aspiration; do not claim "certified" until earned.
-  licenseNote:
-    "Texas does not license residential roofing contractors. Northvale Roofing LLC is a GAF Master Elite applicant.",
-  addressLine1: "",
-  city: "Spring",
-  region: "TX",
-  postalCode: "",
+  phoneDisplay: businessInfo.phoneDisplay,
+  phoneE164: businessInfo.phoneE164,
+  smsDisplay: businessInfo.smsDisplay || businessInfo.phoneDisplay,
+  email: businessInfo.email,
+  hoursSummary: businessInfo.hoursSummary,
+  foundedYear: businessInfo.foundedYear,
+  licenseNote: `Texas does not license residential roofing contractors. Northvale Roofing LLC is a ${
+    businessInfo.certStatus || "GAF Master Elite applicant"
+  }.`,
+  addressLine1: businessInfo.addressLine1,
+  city: businessInfo.city,
+  region: businessInfo.region,
+  postalCode: businessInfo.postalCode,
   country: "US",
   gbpPlaceId: "",
+  // Owner-supplied facts (may be empty until provided; never fabricate).
+  yearsExperience: businessInfo.yearsExperience,
+  certStatus: businessInfo.certStatus,
+  warranties: businessInfo.warranties,
+  financing: businessInfo.financing,
 } as const;
 
 export const SIGNATURE_PHRASES = [
