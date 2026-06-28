@@ -4,6 +4,7 @@ import { BRAND } from "~/lib/brand";
 import { buildSeo, localBusinessJsonLd } from "~/lib/seo";
 import SiteHeader from "@components/SiteHeader.astro";
 import SiteFooter from "@components/SiteFooter.astro";
+import MobileClickToCall from "@components/MobileClickToCall.astro";
 import type { SeoInput } from "~/lib/seo";
 
 interface Props {
@@ -67,7 +68,7 @@ const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
       )
     }
   </head>
-  <body class="min-h-dvh bg-white">
+  <body class="min-h-dvh bg-white pb-14 md:pb-0">
     {
       gtmId && (
         <noscript>
@@ -86,6 +87,7 @@ const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
       <slot />
     </main>
     {!bare && <SiteFooter />}
+    {!bare && <MobileClickToCall />}
 
     {
       ga4Id && (

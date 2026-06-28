@@ -2,6 +2,7 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import CTAButton from "@components/CTAButton.astro";
+import PhoneCTAButton from "@components/PhoneCTAButton.astro";
 import LeadForm from "@components/LeadForm.astro";
 import TrustBar from "@components/TrustBar.astro";
 import RelatedLinks from "@components/RelatedLinks.astro";
@@ -56,6 +57,7 @@ const relatedServices = SERVICE_LIST.map((s) => ({
     <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-800)]">{area.intro}</p>
     <div class="mt-6 flex flex-wrap gap-3">
       <CTAButton href="/contact" label="Book inspection" ctaId={`area-${area.slug}-book`} />
+      <PhoneCTAButton ctaId={`area-${area.slug}-call`} />
       <CTAButton href="/storm-response" variant="ghost" label="Storm today?" />
     </div>
   </section>

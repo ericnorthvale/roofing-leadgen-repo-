@@ -1,5 +1,6 @@
 ---
 import CTAButton from "@components/CTAButton.astro";
+import PhoneCTAButton from "@components/PhoneCTAButton.astro";
 
 interface Props {
   eyebrow?: string;
@@ -28,6 +29,7 @@ const { eyebrow, headline, subhead, primaryCta, secondaryCta } = Astro.props;
         label={primaryCta.label}
         ctaId={primaryCta.ctaId ?? "hero-primary"}
       />
+      <PhoneCTAButton ctaId="hero-call" />
       {
         secondaryCta && (
           <CTAButton

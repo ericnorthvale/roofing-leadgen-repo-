@@ -1,0 +1,31 @@
+---
+/**
+ * Sticky mobile call/text bar (mobile only, hidden on md+). Keeps a one-tap
+ * "Call now" / "Text us" available at any scroll depth — the single highest-
+ * leverage mobile conversion element for a roofer. Zero JS; `contain: layout`
+ * avoids layout shift. BaseLayout adds bottom padding so it never covers content.
+ */
+import { BRAND } from "~/lib/brand";
+import { telHref, smsHref } from "~/lib/phone";
+---
+
+<div
+  class="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-px bg-[color:var(--color-navy-100)] md:hidden"
+  style="contain: layout"
+  aria-label="Quick contact"
+>
+  <a
+    href={telHref(BRAND.phoneE164)}
+    data-cta-id="mobile-call"
+    class="flex min-h-[56px] items-center justify-center bg-[color:var(--color-gold-500)] font-semibold text-[color:var(--color-navy-950)]"
+  >
+    Call now
+  </a>
+  <a
+    href={smsHref(BRAND.phoneE164, "Hi — I'd like to book a free roof inspection.")}
+    data-cta-id="mobile-sms"
+    class="flex min-h-[56px] items-center justify-center bg-[color:var(--color-navy-900)] font-semibold text-white"
+  >
+    Text us
+  </a>
+</div>

@@ -1,0 +1,24 @@
+---
+/**
+ * Click-to-call CTA. Captures phone-first visitors (a big share of roofing leads)
+ * alongside the form-first "Book inspection" CTA. Uses BRAND as the single phone
+ * source, so it becomes the real number the moment the owner sets NAP.
+ */
+import { BRAND } from "~/lib/brand";
+import { telHref, formatPhoneDisplay } from "~/lib/phone";
+
+interface Props {
+  ctaId?: string;
+  label?: string;
+  variant?: "primary" | "ghost";
+}
+const { ctaId = "call", label, variant = "ghost" } = Astro.props;
+---
+
+<a
+  class:list={["btn", variant === "primary" ? "btn-primary" : "btn-ghost"]}
+  href={telHref(BRAND.phoneE164)}
+  data-cta-id={ctaId}
+>
+  {label ?? `Call ${formatPhoneDisplay(BRAND.phoneE164)}`}
+</a>
