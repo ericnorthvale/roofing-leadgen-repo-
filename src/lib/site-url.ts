@@ -17,3 +17,17 @@ export function publicOrigin(request: Request): string {
     (first(request.headers.get("x-forwarded-proto")) ?? url.protocol.replace(":", "")) || "https";
   return `${proto}://${host}`;
 }
+
+/**
+ * A 302 redirect that is NEVER cached. Auth endpoints set a per-request CSRF
+ * `state` / session cookie, so a shared cache serving one user's redirect (with
+ * its Set-Cookie + state) to everyone would both leak/fix the state across users
+ * and intermittently break sign-in when the cached state cookie expires. Astro
+ * still attaches any queued cookies to this Response.
+ */
+export function noStoreRedirect(location: string): Response {
+  return new Response(null, {
+    status: 302,
+    headers: { location, "cache-control": "no-store, max-age=0" },
+  });
+}

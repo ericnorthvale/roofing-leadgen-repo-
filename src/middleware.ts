@@ -2,6 +2,7 @@ import { defineMiddleware } from "astro:middleware";
 import { parseUtmFromUrl, hasAnyUtm } from "~/lib/utm";
 import { evaluateEmailAccess, isAdminPath } from "~/lib/admin-auth";
 import { verifySessionToken, SESSION_COOKIE } from "~/lib/admin-session";
+import { noStoreRedirect } from "~/lib/site-url";
 
 /**
  * Runs on every request. Two jobs:
@@ -29,10 +30,12 @@ export const onRequest = defineMiddleware(async (context, next) => {
       );
 
       // No valid session → send them through Google sign-in, returning here after.
+      // no-store: this gate's outcome depends on the per-request session cookie,
+      // so it must never be cached/shared.
       if (!session) {
         const loginUrl = new URL("/api/auth/login", url.origin);
         loginUrl.searchParams.set("returnTo", url.pathname + url.search);
-        return context.redirect(loginUrl.pathname + loginUrl.search, 302);
+        return noStoreRedirect(loginUrl.pathname + loginUrl.search);
       }
 
       // Valid session but allowlist may have changed since sign-in — re-check.
@@ -48,7 +51,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
             `the Northvale admin allow list. Ask an owner to add your account, or ` +
             `<a href="/api/auth/logout">sign in with a different account</a>.</p>` +
             `<p style="color:#888;font-size:.85rem">(${access.reason})</p></div>`,
-          { status: 403, headers: { "content-type": "text/html; charset=utf-8" } },
+          {
+            status: 403,
+            headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
+          },
         );
       }
     }

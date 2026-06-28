@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { evaluateEmailAccess } from "~/lib/admin-auth";
 import { createSessionToken, SESSION_COOKIE, SESSION_MAX_AGE_SECONDS } from "~/lib/admin-session";
-import { publicOrigin } from "~/lib/site-url";
+import { publicOrigin, noStoreRedirect } from "~/lib/site-url";
 
 export const prerender = false;
 
@@ -16,7 +16,10 @@ function denied(reason: string, detail: string): Response {
       `<h1>Sign-in failed</h1><p>${detail}</p>` +
       `<p><a href="/api/auth/login">Try again</a></p>` +
       `<p style="color:#888;font-size:.85rem">(${reason})</p></div>`,
-    { status: 403, headers: { "content-type": "text/html; charset=utf-8" } },
+    {
+      status: 403,
+      headers: { "content-type": "text/html; charset=utf-8", "cache-control": "no-store" },
+    },
   );
 }
 
@@ -37,7 +40,7 @@ function decodeJwtPayload(jwt: string): Record<string, unknown> | null {
   }
 }
 
-export const GET: APIRoute = async ({ request, cookies, redirect }) => {
+export const GET: APIRoute = async ({ request, cookies }) => {
   const clientId = import.meta.env.GOOGLE_OAUTH_CLIENT_ID;
   const clientSecret = import.meta.env.GOOGLE_OAUTH_CLIENT_SECRET;
   const sessionSecret = import.meta.env.ADMIN_SESSION_SECRET;
@@ -106,8 +109,7 @@ export const GET: APIRoute = async ({ request, cookies, redirect }) => {
     maxAge: SESSION_MAX_AGE_SECONDS,
   });
 
-  return redirect(
+  return noStoreRedirect(
     returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/keystatic",
-    302,
   );
 };

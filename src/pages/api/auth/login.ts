@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { publicOrigin } from "~/lib/site-url";
+import { publicOrigin, noStoreRedirect } from "~/lib/site-url";
 
 export const prerender = false;
 
@@ -19,7 +19,7 @@ function safeReturnTo(raw: string | null): string {
  * the org's hosted domain (`hd`). The callback validates `state` before trusting
  * anything Google hands back.
  */
-export const GET: APIRoute = ({ request, cookies, redirect }) => {
+export const GET: APIRoute = ({ request, cookies }) => {
   const clientId = import.meta.env.GOOGLE_OAUTH_CLIENT_ID;
   if (!clientId) {
     return new Response("Google sign-in is not configured (missing GOOGLE_OAUTH_CLIENT_ID).", {
@@ -62,5 +62,5 @@ export const GET: APIRoute = ({ request, cookies, redirect }) => {
     ...(primaryDomain ? { hd: primaryDomain } : {}),
   });
 
-  return redirect(`${GOOGLE_AUTH_URL}?${params.toString()}`, 302);
+  return noStoreRedirect(`${GOOGLE_AUTH_URL}?${params.toString()}`);
 };
