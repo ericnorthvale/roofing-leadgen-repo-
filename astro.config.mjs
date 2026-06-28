@@ -75,13 +75,28 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
-      // Admin panel access (Google Workspace SSO via edge provider) — see docs/setup-admin-panel.md.
+      // Admin panel access (in-app Google sign-in) — see docs/setup-admin-panel.md.
       ADMIN_ALLOWED_DOMAINS: envField.string({
         context: "server",
         access: "secret",
         optional: true,
       }),
       ADMIN_ALLOWED_EMAILS: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      GOOGLE_OAUTH_CLIENT_ID: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      GOOGLE_OAUTH_CLIENT_SECRET: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      ADMIN_SESSION_SECRET: envField.string({
         context: "server",
         access: "secret",
         optional: true,

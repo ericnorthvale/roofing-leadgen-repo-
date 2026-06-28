@@ -1,14 +1,15 @@
 /**
- * Admin panel access control (Google Workspace SSO, fail-closed).
+ * Admin panel access control (in-app Google sign-in, fail-closed).
  *
- * The `/keystatic` admin panel must sit behind an edge SSO provider that
- * authenticates with Google Workspace and injects a VERIFIED identity header —
- * recommended: Cloudflare Access (`Cf-Access-Authenticated-User-Email`), or
- * Google IAP (`X-Goog-Authenticated-User-Email`). This module trusts that header
- * ONLY because the provider strips/sets it upstream; the panel must never be
- * exposed publicly without that provider in front. See docs/setup-admin-panel.md.
+ * The `/keystatic` admin panel is gated by an in-app Google OAuth flow
+ * (`/api/auth/*`): after a verified Google sign-in we set an HMAC-signed session
+ * cookie (see `admin-session.ts`). Middleware verifies that cookie on every admin
+ * request and then applies the email/domain allowlist below. We do NOT trust any
+ * upstream identity header — without a proxy that strips it, such a header is
+ * trivially spoofable, so the signed cookie is the only accepted identity.
  *
- * Fail-closed: in production, no verified identity → blocked.
+ * Fail-closed: in production, no valid session → redirected to sign in; an
+ * authenticated-but-not-allowlisted account → blocked.
  */
 
 const DEFAULT_ALLOWED_DOMAINS = ["northvaleroofing.com"];
@@ -32,39 +33,27 @@ const splitList = (v?: string) =>
     .map((s) => s.trim())
     .filter(Boolean);
 
-/** Read the verified identity email from known edge-SSO headers. */
-export function ssoEmail(headers: Headers): string {
-  const cf = headers.get("cf-access-authenticated-user-email");
-  if (cf) return cf.trim().toLowerCase();
-  // Google IAP prefixes the value with "accounts.google.com:".
-  const iap = headers.get("x-goog-authenticated-user-email");
-  if (iap) return iap.split(":").pop()!.trim().toLowerCase();
-  return "";
-}
+/**
+ * Pure allowlist check for an already-verified email. Used after the Google
+ * sign-in proves the identity and after the session cookie is verified.
+ */
+export function evaluateEmailAccess(email: string, env: AdminAuthEnv): AdminAuthResult {
+  const normalized = email.trim().toLowerCase();
+  if (!normalized) return { allowed: false, reason: "no-identity" };
 
-export function checkAdminAccess(opts: {
-  headers: Headers;
-  env: AdminAuthEnv;
-  isDev: boolean;
-}): AdminAuthResult {
-  // Local dev uses Keystatic local mode — no SSO needed on your own machine.
-  if (opts.isDev) return { allowed: true, reason: "dev" };
+  const allowedEmails = splitList(env.ADMIN_ALLOWED_EMAILS).map((e) => e.toLowerCase());
+  if (allowedEmails.includes(normalized))
+    return { allowed: true, reason: "email-allowlist", email: normalized };
 
-  const email = ssoEmail(opts.headers);
-  if (!email) return { allowed: false, reason: "no-sso-identity" };
-
-  const allowedEmails = splitList(opts.env.ADMIN_ALLOWED_EMAILS).map((e) => e.toLowerCase());
-  if (allowedEmails.includes(email)) return { allowed: true, reason: "email-allowlist", email };
-
-  const domains = splitList(opts.env.ADMIN_ALLOWED_DOMAINS).map((d) =>
+  const domains = splitList(env.ADMIN_ALLOWED_DOMAINS).map((d) =>
     d.toLowerCase().replace(/^@/, ""),
   );
   const effectiveDomains = domains.length > 0 ? domains : DEFAULT_ALLOWED_DOMAINS;
-  const domain = email.split("@")[1] ?? "";
+  const domain = normalized.split("@")[1] ?? "";
   if (effectiveDomains.includes(domain))
-    return { allowed: true, reason: "domain-allowlist", email };
+    return { allowed: true, reason: "domain-allowlist", email: normalized };
 
-  return { allowed: false, reason: "not-allowlisted", email };
+  return { allowed: false, reason: "not-allowlisted", email: normalized };
 }
 
 /** True for paths that require admin access. */
