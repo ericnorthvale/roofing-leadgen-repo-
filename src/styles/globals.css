@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Self-hosted variable fonts (no Google Fonts CDN → no render-blocking
+   third-party request; eliminates the LCP + CLS hit from the external
+   stylesheet/font swap). `wght` axis only = smallest payload. */
+@import "@fontsource-variable/inter/wght.css";
+@import "@fontsource-variable/fraunces/wght.css";
+
 /* ─── Northvale Roofing design tokens ────────────────────────────────────
    Brand palette + type scale. Used across components via tokens rather
    than ad-hoc values so we can retint later without touching markup. */
@@ -23,12 +29,14 @@
 
   --color-ink-50: #f7f7f7;
   --color-ink-200: #d9d9d9;
-  --color-ink-500: #737373;
+  --color-ink-500: #666666;
   --color-ink-800: #1f1f1f;
   --color-ink-900: #0a0a0a;
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-serif: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans:
+    "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+  --font-serif: "Fraunces Variable", "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
 
   --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.06);
   --shadow-card-hover: 0 2px 4px rgb(15 23 42 / 0.06), 0 18px 40px rgb(15 23 42 / 0.1);
