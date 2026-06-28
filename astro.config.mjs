@@ -11,6 +11,38 @@ import { isAllowedInSitemap } from "./src/lib/routes";
 // Keep SITE in one place. Eric will set PUBLIC_SITE_URL in Vercel env after domain purchase.
 const SITE = process.env.PUBLIC_SITE_URL || "https://northvaleroofing.com";
 
+/**
+ * Keystatic, but WITHOUT its injected `/api/keystatic/[...params]` route — we
+ * provide our own at `src/pages/api/keystatic/[...params].ts` that rebuilds the
+ * request with the real public host. Keystatic derives its GitHub OAuth
+ * `redirect_uri` from `request.url`, which Vercel reports as `https://localhost`,
+ * so the default route sends an unusable `redirect_uri=https://localhost/...`.
+ * Letting Keystatic inject its API route too would collide with ours (a hard
+ * error in newer Astro), so we filter just that one injection and keep the rest
+ * (the UI route, the virtual:keystatic-config vite plugin, etc.).
+ */
+function keystaticWithHostFix() {
+  const inner = keystatic();
+  const hooks = inner.hooks ?? {};
+  const setup = hooks["astro:config:setup"];
+  return {
+    name: "keystatic-hostfix",
+    hooks: {
+      ...hooks,
+      "astro:config:setup": async (/** @type {any} */ args) => {
+        if (typeof setup !== "function") return;
+        await setup({
+          ...args,
+          injectRoute: (/** @type {any} */ route) => {
+            if (route.pattern === "/api/keystatic/[...params]") return;
+            args.injectRoute(route);
+          },
+        });
+      },
+    },
+  };
+}
+
 export default defineConfig({
   site: SITE,
   output: "static",
@@ -31,7 +63,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     react(),
-    keystatic(),
+    keystaticWithHostFix(),
     sitemap({
       // Quality gate: pages failing the gate (noindex) are auto-excluded.
       filter: (page) => isAllowedInSitemap(page),
