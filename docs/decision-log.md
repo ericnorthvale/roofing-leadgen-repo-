@@ -8,6 +8,24 @@ Format: date · decision · why · who.
 
 ## 2026 — Operating-system & website build
 
+- **Vercel SSR gotchas that cost us a long debugging session (admin sign-in).** Three
+  related traps, all now fixed — keep in mind for any future server route:
+  1. **`request.url` is `https://localhost` on Vercel SSR.** Anything that builds a
+     URL from it (our OAuth `redirect_uri`, Keystatic's GitHub `redirect_uri`) gets
+     `localhost`. Fix: derive the origin from `x-forwarded-host` (`src/lib/site-url.ts`
+     `publicOrigin`). Keystatic builds its own redirect internally, so we shadow its
+     API route with `src/pages/api/keystatic/[...params].ts` (and stop the integration
+     injecting its own via `keystaticWithHostFix` in `astro.config.mjs`).
+  2. **ISR must exclude every dynamic route.** The adapter ISR-cached _all_ SSR routes,
+     which shared one user's CSRF `state`/session and crashed the OAuth callback.
+     Fixed with `isr.exclude: [/^\/api\//, /^\/keystatic/]`.
+  3. **Auth redirects must be `no-store`** (`noStoreRedirect`) so the edge never caches
+     a per-user redirect.
+- **Canonical domain is `www.northvaleroofing.com` (the host Vercel serves).** This
+  bit us repeatedly: every OAuth callback (Google AND the Keystatic GitHub App) must
+  be registered for the **exact serving host**, i.e. the `www` form. OPEN CLEANUP:
+  pick one canonical (recommend `https://www.northvaleroofing.com`), redirect the
+  other, and set `PUBLIC_SITE_URL` to match so SEO + callbacks stay consistent. · Claude · 2026-06-28
 - **Production runs on the `xvp3` Vercel project; `northvaleroofing.com` moved onto it.**
   There were two Vercel projects for this repo — `roofing-leadgen-repo-xvp3` (correct,
   connected to `ericnorthvale/roofing-leadgen-repo-`) and an older duplicate (tied to a
