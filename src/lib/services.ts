@@ -77,7 +77,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
         heading: "Options worth considering",
         bullets: [
           {
-            html: '<strong>Class-4 impact-resistant upgrade</strong> — most Texas carriers offer a wind/hail premium discount for Class-4 shingles; the upgrade often pays back within a few years. See <a href="/blog">our Class-4 IR shingle breakdown</a>.',
+            html: '<strong>Class-4 impact-resistant upgrade</strong> — many Texas carriers offer a wind/hail premium discount for Class-4 shingles; ask your insurer what they\'d credit. See <a href="/blog/class-4-impact-resistant-shingles-texas">our Class-4 IR shingle breakdown</a>.',
           },
           {
             lead: "Ridge vent upgrade",
