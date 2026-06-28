@@ -94,7 +94,8 @@ automatically (`docs/setup-integrations.md`).
 
 ## What needs you (accounts to set up — I give click-by-click, never touch secrets)
 
-See the full checklist in `TASKS.md`. The short list, in order:
+**Ordered runbook with what-you-need at each step: `docs/SETUP.md`.** Admin-panel
+walkthrough: `docs/using-the-admin-panel.md`. The short list, in order:
 
 1. **Real NAP** (phone + address) in the admin panel.
 2. **Lead alerts** — Twilio + Resend (`docs/setup-leads.md`).
