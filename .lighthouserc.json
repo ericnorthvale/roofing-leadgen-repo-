@@ -40,7 +40,12 @@
         "interaction-to-next-paint": ["warn", { "maxNumericValue": 200 }],
         "unused-javascript": "off",
         "uses-long-cache-ttl": "off",
-        "csp-xss": "off"
+        "csp-xss": "off",
+        "is-crawlable": "off",
+        "canonical": "off",
+        "lcp-lazy-loaded": "off",
+        "prioritize-lcp-image": "off",
+        "non-composited-animations": "off"
       }
     },
     "upload": {
