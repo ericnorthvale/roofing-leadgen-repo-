@@ -40,7 +40,25 @@ function decodeJwtPayload(jwt: string): Record<string, unknown> | null {
   }
 }
 
-export const GET: APIRoute = async ({ request, cookies }) => {
+const escapeHtml = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+export const GET: APIRoute = async (ctx) => {
+  // Never let the sign-in callback hard-crash (FUNCTION_INVOCATION_FAILED).
+  // Surface the reason as a readable page + server log instead.
+  try {
+    return await handleCallback(ctx);
+  } catch (err) {
+    const msg = err instanceof Error ? `${err.name}: ${err.message}` : String(err);
+    console.error("[auth/callback] crashed:", err);
+    return denied(
+      "callback-error",
+      `Sign-in hit an unexpected error: <code>${escapeHtml(msg)}</code>`,
+    );
+  }
+};
+
+const handleCallback: APIRoute = async ({ request, cookies }) => {
   const clientId = import.meta.env.GOOGLE_OAUTH_CLIENT_ID;
   const clientSecret = import.meta.env.GOOGLE_OAUTH_CLIENT_SECRET;
   const sessionSecret = import.meta.env.ADMIN_SESSION_SECRET;
