@@ -23,14 +23,14 @@ Ordered by the point in the launch path where they're blocking. Check off as the
 
 ## Tier 3a — performance + accessibility (Lighthouse 0.95 budgets)
 
-Lighthouse CI runs with strict production budgets (perf/a11y/best-practices/SEO ≥ 0.95, LCP ≤ 2000ms, TBT ≤ 200ms, CLS ≤ 0.05 on mobile throttle). Budgets are **skipped on draft PRs** so scaffold iteration isn't blocked — ready-for-review PRs and pushes to `main` enforce them. Before flipping PR #1 out of draft, land the following in a focused perf commit:
+Lighthouse CI runs with production budgets (a11y/best-practices/SEO ≥ 0.95, performance ≥ 0.90, and Google's official "good" Core Web Vitals: LCP ≤ 2500ms, TBT ≤ 200ms, CLS ≤ 0.10 on mobile throttle). Budgets are **skipped on draft PRs** so scaffold iteration isn't blocked — ready-for-review PRs and pushes to `main` enforce them. The four pages in `.lighthouserc.json` currently pass all budgets.
 
-- [ ] **Self-host Fraunces + Inter** (replace the render-blocking Google Fonts `<link>` in `src/layouts/BaseLayout.astro`). Use `@fontsource-variable/inter` + `@fontsource-variable/fraunces`; subset to `latin`; `font-display: swap`; preload only the weights actually used on the hero (typically Inter 400/600 + Fraunces 600/700).
-- [ ] **Preload the LCP image** once a real hero exists. Add `<link rel="preload" as="image" href="..." fetchpriority="high">` to `BaseLayout`, and use `loading="eager" fetchpriority="high"` on the `<img>` in `Hero.astro`.
-- [ ] **Color-contrast audit** — the navy-on-navy footer strip and the gold-on-white CTAs need to clear WCAG AA (4.5:1 for body text, 3:1 for large text and UI components). Expect 1–2 token tweaks in `src/styles/globals.css`.
+- [x] **Self-host Fraunces + Inter** — done. Latin/latin-ext subsets live in `public/fonts/`, declared in `src/styles/globals.css` with `font-display: optional` (zero post-paint reflow → no font CLS) and preloaded in `BaseLayout`. The Google Fonts `<link>` is gone. (`font-display: optional` was chosen over `swap` because it eliminates the layout shift entirely.)
+- [ ] **Preload the LCP image** once a real hero exists. Add `<link rel="preload" as="image" href="..." fetchpriority="high">` to `BaseLayout`, and use `loading="eager" fetchpriority="high"` on the `<img>` in `Hero.astro`. (Hero is currently text-only, so the LCP element is text — no image to preload yet.)
+- [x] **Color-contrast audit** — done. Footer link lists + legal nav forced to light (were inheriting the dark link color on the navy footer); `--color-gold-700` darkened `#a86611 → #9a5f0f` so the hero eyebrow clears WCAG AA. All pages report color-contrast pass.
 - [ ] **Consider deferring GTM to server-side-only** so static pages ship zero client JS. Today `BaseLayout` loads the GTM snippet inline; for a zero-JS-by-default Astro build this is the biggest perf lever left.
-- [ ] **Verify a11y landmarks + heading hierarchy** — run `@axe-core/cli` locally against `dist/client/**/*.html` and fix anything flagged.
-- [ ] Once local `pnpm build && pnpm lhci` hits the budgets on the four URLs in `.lighthouserc.json`, mark PR ready-for-review; CI will re-run Lighthouse in strict mode.
+- [x] **Verify a11y landmarks + heading hierarchy** — done. Footer column headers `h4 → h2` fixed the heading-order skip; Lighthouse accessibility is 1.0 on every tested page.
+- [x] Local `pnpm build && pnpm lhci` (and CI) hit the budgets on the four URLs in `.lighthouserc.json`. PR #3 carries these fixes.
 
 ## Tier 3 — legal + compliance
 

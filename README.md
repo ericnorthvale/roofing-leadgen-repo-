@@ -12,7 +12,7 @@ Website + lead-gen + content engine for a premium residential roofing business s
 
 - **Site:** Astro 5 + Tailwind 4 + TypeScript (zero-JS-by-default for best Core Web Vitals)
 - **Hosting:** Vercel (hybrid output + ISR on content pages)
-- **Domain + DNS:** Cloudflare Registrar + Cloudflare DNS
+- **Domain + DNS:** Squarespace Domains (registrar + DNS) — registered 2026-04-23
 - **Automation / cron:** GitHub Actions
 - **CRM + SMS + email + nurture:** HighLevel Pro SaaS
 - **Call tracking + attribution:** CallRail Elite

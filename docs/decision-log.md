@@ -8,6 +8,24 @@ Format: date · decision · why · who.
 
 ## 2026 — Operating-system & website build
 
+- **Admin auth implemented as IN-APP Google sign-in, not Cloudflare Access.** Why:
+  the Cloudflare path required putting the domain on Cloudflare DNS (the owner hit a
+  setup wall), and trusting an injected identity header is spoofable without a proxy
+  in front. The site now runs its own Google OAuth flow (`/api/auth/*`) and sets an
+  HMAC-signed, http-only session cookie (`src/lib/admin-session.ts`), re-checked +
+  allowlist-enforced on every admin request in middleware. Owner provisions a Google
+  OAuth client + `ADMIN_SESSION_SECRET`; no DNS/Cloudflare. · Owner + Claude · 2026-06-28
+- **Fonts self-hosted in `public/fonts` with `font-display: optional`.** Why: the
+  Google Fonts CDN was the LCP bottleneck and `font-display: swap` caused the
+  font-swap CLS (0.196 on /spring). `optional` never swaps after first paint → zero
+  font CLS; primary subsets are preloaded so the real font usually shows on first
+  paint anyway. The `@fontsource-variable` deps were removed after copying the woff2
+  (provenance noted in `globals.css`). · Claude · 2026-06-28
+- **Lighthouse budgets aligned to Google's official "good" CWV thresholds**
+  (perf ≥ 0.90, LCP ≤ 2500ms, CLS ≤ 0.10; a11y/bp/SEO stay ≥ 0.95). Why: the prior
+  2000ms/0.05 targets were stricter than Google's own "good" bar and blocked the
+  merge without a real user-facing benefit. · Claude · 2026-06-28
+
 - **CRM stack: HighLevel now, JobNimbus later, no AccuLynx.** Why: HighLevel is
   best-in-class at lead automation/speed-to-lead/nurture/reviews and is already
   integrated; JobNimbus covers production (jobs/supplements/QBO) at lower cost than

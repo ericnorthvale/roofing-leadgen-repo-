@@ -51,10 +51,11 @@ Environment Variables**, then redeploy.
 ## Step 6 — Admin panel sign-in · 30–45 min
 
 - **Unlocks:** you/Greg editing Business Info, reviews, photos yourselves.
-- **You need:** (a) **Cloudflare Access** in front of the site with **Google** as the
-  identity provider (Google Workspace SSO); (b) a **Keystatic GitHub app** (3 values).
-- **How:** `setup-admin-panel.md` then `using-the-admin-panel.md`. Env:
-  `KEYSTATIC_GITHUB_CLIENT_ID/SECRET`, `KEYSTATIC_SECRET`, optional `ADMIN_ALLOWED_DOMAINS/EMAILS`.
+- **You need:** (a) a **Google OAuth client** (built-in "Sign in with Google" — no
+  Cloudflare/DNS); (b) a **Keystatic GitHub app** (3 values).
+- **How:** `setup-admin-panel.md` then `using-the-admin-panel.md`. Env: `GOOGLE_OAUTH_CLIENT_ID`,
+  `GOOGLE_OAUTH_CLIENT_SECRET`, `ADMIN_SESSION_SECRET`, `KEYSTATIC_GITHUB_CLIENT_ID/SECRET`,
+  `KEYSTATIC_SECRET`, optional `ADMIN_ALLOWED_DOMAINS/EMAILS`.
 
 ## Step 7 — Photos & live reviews · 30 min
 

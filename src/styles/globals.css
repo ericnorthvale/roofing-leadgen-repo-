@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
 /* Self-hosted variable fonts (files in /public/fonts).
+   Provenance: the .woff2 files were copied from the @fontsource-variable/inter
+   and @fontsource-variable/fraunces npm packages (latin + latin-ext, wght axis).
+   To refresh/extend: `pnpm add -D @fontsource-variable/{inter,fraunces}`, copy the
+   needed subsets from node_modules/.../files/ into public/fonts/, then remove the dep.
    - No Google Fonts CDN → no render-blocking third-party request (fixes LCP).
    - `font-display: optional` → the browser uses the fallback if the font isn't
      ready within its short block period and NEVER swaps afterward, so there is

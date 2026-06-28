@@ -6,7 +6,7 @@ Run through before flipping northvaleroofing.com public. Each row either ships o
 
 - [ ] `Northvale Roofing LLC` registered with TX SOS.
 - [ ] USPTO TEAS 1(b) ITU application filed (IC 037).
-- [ ] Domain purchased at Cloudflare Registrar; DNS pointed to Vercel.
+- [x] Domain purchased at Squarespace Domains (2026-04-23); DNS managed there, records pointed to Vercel.
 - [ ] SSL certificate issued (Vercel automatic).
 
 ## Site
