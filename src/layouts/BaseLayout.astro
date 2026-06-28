@@ -34,6 +34,20 @@ const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
     {gscVerification && <meta name="google-site-verification" content={gscVerification} />}
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="preload"
+      href="/fonts/inter-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/fraunces-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
 
     <meta property="og:site_name" content={BRAND.name} />
     <meta property="og:title" content={s.titleWithBrand} />
