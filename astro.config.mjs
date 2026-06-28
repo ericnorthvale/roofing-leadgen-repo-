@@ -20,6 +20,12 @@ export default defineConfig({
     isr: {
       // content pages (blog, neighborhood, services) regenerate hourly when traffic hits
       expiration: 60 * 60,
+      // NEVER ISR-cache dynamic routes. The /api endpoints and the Keystatic admin
+      // set per-request cookies and must run fresh every time — caching them shares
+      // one user's CSRF `state`/session across everyone and outright breaks the
+      // OAuth callback (it gets unique code/state query params each call). Only the
+      // static content pages get ISR.
+      exclude: [/^\/api\//, /^\/keystatic/],
     },
   }),
   integrations: [
