@@ -115,6 +115,12 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
       "Cypress is dominated by master-planned communities with strict architectural review committees that approve specific shingle lines and colors. Getting the ARC submittal right the first time is part of the job here.",
     dataCompleteness: "draft",
   },
+  // The Woodlands — Phase 2 flagship. Facts below are sourced (NWS Houston/Galveston,
+  // U.S. Census, The Woodlands Township Standards & RDRC pages). Marked "complete";
+  // the quality gate still holds it noindex until real NAP is entered (auto-publishes
+  // then). NEEDS OWNER: real local projects/testimonials/photos to strengthen it.
+  // Verify the specific accepted-materials list against the official 2024 Residential
+  // Development Standards PDF before treating it as exhaustive.
   "the-woodlands": {
     slug: "the-woodlands",
     name: "The Woodlands",
@@ -122,27 +128,36 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     landmarks: [
       "Creekside Park",
       "Grogan's Mill",
-      "Panther Creek",
-      "Alden Bridge",
       "Cochran's Crossing",
       "Sterling Ridge",
-      "Indian Springs",
+      "Alden Bridge",
       "Town Center",
     ],
     neighborhoods: [
-      "Creekside Park",
       "Grogan's Mill",
       "Panther Creek",
-      "Alden Bridge",
       "Cochran's Crossing",
-      "Sterling Ridge",
       "Indian Springs",
+      "Alden Bridge",
+      "College Park",
+      "Sterling Ridge",
+      "Carlton Woods",
+      "Creekside Park",
     ],
     intro:
-      "Creekside Park to Grogan's Mill. We know the HOA shingle restrictions by village, and we show up when we say we'll show up.",
+      "From Grogan's Mill to Creekside Park, we work The Woodlands village by village — and we know the Township's roofing Standards before we ever get on a ladder.",
     localContext:
-      "The Woodlands is a master-planned community of villages, each with its own architectural review committee and approved-shingle rules. A dense tree canopy means wind events routinely drop limbs and debris onto roofs, and many homes from the 2000s build-out are now reaching the typical replacement window for architectural shingles.",
-    dataCompleteness: "draft",
+      "The Woodlands is a master-planned community founded by George P. Mitchell and dedicated in 1974, mostly in Montgomery County north of Houston with Creekside Park extending into Harris County, and home to roughly 114,000 residents as of the 2020 census. It's built around named villages — Grogan's Mill (the original), Cochran's Crossing, Panther Creek, Alden Bridge, Sterling Ridge, and Creekside Park among them — and governed by The Woodlands Township through Restrictive Covenants and village Residential Design Review Committees that set roofing standards favoring muted, natural-harmonizing materials. The heavily wooded, humid-subtropical setting plus exposure to severe spring storms makes durable, Standards-compliant roofing a practical concern here.",
+    climateNote:
+      "The Woodlands sits in southeast Texas's humid-subtropical climate. The National Weather Service Houston/Galveston office reports the region averages roughly 50–60 thunderstorm days a year, with about a third producing severe weather — hail an inch or larger, or wind gusts above 58 mph — and local downbursts can drive winds from 60 to over 100 mph. The Gulf Coast location also exposes the area to tropical systems. Sustained heat, intense UV, and humidity dry out asphalt binder over time, driving granule loss and brittleness.",
+    permitHoaNote:
+      "Most of The Woodlands is unincorporated Montgomery County, which does not require a building permit for a residential roof replacement — reroof rules are driven instead by covenants. The Woodlands Township administers the community Standards (responsibility moved from the original associations to the Township in 2010), and each village has a Residential Design Review Committee. Re-roofing is exempt from the usual survey/application paperwork, but materials and colors must still comply with the published Standards, which favor muted, non-glossy roofing; the Township keeps an approved materials-and-color compliance list (Covenant Administration, 281-210-3973). We confirm your village's current requirements before ordering material.",
+    commonRoofTypes: [
+      "Architectural (dimensional) asphalt shingle — the dominant material on local housing stock and permitted as composition shingle under Township Standards",
+      "Standing-seam or stone-coated metal — accepted under Standards (must be non-glossy), chosen for longevity and storm/UV resistance",
+      "Concrete/clay tile or slate — accepted on higher-end and custom homes, common in luxury villages like Carlton Woods",
+    ],
+    dataCompleteness: "complete",
   },
   kingwood: {
     slug: "kingwood",

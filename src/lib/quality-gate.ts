@@ -16,8 +16,26 @@
  */
 import type { ServiceArea } from "./service-areas";
 import type { Service } from "./services";
+import businessInfo from "../data/business-info.json";
 
 export type DataCompleteness = "complete" | "draft";
+
+const PLACEHOLDER_PHONE = "+12810000000";
+
+/**
+ * True only when the business has a real, publishable NAP (not the placeholder
+ * phone, and a real street address + ZIP). Local/city pages must not be indexed
+ * with a fake phone, so this gates their indexability — they auto-publish the
+ * moment the owner enters real NAP in the admin panel.
+ */
+export function hasRealNap(): boolean {
+  return (
+    businessInfo.phoneE164.trim().length > 0 &&
+    businessInfo.phoneE164 !== PLACEHOLDER_PHONE &&
+    businessInfo.addressLine1.trim().length > 0 &&
+    businessInfo.postalCode.trim().length > 0
+  );
+}
 
 export interface QualityVerdict {
   /** Safe to index + include in sitemap. */
@@ -52,11 +70,15 @@ function verdict(
 
 const filled = (s?: string) => !!s && s.trim().length > 0;
 
-/** Quality verdict for a service-area (city) page. */
-export function evaluateArea(area: ServiceArea): QualityVerdict {
+/**
+ * Quality verdict for a service-area (city) page. `opts.hasNap` overrides the
+ * real-NAP check (defaults to the live business info) — handy for tests.
+ */
+export function evaluateArea(area: ServiceArea, opts: { hasNap?: boolean } = {}): QualityVerdict {
   return verdict(
     area.dataCompleteness,
     {
+      "real business NAP (phone + address)": opts.hasNap ?? hasRealNap(),
       "distinct local intro": filled(area.intro),
       "factual local context": filled(area.localContext),
       [`${MIN_NEIGHBORHOODS}+ named neighborhoods`]:

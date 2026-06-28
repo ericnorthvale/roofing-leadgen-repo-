@@ -38,24 +38,29 @@ describe("evaluateArea", () => {
     expect(verdict.indexable).toBe(false);
   });
 
-  it("indexes a complete area with all required fields", () => {
-    const verdict = evaluateArea(completeArea);
+  it("indexes a complete area with all required fields (real NAP present)", () => {
+    const verdict = evaluateArea(completeArea, { hasNap: true });
     expect(verdict.indexable).toBe(true);
     expect(verdict.missing).toHaveLength(0);
   });
 
+  it("blocks a complete, content-rich area when NAP is still a placeholder", () => {
+    const verdict = evaluateArea(completeArea, { hasNap: false });
+    expect(verdict.indexable).toBe(false);
+    expect(verdict.missing.some((m) => m.toLowerCase().includes("nap"))).toBe(true);
+  });
+
   it("blocks a complete area that is missing required content", () => {
-    const verdict = evaluateArea({
-      ...completeArea,
-      climateNote: undefined,
-      neighborhoods: ["Klein"],
-    });
+    const verdict = evaluateArea(
+      { ...completeArea, climateNote: undefined, neighborhoods: ["Klein"] },
+      { hasNap: true },
+    );
     expect(verdict.indexable).toBe(false);
     expect(verdict.missing.length).toBeGreaterThan(0);
   });
 
   it("flags missing real-world proof without blocking indexing", () => {
-    const verdict = evaluateArea(completeArea);
+    const verdict = evaluateArea(completeArea, { hasNap: true });
     expect(verdict.recommended.length).toBeGreaterThan(0);
     expect(verdict.indexable).toBe(true);
   });
