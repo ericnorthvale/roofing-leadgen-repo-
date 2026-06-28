@@ -23,18 +23,14 @@ export type DataCompleteness = "complete" | "draft";
 const PLACEHOLDER_PHONE = "+12810000000";
 
 /**
- * True only when the business has a real, publishable NAP (not the placeholder
- * phone, and a real street address + ZIP). Local/city pages must not be indexed
- * with a fake phone, so this gates their indexability — they auto-publish the
- * moment the owner enters real NAP in the admin panel.
+ * True when the business has a real, publishable phone (not the placeholder).
+ * Northvale is a service-area business with no public storefront address, so a
+ * real phone — not a street address — is the contact requirement for indexing a
+ * city page. (A fake phone must never go live; a missing street address is normal
+ * for a service-area roofer.) City pages auto-publish once a real phone is set.
  */
 export function hasRealNap(): boolean {
-  return (
-    businessInfo.phoneE164.trim().length > 0 &&
-    businessInfo.phoneE164 !== PLACEHOLDER_PHONE &&
-    businessInfo.addressLine1.trim().length > 0 &&
-    businessInfo.postalCode.trim().length > 0
-  );
+  return businessInfo.phoneE164.trim().length > 0 && businessInfo.phoneE164 !== PLACEHOLDER_PHONE;
 }
 
 export interface QualityVerdict {
@@ -78,7 +74,7 @@ export function evaluateArea(area: ServiceArea, opts: { hasNap?: boolean } = {})
   return verdict(
     area.dataCompleteness,
     {
-      "real business NAP (phone + address)": opts.hasNap ?? hasRealNap(),
+      "real business phone": opts.hasNap ?? hasRealNap(),
       "distinct local intro": filled(area.intro),
       "factual local context": filled(area.localContext),
       [`${MIN_NEIGHBORHOODS}+ named neighborhoods`]:

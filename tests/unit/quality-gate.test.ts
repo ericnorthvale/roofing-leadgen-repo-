@@ -44,10 +44,10 @@ describe("evaluateArea", () => {
     expect(verdict.missing).toHaveLength(0);
   });
 
-  it("blocks a complete, content-rich area when NAP is still a placeholder", () => {
+  it("blocks a complete, content-rich area when the phone is still a placeholder", () => {
     const verdict = evaluateArea(completeArea, { hasNap: false });
     expect(verdict.indexable).toBe(false);
-    expect(verdict.missing.some((m) => m.toLowerCase().includes("nap"))).toBe(true);
+    expect(verdict.missing.some((m) => m.toLowerCase().includes("phone"))).toBe(true);
   });
 
   it("blocks a complete area that is missing required content", () => {
