@@ -1,5 +1,7 @@
 import type { APIRoute } from "astro";
 import { pushLeadToHighLevel } from "~/lib/highlevel";
+import { notifyNewLead } from "~/lib/notify";
+import { rateLimit, clientKey } from "~/lib/rate-limit";
 import { deserializeUtm } from "~/lib/utm";
 
 export const prerender = false;
@@ -32,6 +34,12 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   // Vercel geo — only meaningful at request time, so captured here rather than
   // in middleware (where prerender emits a build-time warning).
   const h = request.headers;
+
+  // Best-effort rate limit (lightweight; honeypot is the primary spam defense).
+  if (!rateLimit(clientKey(h)).allowed) {
+    return new Response("Too many requests", { status: 429 });
+  }
+
   const geo = {
     city: h.get("x-vercel-ip-city") ?? undefined,
     region: h.get("x-vercel-ip-country-region") ?? undefined,
@@ -107,6 +115,36 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   // page, and an alerting Vercel log is enough. Losing a lead to a 500 is the worst outcome.
   if (!hl.ok) {
     console.error("[lead] HighLevel push failed:", hl.error);
+  }
+
+  // Instant owner alert + safety net (SMS/email). Best-effort; never blocks the
+  // redirect. Works even when HighLevel isn't configured, so no lead is ever lost.
+  const notify = await notifyNewLead(
+    {
+      firstName: body.firstName,
+      lastName: body.lastName,
+      phone: body.phone,
+      email: body.email,
+      address: body.address,
+      city: body.city,
+      zip: body.zip,
+      service: body.service,
+      notes: body.notes,
+      source: body.source ?? "website",
+      utmSource: utm.source ?? "direct",
+    },
+    {
+      TWILIO_ACCOUNT_SID: import.meta.env.TWILIO_ACCOUNT_SID,
+      TWILIO_AUTH_TOKEN: import.meta.env.TWILIO_AUTH_TOKEN,
+      TWILIO_FROM: import.meta.env.TWILIO_FROM,
+      LEAD_ALERT_SMS_TO: import.meta.env.LEAD_ALERT_SMS_TO,
+      RESEND_API_KEY: import.meta.env.RESEND_API_KEY,
+      LEAD_ALERT_EMAIL_TO: import.meta.env.LEAD_ALERT_EMAIL_TO,
+      LEAD_ALERT_EMAIL_FROM: import.meta.env.LEAD_ALERT_EMAIL_FROM,
+    },
+  );
+  if (notify.errors.length > 0) {
+    console.error("[lead] alert errors:", notify.errors.join("; "));
   }
 
   return redirect("/thank-you", 303);

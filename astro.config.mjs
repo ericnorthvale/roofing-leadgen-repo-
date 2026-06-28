@@ -58,6 +58,18 @@ export default defineConfig({
       }),
       GOOGLE_PLACE_ID: envField.string({ context: "server", access: "secret", optional: true }),
       META_CAPI_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),
+      // Lead alerts (SMS via Twilio + email via Resend). Day-one safety net — see docs/setup-leads.md.
+      TWILIO_ACCOUNT_SID: envField.string({ context: "server", access: "secret", optional: true }),
+      TWILIO_AUTH_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),
+      TWILIO_FROM: envField.string({ context: "server", access: "secret", optional: true }),
+      LEAD_ALERT_SMS_TO: envField.string({ context: "server", access: "secret", optional: true }),
+      RESEND_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+      LEAD_ALERT_EMAIL_TO: envField.string({ context: "server", access: "secret", optional: true }),
+      LEAD_ALERT_EMAIL_FROM: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       META_PIXEL_ID: envField.string({ context: "server", access: "public", optional: true }),
       GOOGLE_ADS_CONVERSION_ID: envField.string({
         context: "server",
