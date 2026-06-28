@@ -88,3 +88,72 @@ against this plan and the Phase-2 bar. Update TASKS.md every batch.
 - Never modify DNS, domain settings, secrets, env vars, billing, or auth. Stop
   and ask if a task seems to need these.
 - Confirm before any bulk delete/move/rename.
+
+---
+
+# The Operating System (Architecture, Automation, Security, SDLC, Testing, Cost)
+
+Beyond the SEO site, Northvale needs a connected operating system two
+non-technical owners can run and scale to a sales team, with automation at the
+core. Reconciled with the Joint Launch Plan.
+
+## Locked stack decisions
+
+- **Lead/automation hub = HighLevel** — the website posts leads here; it runs
+  speed-to-lead SMS/email, nurture, review requests, and sales-team lead routing.
+- **Production CRM = JobNimbus, added later** (~Aug, when jobs start). **No
+  AccuLynx.** Website never integrates to the production CRM (HighLevel→JobNimbus
+  is a CRM-to-CRM handoff), so it doesn't affect website code.
+- **Admin panel sign-in = Google Workspace SSO** (restricted to @northvaleroofing.com).
+- **Photos = CompanyCam auto-pull** (real, geotagged → strong local SEO + trust).
+- **Automation = native + HighLevel first; n8n for custom glue only**, on a cheap
+  cloud instance (Mac mini for dev). No duplicated wiring.
+- **Finance = full revenue-attribution loop, phased**; assisted owner reports can
+  start now via the connected QuickBooks.
+- **Security/testing = lightweight now, harden before scaling.**
+
+## Architecture (data flow)
+
+Website (Vercel) → **HighLevel** (leads/automation) → **JobNimbus** (jobs) →
+**QuickBooks** (money); **CompanyCam** (photos) + **GA4** (traffic) feed in; **n8n**
+glues the gaps + scheduled jobs. Source of truth per domain: content = GitHub;
+leads = HighLevel; jobs = JobNimbus; money = QuickBooks; photos = CompanyCam.
+
+## Build sequencing (operations kit)
+
+1. **D1 — Lead alerts + safety net** ✅ (PR #3): instant SMS/email so no lead is lost.
+2. **D2 — Admin panel** (Keystatic + Google SSO): owners edit Business Info, photos,
+   reviews, blog. City/service SEO pages stay Claude-crafted.
+3. **D3/D4 — CompanyCam photos + Google reviews** (env-gated).
+4. **D5 (later) — n8n**: revenue-attribution loop + scheduled owner reports; then
+   pre-scale security/testing hardening.
+
+## Security baseline (phased)
+
+NOW (cheap/essential): 2FA on all accounts; Google SSO for admin; secrets in env
+(not git); HTTPS; webhook signature verification; honeypot + rate-limit on
+`/api/lead`; TCPA/TDPSA consent capture. DEFER to hardening: Sentry, automated
+dependency scanning, formal PII retention/deletion policy, CSP tightening,
+access-audit cadence.
+
+## SDLC + testing
+
+Branch → PR → Vercel preview → review → merge → deploy. CI: typecheck, lint,
+build, link-check, Lighthouse (+ unit/integration/E2E, `npm audit`, secret-scan as
+we harden). Tests: unit (Vitest — quality gate, phone, utm, notify, rate-limit),
+integration (`/api/lead`), E2E (Playwright smoke + lead flow + admin auth-gate),
+schema validation, synthetic monitoring (nightly lead test). n8n workflows
+version-controlled in git, tested before prod.
+
+## Cost (approx monthly run-rate, USD — verify; excludes ad spend + payroll)
+
+Launch ≈ **$330–500/mo** (Vercel, Google Workspace, HighLevel, CompanyCam,
+QuickBooks, n8n VPS, call tracking, Twilio/Resend usage). At scale ≈
+**$900–1,400/mo** (+ JobNimbus seats). Ad spend is separate (~$4.5k–7k/mo per
+launch plan: LSA + Google + Facebook).
+
+## Maintenance
+
+Mostly automated + Claude-assisted, Greg-light: weekly alert/review checks;
+monthly auto-report + dependency PRs + SEO snapshot; quarterly security review +
+audits; annual renewals calendar. Bookkeeper/CPA own QuickBooks.

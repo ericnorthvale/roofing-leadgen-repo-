@@ -35,11 +35,43 @@ Source of truth for build progress. Update after every batch/PR.
 - [ ] (per batch) build + gate + schema + link check + fresh reviewer subagent
 - [ ] (per batch) update this file
 
-## Owner to-dos (unblocks indexable pages)
+## Operations, Architecture & Automation (see PLAN.md "Operating System")
+
+Locked decisions: **HighLevel** = website lead/automation hub; **JobNimbus** =
+production CRM, added later (no AccuLynx); **Google Workspace SSO** for the admin
+panel; **CompanyCam** auto-pull for photos; **n8n on cheap cloud** for custom glue
+later (Mac mini for dev); **lightweight security now, harden before scaling**.
+
+- [x] **D1 — Lead alerts + safety net:** SMS (Twilio) + email (Resend) on every
+      lead, env-gated; rate limit; `docs/setup-leads.md`. → PR #3
+- [ ] **D2 — Admin panel:** Keystatic at `/admin` behind Google Workspace SSO.
+      Editable: Business Info (NAP/cert/experience/warranties/financing/hours),
+      Photos, Reviews, Blog. City/service SEO pages stay Claude-crafted.
+- [ ] **D3/D4 — CompanyCam photo pull + Google reviews** (env-gated).
+- [ ] **D5 (later) — n8n:** revenue-attribution loop (lead→job→revenue) +
+      scheduled monthly/quarterly owner report; then security/testing hardening.
+
+## Owner to-dos
+
+**Unblocks indexable pages / content:**
 
 - [ ] Real NAP: business phone + physical address (replaces `(281) 000-0000`, blank address)
 - [ ] Real cert status (RCAT / GAF Master Elite — held vs. applicant)
 - [ ] Operator/crew real experience (years, rough project scale) for "established" copy
 - [ ] Real photos (owner's prior work OK if rights confirmed + labeled)
-- [ ] GA4 measurement ID + (optional) GTM container ID in Vercel env
-- [ ] Search Console verification (manual — see CLAUDE.md)
+
+**Accounts to provision (Claude builds code + gives click-by-click; never touches secrets/DNS):**
+
+- [ ] GA4 measurement ID + (optional) GTM ID in Vercel env; Search Console verify (`docs/analytics-search-console.md`)
+- [ ] Lead alerts: Twilio + Resend keys in Vercel (`docs/setup-leads.md`)
+- [ ] HighLevel account → API key + location ID in Vercel (lead hub)
+- [ ] Admin panel: Google OAuth app + Keystatic GitHub app (for sign-in + saving) — D2
+- [ ] CompanyCam account + API key — D3
+- [ ] JobNimbus (production CRM) — when first jobs land (~Aug)
+- [ ] n8n on a small cloud instance — when QuickBooks + ads are live (D5)
+
+## Branch / PR map
+
+- **PR #2** — Phase-1 SEO harness. Branch `claude/repo-overview-architecture-2r2oti` → `main`.
+- **PR #3** — D1 lead alerts. Branch `claude/owner-operations-kit` → stacked on the Phase-1 branch.
+- Operations-kit work continues on `claude/owner-operations-kit`, one draft PR per deliverable.
