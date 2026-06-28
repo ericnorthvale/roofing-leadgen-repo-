@@ -1,6 +1,11 @@
 ---
 import ServiceLayout from "@layouts/ServiceLayout.astro";
 import { SERVICES } from "~/lib/services";
+import { RESOURCES } from "~/lib/resources";
 ---
 
-<ServiceLayout service={SERVICES.replacement} />
+<ServiceLayout
+  service={SERVICES.replacement}
+  beforeAfter={true}
+  resources={RESOURCES.replacement}
+/>

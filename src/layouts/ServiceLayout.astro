@@ -7,14 +7,21 @@ import LeadForm from "@components/LeadForm.astro";
 import TrustBar from "@components/TrustBar.astro";
 import Faq from "@components/Faq.astro";
 import RelatedLinks from "@components/RelatedLinks.astro";
+import BeforeAfter from "@components/BeforeAfter.astro";
+import Resources from "@components/Resources.astro";
 import { buildSeo, serviceJsonLd, faqPageJsonLd } from "~/lib/seo";
 import { evaluateService } from "~/lib/quality-gate";
 import { SERVICE_LIST, type Service } from "~/lib/services";
+import type { ResourceLink } from "~/lib/resources";
 
 interface Props {
   service: Service;
+  /** Show a before/after band (best for replacement / storm pages). */
+  beforeAfter?: boolean;
+  /** Optional educational external resources for this service. */
+  resources?: ResourceLink[];
 }
-const { service } = Astro.props;
+const { service, beforeAfter = false, resources = [] } = Astro.props;
 
 const siteUrl = Astro.site?.toString() ?? "https://northvaleroofing.com";
 const verdict = evaluateService(service);
@@ -117,7 +124,11 @@ const relatedServices = SERVICE_LIST.filter((s) => s.serviceTag !== service.serv
     </aside>
   </section>
 
+  {beforeAfter && <BeforeAfter heading="Recent work" />}
+
   {service.faqs && <Faq items={service.faqs} />}
+
+  <Resources links={resources} />
 
   <RelatedLinks heading="Other services" links={relatedServices} />
 </BaseLayout>

@@ -26,6 +26,10 @@ import { SERVICE_LIST } from "~/lib/services";
             title={service.title}
             badge={service.serviceTag === "inspection" ? "Free" : undefined}
             blurb={service.summary}
+            image={{
+              slot: `SERVICE: ${service.title.toLowerCase()}`,
+              alt: `${service.title} by Northvale Roofing`,
+            }}
           />
         ))
       }

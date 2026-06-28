@@ -1,0 +1,92 @@
+---
+/**
+ * Visual trust row. Shows only claims that are TRUE today (sourced from the brand
+ * promise + signature commitments) as branded chips. Manufacturer / accreditation /
+ * financing LOGOS are rendered as clearly-labelled ImagePlaceholder slots so they
+ * read as "coming" rather than as fake badges — swap in the real logo (and only
+ * once the status is confirmed held) by passing each one a `src`.
+ *
+ * Never add a chip or badge for something not yet true (no "BBB A+", no "fully
+ * insured", no financing partner) until the owner confirms and supplies proof.
+ */
+import { BRAND } from "~/lib/brand";
+import ImagePlaceholder from "@components/ImagePlaceholder.astro";
+
+interface Props {
+  /** Show the logo placeholder slots (GAF / BBB / financing). */
+  showLogos?: boolean;
+  /** Dark band (e.g. footer CTA) vs light section. */
+  variant?: "light" | "dark";
+  class?: string;
+}
+const { showLogos = false, variant = "light", class: className } = Astro.props;
+
+// True, defensible commitments only — pulled from the brand single source.
+const claims = [
+  BRAND.promise, // "Written estimate before we leave the driveway."
+  "Named project manager on every job",
+  "Forty-photo documentation packet",
+  BRAND.certStatus || "GAF Master Elite applicant",
+];
+
+const isDark = variant === "dark";
+---
+
+<div class:list={[className]}>
+  <ul
+    class:list={[
+      "flex flex-wrap items-center justify-center gap-2 md:gap-3",
+      isDark ? "text-white" : "text-[color:var(--color-navy-900)]",
+    ]}
+  >
+    {
+      claims.map((claim) => (
+        <li
+          class:list={[
+            "inline-flex items-center gap-1.5 rounded-[var(--radius-pill)] border px-3 py-1.5 text-xs font-semibold md:text-sm",
+            isDark ? "border-white/25 bg-white/5" : "border-[color:var(--color-navy-100)] bg-white",
+          ]}
+        >
+          <svg
+            class="h-3.5 w-3.5 shrink-0 text-[color:var(--color-gold-500)]"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 011.4-1.4l3.1 3.1 6.8-6.8a1 1 0 011.4 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          {claim}
+        </li>
+      ))
+    }
+  </ul>
+
+  {
+    showLogos && (
+      <div class="mt-5 grid grid-cols-3 gap-3 sm:mx-auto sm:max-w-md">
+        <ImagePlaceholder
+          slot="TRUST BADGE: GAF (when held)"
+          ratio="1/1"
+          alt="GAF certification badge"
+          tone="navy"
+        />
+        <ImagePlaceholder
+          slot="TRUST BADGE: BBB (when accredited)"
+          ratio="1/1"
+          alt="BBB accreditation badge"
+          tone="navy"
+        />
+        <ImagePlaceholder
+          slot="TRUST BADGE: financing partner"
+          ratio="1/1"
+          alt="Financing partner logo"
+          tone="navy"
+        />
+      </div>
+    )
+  }
+</div>

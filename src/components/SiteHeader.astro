@@ -4,9 +4,18 @@ import { telHref, formatPhoneDisplay } from "~/lib/phone";
 import CTAButton from "@components/CTAButton.astro";
 
 const phone = formatPhoneDisplay(BRAND.phoneE164);
+
+const navLinks = [
+  { href: "/services", label: "Services" },
+  { href: "/the-woodlands", label: "The Woodlands" },
+  { href: "/storm-response", label: "Storm Response" },
+  { href: "/reviews", label: "Reviews" },
+  { href: "/about", label: "About" },
+  { href: "/blog", label: "Blog" },
+];
 ---
 
-<header class="border-b border-[color:var(--color-navy-100)] bg-white">
+<header class="relative border-b border-[color:var(--color-navy-100)] bg-white">
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4">
     <a href="/" class="flex items-center gap-3" aria-label={`${BRAND.name} — home`}>
       <img src="/brand/logo.svg" alt="" width="40" height="40" loading="eager" decoding="async" />
@@ -16,23 +25,102 @@ const phone = formatPhoneDisplay(BRAND.phoneE164);
     </a>
 
     <nav class="hidden items-center gap-6 md:flex" aria-label="Main">
-      <a href="/services" class="text-sm font-medium">Services</a>
-      <a href="/the-woodlands" class="text-sm font-medium">The Woodlands</a>
-      <a href="/storm-response" class="text-sm font-medium">Storm Response</a>
-      <a href="/reviews" class="text-sm font-medium">Reviews</a>
-      <a href="/about" class="text-sm font-medium">About</a>
-      <a href="/blog" class="text-sm font-medium">Blog</a>
+      {
+        navLinks.map((link) => (
+          <a href={link.href} class="text-sm font-medium">
+            {link.label}
+          </a>
+        ))
+      }
     </nav>
 
     <div class="flex items-center gap-3">
       <a
         href={telHref(BRAND.phoneE164)}
-        data-cra-phone
+        data-cta-phone
         class="hidden text-sm font-semibold text-[color:var(--color-navy-900)] md:inline"
       >
         {phone}
       </a>
       <CTAButton href="/contact" label="Book inspection" ctaId="header-book" />
+
+      {/* Mobile menu — native <details> disclosure, no JS, keyboard + SR accessible. */}
+      <details class="nv-menu md:hidden">
+        <summary
+          class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] text-[color:var(--color-navy-900)]"
+          aria-label="Open menu"
+        >
+          <svg
+            class="nv-menu-open h-6 w-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+          <svg
+            class="nv-menu-close h-6 w-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M6 6l12 12M18 6L6 18"></path>
+          </svg>
+        </summary>
+        <nav
+          class="absolute top-full right-0 left-0 z-50 border-b border-[color:var(--color-navy-100)] bg-white shadow-[var(--shadow-card)]"
+          aria-label="Mobile"
+        >
+          <ul class="mx-auto flex max-w-6xl flex-col px-4 py-2">
+            {
+              navLinks.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="flex min-h-12 items-center text-base font-medium text-[color:var(--color-navy-900)]"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))
+            }
+            <li>
+              <a
+                href={telHref(BRAND.phoneE164)}
+                data-cta-phone
+                class="flex min-h-12 items-center font-semibold text-[color:var(--color-gold-700)]"
+              >
+                Call {phone}
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </details>
     </div>
   </div>
 </header>
+
+<style>
+  /* Hide the default disclosure triangle and swap the open/close icons. */
+  .nv-menu > summary {
+    list-style: none;
+  }
+  .nv-menu > summary::-webkit-details-marker {
+    display: none;
+  }
+  .nv-menu > summary .nv-menu-close {
+    display: none;
+  }
+  .nv-menu[open] > summary .nv-menu-open {
+    display: none;
+  }
+  .nv-menu[open] > summary .nv-menu-close {
+    display: block;
+  }
+</style>

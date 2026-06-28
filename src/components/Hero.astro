@@ -1,6 +1,7 @@
 ---
 import CTAButton from "@components/CTAButton.astro";
 import PhoneCTAButton from "@components/PhoneCTAButton.astro";
+import ImagePlaceholder from "@components/ImagePlaceholder.astro";
 
 interface Props {
   eyebrow?: string;
@@ -8,38 +9,66 @@ interface Props {
   subhead: string;
   primaryCta: { href: string; label: string; ctaId?: string };
   secondaryCta?: { href: string; label: string; ctaId?: string };
+  /**
+   * Optional hero visual. When omitted, the hero is text-only (no LCP image).
+   * Pass `src` once a real photo exists — preload it in BaseLayout at that point
+   * (see TASKS_FOR_ERIC "preload the LCP image once a real hero exists").
+   */
+  image?: { slot: string; alt: string; src?: string; ratio?: string };
 }
-const { eyebrow, headline, subhead, primaryCta, secondaryCta } = Astro.props;
+const { eyebrow, headline, subhead, primaryCta, secondaryCta, image } = Astro.props;
 ---
 
 <section class="relative overflow-hidden bg-[color:var(--color-navy-50)]">
-  <div class="mx-auto max-w-6xl px-4 py-16 md:py-24">
-    {
-      eyebrow && (
-        <p class="mb-3 text-sm font-semibold tracking-widest text-[color:var(--color-gold-700)] uppercase">
-          {eyebrow}
-        </p>
-      )
-    }
-    <h1 class="max-w-3xl text-4xl leading-[1.05] font-semibold md:text-6xl">{headline}</h1>
-    <p class="mt-5 max-w-2xl text-lg text-[color:var(--color-ink-800)]">{subhead}</p>
-    <div class="mt-8 flex flex-wrap gap-3">
-      <CTAButton
-        href={primaryCta.href}
-        label={primaryCta.label}
-        ctaId={primaryCta.ctaId ?? "hero-primary"}
-      />
-      <PhoneCTAButton ctaId="hero-call" />
+  <div
+    class:list={[
+      "mx-auto max-w-6xl px-4 py-16 md:py-24",
+      image && "md:grid md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-12",
+    ]}
+  >
+    <div>
       {
-        secondaryCta && (
-          <CTAButton
-            href={secondaryCta.href}
-            label={secondaryCta.label}
-            ctaId={secondaryCta.ctaId ?? "hero-secondary"}
-            variant="ghost"
-          />
+        eyebrow && (
+          <p class="mb-3 text-sm font-semibold tracking-widest text-[color:var(--color-gold-700)] uppercase">
+            {eyebrow}
+          </p>
         )
       }
+      <h1 class="max-w-3xl text-4xl leading-[1.05] font-semibold md:text-6xl">{headline}</h1>
+      <p class="mt-5 max-w-2xl text-lg text-[color:var(--color-ink-800)]">{subhead}</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <CTAButton
+          href={primaryCta.href}
+          label={primaryCta.label}
+          ctaId={primaryCta.ctaId ?? "hero-primary"}
+        />
+        <PhoneCTAButton ctaId="hero-call" />
+        {
+          secondaryCta && (
+            <CTAButton
+              href={secondaryCta.href}
+              label={secondaryCta.label}
+              ctaId={secondaryCta.ctaId ?? "hero-secondary"}
+              variant="ghost"
+            />
+          )
+        }
+      </div>
     </div>
+    {
+      image && (
+        <div class="mt-10 md:mt-0">
+          <ImagePlaceholder
+            slot={image.slot}
+            alt={image.alt}
+            src={image.src}
+            ratio={image.ratio ?? "4/3"}
+            priority={true}
+            tone="mixed"
+            class="shadow-[var(--shadow-card)]"
+          />
+        </div>
+      )
+    }
   </div>
 </section>

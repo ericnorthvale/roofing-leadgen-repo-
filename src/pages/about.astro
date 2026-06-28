@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import CTAButton from "@components/CTAButton.astro";
+import ImagePlaceholder from "@components/ImagePlaceholder.astro";
 import { BRAND } from "~/lib/brand";
 ---
 
@@ -54,6 +55,28 @@ import { BRAND } from "~/lib/brand";
         </li>
       </ul>
     </article>
+
+    <div class="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <ImagePlaceholder
+        slot="CREW: foreman / named project manager"
+        alt="Northvale Roofing foreman on a job site"
+        ratio="3/2"
+        tone="navy"
+      />
+      <ImagePlaceholder
+        slot="CREW: team installing a roof"
+        alt="Northvale Roofing crew installing a new roof"
+        ratio="3/2"
+        tone="mixed"
+      />
+      <ImagePlaceholder
+        slot="TRUCK: branded Northvale vehicle"
+        alt="Branded Northvale Roofing truck on a local street"
+        ratio="3/2"
+        tone="gold"
+      />
+    </div>
+
     <div class="mt-10 flex gap-3">
       <CTAButton href="/contact" label="Book my inspection" ctaId="about-book" />
       <CTAButton href="/reviews" variant="ghost" label="Read reviews" />
