@@ -11,7 +11,7 @@ Please perform an end-of-session wrap-up:
 
 2. **Code-Comment Agreement**: Review any code you've changed during our
    current session and ensure that any and all comments in the code agree
-   with what the code actually *does*. Add comments explaining any code
+   with what the code actually _does_. Add comments explaining any code
    section for which there are none.
 
 3. **Memory update**: Review our session and update your memory with any
