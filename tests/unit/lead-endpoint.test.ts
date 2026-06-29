@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { POST } from "~/pages/api/lead";
 import { _resetRateLimit } from "~/lib/rate-limit";
 
@@ -29,12 +29,23 @@ const validLead = {
 };
 
 beforeEach(() => _resetRateLimit());
+afterEach(() => vi.unstubAllGlobals());
 
 describe("POST /api/lead", () => {
   it("redirects to /thank-you (303) on a valid submission", async () => {
     const res = await POST(ctx(validLead, { "x-forwarded-for": "1.1.1.1" }));
     expect(res.status).toBe(303);
     expect(res.headers.get("location")).toBe("/thank-you");
+  });
+
+  it("makes no outbound calls when no integration keys are set (all gated no-ops)", async () => {
+    // HighLevel, notify (Twilio/Resend), and Meta CAPI must all cleanly skip
+    // with no env keys — so a valid lead never touches the network.
+    const fetchSpy = vi.fn();
+    vi.stubGlobal("fetch", fetchSpy);
+    const res = await POST(ctx(validLead, { "x-forwarded-for": "9.9.9.9" }));
+    expect(res.status).toBe(303);
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 
   it("rejects a submission missing required fields (422)", async () => {

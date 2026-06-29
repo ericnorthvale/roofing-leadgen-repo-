@@ -90,6 +90,17 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
+      // Optional — when both are set, each lead also creates a pipeline opportunity.
+      HIGHLEVEL_PIPELINE_ID: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
+      HIGHLEVEL_PIPELINE_STAGE_ID: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       CALLRAIL_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
       CALLRAIL_ACCOUNT_ID: envField.string({ context: "server", access: "secret", optional: true }),
       GOOGLE_MAPS_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),

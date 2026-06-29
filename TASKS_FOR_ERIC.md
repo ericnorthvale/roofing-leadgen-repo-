@@ -12,11 +12,11 @@ Ordered by the point in the launch path where they're blocking. Check off as the
 
 ## Tier 2 — analytics + CRM wiring (blocks attribution)
 
-- [ ] **HighLevel**: create sub-account (location), issue Private Integration token. Paste into Vercel env as `HIGHLEVEL_API_KEY` + `HIGHLEVEL_LOCATION_ID`.
-- [ ] **CallRail Elite**: provision 3 tracking numbers (site DNI pool + offline pool + GBP pool). Configure webhook → `/api/callrail-webhook` with an HMAC-SHA1 secret; set `CALLRAIL_WEBHOOK_SECRET` + `CALLRAIL_API_KEY` + `CALLRAIL_ACCOUNT_ID` + `PUBLIC_CALLRAIL_COMPANY_ID` in Vercel.
+- [ ] **HighLevel** _(code done — keys pending)_: create sub-account (location), issue Private Integration token, build the sales pipeline. Paste into Vercel env as `HIGHLEVEL_API_KEY` + `HIGHLEVEL_LOCATION_ID`, and (optional, to auto-create pipeline opportunities) `HIGHLEVEL_PIPELINE_ID` + `HIGHLEVEL_PIPELINE_STAGE_ID`. **Step-by-step guide: `docs/setup-highlevel.md`.** The lead form upserts a contact + opens an opportunity automatically once these are set.
+- [ ] **CallRail Elite** _(webhook wiring done — keys pending)_: provision 3 tracking numbers (site DNI pool + offline pool + GBP pool). Point the **Post-Call** webhook → `/api/callrail-webhook` with an HMAC-SHA1 secret; set `CALLRAIL_WEBHOOK_SECRET` + `CALLRAIL_API_KEY` + `CALLRAIL_ACCOUNT_ID` + `PUBLIC_CALLRAIL_COMPANY_ID` in Vercel. Completed inbound calls then push into HighLevel as a contact (+ opportunity) and fire the same instant SMS/email alert as form leads.
 - [ ] **GA4**: create property + data stream. Set `PUBLIC_GA4_ID`.
 - [ ] **Server-side GTM**: stand up container on Vercel subdomain (e.g., `metrics.northvaleroofing.com`). Set `PUBLIC_GTM_ID`.
-- [ ] **Meta Business Manager + CAPI**: create ad account, issue CAPI token. Set `META_CAPI_TOKEN` + `META_PIXEL_ID`.
+- [ ] **Meta Business Manager + CAPI** _(server-side code done — keys pending)_: create ad account, issue CAPI token. Set `META_CAPI_TOKEN` + `META_PIXEL_ID`. Every form lead then sends a server-side `Lead` conversion (hashed PII) to Meta automatically.
 - [ ] **Google Ads**: create account, set up conversion import from HighLevel (nightly), set `GOOGLE_ADS_CONVERSION_ID`.
 - [ ] **Google Business Profile**: claim and verify. Request Place ID (see comment in `.env.example`). Set `GOOGLE_PLACE_ID`.
 - [ ] **Google Places API key** issued and scoped for reviews pull. Set `GOOGLE_PLACES_API_KEY`.
