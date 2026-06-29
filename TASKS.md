@@ -125,9 +125,24 @@ spine and knowledge base were moved up.
 
 ## Branch / PR map
 
-- **PR #2** — Phase-1 SEO harness. Branch `claude/repo-overview-architecture-2r2oti` → `main`.
-- **PR #3** — D1 lead alerts. Branch `claude/owner-operations-kit` → stacked on the Phase-1 branch.
-- **PR #13** — Visual layer + demo images. Branch `claude/roofing-site-audit-bbl2i1` → `main` (squash-merged; one-time owner-authorized direct merge for production preview).
-- **PR #17** — CRM lead pipeline hardened (HighLevel upsert + opportunity, CallRail→HighLevel, Meta CAPI). Branch `claude/crm-lead-gen-integrations-ijcx6k` → `main` (squash-merged; owner-authorized session-end merge).
+Merged to `main` (newest first; reconstructed from history — branch noted where notable):
+
+- **PR #17** — CRM lead pipeline hardened (HighLevel upsert + opportunity, CallRail→HighLevel, Meta CAPI). Branch `claude/crm-lead-gen-integrations-ijcx6k` (squash-merged; owner-authorized session-end merge).
+- **PR #16** — fix(callrail): mask customer phone in webhook logs + record session decisions.
+- **PR #15** — AI-generated-code security review checklist (`docs/security/ai-code-review-checklist.md`). Branch `claude/ai-code-security-checklist-t86f8r`.
+- **PR #14** — Docs: record visual layer + demo-image system (session wrap-up).
+- **PR #13** — Visual layer + demo images. Branch `claude/roofing-site-audit-bbl2i1` (squash-merged; one-time owner-authorized direct merge for production preview).
+- **PR #12** — Docs: Vercel SSR + OAuth-callback lessons from admin sign-in debugging.
+- **PR #11** — fix(admin): build Keystatic GitHub redirect_uri from the real host (not localhost).
+- **PR #10** — fix(admin): exclude `/api` and `/keystatic` from ISR (fixes auth callback crash).
+- **PR #9** — fix(admin): catch + surface auth callback errors instead of crashing.
+- **PR #8** — fix(admin): friendly "panel not set up yet" page instead of a Keystatic crash.
+- **PR #7** — Docs: log deployment + admin-auth decisions to the decision-log.
+- **PR #6** — fix(admin): never cache auth redirects (no-store on sign-in / callback / gate).
+- **PR #5** — fix(admin): make Keystatic + Google sign-in work in production.
+- **PR #4** — Docs: correct launch-checklist (8 service-area pages; actual Lighthouse budgets).
+- **PR #3** — D1 lead alerts. Branch `claude/owner-operations-kit` (stacked on the Phase-1 branch).
+- **PR #2** — Phase-1 SEO harness. Branch `claude/repo-overview-architecture-2r2oti`.
 - **PR #1** — original April scaffold (`ebleck55`). Closed unmerged: superseded by current `main`.
-- Operations-kit work continues on `claude/owner-operations-kit`, one draft PR per deliverable.
+
+Operations-kit work continues on `claude/owner-operations-kit`, one draft PR per deliverable.

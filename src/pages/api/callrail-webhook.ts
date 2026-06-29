@@ -8,6 +8,7 @@ import {
 import { pushLeadToHighLevel } from "~/lib/highlevel";
 import { notifyNewLead } from "~/lib/notify";
 import { canonicalLeadSource } from "~/lib/lead-source";
+import { maskPhone } from "~/lib/phone";
 
 export const prerender = false;
 
@@ -26,6 +27,19 @@ export const POST: APIRoute = async ({ request }) => {
   } catch {
     return new Response("Bad JSON", { status: 400 });
   }
+
+  // Masked diagnostic log (PR #16): the customer number is the caller's PII, so
+  // it is masked to last-4 before it reaches Vercel logs; tracking_phone is our
+  // CallRail pool number (not personal data), logged as-is for routing.
+  console.log("[callrail-webhook]", {
+    id: event.id,
+    direction: event.direction,
+    duration: event.duration,
+    tracking_phone: event.tracking_phone_number,
+    customer_phone: maskPhone(event.customer_phone_number),
+    source: event.source_name,
+    utm_source: event.utm_source,
+  });
 
   // De-dupe: ignore pre-call/outbound noise; act once per completed inbound call.
   if (!isActionableCall(event)) {

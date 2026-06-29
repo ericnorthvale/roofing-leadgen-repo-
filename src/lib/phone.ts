@@ -19,3 +19,16 @@ export function formatPhoneDisplay(e164: string = BRAND.phoneE164): string {
   if (digits.length !== 10) return e164;
   return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
 }
+
+/**
+ * Mask a phone number for logging. Keeps only the last 4 digits so a log line
+ * stays correlatable for debugging without persisting the full number (PII) to
+ * server/function logs. Empty input → ""; anything that isn't a 10-digit US
+ * number is fully redacted rather than partially leaked.
+ */
+export function maskPhone(value: string | undefined | null): string {
+  if (!value) return "";
+  const digits = value.replace(/\D/g, "").replace(/^1/, "");
+  if (digits.length !== 10) return "[redacted]";
+  return `***-***-${digits.slice(6)}`;
+}
