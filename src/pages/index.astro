@@ -5,6 +5,8 @@ import TrustBar from "@components/TrustBar.astro";
 import ServiceCard from "@components/ServiceCard.astro";
 import LeadForm from "@components/LeadForm.astro";
 import Reviews from "@components/Reviews.astro";
+import BeforeAfter from "@components/BeforeAfter.astro";
+import ImagePlaceholder from "@components/ImagePlaceholder.astro";
 import { BRAND } from "~/lib/brand";
 import { SERVICE_AREAS } from "~/lib/service-areas";
 
@@ -30,6 +32,11 @@ const areasLine = Object.values(SERVICE_AREAS)
     subhead={`Premium residential roofing for North Houston. Written estimate before we leave the driveway. A named project manager on every job.`}
     primaryCta={{ href: "/contact", label: "Book my inspection", ctaId: "home-book" }}
     secondaryCta={{ href: "/storm-response", label: "Storm today?", ctaId: "home-storm" }}
+    image={{
+      slot: "HERO: crew on a finished roof, golden hour",
+      alt: "Northvale Roofing crew on a completed roof in The Woodlands at golden hour",
+      demoKey: "hero",
+    }}
   />
 
   <TrustBar />
@@ -41,35 +48,70 @@ const areasLine = Object.values(SERVICE_AREAS)
         href="/services/roof-replacement"
         title="Roof replacement"
         blurb="GAF Timberline HDZ + 50-year non-prorated warranty. Class-4 IR upgrade available."
+        image={{
+          slot: "SERVICE: new architectural-shingle roof",
+          alt: "Finished GAF Timberline HDZ roof replacement",
+          demoKey: "svc-replacement",
+        }}
       />
       <ServiceCard
         href="/services/roof-repair"
         title="Roof repair"
         blurb="Leaks, lifted shingles, storm patching — usually same-day or next-day."
+        image={{
+          slot: "SERVICE: roofer repairing flashing / shingles",
+          alt: "Roofer repairing lifted shingles and flashing",
+          demoKey: "svc-repair",
+        }}
       />
       <ServiceCard
         href="/services/roof-inspection"
         title="Roof inspection"
         badge="Free"
         blurb="Forty-photo packet. Written findings within 24 hours. No obligation, no pressure."
+        image={{
+          slot: "SERVICE: inspector photographing a roof",
+          alt: "Inspector documenting a roof for the forty-photo packet",
+          demoKey: "svc-inspection",
+        }}
       />
       <ServiceCard
         href="/services/storm-damage"
         title="Storm damage"
         blurb="Hail, wind, fallen-limb impact. We document everything your adjuster will ask for."
+        image={{
+          slot: "SERVICE: hail/wind-damaged roof close-up",
+          alt: "Close-up of hail and wind damage on a roof",
+          demoKey: "svc-storm",
+        }}
       />
       <ServiceCard
         href="/services/insurance-claims"
         title="Insurance claims"
         blurb="Process-literate support. Not a public adjuster — we're the contractor of record."
+        image={{
+          slot: "SERVICE: adjuster meeting on a roof",
+          alt: "Project manager meeting an insurance adjuster on site",
+          demoKey: "svc-insurance",
+        }}
       />
       <ServiceCard
         href="/the-woodlands"
         title="Neighborhoods"
-        blurb="ARC-approved shingle lists on file for Bridgeland, Towne Lake, Alden Bridge, Timarron, more."
+        blurb="Township roofing Standards and village review requirements on file for Grogan's Mill, Alden Bridge, Sterling Ridge, Creekside Park, and more."
+        image={{
+          slot: "NEIGHBORHOOD: tree-lined Woodlands street",
+          alt: "Tree-lined residential street in The Woodlands",
+          demoKey: "neighborhood",
+        }}
       />
     </div>
   </section>
+
+  <BeforeAfter
+    heading="See the difference"
+    intro="Real Northvale projects in The Woodlands and NW Houston. We document every job start to finish — these slots fill with our own work, never stock photos."
+  />
 
   <section class="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-[1fr_420px]">
     <div class="prose-northvale">
@@ -100,6 +142,22 @@ const areasLine = Object.values(SERVICE_AREAS)
         <li><strong>Under-60-second response</strong> — text us 8am–9pm CT and hear back fast.</li>
       </ul>
       <p><a href="/about">Read our story →</a></p>
+      <div class="mt-6 grid grid-cols-2 gap-3">
+        <ImagePlaceholder
+          slot="CREW: named project manager on a job site"
+          alt="Northvale Roofing project manager reviewing a roof with a homeowner"
+          demoKey="crew-pm"
+          ratio="3/2"
+          tone="navy"
+        />
+        <ImagePlaceholder
+          slot="TRUCK: branded Northvale vehicle on a local street"
+          alt="Branded Northvale Roofing truck parked at a job in The Woodlands"
+          demoKey="truck"
+          ratio="3/2"
+          tone="mixed"
+        />
+      </div>
     </div>
     <div>
       <LeadForm source="home-hero-sidebar" />

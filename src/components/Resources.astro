@@ -1,0 +1,56 @@
+---
+/**
+ * Educational, non-competitive external resources (manufacturers, building-science
+ * orgs, consumer/government guidance). LINK-ONLY by design — no embeds — so the
+ * mobile performance budget is never affected. Opens in a new tab so the visitor
+ * keeps their place on our page. Renders nothing if no links are passed.
+ */
+import type { ResourceLink } from "~/lib/resources";
+
+interface Props {
+  links: ResourceLink[];
+  heading?: string;
+  intro?: string;
+}
+const {
+  links,
+  heading = "Helpful resources",
+  intro = "Independent, non-commercial sources to help you decide — no sales pitch.",
+} = Astro.props;
+---
+
+{
+  links.length > 0 && (
+    <section class="mx-auto max-w-6xl px-4 py-12" aria-labelledby="resources-heading">
+      <h2 id="resources-heading" class="text-2xl md:text-3xl">
+        {heading}
+      </h2>
+      {intro && <p class="mt-2 max-w-2xl text-sm text-[color:var(--color-ink-500)]">{intro}</p>}
+      <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {links.map((r) => (
+          <li>
+            <a
+              href={r.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group block h-full rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-4 transition hover:border-[color:var(--color-gold-500)]"
+            >
+              <span class="text-[10px] font-semibold tracking-wider text-[color:var(--color-gold-700)] uppercase">
+                {r.source}
+              </span>
+              <span class="mt-1 block font-serif text-lg text-[color:var(--color-navy-900)]">
+                {r.label}{" "}
+                <span aria-hidden="true" class="text-[color:var(--color-ink-500)]">
+                  ↗
+                </span>
+              </span>
+              <span class="mt-1 block text-sm text-[color:var(--color-ink-800)]">
+                {r.description}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

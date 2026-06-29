@@ -4,6 +4,7 @@ import { LEGAL } from "~/lib/legal";
 import { SERVICE_AREAS } from "~/lib/service-areas";
 import { telHref, formatPhoneDisplay } from "~/lib/phone";
 import CTAButton from "@components/CTAButton.astro";
+import TrustBadges from "@components/TrustBadges.astro";
 
 const year = new Date().getFullYear();
 ---
@@ -26,6 +27,9 @@ const year = new Date().getFullYear();
           Call {formatPhoneDisplay(BRAND.phoneE164)}
         </a>
       </div>
+    </div>
+    <div class="mx-auto max-w-6xl px-4 pb-10">
+      <TrustBadges variant="dark" showLogos={true} />
     </div>
   </div>
 

@@ -1,0 +1,111 @@
+---
+/**
+ * Swappable image slot. Renders a real photo (via RoofImage) when `src` is set,
+ * otherwise renders an on-brand, intentional placeholder that reserves the final
+ * aspect ratio so there is ZERO layout shift when the real photo drops in.
+ *
+ * THE SWAP: to ship a real image, pass `src` (a path under /public or an imported
+ * asset URL). Nothing else changes — same dimensions, same `alt`, same position.
+ * This is the single place each image is wired, so photos can be replaced without
+ * hunting through page markup.
+ *
+ * `alt` is required and must truthfully describe the FINAL image (TS enforces it).
+ * `slot` is the human label shown on the placeholder (e.g. "HERO: crew on a
+ * finished roof, golden hour") so the owner knows exactly what photo goes here.
+ */
+import RoofImage from "@components/RoofImage.astro";
+import { demoSrc } from "~/lib/demo-images";
+
+interface Props {
+  /** Label of what the real photo should be, e.g. "BEFORE: storm-damaged roof". */
+  slot: string;
+  /** Final aspect ratio as a CSS ratio, e.g. "16/9", "4/3", "3/2", "1/1". */
+  ratio?: string;
+  /** Set once a real photo exists — flips this slot from placeholder to <img>. */
+  src?: string;
+  /** Demo/preview slot key (see src/lib/demo-images.ts). Ignored once `src` is set. */
+  demoKey?: string;
+  /** Required, truthful description of the FINAL image. */
+  alt: string;
+  /** Above-the-fold (hero) images only: eager + high fetchpriority. */
+  priority?: boolean;
+  /** Placeholder color treatment. */
+  tone?: "navy" | "gold" | "mixed";
+  class?: string;
+}
+const {
+  slot,
+  ratio = "16/9",
+  src,
+  demoKey,
+  alt,
+  priority = false,
+  tone = "mixed",
+  class: className,
+} = Astro.props;
+
+// Precedence: real photo (`src`) → demo/preview image → branded placeholder box.
+const resolved = src ?? demoSrc(demoKey);
+
+const gradients: Record<NonNullable<Props["tone"]>, string> = {
+  navy: "linear-gradient(135deg, var(--color-navy-900), var(--color-navy-700))",
+  gold: "linear-gradient(135deg, var(--color-gold-700), var(--color-gold-500))",
+  mixed: "linear-gradient(135deg, var(--color-navy-900) 45%, var(--color-gold-700))",
+};
+---
+
+{
+  resolved ? (
+    <div
+      class:list={["overflow-hidden rounded-[var(--radius-card)]", className]}
+      style={`aspect-ratio:${ratio};`}
+    >
+      <RoofImage
+        src={resolved}
+        alt={alt}
+        priority={priority}
+        class="block h-full w-full object-cover"
+      />
+    </div>
+  ) : (
+    <div
+      role="img"
+      aria-label={`Image placeholder — ${slot}`}
+      class:list={[
+        "nv-placeholder relative flex items-center justify-center overflow-hidden rounded-[var(--radius-card)]",
+        className,
+      ]}
+      style={`aspect-ratio:${ratio};background:${gradients[tone]};`}
+    >
+      {/* Subtle roofline pattern — decorative only. */}
+      <svg
+        class="pointer-events-none absolute inset-0 h-full w-full opacity-[0.12]"
+        viewBox="0 0 120 60"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden="true"
+        fill="none"
+        stroke="#fff"
+        stroke-width="1.5"
+      >
+        <path d="M-5 40 L30 15 L65 40 M55 40 L90 15 L125 40" />
+        <path d="M-5 55 L30 30 L65 55 M55 55 L90 30 L125 55" opacity="0.6" />
+      </svg>
+      <div class="relative z-10 px-4 py-3 text-center">
+        <svg
+          class="mx-auto mb-2 h-6 w-6 text-white/70"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          aria-hidden="true"
+        >
+          <rect x="3" y="4" width="18" height="16" rx="2" />
+          <circle cx="8.5" cy="9.5" r="1.6" />
+          <path d="M21 16l-5-5L5 20" />
+        </svg>
+        <p class="text-xs leading-snug font-semibold tracking-wide text-white uppercase">{slot}</p>
+        <p class="mt-1 text-[10px] font-medium text-white/60">Photo placeholder · {ratio}</p>
+      </div>
+    </div>
+  )
+}

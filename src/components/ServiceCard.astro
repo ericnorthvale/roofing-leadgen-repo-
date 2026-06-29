@@ -1,28 +1,46 @@
 ---
+import ImagePlaceholder from "@components/ImagePlaceholder.astro";
+
 interface Props {
   href: string;
   title: string;
   blurb: string;
   badge?: string;
+  /** Optional card thumbnail. Pass `src` later to swap the placeholder for a photo. */
+  image?: { slot: string; alt: string; src?: string; demoKey?: string };
 }
-const { href, title, blurb, badge } = Astro.props;
+const { href, title, blurb, badge, image } = Astro.props;
 ---
 
 <a
   href={href}
-  class="group grid gap-2 rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-card-hover)]"
+  class="group grid content-start gap-2 overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-card-hover)]"
 >
   {
-    badge && (
-      <span class="mb-1 self-start rounded-full bg-[color:var(--color-gold-100)] px-2 py-0.5 text-xs font-semibold tracking-wider text-[color:var(--color-gold-900)] uppercase">
-        {badge}
-      </span>
+    image && (
+      <ImagePlaceholder
+        slot={image.slot}
+        alt={image.alt}
+        src={image.src}
+        demoKey={image.demoKey}
+        ratio="3/2"
+        tone="mixed"
+      />
     )
   }
-  <h3 class="text-xl">{title}</h3>
-  <p class="text-sm text-[color:var(--color-ink-800)]">{blurb}</p>
-  <span
-    class="mt-2 text-sm font-semibold text-[color:var(--color-navy-700)] group-hover:text-[color:var(--color-gold-700)]"
-    >Learn more →</span
-  >
+  <div class:list={["grid gap-2", image ? "px-6 pt-4 pb-6" : "p-6"]}>
+    {
+      badge && (
+        <span class="mb-1 self-start rounded-full bg-[color:var(--color-gold-100)] px-2 py-0.5 text-xs font-semibold tracking-wider text-[color:var(--color-gold-900)] uppercase">
+          {badge}
+        </span>
+      )
+    }
+    <h3 class="text-xl">{title}</h3>
+    <p class="text-sm text-[color:var(--color-ink-800)]">{blurb}</p>
+    <span
+      class="mt-2 text-sm font-semibold text-[color:var(--color-navy-700)] group-hover:text-[color:var(--color-gold-700)]"
+      >Learn more →</span
+    >
+  </div>
 </a>
