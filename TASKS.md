@@ -2,6 +2,19 @@
 
 Source of truth for build progress. Update after every batch/PR.
 
+## ▶ Next session — start here
+
+**Complete the steps in `docs/setup-highlevel.md`.** The CRM lead pipeline is
+built and merged (PR #17): the website form and tracked phone calls will create a
+HighLevel contact + pipeline opportunity, and form leads also fire a server-side
+Meta conversion — all **env-gated and dormant until keys land in Vercel**. To turn
+it on: provision the HighLevel sub-account, issue the Private Integration token,
+build the sales pipeline, grab the Pipeline/Stage IDs, create the custom fields,
+set `HIGHLEVEL_API_KEY` / `HIGHLEVEL_LOCATION_ID` (+ optional
+`HIGHLEVEL_PIPELINE_ID` / `HIGHLEVEL_PIPELINE_STAGE_ID`) in Vercel, then submit a
+test lead and confirm a contact + opportunity appear. Then verify the live v2
+payload shapes in `src/lib/highlevel.ts` against the real account.
+
 ## Phase 0 — Audit
 
 - [x] Stack / routing / SEO / risks audit
@@ -68,6 +81,18 @@ spine and knowledge base were moved up.
       Editable: Business Info, Photos, Reviews, Blog. City/service SEO pages stay Claude-crafted.
       Owner provisions the Google OAuth client + secrets (`docs/setup-admin-panel.md`).
 
+**Phase 1.6 — CRM lead pipeline hardened (PR #17, merged):**
+
+- [x] **HighLevel**: contact **upsert** (de-dupes by phone/email) + pipeline
+      **opportunity** creation, gated on `HIGHLEVEL_PIPELINE_ID` /
+      `HIGHLEVEL_PIPELINE_STAGE_ID` (`src/lib/highlevel.ts`).
+- [x] **CallRail webhook → HighLevel**: completed inbound (Post-Call) events push
+      a contact (+ opportunity) and fire the owner SMS/email alert
+      (`src/pages/api/callrail-webhook.ts`); pre-call/outbound de-duped.
+- [x] **Meta Conversions API**: best-effort server-side `Lead` event (hashed PII,
+      dedup `event_id`), env-gated (`src/lib/meta-capi.ts`).
+- [x] Owner guide `docs/setup-highlevel.md`; 64 unit tests pass; all env-gated.
+
 **Phase 2 — Automation (30–90d):**
 
 - [ ] n8n (cheap cloud): revenue-attribution loop (lead→job→revenue), auto monthly
@@ -103,4 +128,6 @@ spine and knowledge base were moved up.
 - **PR #2** — Phase-1 SEO harness. Branch `claude/repo-overview-architecture-2r2oti` → `main`.
 - **PR #3** — D1 lead alerts. Branch `claude/owner-operations-kit` → stacked on the Phase-1 branch.
 - **PR #13** — Visual layer + demo images. Branch `claude/roofing-site-audit-bbl2i1` → `main` (squash-merged; one-time owner-authorized direct merge for production preview).
+- **PR #17** — CRM lead pipeline hardened (HighLevel upsert + opportunity, CallRail→HighLevel, Meta CAPI). Branch `claude/crm-lead-gen-integrations-ijcx6k` → `main` (squash-merged; owner-authorized session-end merge).
+- **PR #1** — original April scaffold (`ebleck55`). Closed unmerged: superseded by current `main`.
 - Operations-kit work continues on `claude/owner-operations-kit`, one draft PR per deliverable.

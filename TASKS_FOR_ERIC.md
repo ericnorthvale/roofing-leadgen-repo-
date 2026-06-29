@@ -2,6 +2,11 @@
 
 Ordered by the point in the launch path where they're blocking. Check off as they're done; add new ones at the appropriate tier.
 
+> **▶ Do next: HighLevel.** The CRM lead pipeline is built and live in code
+> (form + tracked calls → contact + opportunity; form leads → Meta conversion),
+> all dormant until keys are set. Follow **`docs/setup-highlevel.md`** to turn it
+> on — that's the highest-leverage unblock right now (see the Tier 2 items below).
+
 ## Tier 1 — blocks anything going live
 
 - [ ] **Register `Northvale Roofing LLC`** with TX Secretary of State (~$300, 3–5 business days). See `docs/trademark-clearance.md` for why LLC-first.

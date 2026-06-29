@@ -81,6 +81,21 @@ certs, fake address/GBP. When in doubt, flag it for the owner — don't invent.
   `dataCompleteness: "complete"`, and confirm NAP is real. Don't flip the flag
   on invented content.
 
+## Integrations (lead pipeline)
+
+- **Pattern:** every third-party integration is **env-gated + best-effort** —
+  it never throws, missing keys = a clean skip, and a provider failure never
+  blocks a lead. `src/lib/notify.ts` is the reference; `highlevel.ts`,
+  `meta-capi.ts`, and the CallRail webhook follow it. Use native `fetch`; keep
+  secrets in the `astro.config.mjs` env schema (server/secret).
+- **Flow:** form (`/api/lead`) + tracked calls (`/api/callrail-webhook`) →
+  HighLevel contact **upsert** (+ pipeline opportunity when
+  `HIGHLEVEL_PIPELINE_ID`/`_STAGE_ID` set) + instant SMS/email alert; form leads
+  also send a server-side Meta `Lead` conversion. One canonical `lead_source`
+  (`src/lib/lead-source.ts`) travels across every system.
+- **Caveat:** HighLevel v2 payload shapes in `highlevel.ts` were built to the
+  docs — confirm against the live account once the real token exists.
+
 ## Review workflow
 
 1. Branch (never `main`) → small, self-contained commits.
