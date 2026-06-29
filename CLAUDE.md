@@ -58,7 +58,15 @@ certs, fake address/GBP. When in doubt, flag it for the owner — don't invent.
 - JSON-LD: `RoofingContractor`/LocalBusiness sitewide (`BaseLayout`);
   `Service` + `areaServed` on service pages; `BreadcrumbList` via `Breadcrumbs`;
   `FAQPage` where there's real Q&A. Validate with Google's Rich Results Test.
-- Images via the image wrapper with descriptive, specific `alt` text.
+- Images via the image wrapper with descriptive, specific `alt` text. Reusable
+  image slots use `src/components/ImagePlaceholder.astro` — pass a real `src` to
+  swap a slot's branded placeholder for a photo in one place (zero layout shift;
+  the slot reserves its aspect ratio). `RoofImage` is the underlying `<img>`.
+- **Demo images:** `src/lib/demo-images.ts` (`USE_DEMO_IMAGES`) fills every slot
+  with royalty-free STOCK for preview only. Set it to `false` (or delete
+  `public/placeholders/`) and replace with real Northvale photos before the real
+  public launch — stock in before/after or "recent work" would violate Hard Rule
+  #2 (FTC). See `TASKS_FOR_ERIC.md`.
 - Internal links via `RelatedLinks` — relevant, not stuffed.
 - Sitemap + robots auto-exclude `noindex` pages (`src/lib/routes.ts`). Don't
   add a page to the sitemap by hand.

@@ -22,6 +22,16 @@ Source of truth for build progress. Update after every batch/PR.
 - [x] Scrub invented facts → confident-but-true / flagged placeholders
 - [x] Validate: build + 15 unit tests + lint pass; open draft PR
 
+## Phase 1.5 — Visual layer + UX/conversion (PR #13, merged)
+
+- [x] `ImagePlaceholder` swap primitive (`src` → real photo / `demoKey` → demo / branded box; reserves aspect ratio, no CLS)
+- [x] Accessible mobile nav (`<details>` menu in `SiteHeader`) — launch-blocker fix
+- [x] `TrustBadges`, `BeforeAfter`, crew/truck strips, service-card thumbnails, Woodlands gallery, split hero with image slot
+- [x] Third-party `Resources` block + `src/lib/resources.ts` (non-competitive, link-only)
+- [x] Copy/typo fixes (homepage Neighborhoods card; `data-cta-phone`)
+- [x] Royalty-free demo images behind `USE_DEMO_IMAGES` (`src/lib/demo-images.ts`) — preview only, remove before launch
+- [x] Validate: build + 51 unit tests + lint pass
+
 ## Phase 2 — Flagship city: The Woodlands (needs owner real data)
 
 - [ ] City hub page (real local data, photos, trust signals)
@@ -72,10 +82,11 @@ spine and knowledge base were moved up.
 
 **Unblocks indexable pages / content:**
 
-- [ ] Real NAP: business phone + physical address (replaces `(281) 000-0000`, blank address)
+- [x] Real business phone wired (`(713) 449-7661`) — unblocks NAP-gated indexing
+- [ ] Real physical address (`addressLine1`/`postalCode` still blank in `business-info.json`)
 - [ ] Real cert status (RCAT / GAF Master Elite — held vs. applicant)
-- [ ] Operator/crew real experience (years, rough project scale) for "established" copy
-- [ ] Real photos (owner's prior work OK if rights confirmed + labeled)
+- [ ] Operator/crew real experience (years, rough project scale) for "established" copy — note `about.astro` "10+ year foreman" is unverified
+- [ ] Real photos → then set `USE_DEMO_IMAGES = false` to replace the demo stock (owner's prior work OK if rights confirmed + labeled)
 
 **Accounts to provision (Claude builds code + gives click-by-click; never touches secrets/DNS):**
 
@@ -91,4 +102,5 @@ spine and knowledge base were moved up.
 
 - **PR #2** — Phase-1 SEO harness. Branch `claude/repo-overview-architecture-2r2oti` → `main`.
 - **PR #3** — D1 lead alerts. Branch `claude/owner-operations-kit` → stacked on the Phase-1 branch.
+- **PR #13** — Visual layer + demo images. Branch `claude/roofing-site-audit-bbl2i1` → `main` (squash-merged; one-time owner-authorized direct merge for production preview).
 - Operations-kit work continues on `claude/owner-operations-kit`, one draft PR per deliverable.
