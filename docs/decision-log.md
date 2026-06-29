@@ -83,6 +83,18 @@ Format: date · decision · why · who.
   the Knowledge Base/Decision Log UP in the build order (cheapest insurance against
   blind ad spend + key-person risk). · Owner + Claude
 
+- **AI-code security checklist is scoped to THIS stack, not the literal request.**
+  Why: the request named mobile concepts (platform-channel validation, deep-link
+  routing, crash-report logging) but the repo is Astro/React/Vercel with no native
+  code; each was mapped to its real equivalent — API/webhook input validation,
+  dynamic routing + open-redirect/return-path, and PII in server logs/analytics —
+  in `docs/security/ai-code-review-checklist.md`. · Owner + Claude · 2026-06-29
+- **Customer phone numbers are masked to last-4 before logging.** Why: the CallRail
+  webhook logged the full caller number to Vercel function logs (PII leak surfaced
+  by the checklist above). `maskPhone()` in `src/lib/phone.ts` keeps logs
+  correlatable without storing personal data; the CallRail tracking (pool) number
+  is not personal data and is still logged for routing diagnostics. · Claude · 2026-06-29
+
 ## Template for new entries
 
 - **<decision>.** Why: <reasoning>. · <who> · <date>
