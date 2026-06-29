@@ -7,7 +7,7 @@ interface Props {
   blurb: string;
   badge?: string;
   /** Optional card thumbnail. Pass `src` later to swap the placeholder for a photo. */
-  image?: { slot: string; alt: string; src?: string };
+  image?: { slot: string; alt: string; src?: string; demoKey?: string };
 }
 const { href, title, blurb, badge, image } = Astro.props;
 ---
@@ -22,6 +22,7 @@ const { href, title, blurb, badge, image } = Astro.props;
         slot={image.slot}
         alt={image.alt}
         src={image.src}
+        demoKey={image.demoKey}
         ratio="3/2"
         tone="mixed"
       />

@@ -14,6 +14,7 @@
  * finished roof, golden hour") so the owner knows exactly what photo goes here.
  */
 import RoofImage from "@components/RoofImage.astro";
+import { demoSrc } from "~/lib/demo-images";
 
 interface Props {
   /** Label of what the real photo should be, e.g. "BEFORE: storm-damaged roof". */
@@ -22,6 +23,8 @@ interface Props {
   ratio?: string;
   /** Set once a real photo exists — flips this slot from placeholder to <img>. */
   src?: string;
+  /** Demo/preview slot key (see src/lib/demo-images.ts). Ignored once `src` is set. */
+  demoKey?: string;
   /** Required, truthful description of the FINAL image. */
   alt: string;
   /** Above-the-fold (hero) images only: eager + high fetchpriority. */
@@ -34,11 +37,15 @@ const {
   slot,
   ratio = "16/9",
   src,
+  demoKey,
   alt,
   priority = false,
   tone = "mixed",
   class: className,
 } = Astro.props;
+
+// Precedence: real photo (`src`) → demo/preview image → branded placeholder box.
+const resolved = src ?? demoSrc(demoKey);
 
 const gradients: Record<NonNullable<Props["tone"]>, string> = {
   navy: "linear-gradient(135deg, var(--color-navy-900), var(--color-navy-700))",
@@ -48,13 +55,18 @@ const gradients: Record<NonNullable<Props["tone"]>, string> = {
 ---
 
 {
-  src ? (
-    <RoofImage
-      src={src}
-      alt={alt}
-      priority={priority}
-      class:list={["block h-full w-full object-cover", className]}
-    />
+  resolved ? (
+    <div
+      class:list={["overflow-hidden rounded-[var(--radius-card)]", className]}
+      style={`aspect-ratio:${ratio};`}
+    >
+      <RoofImage
+        src={resolved}
+        alt={alt}
+        priority={priority}
+        class="block h-full w-full object-cover"
+      />
+    </div>
   ) : (
     <div
       role="img"

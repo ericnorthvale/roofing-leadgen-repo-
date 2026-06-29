@@ -38,6 +38,7 @@ Lighthouse CI runs with production budgets (a11y/best-practices/SEO ≥ 0.95, pe
 - [ ] **Counsel review** of `/legal/privacy`, `/legal/terms`, `/legal/tcpa`, `/legal/accessibility`. Texas-barred attorney familiar with TDPSA + TCPA.
 - [ ] **Fill in LEGAL constants** in `src/lib/legal.ts` — `emailFooterAddress` (physical mailing address) once LLC registered agent is final.
 - [ ] **Photograph crew + trucks + finished-job sites** for about + reviews + service pages. Replace stock copy slots. No unlicensed stock.
+- [ ] **Remove demo placeholder images before launch.** The site currently shows royalty-free STOCK photos in every image slot for design preview (`public/placeholders/`, wired via `src/lib/demo-images.ts`). Set `USE_DEMO_IMAGES = false` (or delete the folder) and replace each slot with a real Northvale photo via the `src` prop. **Required:** before/after + "recent work" must show only real Northvale jobs (FTC).
 
 ## Tier 4 — content engine wiring
 

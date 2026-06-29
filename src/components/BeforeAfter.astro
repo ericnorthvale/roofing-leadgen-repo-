@@ -39,6 +39,7 @@ const {
         slot={beforeLabel}
         alt={beforeAlt}
         src={beforeSrc}
+        demoKey="before"
         ratio="4/3"
         tone="navy"
       />
@@ -47,7 +48,14 @@ const {
       </figcaption>
     </figure>
     <figure>
-      <ImagePlaceholder slot={afterLabel} alt={afterAlt} src={afterSrc} ratio="4/3" tone="gold" />
+      <ImagePlaceholder
+        slot={afterLabel}
+        alt={afterAlt}
+        src={afterSrc}
+        demoKey="after"
+        ratio="4/3"
+        tone="gold"
+      />
       <figcaption class="mt-2 text-sm font-semibold text-[color:var(--color-ink-500)]">
         After
       </figcaption>
