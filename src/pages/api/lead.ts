@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { pushLeadToHighLevel } from "~/lib/highlevel";
 import { notifyNewLead } from "~/lib/notify";
+import { sendMetaLeadEvent } from "~/lib/meta-capi";
 import { rateLimit, clientKey } from "~/lib/rate-limit";
 import { canonicalLeadSource } from "~/lib/lead-source";
 import { deserializeUtm } from "~/lib/utm";
@@ -120,6 +121,8 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
     {
       HIGHLEVEL_API_KEY: import.meta.env.HIGHLEVEL_API_KEY,
       HIGHLEVEL_LOCATION_ID: import.meta.env.HIGHLEVEL_LOCATION_ID,
+      HIGHLEVEL_PIPELINE_ID: import.meta.env.HIGHLEVEL_PIPELINE_ID,
+      HIGHLEVEL_PIPELINE_STAGE_ID: import.meta.env.HIGHLEVEL_PIPELINE_STAGE_ID,
     },
   );
 
@@ -157,6 +160,32 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   );
   if (notify.errors.length > 0) {
     console.error("[lead] alert errors:", notify.errors.join("; "));
+  }
+
+  // Server-side Meta conversion (best-effort; env-gated). Gives Meta ad
+  // optimization a Lead signal even when the browser pixel is blocked. The
+  // event_id de-dupes against any future client-side pixel fire.
+  const meta = await sendMetaLeadEvent(
+    {
+      email: body.email,
+      phone: body.phone,
+      firstName: body.firstName,
+      lastName: body.lastName,
+      city: body.city,
+      zip: body.zip,
+      fbclid: utm.fbclid,
+      clientIp: h.get("x-forwarded-for")?.split(",")[0]?.trim(),
+      userAgent: h.get("user-agent") ?? undefined,
+      eventSourceUrl: utm.landingPath ?? h.get("referer") ?? undefined,
+      leadSource,
+    },
+    {
+      META_PIXEL_ID: import.meta.env.META_PIXEL_ID,
+      META_CAPI_TOKEN: import.meta.env.META_CAPI_TOKEN,
+    },
+  );
+  if (meta.status === "error") {
+    console.error("[lead] Meta CAPI error:", meta.error);
   }
 
   return redirect("/thank-you", 303);

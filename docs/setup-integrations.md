@@ -30,7 +30,33 @@ Surfaces real, geotagged job photos on the site (strong local-SEO + trust signal
 > ISR). The Phase-2 upgrade (n8n) turns it into a scheduled sync that opens a
 > preview PR as new tagged photos arrive.
 
+## CallRail tracked calls → CRM
+
+Turns a tracked phone call into a CRM lead, same as a form submission.
+
+1. In **CallRail → Settings → Integrations → Webhooks**, add a webhook for the
+   **Post-Call** event (not Pre-Call) pointing at
+   `https://northvaleroofing.com/api/callrail-webhook`.
+2. Set a shared secret on that webhook and put the same value in **Vercel** as
+   `CALLRAIL_WEBHOOK_SECRET`. The endpoint verifies the HMAC-SHA1 signature and
+   rejects anything unsigned (401) or unconfigured (503).
+3. Redeploy. Completed inbound calls then upsert a HighLevel contact (and open an
+   opportunity if a pipeline is configured — see `docs/setup-highlevel.md`) and
+   fire the same instant SMS/email alert as a form lead.
+
+> Why Post-Call only: CallRail fires both a Pre-Call and a Post-Call webhook per
+> call. The endpoint acts only on completed inbound calls (those carry a
+> `duration`), so pointing it at Post-Call avoids duplicate leads.
+
+## HighLevel CRM + Meta conversions
+
+HighLevel (lead routing + nurture) and Meta CAPI (server-side ad conversions)
+activate the same way — code is built and env-gated. HighLevel has its own
+walkthrough in **`docs/setup-highlevel.md`**; Meta needs `META_PIXEL_ID` +
+`META_CAPI_TOKEN` in Vercel (see `TASKS_FOR_ERIC.md`).
+
 ## Behavior with no keys
 
 Everything works exactly as before: `/reviews` falls back to admin-panel reviews,
-and the gallery renders nothing. No errors, no network calls.
+the gallery renders nothing, the lead form still submits and redirects, and the
+CallRail webhook returns 503. No errors, no network calls.

@@ -35,13 +35,33 @@ function timingSafeEqual(a: string, b: string): boolean {
 export interface CallRailCallEvent {
   id: string;
   direction: "inbound" | "outbound";
-  answered: boolean;
-  duration: number;
+  answered?: boolean;
+  /** Present on Post-Call events; absent on Pre-Call ("call started") events. */
+  duration?: number;
   customer_phone_number: string;
   tracking_phone_number: string;
   source_name?: string;
+  recording?: string;
   gclid?: string;
+  fbclid?: string;
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
+}
+
+/**
+ * Only act on completed inbound calls. CallRail fires multiple webhooks per call
+ * (Pre-Call when it starts, Post-Call when it ends); the Post-Call event carries
+ * `duration`. Gating on inbound + duration present de-dupes to one push per call
+ * and ignores outbound/pre-call noise. (Missed calls have duration 0 — still a
+ * real lead, so we keep them.)
+ */
+export function isActionableCall(event: CallRailCallEvent): boolean {
+  return event.direction === "inbound" && typeof event.duration === "number";
+}
+
+/** Placeholder contact name for a phone lead (callers have no name). */
+export function phoneLeadName(customerPhone: string): string {
+  const last4 = customerPhone.replace(/[^\d]/g, "").slice(-4);
+  return last4 ? `Phone lead ${last4}` : "Phone lead";
 }
