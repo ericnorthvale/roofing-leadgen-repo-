@@ -1,8 +1,8 @@
 # Northvale Roofing — Website & Tech Overview
 
-*A quick walkthrough of where the website stands, how you can help keep it
+_A quick walkthrough of where the website stands, how you can help keep it
 current, and where we're taking it. Skim the headers — the detail is there if
-you want it.*
+you want it._
 
 ---
 
@@ -24,6 +24,7 @@ performance/accessibility/SEO budgets. We're now in the "fill it with real
 business data and turn on the plumbing" stage rather than the "build it" stage.
 
 **What's live and visible to Google right now:**
+
 - All **5 service pages** — roof replacement, repair, inspection, storm damage,
   insurance claims. Fully written, with FAQs and structured data.
 - **The Woodlands** city page — our flagship, written with real local detail
@@ -40,9 +41,10 @@ and out of the sitemap. It's a guardrail that lets us scale to all 8 cities
 without ever tripping a spam penalty.
 
 **What we worked on over the weekend:**
+
 - **Visual layer & UX.** Added the image system (branded placeholders that swap
   to real photos with zero layout shift), trust badges, before/after sections,
-  crew/truck strips, and an accessible mobile menu. The site now *looks* like a
+  crew/truck strips, and an accessible mobile menu. The site now _looks_ like a
   premium contractor, not a scaffold.
 - **The admin panel.** Got the self-service editing panel working reliably in
   production, including Google sign-in. (More on this in section 2.)
@@ -71,8 +73,9 @@ There are two paths, depending on what you're changing.
 There's an admin panel at **`northvaleroofing.com/keystatic`**. You sign in with
 your `@northvaleroofing.com` Google account and edit through a simple web form.
 You can manage:
+
 - **Business info** — phone, address, email, hours, certifications, experience,
-  warranties, financing. This is the *single source of truth*: change it once and
+  warranties, financing. This is the _single source of truth_: change it once and
   it updates everywhere on the site (header, footer, contact pages, and the data
   Google reads).
 - **Reviews** — add real customer reviews. (Only genuine ones — inventing reviews
@@ -97,6 +100,7 @@ going live. For these, **the best thing you can do is send me the raw facts**, a
 I'll handle the rest.
 
 When something needs changing, just send me:
+
 1. **Which page** (a URL or "the Cypress page").
 2. **What you want changed** in plain words ("this claim is wrong," "add that we
    do metal roofs," "the tone here feels off").
@@ -117,15 +121,16 @@ frame it.
 ## 3. Where we're headed (and why)
 
 **Near term — turn on the engine and finish the flagship.**
+
 - **Activate the lead pipeline.** Provision the HighLevel, CallRail, Meta, and
-  GA4 accounts and drop their keys into Vercel. *Why:* the code is already built
+  GA4 accounts and drop their keys into Vercel. _Why:_ the code is already built
   and waiting — this is the highest-leverage switch we can flip. It's the
   difference between leads landing in an inbox and leads flowing into a real CRM
   with instant alerts and full ad-tracking.
 - **Finish The Woodlands.** Add a real project, photos, and a customer quote.
-  *Why:* it becomes the quality template every other city is built against, and
+  _Why:_ it becomes the quality template every other city is built against, and
   proves the model before we scale.
-- **Swap in real photos.** Replace the stock preview images. *Why:* required
+- **Swap in real photos.** Replace the stock preview images. _Why:_ required
   before launch for FTC compliance, and real local photos are a genuine trust and
   local-SEO signal.
 
@@ -133,20 +138,21 @@ frame it.
 remaining cities in small batches, each only published once it has real local
 content (the quality gate enforces this). Then stand up automation (via n8n) for
 the recurring work:
+
 - **Revenue attribution** — tie every closed job back to the channel that
-  produced the lead. *Why:* so ad spend isn't flying blind; we'll know cost-per-
+  produced the lead. _Why:_ so ad spend isn't flying blind; we'll know cost-per-
   lead and revenue per channel.
 - **Automatic monthly owner report** — pulls finances, leads, and traffic into
-  one PDF. *Why:* a clear monthly picture without anyone assembling it by hand.
+  one PDF. _Why:_ a clear monthly picture without anyone assembling it by hand.
 - **Review-request engine** — politely asks happy customers for a Google review
-  after a job. *Why:* reviews are the single biggest local-SEO and trust lever.
+  after a job. _Why:_ reviews are the single biggest local-SEO and trust lever.
 - **Auto-pull job photos** (via CompanyCam) — fresh real photos onto the site
-  with our approval. *Why:* keeps the site current without manual uploads.
+  with our approval. _Why:_ keeps the site current without manual uploads.
 
 **Later — connect the full business.** Bring in JobNimbus (job management) and
 QuickBooks (accounting) so a lead can be traced all the way through to revenue,
 and add the structure (lead routing, dashboards, security hardening) to support a
-sales team as we grow. *Why:* this is what turns a website into an operating
+sales team as we grow. _Why:_ this is what turns a website into an operating
 system we can scale people onto.
 
 **Rough cost:** the supporting tools run about **$330–500/month** at launch
@@ -158,6 +164,7 @@ management and more automation. Ad spend is separate.
 ## What I need from you
 
 Short list to keep things moving:
+
 1. **Real photos** of crew, trucks, and finished jobs — the single biggest unlock
    for going live.
 2. **Any real Woodlands detail** — a completed job we can describe, and a genuine
