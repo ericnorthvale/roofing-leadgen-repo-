@@ -1,8 +1,9 @@
 ---
 /**
- * Swappable image slot. Renders a real photo (via RoofImage) when `src` is set,
- * otherwise renders an on-brand, intentional placeholder that reserves the final
- * aspect ratio so there is ZERO layout shift when the real photo drops in.
+ * Swappable image slot. Resolves in order: a real photo (`src`, via RoofImage) →
+ * a demo/preview stock photo (`demoKey`, via demo-images.ts) → an on-brand,
+ * intentional placeholder box. Every branch reserves the final aspect ratio so
+ * there is ZERO layout shift when the real photo drops in.
  *
  * THE SWAP: to ship a real image, pass `src` (a path under /public or an imported
  * asset URL). Nothing else changes — same dimensions, same `alt`, same position.
