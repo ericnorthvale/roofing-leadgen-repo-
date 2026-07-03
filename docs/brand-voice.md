@@ -75,14 +75,14 @@ We move. Same-day inspection. Written estimate before we leave the driveway. SMS
 
 ## Do-this / don't-this reference
 
-| Don't                                                | Do                                                                                                |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| "Contact us for a free estimate"                     | "Text us at 281-xxx-xxxx — you'll hear back in under 60 seconds"                                  |
-| "We serve The Woodlands and surrounding areas"       | "We're based off I-45 in Spring. Most jobs we do are within a 20-minute drive of Creekside Park." |
-| "Affordable quality roofing since 2026"              | "Premium residential roofing for North Houston. Written estimate the same day we inspect."        |
-| "We have over 20 years of combined experience"       | "Every crew is led by a 10+ year foreman. Every job is signed off by a named project manager."    |
-| "Best roofers in The Woodlands" (without proof)      | "Voted [award] in [year]" (with proof) — else don't claim it                                      |
-| "Fill out the form below and we'll contact you soon" | "Book my inspection → same-day confirmation"                                                      |
+| Don't                                                | Do                                                                                                                            |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| "Contact us for a free estimate"                     | "Text us at (713) 449-7661 — you'll hear back in under 60 seconds" (always render the number from `brand.ts`, never hardcode) |
+| "We serve The Woodlands and surrounding areas"       | "We're based off I-45 in Spring. Most jobs we do are within a 20-minute drive of Creekside Park."                             |
+| "Affordable quality roofing since 2026"              | "Premium residential roofing for North Houston. Written estimate the same day we inspect."                                    |
+| "We have over 20 years of combined experience"       | "Every crew is led by a 10+ year foreman. Every job is signed off by a named project manager."                                |
+| "Best roofers in The Woodlands" (without proof)      | "Voted [award] in [year]" (with proof) — else don't claim it                                                                  |
+| "Fill out the form below and we'll contact you soon" | "Book my inspection → same-day confirmation"                                                                                  |
 
 ## The 30-second sanity test (use before any copy ships)
 

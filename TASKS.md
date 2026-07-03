@@ -2,6 +2,26 @@
 
 Source of truth for build progress. Update after every batch/PR.
 
+## ⚑ July 2026 full-project review (docs/project-review-2026-07.md)
+
+A top-to-bottom review shipped with this branch. P0 code fixes landed in the
+same PR (placeholder-review leak, form validation + length caps, TCPA consent
+evidence to CRM, CallRail DNI + Meta Pixel + Google Ads tag with shared
+event-id dedup, AggregateRating JSON-LD wiring, dead-code cleanup, e2e form
+tests). Still open — tracked in the review doc:
+
+- [ ] **Owner (blocks GSC/GBP/ads):** resolve canonical domain (www vs apex,
+      single Vercel project, consistent `PUBLIC_SITE_URL`)
+- [ ] **Owner:** LLC + GL insurance → apply for Google LSA immediately after;
+      claim/verify GBP (promote to co-equal workstream with the site)
+- [ ] **Owner:** HighLevel keys + verify v2 payload shapes + build the
+      speed-to-lead auto-responder and missed-call text-back workflows
+- [ ] Lead persistence fallback (Vercel Blob/KV) so an unconfigured stack can
+      never silently drop a lead
+- [ ] Meta CAPI for phone leads + rate limit on the CallRail webhook
+- [ ] Implement the stubbed content-pipeline scripts or disable their cron
+      workflows
+
 ## ▶ Next session — start here
 
 **Owner validation of the local-authority SEO expansion (this branch's draft

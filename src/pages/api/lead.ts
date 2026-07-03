@@ -5,6 +5,8 @@ import { sendMetaLeadEvent } from "~/lib/meta-capi";
 import { rateLimit, clientKey } from "~/lib/rate-limit";
 import { canonicalLeadSource } from "~/lib/lead-source";
 import { deserializeUtm } from "~/lib/utm";
+import { validateLead, isValidEventId } from "~/lib/lead-validation";
+import { CONSENT_TEXT_VERSION } from "~/lib/legal";
 
 export const prerender = false;
 
@@ -22,6 +24,8 @@ interface FormShape {
   consent?: string;
   website?: string;
   utm?: string;
+  /** Browser-generated id shared with the client pixel for CAPI dedup. */
+  eventId?: string;
 }
 
 function readForm(form: FormData): FormShape {
@@ -69,9 +73,13 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
     return redirect("/thank-you", 303);
   }
 
-  if (!body.firstName || !body.phone || !body.address || !body.city || !body.zip || !body.consent) {
-    return new Response("Missing required fields", { status: 422 });
+  const validation = validateLead(body);
+  if (!validation.ok) {
+    return new Response(`Invalid fields — ${validation.errors.join(", ")}`, { status: 422 });
   }
+
+  const lead = validation.lead;
+  const clientIp = h.get("x-forwarded-for")?.split(",")[0]?.trim();
 
   const utm = { ...deserializeUtm(body.utm), ...(locals.utm ?? {}) };
 
@@ -94,18 +102,18 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
 
   const hl = await pushLeadToHighLevel(
     {
-      firstName: body.firstName,
-      lastName: body.lastName,
-      email: body.email,
-      phone: body.phone,
-      address: body.address,
-      city: body.city,
-      zip: body.zip,
-      source: body.source ?? "website",
+      firstName: lead.firstName,
+      lastName: lead.lastName,
+      email: lead.email,
+      phone: lead.phone,
+      address: lead.address,
+      city: lead.city,
+      zip: lead.zip,
+      source: lead.source ?? "website",
       tags,
       customFields: {
-        service: body.service ?? "inspection",
-        notes: body.notes ?? "",
+        service: lead.service ?? "inspection",
+        notes: lead.notes ?? "",
         lead_source: leadSource,
         utm_source: utm.source ?? "",
         utm_medium: utm.medium ?? "",
@@ -116,6 +124,16 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
         fbclid: utm.fbclid ?? "",
         landing_path: utm.landingPath ?? "",
         first_touch_at: utm.firstTouchAt ?? "",
+        // TCPA "prior express written consent" evidence — what was agreed to,
+        // when, and from where. The disclaimer text itself is versioned in
+        // src/lib/legal.ts (CONSENT_TEXT_VERSION).
+        consent_given: "true",
+        consent_timestamp: new Date().toISOString(),
+        consent_ip: clientIp ?? "",
+        consent_text_version: CONSENT_TEXT_VERSION,
+        // Vercel request geo — coarse anti-fraud / service-area signal.
+        ip_city: locals.geo?.city ?? "",
+        ip_region: locals.geo?.region ?? "",
       },
     },
     {
@@ -136,16 +154,16 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   // redirect. Works even when HighLevel isn't configured, so no lead is ever lost.
   const notify = await notifyNewLead(
     {
-      firstName: body.firstName,
-      lastName: body.lastName,
-      phone: body.phone,
-      email: body.email,
-      address: body.address,
-      city: body.city,
-      zip: body.zip,
-      service: body.service,
-      notes: body.notes,
-      source: body.source ?? "website",
+      firstName: lead.firstName,
+      lastName: lead.lastName,
+      phone: lead.phone,
+      email: lead.email,
+      address: lead.address,
+      city: lead.city,
+      zip: lead.zip,
+      service: lead.service,
+      notes: lead.notes,
+      source: lead.source ?? "website",
       utmSource: utm.source ?? "direct",
     },
     {
@@ -164,20 +182,22 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
 
   // Server-side Meta conversion (best-effort; env-gated). Gives Meta ad
   // optimization a Lead signal even when the browser pixel is blocked. The
-  // event_id de-dupes against any future client-side pixel fire.
+  // browser generates the event id (hidden field) and fires the pixel Lead
+  // with the same id on /thank-you, so Meta de-dupes the two.
   const meta = await sendMetaLeadEvent(
     {
-      email: body.email,
-      phone: body.phone,
-      firstName: body.firstName,
-      lastName: body.lastName,
-      city: body.city,
-      zip: body.zip,
+      email: lead.email,
+      phone: lead.phone,
+      firstName: lead.firstName,
+      lastName: lead.lastName,
+      city: lead.city,
+      zip: lead.zip,
       fbclid: utm.fbclid,
-      clientIp: h.get("x-forwarded-for")?.split(",")[0]?.trim(),
+      clientIp,
       userAgent: h.get("user-agent") ?? undefined,
       eventSourceUrl: utm.landingPath ?? h.get("referer") ?? undefined,
       leadSource,
+      eventId: lead.eventId && isValidEventId(lead.eventId) ? lead.eventId : undefined,
     },
     {
       META_PIXEL_ID: import.meta.env.META_PIXEL_ID,

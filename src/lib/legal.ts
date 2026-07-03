@@ -3,6 +3,13 @@
  * so the values that surface in footer/disclaimer copy come from one place.
  */
 
+/**
+ * Version tag for the consent disclaimer below. Bump the date whenever the
+ * consentDisclaimer wording changes — it is stored with every lead as TCPA
+ * "prior express written consent" evidence (which exact text was agreed to).
+ */
+export const CONSENT_TEXT_VERSION = "2026-07-03.v1";
+
 export const LEGAL = {
   consentDisclaimer:
     "By submitting this form you agree to receive calls, texts, and emails from Northvale Roofing at the number and address you provide, including automated messages. Consent is not a condition of purchase. Message and data rates may apply. Reply STOP to opt out. See our Privacy Policy and TCPA Notice.",

@@ -545,11 +545,10 @@ https://www.thewoodlandstownship-tx.gov/files/sharedassets/main/v/2/covenant-adm
 6. Harris County's adopted IRC edition (scanned PDF unverifiable).
 7. Conroe "IRC 2012" currency (confirm before relying on §233.153 hook).
 
-### ⚠ Corrections needed to EXISTING site copy (found during research)
+### ✅ RESOLVED — corrections applied to site copy (verified 2026-07-03)
 
-- services.ts storm page cites "§ 27.02" for a 3-day right to rescind —
-  §27.02 is the DEDUCTIBLE statute. The federal FTC Cooling-Off Rule /
-  Tex. Bus. & Com. Code Ch. 601 covers 3-day cancellation for door-to-door
-  sales. Fix the citation or drop the specific cite.
-- services.ts storm page cites "Tex. Ins. Code § 701" for public adjusters —
-  correct chapter is §4102 (and §4102.163 for the roofer prohibition).
+Both statute miscitations found during research were fixed in Phase 2.5 and
+re-verified against live copy: `services.ts`, `city-services.ts`, and
+`storm-response.astro` now cite Ins. Code §707.002 + Bus. & Com. Code §27.02
+for the deductible rules and Ins. Code §4102.163 for the public-adjuster
+prohibition. No remaining copy cites "§701" or a §27.02 rescission right.
