@@ -1,0 +1,35 @@
+---
+import NeighborhoodPageLayout from "@layouts/NeighborhoodPageLayout.astro";
+import CityServiceLayout from "@layouts/CityServiceLayout.astro";
+import { NEIGHBORHOODS } from "~/lib/neighborhoods";
+import { CITY_SERVICES } from "~/lib/city-services";
+import type { Neighborhood } from "~/lib/neighborhoods";
+import type { CityService } from "~/lib/city-services";
+
+/**
+ * Child pages of a city hub: /the-woodlands/alden-bridge (neighborhood) and
+ * /the-woodlands/roof-replacement (service-in-city). Slugs are disjoint by
+ * construction — service slugs vs village names — and getStaticPaths would
+ * fail loudly on a duplicate param pair if that ever changed.
+ */
+export function getStaticPaths() {
+  const neighborhoods = Object.values(NEIGHBORHOODS).map((n) => ({
+    params: { area: n.citySlug, child: n.slug },
+    props: { neighborhood: n, cityService: null },
+  }));
+  const cityServices = Object.values(CITY_SERVICES).map((cs) => ({
+    params: { area: cs.citySlug, child: cs.slug },
+    props: { neighborhood: null, cityService: cs },
+  }));
+  return [...neighborhoods, ...cityServices];
+}
+
+interface Props {
+  neighborhood: Neighborhood | null;
+  cityService: CityService | null;
+}
+const { neighborhood, cityService } = Astro.props;
+---
+
+{neighborhood && <NeighborhoodPageLayout neighborhood={neighborhood} />}
+{cityService && <CityServiceLayout cityService={cityService} />}

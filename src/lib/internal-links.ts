@@ -143,6 +143,17 @@ export function allNeighborhoodLinks(): LinkItem[] {
     }));
 }
 
+/** Indexable city-specific versions of one service (e.g. replacement → The Woodlands). */
+export function cityVersionsOfService(serviceTag: ServiceTag): LinkItem[] {
+  return Object.values(CITY_SERVICES)
+    .filter((cs) => cs.serviceTag === serviceTag && evaluateCityService(cs).indexable)
+    .map((cs) => ({
+      href: `/${cs.citySlug}/${cs.slug}`,
+      label: cs.title,
+      description: cs.summary,
+    }));
+}
+
 /** Every indexable service-in-city page (all cities). */
 export function allCityServiceLinks(): LinkItem[] {
   return Object.values(CITY_SERVICES)
