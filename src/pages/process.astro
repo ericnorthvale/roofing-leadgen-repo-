@@ -1,0 +1,89 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import TrustBar from "@components/TrustBar.astro";
+import LeadForm from "@components/LeadForm.astro";
+import RelatedLinks from "@components/RelatedLinks.astro";
+import { serviceLinks } from "~/lib/internal-links";
+---
+
+<BaseLayout
+  seo={{
+    title: "Our Process — From First Call to Forty-Photo Packet",
+    description:
+      "How a Northvale Roofing job runs: same-day inspection, written estimate before we leave, HOA paperwork handled, one-day install, documented close-out.",
+    pathname: "/process",
+  }}
+>
+  <section class="mx-auto max-w-6xl px-4 py-10">
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Our process" }]} />
+    <h1 class="mt-6 text-4xl md:text-5xl">How a Northvale job runs</h1>
+    <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-800)]">
+      Every promise on this site reduces to a process you can hold us to. This is it, step by step
+      — the same sequence on a $600 repair and a full replacement.
+    </p>
+  </section>
+
+  <TrustBar />
+
+  <section class="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[1fr_400px]">
+    <article class="prose-northvale">
+      <h2>1. You call or text. We book the same day.</h2>
+      <p>
+        Text or call between 8am and 9pm CT and you'll hear back fast — our target is under a
+        minute during business hours. We book the inspection when you reach us, not "someone will
+        contact you shortly."
+      </p>
+
+      <h2>2. The forty-photo inspection</h2>
+      <p>
+        Every slope, valley, ridge, and penetration — plus the attic where accessible. You get the
+        full packet and written findings within 24 hours, including an estimated remaining life for
+        the roof, whether or not you ever hire us. It's free, and it stays free.
+        <a href="/services/roof-inspection">What's in the packet →</a>
+      </p>
+
+      <h2>3. The written estimate — before we leave the driveway</h2>
+      <p>
+        Not a verbal ballpark, not "we'll email you this week." An itemized written price, standing
+        offer, no pressure. If a repair is the honest answer, that's what the estimate says.
+      </p>
+
+      <h2>4. Materials, colors, and community approvals</h2>
+      <p>
+        We bring manufacturer samples to your driveway and quote options side by side — standard
+        architectural, Class 4 impact-resistant, metal where it fits. Where your community has an
+        architectural review process (in The Woodlands, Township approval is mandatory for every
+        re-roof), we prepare and file the paperwork and don't order material until approval is in
+        hand. <a href="/the-woodlands/roof-replacement">How the Township process works →</a>
+      </p>
+
+      <h2>5. Install day, run by a named project manager</h2>
+      <p>
+        You have a name and a cell number, not a dispatcher. Most replacements finish in one day —
+        two for larger or steep homes — with the site protected, tarped, and supervised
+        throughout. Repairs are usually same-day or next-day jobs.
+      </p>
+
+      <h2>6. Clean close-out, documented</h2>
+      <p>
+        Magnet sweep of the driveway and yard, full debris haul-off, final walk-through with you,
+        and the close-out documentation packet: photos of the finished work for your records —
+        and for your insurance file, where a claim was involved. Manufacturer warranty registration
+        is completed on every install; <a href="/warranty">what's covered and by whom →</a>
+      </p>
+
+      <h2>If insurance is involved</h2>
+      <p>
+        The sequence gains a few steps — documented pre-claim inspection, the adjuster meeting,
+        scope alignment — and the legal lines stay bright: we never touch your deductible and never
+        act as your public adjuster. <a href="/services/insurance-claims">The claims process →</a>
+      </p>
+    </article>
+    <aside class="md:sticky md:top-10 md:self-start">
+      <LeadForm source="process-page" />
+    </aside>
+  </section>
+
+  <RelatedLinks heading="Our services" links={serviceLinks()} />
+</BaseLayout>

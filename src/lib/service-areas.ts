@@ -161,6 +161,28 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
       "Standing-seam or stone-coated metal — accepted under Standards (must be non-glossy), chosen for longevity and storm/UV resistance",
       "Concrete/clay tile or slate — accepted on higher-end and custom homes, common in luxury villages like Carlton Woods",
     ],
+    faqs: [
+      {
+        q: "Who approves roof replacements in The Woodlands?",
+        a: "Your village's Residential Design Review Committee (or designated Township staff), under the Township's 2024 Residential Development Standards — prior written approval is required for all roof replacement, and roofing repairs need a permit at the time of repair. We prepare and file the application through the Township's Civic Access Portal on every job.",
+      },
+      {
+        q: "Is there a county permit for re-roofing in The Woodlands?",
+        a: "No — unincorporated Montgomery County's own FAQ states residential properties don't require a permit for a roof, and most of The Woodlands is unincorporated Montgomery County. The covenant approval is the binding requirement. (Creekside Park sits in Harris County; the covenant process is the same.)",
+      },
+      {
+        q: "Which roofing materials do the Township Standards allow?",
+        a: "Tile, slate, composition shingles, stone-coated or standing-seam metal, and cement-fiberboard — in muted colors without pattern that harmonize with the natural landscape, and metal must be non-glossy. We bring compliant samples so your selection clears review the first time.",
+      },
+      {
+        q: "How long does the RDRC approval take?",
+        a: "The Standards give committees up to 45 days to act on a complete application — most come back sooner, and staff-approval or pre-approval paths apply to some items. We file early and never order material before approval.",
+      },
+      {
+        q: "Do you cover every village in The Woodlands?",
+        a: "Yes — Grogan's Mill, Panther Creek, Cochran's Crossing, Indian Springs, Alden Bridge, College Park, Sterling Ridge, Carlton Woods (behind the gates, coordinated with the association), and Creekside Park. Each village has its own page covering roof ages and covenant specifics.",
+      },
+    ],
     dataCompleteness: "complete",
   },
   kingwood: {
