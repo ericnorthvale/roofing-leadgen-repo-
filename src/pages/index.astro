@@ -12,7 +12,8 @@ import TableOfContents from "@components/TableOfContents.astro";
 import { BRAND } from "~/lib/brand";
 import { SERVICE_AREAS } from "~/lib/service-areas";
 import { NEIGHBORHOODS } from "~/lib/neighborhoods";
-import { faqPageJsonLd } from "~/lib/seo";
+import { aggregateRatingJsonLd, faqPageJsonLd } from "~/lib/seo";
+import { getSiteReviews } from "~/lib/reviews";
 
 // Data-driven so the eyebrow always reflects every city we actually serve.
 const areasLine = Object.values(SERVICE_AREAS)
@@ -110,6 +111,11 @@ const faqs = [
     a: "Enormously. ARMA notes a poorly-vented attic can reach 140°F on a 90°F day, cooking shingles from below and shortening roof life. The guideline is 1 square foot of net free vent area per 300 square feet of attic, balanced between intake at the soffits and exhaust at the ridge — something we evaluate on every inspection and correct on every replacement.",
   },
 ];
+
+// AggregateRating rides along only once real reviews exist (null until then —
+// the homepage shows the same review set in the <Reviews /> section below).
+const siteUrl = Astro.site?.toString() ?? "https://northvaleroofing.com";
+const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
 ---
 
 <BaseLayout
@@ -118,7 +124,7 @@ const faqs = [
     description:
       "Roof replacement, roof repair, storm damage restoration, insurance claims & free inspections in The Woodlands, Spring, Magnolia, Conroe & North Houston.",
     pathname: "/",
-    jsonLd: faqPageJsonLd(faqs),
+    jsonLd: aggregateRating ? [faqPageJsonLd(faqs), aggregateRating] : faqPageJsonLd(faqs),
   }}
 >
   <Hero

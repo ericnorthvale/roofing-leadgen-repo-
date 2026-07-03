@@ -7,7 +7,8 @@ before adding pages or content. Full plan: `PLAN.md`. Progress: `TASKS.md`.
 
 A local-roofing website + safe-to-scale SEO engine for the Houston metro.
 Pages render **from data records**, never from name-swapped boilerplate.
-Astro 5 (static) + Tailwind 4 on Vercel. pnpm + Node 20.
+Astro 5 + Tailwind 4 on Vercel (hybrid: static content pages with hourly ISR,
+plus SSR for `/api/*` and the `/keystatic` admin). pnpm + Node 20.
 
 ## Brand + NAP
 
@@ -15,9 +16,10 @@ Astro 5 (static) + Tailwind 4 on Vercel. pnpm + Node 20.
 - **Domain:** northvaleroofing.com
 - **NAP must be byte-for-byte identical everywhere.** Single source:
   `src/lib/brand.ts`. Never hardcode phone/address in a page or component.
-- Current phone/address are placeholders (`(281) 000-0000`, blank address).
-  Until the owner provides real ones, any page that depends on a real address
-  for trust/schema stays `noindex` (the quality gate handles this).
+- The real phone `(713) 449-7661` is live in `src/data/business-info.json` and
+  satisfies the NAP index gate. The street address is still blank — schema
+  omits it automatically; never invent one. All contact facts flow from
+  `business-info.json` → `brand.ts`; edit them there only.
 - Voice: confident, premium, neighborly-expert. See `docs/brand-voice.md`.
   Positioning is "bold & premium" — sound established — but **only with true,
   defensible claims** (see Hard Rules).

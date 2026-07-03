@@ -68,7 +68,7 @@ pnpm tsx src/scripts/content-draft.ts --brief=briefs/sample-class-4-shingle.json
     "insurance-claims" | "materials" | "maintenance" | "buyer-seller" |
     "local-weather" | "hoa" | "inspector-peers",
   "persona": ["homeowner" | "agent" | "insurance" | "storm" | "hoa" | "inspector", ...],
-  "relatedCity": "the-woodlands" | "spring" | "tomball" | "magnolia" | "conroe" | "cypress",
+  "relatedCity": "houston" | "spring" | "cypress" | "the-woodlands" | "kingwood" | "tomball" | "magnolia" | "conroe",
   "targetKeyword": string,
   "secondaryKeywords": string[],
   "angle": string,

@@ -49,18 +49,9 @@ const blog = defineCollection({
   }),
 });
 
-const neighborhoods = defineCollection({
-  loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/neighborhoods" }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().max(160),
-    city: z.enum(SERVICE_AREA_SLUGS),
-    neighborhood: z.string(),
-    hoaName: z.string().optional(),
-    approvedShingleList: z.array(z.string()).default([]),
-    status: z.enum(["draft", "published", "archived"]).default("draft"),
-  }),
-});
+// NOTE: village/neighborhood pages are driven by src/lib/neighborhoods.ts (the
+// data model behind the quality gate) — there is deliberately NO content
+// collection for them, so there's a single source of truth.
 
 const reviews = defineCollection({
   loader: glob({ pattern: "**/*.json", base: "./src/content/reviews" }),
@@ -73,7 +64,13 @@ const reviews = defineCollection({
     serviceTag: z.string().optional(),
     // Free-text (not enum) so a value typed in the admin panel can't break the build.
     cityTag: z.string().optional(),
+    /**
+     * Seed/example entries (kept as admin-panel templates) are flagged here and
+     * NEVER rendered on the site — publishing one would be a fabricated review
+     * (Hard Rule #2 / FTC). Filtered out in src/lib/reviews.ts.
+     */
+    placeholder: z.boolean().default(false),
   }),
 });
 
-export const collections = { blog, neighborhoods, reviews };
+export const collections = { blog, reviews };

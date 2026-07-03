@@ -1,24 +1,16 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
-import { fetchGoogleReviews } from "~/lib/google-reviews";
+import { getSiteReviews } from "~/lib/reviews";
+import { aggregateRatingJsonLd } from "~/lib/seo";
 
 // Admin-managed reviews (added via the /keystatic panel) + live Google reviews
-// (when GOOGLE_PLACES_API_KEY + GOOGLE_PLACE_ID are set). Real reviews only.
-const managed = (await getCollection("reviews")).map((r) => ({
-  author: r.data.author,
-  rating: r.data.rating,
-  relativeTime: r.data.relativeTime,
-  text: r.data.text,
-  source: r.data.source as string,
-}));
+// (when GOOGLE_PLACES_API_KEY + GOOGLE_PLACE_ID are set). Real reviews only —
+// placeholder/seed entries are filtered out in getSiteReviews.
+const reviews = await getSiteReviews();
 
-const google = await fetchGoogleReviews({
-  GOOGLE_PLACES_API_KEY: import.meta.env.GOOGLE_PLACES_API_KEY,
-  GOOGLE_PLACE_ID: import.meta.env.GOOGLE_PLACE_ID,
-});
-
-const reviews = [...google, ...managed];
+const siteUrl = Astro.site?.toString() ?? "https://northvaleroofing.com";
+// null while there are zero real reviews — never emitted fabricated.
+const aggregateRating = aggregateRatingJsonLd(siteUrl, reviews);
 ---
 
 <BaseLayout
@@ -27,6 +19,7 @@ const reviews = [...google, ...managed];
     description:
       "Verified Google and direct customer reviews from homeowners across The Woodlands, Spring, Tomball, Magnolia, Conroe, and Cypress.",
     pathname: "/reviews",
+    ...(aggregateRating ? { jsonLd: aggregateRating } : {}),
   }}
 >
   <section class="mx-auto max-w-5xl px-4 py-12">

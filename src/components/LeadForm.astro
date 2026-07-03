@@ -17,16 +17,28 @@ const {
   defaultService = "inspection",
   submitLabel = "Book my inspection",
 } = Astro.props;
+
+// HTML `pattern` regexes as JS strings — a quoted Astro attribute eats the
+// backslashes (`pattern="\d{5}"` renders as `d{5}`, matching nothing), so
+// these must be passed as expressions. Escapes are v-flag-safe (browsers
+// compile `pattern` with the `v` flag, where unescaped `(`/`)` in a character
+// class are a syntax error that silently disables validation).
+const PHONE_PATTERN = "[0-9\\s\\(\\)\\-\\+\\.]{10,}";
+const ZIP_PATTERN = "\\d{5}(-\\d{4})?";
 ---
 
 <form
   method="POST"
   action="/api/lead"
   class="grid gap-4 rounded-[var(--radius-card)] bg-white p-6 shadow-[var(--shadow-card)]"
-  novalidate
 >
   <input type="hidden" name="source" value={source} />
   <input type="hidden" name="utm" value="" data-utm-field />
+  {
+    /* Shared conversion id: the server CAPI event and the /thank-you pixel fire
+      both carry it, so Meta de-dupes them into one Lead. */
+  }
+  <input type="hidden" name="eventId" value="" data-event-id-field />
 
   <div class="grid gap-4 md:grid-cols-2">
     <label class="grid gap-1 text-sm">
@@ -35,6 +47,7 @@ const {
         required
         name="firstName"
         type="text"
+        maxlength="100"
         autocomplete="given-name"
         class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
       />
@@ -44,6 +57,7 @@ const {
       <input
         name="lastName"
         type="text"
+        maxlength="100"
         autocomplete="family-name"
         class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
       />
@@ -56,9 +70,10 @@ const {
       required
       name="phone"
       type="tel"
+      maxlength="30"
       autocomplete="tel"
       inputmode="tel"
-      pattern="[\d\s\(\)\-+]{10,}"
+      pattern={PHONE_PATTERN}
       class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
     />
   </label>
@@ -70,6 +85,7 @@ const {
     <input
       name="email"
       type="email"
+      maxlength="200"
       autocomplete="email"
       class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
     />
@@ -81,6 +97,7 @@ const {
       required
       name="address"
       type="text"
+      maxlength="200"
       autocomplete="street-address"
       class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
     />
@@ -94,6 +111,7 @@ const {
         name="city"
         value={defaultCity}
         type="text"
+        maxlength="100"
         autocomplete="address-level2"
         class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
       />
@@ -104,9 +122,10 @@ const {
         required
         name="zip"
         type="text"
+        maxlength="10"
         autocomplete="postal-code"
         inputmode="numeric"
-        pattern="\d{5}"
+        pattern={ZIP_PATTERN}
         class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"
       />
     </label>
@@ -136,6 +155,7 @@ const {
     <textarea
       name="notes"
       rows="3"
+      maxlength="2000"
       class="rounded border border-[color:var(--color-navy-200)] px-3 py-2"></textarea>
   </label>
 
@@ -189,6 +209,20 @@ const {
       field.value = JSON.stringify(payload);
     } catch {
       /* no-op */
+    }
+
+    // Conversion event id — generated here, submitted with the form (server
+    // CAPI) and mirrored to sessionStorage so /thank-you fires the browser
+    // pixel with the SAME id. Meta collapses the pair into one Lead event.
+    try {
+      const eventField = form.querySelector<HTMLInputElement>("[data-event-id-field]");
+      if (eventField && "randomUUID" in crypto) {
+        const eventId = crypto.randomUUID();
+        eventField.value = eventId;
+        sessionStorage.setItem("nv_event_id", eventId);
+      }
+    } catch {
+      /* no-op — server derives its own id when absent */
     }
   })();
 </script>

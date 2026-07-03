@@ -8,6 +8,20 @@ const conversionScript = renderDataLayerPush({
   value: 75,
   currency: "USD",
 });
+
+// Google Ads conversion — needs both the AW id and the per-action label.
+const adsIdRaw = import.meta.env.GOOGLE_ADS_CONVERSION_ID;
+const adsLabelRaw = import.meta.env.GOOGLE_ADS_CONVERSION_LABEL;
+const adsSendTo =
+  adsIdRaw && /^AW-\w+$/.test(adsIdRaw) && adsLabelRaw && /^[\w-]+$/.test(adsLabelRaw)
+    ? `${adsIdRaw}/${adsLabelRaw}`
+    : undefined;
+const metaPixelId = import.meta.env.META_PIXEL_ID;
+const metaPixelOn = Boolean(metaPixelId && /^\d+$/.test(metaPixelId));
+
+// The browser pixel Lead fire reuses the event id generated in LeadForm (via
+// sessionStorage), so Meta de-dupes it against the server CAPI event.
+const pixelConversionScript = `(function(){var id;try{id=sessionStorage.getItem("nv_event_id")||undefined;sessionStorage.removeItem("nv_event_id");}catch(e){}${metaPixelOn ? `if(window.fbq){fbq('track','Lead',{value:75,currency:'USD'},id?{eventID:id}:undefined);}` : ""}${adsSendTo ? `if(window.gtag){gtag('event','conversion',{send_to:'${adsSendTo}',value:75,currency:'USD',transaction_id:id||''});}` : ""}})();`;
 ---
 
 <BaseLayout
@@ -28,4 +42,5 @@ const conversionScript = renderDataLayerPush({
     </p>
   </section>
   <script is:inline set:html={conversionScript} />
+  {(metaPixelOn || adsSendTo) && <script is:inline set:html={pixelConversionScript} />}
 </BaseLayout>

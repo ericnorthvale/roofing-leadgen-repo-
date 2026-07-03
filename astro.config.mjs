@@ -156,6 +156,13 @@ export default defineConfig({
         access: "public",
         optional: true,
       }),
+      // Per-action conversion label (the part after the slash in AW-XXX/label).
+      // Both must be set for /thank-you to fire the Ads conversion event.
+      GOOGLE_ADS_CONVERSION_LABEL: envField.string({
+        context: "server",
+        access: "public",
+        optional: true,
+      }),
       // Public config
       PUBLIC_SITE_URL: envField.string({ context: "client", access: "public", default: SITE }),
       PUBLIC_GA4_ID: envField.string({ context: "client", access: "public", optional: true }),

@@ -20,6 +20,28 @@ const biz = localBusinessJsonLd(siteUrl);
 const gtmId = import.meta.env.PUBLIC_GTM_ID;
 const ga4Id = import.meta.env.PUBLIC_GA4_ID;
 const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
+
+// CallRail Dynamic Number Insertion — swaps the visible phone number per
+// visitor so calls attribute back to their source. The env var holds the two
+// path segments from the CallRail-provided snippet ("companyId/scriptKey");
+// only render when it matches that shape (never interpolate arbitrary input
+// into a script src).
+const callrailId = import.meta.env.PUBLIC_CALLRAIL_COMPANY_ID;
+const callrailSrc =
+  callrailId && /^\d+\/[A-Za-z0-9]+$/.test(callrailId)
+    ? `https://cdn.callrail.com/companies/${callrailId}/12/swap.js`
+    : undefined;
+
+// Client-side Meta Pixel (PageView here; the Lead fire with the shared
+// event_id lives on /thank-you and de-dupes against the server CAPI event).
+const metaPixelId = import.meta.env.META_PIXEL_ID;
+const metaPixelSafe = metaPixelId && /^\d+$/.test(metaPixelId) ? metaPixelId : undefined;
+
+// Google Ads conversion tag (AW-…). gtag.js loads when either GA4 or Ads is
+// configured; /thank-you fires the actual conversion event.
+const adsIdRaw = import.meta.env.GOOGLE_ADS_CONVERSION_ID;
+const adsId = adsIdRaw && /^AW-\w+$/.test(adsIdRaw) ? adsIdRaw : undefined;
+const gtagLoaderId = ga4Id ?? adsId;
 ---
 
 <!doctype html>
@@ -98,17 +120,46 @@ const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
     {!bare && <MobileClickToCall />}
 
     {
-      ga4Id && (
-        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} />
-      )
-    }
-    {
-      ga4Id && (
+      gtagLoaderId && (
         <script
           is:inline
-          set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${ga4Id}',{send_page_view:true});`}
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${gtagLoaderId}`}
         />
       )
     }
+    {
+      gtagLoaderId && (
+        <script
+          is:inline
+          set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());${ga4Id ? `gtag('config','${ga4Id}',{send_page_view:true});` : ""}${adsId ? `gtag('config','${adsId}');` : ""}`}
+        />
+      )
+    }
+
+    {
+      metaPixelSafe && (
+        <script
+          is:inline
+          set:html={`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${metaPixelSafe}');fbq('track','PageView');`}
+        />
+      )
+    }
+    {
+      metaPixelSafe && (
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style="display:none"
+            alt=""
+            src={`https://www.facebook.com/tr?id=${metaPixelSafe}&ev=PageView&noscript=1`}
+          />
+        </noscript>
+      )
+    }
+
+    {/* CallRail DNI — must load on every page so swapped numbers stay consistent. */}
+    {callrailSrc && <script is:inline async src={callrailSrc} />}
   </body>
 </html>

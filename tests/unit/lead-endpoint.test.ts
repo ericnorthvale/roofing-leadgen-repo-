@@ -53,6 +53,63 @@ describe("POST /api/lead", () => {
     expect(res.status).toBe(422);
   });
 
+  it("rejects a malformed phone (422) — server never trusts the browser", async () => {
+    const res = await POST(
+      ctx({ ...validLead, phone: "not-a-phone" }, { "x-forwarded-for": "2.2.2.3" }),
+    );
+    expect(res.status).toBe(422);
+  });
+
+  it("rejects a malformed zip and email (422)", async () => {
+    const badZip = await POST(ctx({ ...validLead, zip: "773" }, { "x-forwarded-for": "2.2.2.4" }));
+    expect(badZip.status).toBe(422);
+    const badEmail = await POST(
+      ctx({ ...validLead, email: "nope" }, { "x-forwarded-for": "2.2.2.5" }),
+    );
+    expect(badEmail.status).toBe(422);
+  });
+
+  it("rejects oversized notes (422) — length caps before anything goes downstream", async () => {
+    const res = await POST(
+      ctx({ ...validLead, notes: "x".repeat(2001) }, { "x-forwarded-for": "2.2.2.6" }),
+    );
+    expect(res.status).toBe(422);
+  });
+
+  it("sends TCPA consent evidence + the browser event id to HighLevel when configured", async () => {
+    vi.stubEnv("HIGHLEVEL_API_KEY", "test-key");
+    vi.stubEnv("HIGHLEVEL_LOCATION_ID", "loc-1");
+    const fetchSpy = vi.fn(
+      async () => new Response(JSON.stringify({ contact: { id: "c-1" } }), { status: 200 }),
+    );
+    vi.stubGlobal("fetch", fetchSpy);
+
+    const res = await POST(
+      ctx(
+        { ...validLead, eventId: "123e4567-e89b-42d3-a456-426614174000" },
+        { "x-forwarded-for": "5.5.5.5" },
+      ),
+    );
+    expect(res.status).toBe(303);
+    expect(fetchSpy).toHaveBeenCalledOnce();
+
+    const body = JSON.parse(
+      (fetchSpy.mock.calls[0] as unknown as [string, RequestInit])[1]!.body as string,
+    );
+    const fields = Object.fromEntries(
+      (body.customFields as { key: string; field_value: string }[]).map((f) => [
+        f.key,
+        f.field_value,
+      ]),
+    );
+    expect(fields.consent_given).toBe("true");
+    expect(fields.consent_ip).toBe("5.5.5.5");
+    expect(fields.consent_text_version).toMatch(/^\d{4}-\d{2}-\d{2}\.v\d+$/);
+    expect(Date.parse(fields.consent_timestamp)).not.toBeNaN();
+
+    vi.unstubAllEnvs();
+  });
+
   it("silently accepts (303) when the honeypot is filled — no tell to the bot", async () => {
     const res = await POST(
       ctx({ ...validLead, website: "spam" }, { "x-forwarded-for": "3.3.3.3" }),
