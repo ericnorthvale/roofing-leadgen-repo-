@@ -48,21 +48,22 @@ A few rules protect you and keep the claim clean:
 - **You file the claim.** A contractor supports and documents; we are not public
   adjusters. (In Texas, that's a separately licensed role — see our
   [insurance claims](/services/insurance-claims) page.)
-- **Never accept a "we'll waive your deductible" offer.** That's insurance fraud in
-  Texas, with criminal exposure for both you and the contractor. Walk away from anyone
-  who suggests it.
-- **Don't sign a contract at the door under pressure.** Texas law gives you **three
-  days to rescind** a residential roof-repair contract signed at your home after an
-  insurance-related solicitation. Take the time.
+- **Never accept a "we'll waive your deductible" offer.** That's a criminal offense in
+  Texas (Tex. Bus. & Com. Code § 27.02), with exposure for both you and the contractor.
+  Walk away from anyone who suggests it.
+- **Don't sign a contract at the door under pressure.** Under Texas's home-solicitation
+  law (Tex. Bus. & Com. Code ch. 601) and the FTC Cooling-Off Rule, a contract signed at
+  your home after a door-to-door solicitation can generally be **canceled until midnight
+  of the third business day**. Take the time.
 
 ## What "supplements" are (and why they matter)
 
-When an adjuster's first scope misses code-required items — new decking,
-ice-and-water shield, drip edge — a contractor documents those and the carrier pays a
-supplement. This is normal and legitimate, and it's where a careful, documentation-
+When an adjuster's first scope misses code-required items — new decking, drip edge —
+or best-practice components like ice-and-water shield, a contractor documents those
+and the carrier pays a supplement. This is normal and legitimate, and it's where a careful, documentation-
 heavy roofer earns their keep on a storm job.
 
-## The bottom line
+## The four rules that protect you
 
 Get a documented inspection, file your own claim, keep every photo, and steer clear
 of anyone promising to game your deductible. If you'd like a no-pressure look after a

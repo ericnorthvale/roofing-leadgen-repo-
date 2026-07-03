@@ -33,11 +33,17 @@ export const COMPLIANCE_STATUTE_REFS = [
   {
     code: "§27.02",
     label:
-      "Tex. Bus. & Com. Code § 27.02 — door-to-door solicitation (insurance roof repair contracts)",
+      "Tex. Bus. & Com. Code § 27.02 — insurance-paid roofing contract rules (required boldfaced notice on $1,000+ insurance-proceeds contracts; paying or waiving a deductible is an offense)",
   },
   {
-    code: "§701",
-    label: "Tex. Ins. Code § 701 — public adjuster prohibitions (we are a contractor, not a PA)",
+    code: "ch. 601",
+    label:
+      "Tex. Bus. & Com. Code ch. 601 — home-solicitation sales (3-business-day right to cancel a contract signed at your home)",
+  },
+  {
+    code: "§4102.163",
+    label:
+      "Tex. Ins. Code § 4102.163 — a roofing contractor may not also act as public adjuster on the same property (we are a contractor, not a PA)",
   },
   {
     code: "§1102",
