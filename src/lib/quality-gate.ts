@@ -16,6 +16,8 @@
  */
 import type { ServiceArea } from "./service-areas";
 import type { Service } from "./services";
+import type { Neighborhood } from "./neighborhoods";
+import type { CityService } from "./city-services";
 import businessInfo from "../data/business-info.json";
 
 export type DataCompleteness = "complete" | "draft";
@@ -98,5 +100,52 @@ export function evaluateService(service: Service): QualityVerdict {
     summary: filled(service.summary),
     [`${MIN_SERVICE_SECTIONS}+ content sections`]:
       (service.sections?.length ?? 0) >= MIN_SERVICE_SECTIONS,
+  });
+}
+
+/**
+ * Quality verdict for a neighborhood page. The anti-doorway bar is higher here
+ * than for cities: every field that makes the page distinct from its siblings
+ * (development era, housing stock, covenant/design-review specifics) is a hard
+ * requirement, because a neighborhood page without them IS a doorway page.
+ */
+export function evaluateNeighborhood(
+  n: Neighborhood,
+  opts: { hasNap?: boolean } = {},
+): QualityVerdict {
+  return verdict(
+    n.dataCompleteness,
+    {
+      "real business phone": opts.hasNap ?? hasRealNap(),
+      "distinct intro": filled(n.intro),
+      "sourced local context": filled(n.localContext),
+      "development era / roof-age context": filled(n.developmentEra),
+      "distinct housing-stock note": filled(n.housingStock),
+      "covenant / design-review note": filled(n.hoaNote),
+    },
+    {
+      "a real local project": (n.projects?.length ?? 0) >= 1,
+      "a real local testimonial": (n.testimonials?.length ?? 0) >= 1,
+      "real local photos": (n.photos?.length ?? 0) >= 1,
+    },
+  );
+}
+
+/**
+ * Quality verdict for a service-in-city page (e.g. /the-woodlands/roof-replacement).
+ * Requires the same content depth as a service page PLUS page-specific local
+ * sections — a city-service record that merely repeats the generic service copy
+ * with the city name swapped in must never be marked complete.
+ */
+export function evaluateCityService(
+  cs: CityService,
+  opts: { hasNap?: boolean } = {},
+): QualityVerdict {
+  return verdict(cs.dataCompleteness, {
+    "real business phone": opts.hasNap ?? hasRealNap(),
+    "distinct summary": filled(cs.summary),
+    [`${MIN_SERVICE_SECTIONS}+ locally-specific content sections`]:
+      (cs.sections?.length ?? 0) >= MIN_SERVICE_SECTIONS,
+    "local FAQ coverage": (cs.faqs?.length ?? 0) >= 2,
   });
 }

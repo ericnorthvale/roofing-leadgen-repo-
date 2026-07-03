@@ -10,7 +10,14 @@
  */
 import { SERVICE_AREAS, SERVICE_AREA_SLUGS } from "./service-areas";
 import { SERVICE_LIST } from "./services";
-import { evaluateArea, evaluateService } from "./quality-gate";
+import { NEIGHBORHOODS } from "./neighborhoods";
+import { CITY_SERVICES } from "./city-services";
+import {
+  evaluateArea,
+  evaluateService,
+  evaluateNeighborhood,
+  evaluateCityService,
+} from "./quality-gate";
 
 /** Utility pages excluded from search (mirror the Disallow rules in public/robots.txt). */
 const STATIC_EXCLUDED = new Set(["/thank-you"]);
@@ -30,7 +37,15 @@ export function dataRouteStatuses(): RouteStatus[] {
     path: `/services/${svc.slug}`,
     indexable: evaluateService(svc).indexable,
   }));
-  return [...areas, ...services];
+  const neighborhoods = Object.values(NEIGHBORHOODS).map((n) => ({
+    path: `/${n.citySlug}/${n.slug}`,
+    indexable: evaluateNeighborhood(n).indexable,
+  }));
+  const cityServices = Object.values(CITY_SERVICES).map((cs) => ({
+    path: `/${cs.citySlug}/${cs.slug}`,
+    indexable: evaluateCityService(cs).indexable,
+  }));
+  return [...areas, ...services, ...neighborhoods, ...cityServices];
 }
 
 /** Set of absolute paths (no trailing slash) that must be kept OUT of the sitemap. */

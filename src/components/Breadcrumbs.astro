@@ -8,6 +8,11 @@ interface Props {
 }
 const { items } = Astro.props;
 
+const base = (Astro.site?.toString() ?? "https://northvaleroofing.com").replace(/\/+$/, "");
+
+// Per schema.org/Google, `item` may be omitted for the current page (last crumb);
+// emitting `item: undefined` fails Rich Results validation. Relative hrefs are
+// made absolute — Google requires full URLs here.
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
@@ -15,7 +20,7 @@ const jsonLd = {
     "@type": "ListItem",
     position: i + 1,
     name: c.label,
-    item: c.href,
+    ...(c.href ? { item: c.href.startsWith("http") ? c.href : `${base}${c.href}` } : {}),
   })),
 };
 ---

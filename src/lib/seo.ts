@@ -64,12 +64,17 @@ export function localBusinessJsonLd(siteUrl: string): Record<string, unknown> {
     priceRange: "$$$",
     address: {
       "@type": "PostalAddress",
+      // Street address + ZIP appear automatically once the owner fills them in
+      // business-info.json — never hardcode them here.
+      ...(BRAND.addressLine1 ? { streetAddress: BRAND.addressLine1 } : {}),
       addressLocality: BRAND.city,
       addressRegion: BRAND.region,
+      ...(BRAND.postalCode ? { postalCode: BRAND.postalCode } : {}),
       addressCountry: BRAND.country,
     },
     areaServed: areaServedNames(),
-    sameAs: [] as string[],
+    // Real owner-supplied profile URLs only (GBP, Facebook, …) — empty until provided.
+    sameAs: BRAND.socialProfiles,
   };
 }
 
@@ -103,5 +108,65 @@ export function faqPageJsonLd(faqs: { q: string; a: string }[]): Record<string, 
       name: f.q,
       acceptedAnswer: { "@type": "Answer", text: f.a },
     })),
+  };
+}
+
+/** BlogPosting structured data for a published post. */
+export function blogPostingJsonLd(
+  siteUrl: string,
+  post: {
+    title: string;
+    description: string;
+    /** Absolute path, e.g. /blog/my-post */
+    pathname: string;
+    datePublished: Date;
+    dateModified?: Date;
+    authorName: string;
+    /** Absolute path or URL to the hero image, if any. */
+    image?: string;
+  },
+): Record<string, unknown> {
+  const base = siteUrl.replace(/\/+$/, "");
+  const url = `${base}${post.pathname}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    url,
+    mainEntityOfPage: url,
+    datePublished: post.datePublished.toISOString(),
+    dateModified: (post.dateModified ?? post.datePublished).toISOString(),
+    author: { "@type": "Person", name: post.authorName },
+    publisher: { "@id": `${base}#business` },
+    ...(post.image
+      ? { image: post.image.startsWith("http") ? post.image : `${base}${post.image}` }
+      : {}),
+  };
+}
+
+/**
+ * AggregateRating for the sitewide business node, computed from REAL reviews
+ * only. Returns null when there are no reviews — callers must skip emitting it
+ * (never fabricate a rating; FTC + Google policy).
+ */
+export function aggregateRatingJsonLd(
+  siteUrl: string,
+  reviews: { rating: number }[],
+): Record<string, unknown> | null {
+  if (reviews.length === 0) return null;
+  const base = siteUrl.replace(/\/+$/, "");
+  const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
+  return {
+    "@context": "https://schema.org",
+    "@type": "RoofingContractor",
+    "@id": `${base}#business`,
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: Number((sum / reviews.length).toFixed(2)),
+      reviewCount: reviews.length,
+      bestRating: 5,
+      worstRating: 1,
+    },
   };
 }

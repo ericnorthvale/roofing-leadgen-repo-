@@ -1,0 +1,38 @@
+---
+/**
+ * Jump-link table of contents for long-form (2,000+ word) pages. Pass the
+ * headings in page order; each `id` must match an element id on the page
+ * (section headings get their ids from `headingId()` in ~/lib/headings.ts so
+ * the TOC and the headings can never drift apart).
+ */
+interface Props {
+  heading?: string;
+  items: { id: string; label: string }[];
+}
+const { heading = "On this page", items } = Astro.props;
+---
+
+{
+  items.length > 1 && (
+    <nav
+      aria-label="Table of contents"
+      class="rounded-lg border border-[color:var(--color-ink-100)] bg-[color:var(--color-ink-25,#fafafa)] p-5"
+    >
+      <p class="text-sm font-semibold tracking-wide text-[color:var(--color-ink-500)] uppercase">
+        {heading}
+      </p>
+      <ol class="mt-3 grid gap-x-6 gap-y-1.5 text-sm sm:grid-cols-2">
+        {items.map((item) => (
+          <li>
+            <a
+              class="text-[color:var(--color-navy-700,#1d3a66)] hover:underline"
+              href={`#${item.id}`}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  )
+}

@@ -1,4 +1,5 @@
 import type { DataCompleteness } from "./quality-gate";
+import type { ServiceFaq } from "./services";
 
 export type ServiceAreaSlug =
   | "houston"
@@ -48,6 +49,9 @@ export interface ServiceArea {
   permitHoaNote?: string;
   /** Roof types commonly seen on local housing stock. */
   commonRoofTypes?: string[];
+
+  /** Real, generally-true local Q&A. Feeds FAQPage JSON-LD on the city page. */
+  faqs?: ServiceFaq[];
 
   // --- Real-world proof (recommended, not required to index). NEVER fabricate. ---
   projects?: ServiceAreaProject[];
