@@ -1,7 +1,12 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
+import RelatedLinks from "@components/RelatedLinks.astro";
+import CTAButton from "@components/CTAButton.astro";
+import { BRAND } from "~/lib/brand";
+import { blogPostingJsonLd } from "~/lib/seo";
 import type { SeoInput } from "~/lib/seo";
+import type { LinkItem } from "~/lib/internal-links";
 
 interface Props {
   seo: SeoInput;
@@ -10,11 +15,30 @@ interface Props {
   pubDate: Date;
   updatedDate?: Date;
   author: string;
+  /** Related service/city pages, resolved by the caller from the post's cluster. */
+  related?: LinkItem[];
 }
-const { seo, title, description, pubDate, updatedDate, author } = Astro.props;
+const { seo, title, description, pubDate, updatedDate, author, related = [] } = Astro.props;
+
+const siteUrl = Astro.site?.toString() ?? "https://northvaleroofing.com";
+const posting = blogPostingJsonLd(siteUrl, {
+  title,
+  description,
+  pathname: seo.pathname ?? "/blog",
+  datePublished: pubDate,
+  dateModified: updatedDate,
+  authorName: author,
+  // The default byline is the company; a named human author gets Person schema.
+  authorType: author === BRAND.name ? "Organization" : "Person",
+  image: seo.ogImage,
+});
+const jsonLd = [
+  ...(Array.isArray(seo.jsonLd) ? seo.jsonLd : seo.jsonLd ? [seo.jsonLd] : []),
+  posting,
+];
 ---
 
-<BaseLayout seo={seo}>
+<BaseLayout seo={{ ...seo, jsonLd }}>
   <article class="mx-auto max-w-3xl px-4 py-10">
     <Breadcrumbs
       items={[{ label: "Home", href: "/" }, { label: "Blog", href: "/blog" }, { label: title }]}
@@ -46,5 +70,21 @@ const { seo, title, description, pubDate, updatedDate, author } = Astro.props;
       </p>
     </header>
     <section class="prose-northvale mt-8"><slot /></section>
+
+    <footer class="mt-12 rounded-lg border border-[color:var(--color-ink-100)] p-6">
+      <p class="text-sm font-semibold tracking-wide text-[color:var(--color-ink-500)] uppercase">
+        About {BRAND.name}
+      </p>
+      <p class="mt-2 text-sm text-[color:var(--color-ink-800)]">
+        {BRAND.name} is a residential roofing company serving The Woodlands and the north Houston metro
+        — roof replacement, repair, inspections, and storm-damage documentation. Same-day inspection,
+        written estimate before we leave the driveway.
+      </p>
+      <div class="mt-4">
+        <CTAButton href="/contact" label="Book a free inspection" ctaId="blog-author-box-book" />
+      </div>
+    </footer>
   </article>
+
+  {related.length > 0 && <RelatedLinks heading="Keep reading" links={related} />}
 </BaseLayout>

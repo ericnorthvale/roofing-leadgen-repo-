@@ -31,6 +31,8 @@ export const BRAND = {
   certStatus: businessInfo.certStatus,
   warranties: businessInfo.warranties,
   financing: businessInfo.financing,
+  /** Owner's real profile URLs (GBP, Facebook, …) — feeds JSON-LD sameAs. */
+  socialProfiles: (businessInfo as { socialProfiles?: string[] }).socialProfiles ?? [],
 } as const;
 
 export const SIGNATURE_PHRASES = [

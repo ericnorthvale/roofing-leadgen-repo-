@@ -1,0 +1,115 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import LeadForm from "@components/LeadForm.astro";
+import RelatedLinks from "@components/RelatedLinks.astro";
+import { BRAND } from "~/lib/brand";
+import { serviceLinks } from "~/lib/internal-links";
+
+// NEEDS OWNER: specific written workmanship-warranty term (years/coverage) —
+// stated on estimates today; publish here once Eric confirms the standard term.
+// See TASKS_FOR_ERIC.md. Never invent a number.
+---
+
+<BaseLayout
+  seo={{
+    title: "Roof Warranties, Explained Honestly",
+    description:
+      "What roof warranties actually cover: manufacturer tiers, what any contractor can register, what requires certification — and what Northvale puts in writing.",
+    pathname: "/warranty",
+  }}
+>
+  <section class="mx-auto max-w-6xl px-4 py-10">
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Warranty" }]} />
+    <h1 class="mt-6 text-4xl md:text-5xl">Roof warranties, explained honestly</h1>
+    <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-800)]">
+      Warranty talk is where roofing sales gets slippery. Here's how the coverage actually works —
+      including which tiers require certifications a contractor must hold, and where we stand.
+    </p>
+  </section>
+
+  <section class="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[1fr_400px]">
+    <article class="prose-northvale">
+      <h2>Two different warranties protect a roof</h2>
+      <p>
+        <strong>The manufacturer's warranty</strong> covers the product — defects in the shingles and
+        system components. <strong>The workmanship warranty</strong> covers the installation — the thing
+        that actually causes most premature failures. Any honest conversation keeps them separate.
+      </p>
+
+      <h2>Manufacturer coverage: what we register on every job</h2>
+      <ul>
+        <li>
+          <strong>Lifetime limited product warranties</strong> on the architectural lines we install —
+          GAF Timberline HDZ, TAMKO Titan XT, CertainTeed Landmark — registered to you at close.
+        </li>
+        <li>
+          <strong>GAF WindProven</strong> — on Timberline HDZ systems installed with four qualifying GAF
+          accessory categories: a 15-year wind warranty with <em
+            >no maximum wind speed limitation</em
+          >. It's a product-qualified system warranty — no special contractor certification required
+          — so it's coverage we can legitimately offer today.
+        </li>
+        <li>
+          <strong>TAMKO's high-wind coverage</strong> — Titan XT carries a 15-year warranty for winds
+          up to 160 mph under its specified high-wind application, which is how we nail it.
+        </li>
+        <li>
+          <strong>CertainTeed SureStart</strong> — Landmark's first ten years cover 100% of materials
+          <em>and</em> labor for manufacturing defects, non-prorated.
+        </li>
+      </ul>
+
+      <h2>The certification tiers — and where we stand</h2>
+      <p>
+        Manufacturers reserve their biggest warranties for certified installers: GAF's Golden Pledge
+        (25–30 years of workmanship coverage) requires a Master Elite contractor, Silver Pledge
+        requires Certified Plus, and CertainTeed's 5-STAR SureStart PLUS requires a SELECT
+        ShingleMaster. <strong
+          >{BRAND.certStatus || "We are pursuing manufacturer certification"}</strong
+        >
+        — and until a certification is earned, we will not advertise or sell the warranty tiers that depend
+        on it. When that changes, this page changes.
+      </p>
+
+      <h2>Our workmanship warranty</h2>
+      <p>
+        Every Northvale estimate states the workmanship warranty for that job in writing — term and
+        coverage, on paper, before you sign anything. No verbal "don't worry, we'll take care of
+        you." If a written promise isn't in the estimate, it doesn't exist; ours are.
+      </p>
+
+      <h2>What voids warranties (and how we protect yours)</h2>
+      <ul>
+        <li>
+          <strong>Bad installation</strong> — off-spec nailing voids wind coverage; we nail to manufacturer
+          spec, six-nail where wind exposure calls for it, and photograph the work.
+        </li>
+        <li>
+          <strong>Poor attic ventilation</strong> — manufacturers can reduce or deny coverage over it,
+          and ARMA's 140°F-attic numbers explain why. We size ventilation on every replacement.
+        </li>
+        <li>
+          <strong>Pressure washing</strong> — ARMA warns it damages asphalt roofing. Algae streaks have
+          gentler answers, including algae-resistant shingle warranties like GAF's 25-year StainGuard
+          Plus.
+        </li>
+        <li>
+          <strong>Unregistered warranties</strong> — some coverage requires registration; we complete
+          it at close-out and hand you the confirmation in the documentation packet.
+        </li>
+      </ul>
+
+      <p>
+        Questions about coverage on a roof we didn't install? Bring us the paperwork during a
+        <a href="/services/roof-inspection"> free inspection</a> and we'll tell you what you actually
+        have.
+      </p>
+    </article>
+    <aside class="md:sticky md:top-10 md:self-start">
+      <LeadForm source="warranty-page" />
+    </aside>
+  </section>
+
+  <RelatedLinks heading="Our services" links={serviceLinks()} />
+</BaseLayout>

@@ -6,8 +6,14 @@ const CORE_PATHS = [
   "/services/roof-replacement",
   "/services/roof-inspection",
   "/the-woodlands",
+  "/the-woodlands/roof-replacement",
+  "/the-woodlands/storm-damage",
+  "/the-woodlands/alden-bridge",
+  "/the-woodlands/creekside-park",
   "/spring",
   "/storm-response",
+  "/process",
+  "/warranty",
   "/about",
   "/contact",
   "/reviews",
@@ -31,7 +37,27 @@ for (const path of CORE_PATHS) {
   });
 }
 
-test("homepage surfaces the house tagline", async ({ page }) => {
+test("homepage h1 carries the primary keyword", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Same day");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText(
+    "The Woodlands Roofing Company",
+  );
+});
+
+test("homepage still surfaces the house tagline", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("body")).toContainText("Same day. In writing.");
+});
+
+test("draft city page is noindex; flagship city page is not", async ({ page }) => {
+  await page.goto("/spring");
+  await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(1);
+  await page.goto("/the-woodlands");
+  await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(0);
+});
+
+test("pages emit a canonical URL", async ({ page }) => {
+  await page.goto("/the-woodlands/roof-replacement");
+  const canonical = page.locator('link[rel="canonical"]');
+  await expect(canonical).toHaveAttribute("href", /\/the-woodlands\/roof-replacement$/);
 });

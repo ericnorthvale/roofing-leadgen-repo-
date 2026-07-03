@@ -1,0 +1,78 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import LeadForm from "@components/LeadForm.astro";
+import { BRAND } from "~/lib/brand";
+
+// Quality gate: this page stays noindex until the owner supplies real financing
+// terms (provider, plans) in business-info.json. NEVER invent offers/APRs.
+const hasRealFinancing = BRAND.financing.trim().length > 0;
+---
+
+<BaseLayout
+  seo={{
+    title: "Roof Financing Options",
+    description:
+      "Payment and financing options for roof replacement and repair with Northvale Roofing.",
+    pathname: "/financing",
+    noindex: !hasRealFinancing,
+  }}
+>
+  {
+    !hasRealFinancing && (
+      <div class="border-b-2 border-[color:var(--color-gold-500)] bg-[color:var(--color-gold-50)] px-4 py-3 text-sm text-[color:var(--color-ink-800)]">
+        <div class="mx-auto max-w-6xl">
+          <strong>NEEDS REAL DATA — draft, not indexed.</strong> This page publishes automatically
+          once real financing terms are entered in Business Info (admin panel). Never list a
+          provider, plan, or rate that isn't confirmed.
+        </div>
+      </div>
+    )
+  }
+
+  <section class="mx-auto max-w-6xl px-4 py-10">
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Financing" }]} />
+    <h1 class="mt-6 text-4xl md:text-5xl">Paying for your roof</h1>
+    <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-800)]">
+      A roof is a big check on short notice. Here's how payment works with us — always in writing,
+      never a surprise.
+    </p>
+  </section>
+
+  <section class="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[1fr_400px]">
+    <article class="prose-northvale">
+      <h2>Every price in writing, before you commit</h2>
+      <p>
+        The estimate you sign is itemized — shingle line, underlayment, decking allowance, warranty
+        — and it's the price you pay. Change orders happen only for genuinely hidden conditions,
+        priced from the rates already stated in your estimate.
+      </p>
+
+      <h2>Financing</h2>
+      {
+        hasRealFinancing ? (
+          <p>{BRAND.financing}</p>
+        ) : (
+          <p>
+            <em>
+              [NEEDS DATA: financing provider and plan terms — this section publishes once the owner
+              confirms real offerings in the admin panel.]
+            </em>
+          </p>
+        )
+      }
+
+      <h2>If insurance is paying</h2>
+      <p>
+        Storm-damage replacements often run through your homeowner's policy. Two things Texas law
+        makes non-negotiable: you pay your own deductible (contractors offering to absorb it are
+        breaking the law), and replacement-cost policies typically pay in two parts — the
+        depreciated value first, the remainder after proof of completed repairs. Our
+        <a href="/services/insurance-claims"> insurance claims guide</a> walks the whole process.
+      </p>
+    </article>
+    <aside class="md:sticky md:top-10 md:self-start">
+      <LeadForm source="financing-page" />
+    </aside>
+  </section>
+</BaseLayout>

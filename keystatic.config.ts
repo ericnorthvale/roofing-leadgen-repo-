@@ -71,6 +71,12 @@ export default config({
         }),
         warranties: fields.text({ label: "Warranties offered", multiline: true }),
         financing: fields.text({ label: "Financing offered", multiline: true }),
+        socialProfiles: fields.array(fields.text({ label: "Profile URL" }), {
+          label: "Business profile URLs (Google Business Profile, Facebook, Instagram…)",
+          description:
+            "Full URLs to the company's own profiles. Feeds the sameAs field in structured data.",
+          itemLabel: (props) => props.value || "Profile URL",
+        }),
       },
     }),
   },

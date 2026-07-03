@@ -4,7 +4,13 @@ Source of truth for build progress. Update after every batch/PR.
 
 ## ▶ Next session — start here
 
-**Complete the steps in `docs/setup-highlevel.md`.** The CRM lead pipeline is
+**Owner validation of the local-authority SEO expansion (this branch's draft
+PR).** Review the Vercel preview: homepage H1/title (owner-specified), 5
+service guides, 5 Woodlands service-in-city pages, 9 village pages, /process +
+/warranty, 10 new blog posts. Then supply the highest-value data: GBP/social
+URLs (`sameAs`), financing terms, team members, real photos, and the standard
+workmanship-warranty term (see Owner to-dos). CRM keys task
+(`docs/setup-highlevel.md`) still stands. The CRM lead pipeline is
 built and merged (PR #17): the website form and tracked phone calls will create a
 HighLevel contact + pipeline opportunity, and form leads also fire a server-side
 Meta conversion — all **env-gated and dormant until keys land in Vercel**. To turn
@@ -45,12 +51,38 @@ payload shapes in `src/lib/highlevel.ts` against the real account.
 - [x] Royalty-free demo images behind `USE_DEMO_IMAGES` (`src/lib/demo-images.ts`) — preview only, remove before launch
 - [x] Validate: build + 51 unit tests + lint pass
 
-## Phase 2 — Flagship city: The Woodlands (needs owner real data)
+## Phase 2 — Flagship city: The Woodlands
 
-- [ ] City hub page (real local data, photos, trust signals)
-- [ ] Core service-in-city pages
-- [ ] Full schema + breadcrumbs + internal links + fast mobile CWV
-- [ ] Validate → PR → pause for preview review
+- [x] City hub page — sourced local data, FAQ schema, village/spoke links
+      (photos still demo/gated; real photos = owner to-do)
+- [x] Core service-in-city pages — `/the-woodlands/{roof-replacement,roof-repair,
+roof-inspection,storm-damage,insurance-claims}` via `city-services.ts` +
+      `CityServiceLayout` (city-scoped Service schema, local FAQs, TOC)
+- [x] Full schema + breadcrumbs (JSON-LD bug fixed) + internal-link graph
+      (`src/lib/internal-links.ts`)
+- [x] Validate → draft PR → pause for preview review
+
+## Phase 2.5 — Local authority expansion (this branch)
+
+- [x] Research pass: 4 sourced fact sheets → `docs/research-facts.md`
+      (materials/costs, Township Standards + villages, climate/storms,
+      permits + TX insurance law) with UNVERIFIED do-not-publish lists
+- [x] 9 neighborhood (village) pages — `src/lib/neighborhoods.ts` +
+      `NeighborhoodPageLayout`, per-page anti-doorway gate
+      (`evaluateNeighborhood`), all indexable on sourced distinct content
+- [x] Homepage: owner-specified H1/title/description + ~3,000-word sections
+      (why-roofs-fail, materials, villages, HOA, permits/codes, 16 FAQs)
+- [x] 5 service guides expanded (system anatomy, cited costs, statute-accurate
+      insurance content); **fixed Golden Pledge overpromise** (Master Elite not
+      held) + two wrong statute citations on storm pages
+- [x] EEAT pages: `/process`, `/warranty` (live); `/financing`, `/team`,
+      `/gallery` (gated noindex until owner data)
+- [x] 10 published blog posts (all claims traced to research-facts.md, costs
+      attributed) + `BlogPosting` schema + author box + related-link graph
+- [x] SEO plumbing: `sameAs` wiring (owner-editable), gated AggregateRating
+      helper, TOC component, keyword map (`docs/keyword-map.md`)
+- [x] Tests: 88 unit (21 new SEO guards: unique titles, lengths, gates,
+      anti-cannibalization, sitemap parity) + 60 e2e pass
 
 ## Phase 3 — Gated expansion (batches of 5–20)
 
@@ -112,6 +144,15 @@ spine and knowledge base were moved up.
 - [ ] Real cert status (RCAT / GAF Master Elite — held vs. applicant)
 - [ ] Operator/crew real experience (years, rough project scale) for "established" copy — note `about.astro` "10+ year foreman" is unverified
 - [ ] Real photos → then set `USE_DEMO_IMAGES = false` to replace the demo stock (owner's prior work OK if rights confirmed + labeled)
+- [ ] **GBP + social profile URLs** → Business Info "profile URLs" in the admin
+      panel (feeds JSON-LD `sameAs`)
+- [ ] **Financing terms** (provider, plans) → Business Info; auto-publishes `/financing`
+- [ ] **Team members** (names, roles, photos) → unlocks `/team`
+- [ ] **Standard workmanship-warranty term** (years/coverage) → `/warranty` page
+- [ ] **Real project photos** (CompanyCam or uploads) → unlocks `/gallery` +
+      village-page proof sections
+- [ ] Confirm drone-inspection capability before any page claims it (none do today)
+- [ ] Real reviews (Google profile live?) → Reviews page + gated AggregateRating schema
 
 **Accounts to provision (Claude builds code + gives click-by-click; never touches secrets/DNS):**
 

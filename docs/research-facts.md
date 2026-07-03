@@ -1,0 +1,555 @@
+# Research fact sheets — sourced claims behind the SEO content
+
+Every published claim on materials, costs, codes, climate, and local specifics
+traces back to an entry here. **Rules:** publish only facts listed with a
+source; anything in an "UNVERIFIED" list stays off the site until verified.
+Cost figures are attributed market data — publish as "according to [source]
+(year)", never as Northvale's own pricing.
+
+Compiled: July 3, 2026 (re-verify cost figures before major republishing).
+
+---
+
+## Sheet 1 — Materials & costs (manufacturer + industry sources)
+
+### TAMKO Titan XT (official data sheet, Rev. 11/15/2023)
+
+- Premium architectural (laminated) shingle; two fiberglass mats, polyester
+  reinforcing strip in the common bond area — SOURCE:
+  https://www.tamko.com/docs/default-source/data-sheets/tamko-titan-xt-data-sheet-(phillipsburg).pdf?sfvrsn=c13220a0_25
+- 15-year limited warranty for winds up to 160 mph when applied per Titan XT
+  High Wind Application Instructions — SOURCE: same data sheet
+- Limited Lifetime warranty (single-family); 10-year Full Start non-prorated
+  period; 10-year Algae Cleaning limited warranty — SOURCE: same data sheet
+- **UL 2218 Class 3 impact rated (NOT Class 4 — never claim Class 4 for Titan
+  XT).** TAMKO disclaimer: UL 2218 steel-ball testing "may not correlate with
+  real world" hail — SOURCE: same data sheet
+- Rapid Fire Zone 1-1/2" expanded nailing zone; reinforced 2" poly nail line;
+  polymer-modified sealant; standard fastening 4 nails/shingle — SOURCE: same
+  data sheet + application instructions
+- UL 790/ASTM E108 Class A fire; ASTM D7158 Class H; ASTM D3161 Class F;
+  Miami-Dade approved — SOURCE: same data sheet
+- Warranty text (effective 2024-03-31):
+  https://www.tamko.com/docs/default-source/limited-warranties/tamko-fiberglass-asphalt-shingle-limited-warranty-(effective-march-31-2024).pdf
+
+### GAF Timberline HDZ (official spec sheet RESGN467HDZ-0526, May 2026)
+
+- LayerLock Technology powers StrikeZone, "the industry's largest nailing
+  zone," with Dura Grip sealant — SOURCE:
+  https://www.gaf.com/en-us/document-library/documents/specifications/timberline-hdz-shingles-spec-sheet-resgn467hdz.pdf
+- **WindProven limited wind warranty: 15 years, no maximum wind speed
+  limitation.** Requires LayerLock shingles + 4 qualifying GAF accessory
+  categories (starter strips, roof deck protection, ridge cap, and leak barrier
+  or attic ventilation). **No contractor certification required** — SOURCE:
+  spec sheet + https://www.gaf.com/en-us/resources/warranties/residential
+- 25-year StainGuard Plus algae-protection limited warranty (packages bearing
+  the logo) — SOURCE: spec sheet
+- Lifetime limited warranty against manufacturing defects (original owner,
+  single-family) — SOURCE: spec sheet
+- HDZ passes UL 2218 at **Class 3**; "may be eligible for insurance discounts";
+  GAF states hail damage is NOT covered by the limited warranty — SOURCE: spec
+  sheet
+- ASTM D7158 Class H; D3161 Class F; UL 790 Class A; **"Meets Texas Department
+  of Insurance Requirements"** — SOURCE: spec sheet
+
+### GAF warranty tiers vs. contractor certification (CRITICAL)
+
+SOURCE: https://www.gaf.com/en-us/resources/warranties/residential
+
+| Warranty                    | Contractor required                        | Workmanship coverage |
+| --------------------------- | ------------------------------------------ | -------------------- |
+| Shingle & Accessory Limited | Any contractor                             | None                 |
+| Roofing System Limited      | Any contractor (≥3 qualifying accessories) | None                 |
+| System Plus Limited         | GAF Certified+                             | None                 |
+| Silver Pledge Limited       | Certified Plus / Master Elite              | 10-15 yrs            |
+| Golden Pledge Limited       | **Master Elite only**                      | 25-30 yrs            |
+
+**What Northvale can honestly offer today (no GAF certification): Shingle &
+Accessory Limited, Roofing System Limited, and WindProven.** Never advertise
+System Plus / Silver / Golden Pledge until certified at the matching level.
+
+### CertainTeed Landmark (official SureStart brochure 00-02-203-NA-EN, 01/23)
+
+- Lifetime limited warranty (individual homeowners; 40 yrs non-owner-occupied)
+  with 10-year SureStart period — SOURCE: CertainTeed SureStart brochure
+  (00-02-203-NA-EN; canonical via certainteed.com/roofing)
+- SureStart = 100% materials AND labor, not prorated, transferable once —
+  SOURCE: same brochure
+- SureStart PLUS requires an Integrity Roof System installed by a CertainTeed
+  credentialed contractor (3-STAR → 5-STAR 25 tiers; 5-STAR = SELECT
+  ShingleMaster only) — SOURCE: same brochure +
+  https://www.certainteed.com/why-credentialing-matters
+- StreakFighter algae warranty: certainteed.com lists 25-yr (Landmark) / 30-yr
+  (Landmark PRO) — re-verify at publish time — SOURCE:
+  https://www.certainteed.com/products/residential-roofing-products/landmark
+- Landmark PRO standards: ASTM D3462; D3161 Class F; D7158 Class H; UL 790
+  Class A — SOURCE:
+  https://www.certainteed.com/products/residential-roofing-products/landmark-pro
+
+### Class 4 / impact-resistant options
+
+- GAF Timberline AS II: UL 2218 **Class 4**, SBS polymer-modified; 25-yr
+  StainGuard Plus; WindProven-eligible — SOURCE:
+  https://www.gaf.com/en-us/roofing-materials/residential-roofing-materials/shingles/timberline-as-ii
+- GAF Timberline UHDZ: Class 4 option — SOURCE:
+  https://www.gaf.com/en-us/roofing-materials/residential-roofing-materials/shingles/timberline-uhdz-with-ultramat
+- CertainTeed Landmark ClimateFlex: UL 2218 Class 4 at time of manufacture,
+  polymer-modified (Landmark PRO IR is Class 3) — SOURCE:
+  https://www.certainteed.com/products/residential-roofing-products/landmark-climateflex
+  - SureStart brochure footnote
+- Class 4 definition: highest UL 2218 rating — withstands a 2" steel ball
+  dropped from 20 ft — SOURCE: https://www.gaf.com/en-us/plan-design/impact-resistant-roof
+- Insurance angle: use GAF's hedged "may be eligible for insurance discounts"
+  (see UNVERIFIED #4 for the TX statute claim).
+
+### Architectural vs. 3-tab / lifespans
+
+- InterNACHI life-expectancy chart: 3-tab ~20 yrs; architectural ~30 yrs;
+  **"hot climates drastically reduce asphalt shingle life"** — SOURCE:
+  https://www.nachi.org/life-expectancy.htm
+- Cost per sq ft (Modernize, 2026): 3-tab $3.43–$4.65; architectural
+  $4.11–$5.57; premium architectural $4.39–$5.95 — SOURCE:
+  https://modernize.com/roof/shingles/cost
+
+### Metal / standing seam
+
+- Metal Roofing Alliance FAQ: metal lasts 30–50+ yrs (2–3× asphalt); 140-mph
+  wind rating; can save 10–40% in energy costs; costs roughly 2–3× asphalt —
+  SOURCE: https://www.metalroofing.com/faqs
+- Standing seam = concealed fasteners with raised interlocking seams;
+  exposed-fastener panels' gasketed screws are the main maintenance point —
+  SOURCE: https://sheffieldmetals.com/learning-center/standing-seam-vs-exposed-fastener-metal-roofing/
+- Angi (2026): standing seam avg $19,000, range $9,400–$32,600; $4–$30/sq ft —
+  SOURCE: https://www.angi.com/articles/how-much-does-it-cost-install-standing-seam-metal-roof.htm
+
+### Components / system facts
+
+- **Drip edge is code** (2021 IRC R905.2.8.5): required at eaves and rakes;
+  ≥2" overlap; underlayment over drip edge at eaves, under at rakes — SOURCE:
+  https://codes.iccsafe.org/s/IRC2021P2/chapter-9-roof-assemblies/IRC2021P2-Pt03-Ch09-SecR905.2.8.5
+- Attic ventilation: 1/300 rule (1 sq ft NFVA per 300 sq ft attic; base ratio
+  1/150), 40–50% exhaust high + balance intake at soffits, intake ≥ exhaust —
+  SOURCES: https://www.asphaltroofing.org/the-attic-needs-ventilation-but-how-much-exactly/
+  - GAF Technical Bulletin R-120
+    https://documents.gaf.com/technical-bulletins-&-notes/r-120-proper-attic-ventilation.pdf
+- Synthetic underlayment vs. felt: higher tear resistance, lighter, better
+  water resistance, longer UV tolerance — SOURCE (attribute):
+  https://www.billraganroofing.com/blog/felt-underlayment-vs-synthetic-underlayment
+- Ice & water shield: self-adhering membrane, self-seals around nails; best
+  practice in valleys + around penetrations — SOURCES:
+  https://www.renovationsroofing.com/blog/ice-water-shields ;
+  https://fairandsquareroofing.com/2025/03/06/underlayment-vs-ice-and-water-shield-key-differences/
+- Decking: rotted/delaminated sheathing must be replaced before reroof; signs:
+  sagging, sponginess, musty attic, stains — SOURCE:
+  https://www.iko.com/na/blog/rotted-roof-deck-how-to-replace-roof-sheathing/
+- Pipe boots: neoprene collars degrade in UV, commonly failing within roughly
+  10–15 years; "one of the most common causes of roof leaks" — SOURCES:
+  https://structuretech.com/an-easy-fix-for-split-boots-at-plumbing-vent-flashings/ ;
+  https://bobharveyroofing.com/knowledge-center/pipe-boots-roof-penetrations
+
+### Cost data (attributed market data)
+
+- Angi (2026): national average roof replacement **$9,602**; span
+  $5,900–$46,000; $4–$11/sq ft — SOURCE:
+  https://www.angi.com/articles/how-much-does-roof-replacement-cost.htm
+- This Old House (2026): ~$15,439 average for 2,000 sq ft asphalt; 52% of
+  surveyed homeowners paid $5,001–$20,000 — SOURCE:
+  https://www.thisoldhouse.com/roofing/new-roof-cost
+- Homewyse (May 2026): asphalt install from ~$5.09–$6.66/sq ft — SOURCE:
+  https://www.homewyse.com/services/cost_to_install_asphalt_shingle_roof.html
+- Angi Houston (2026): avg ≈ $9,752; most $6,712–$13,123 — SOURCE:
+  https://www.angi.com/articles/how-much-does-roof-replacement-cost/tx/houston
+  (⚠ confirmed via secondary quote; re-verify on live page — UNVERIFIED #3)
+- Angi (2026): roof repairs typically **$400–$2,000** — SOURCE:
+  https://www.angi.com/articles/how-much-do-roof-repairs-cost.htm
+- Angi (2026): roof inspection national average $250 (range $75–$1,100;
+  physical $75–$200; drone $150–$600; infrared $400–$600); notes some
+  contractors offer free inspections — SOURCE:
+  https://www.angi.com/articles/how-much-does-roof-inspection-cost.htm
+- Cost vs. Value roofing scope definition — SOURCE:
+  https://www.jlconline.com/cost-vs-value/roofing-replacement-asphalt-shingles/
+  (Houston-market recoup figures: UNVERIFIED #2)
+
+### Sheet 1 — UNVERIFIED (do not publish)
+
+1. CertainTeed Landmark exact wind-warranty mph upgrade + StreakFighter term —
+   conflicting sources; pull the current CertainTeed shingle warranty PDF first.
+2. Remodeling Cost vs. Value Houston-specific roofing recoup figures (behind
+   free report download); the 56.9% (2024) national figure is secondary-sourced.
+3. Angi Houston exact dollar figures — 403 on direct fetch; secondary-confirmed
+   only.
+4. "Texas insurers must offer premium discounts for Class 4 roofs" — verify
+   against TDI/statute before promising; use GAF's hedged wording meanwhile.
+5. Titan XT standard-application 110-mph wind warranty — distributor-sourced;
+   confirm in TAMKO warranty PDF.
+6. Exposed-fastener 15–25 yr vs standing-seam 40–70 yr lifespans —
+   supplier-sourced; attribute by name or use MRA's verified "30 to 50+ years."
+7. "Pipe boots cause more leak calls than every other component combined" —
+   single contractor claim; use "one of the most common causes" instead.
+8. 3-tab "~60–70 mph wind rating" — contractor-blog-sourced; contrast verified
+   manufacturer warranties instead.
+
+---
+
+## Sheet 2 — The Woodlands governance, Standards + villages
+
+### Township structure
+
+- The Woodlands Township is a special-purpose district (73rd Texas
+  Legislature, 1993), unincorporated, spanning Montgomery and Harris counties;
+  residents voted against incorporation on 2021-11-02 — SOURCES:
+  https://www.thewoodlandstownship-tx.gov/Government ;
+  https://en.wikipedia.org/wiki/The_Woodlands,_Texas
+- Dedicated by George P. Mitchell October 19, 1974; population 114,436 (2020
+  census) — SOURCES: https://www.visitthewoodlands.com/about/history/ ;
+  https://en.wikipedia.org/wiki/The_Woodlands,_Texas
+- Covenant responsibility moved from the original associations (WCA/TWA/WCOA)
+  to the Township in 2010 — SOURCE:
+  https://www.woodlandsonline.com/npps/story.cfm?nppage=82029
+
+### Who approves re-roofs
+
+- **Residential Design Review Committees (RDRCs)** — one per developed
+  village (nine total), ≥3 elected resident members, meet at least monthly,
+  staffed by the Township **Covenant Administration Department**
+  (281-210-3800, 2801 Technology Forest Blvd) — SOURCES:
+  https://www.thewoodlandstownship-tx.gov/154/Residential-Design-Review-Committees
+  (verify link renders; corroborated) ;
+  https://www.thewoodlandstownship-tx.gov/Departments/Covenant-Administration
+- **Development Standards Committee (DSC)** — 7 members; adopts/enforces
+  standards; only committee that can grant variances — SOURCE:
+  https://www.thewoodlandstownship-tx.gov/Government/Committees-Boards/Development-Standards-Committee
+- Applications go through the Civic Access Portal — SOURCE:
+  https://www.thewoodlandstownship-tx.gov/Departments/Covenant-Administration/Permitting-Process
+
+### 2024 Residential Development Standards (primary doc)
+
+SOURCE for all bullets:
+https://www.thewoodlandstownship-tx.gov/files/sharedassets/main/v/2/covenant-administration/documents/2024-residential-standards-recorded-12-10-2024.pdf
+
+- **Re-roof approval is mandatory** — §1.5(I)(A) requires prior written RDRC
+  (or staff) approval for "All roof replacement or house repainting"; minor
+  repair is exempt EXCEPT "fencing, roofing and color changes, which require a
+  permit at the time of repair or replacement" (§1.5(I)(B)).
+- **Approved materials** (§1.6(H)(4)): colors must harmonize with the natural
+  landscape; "muted in shades and without color pattern"; acceptable: tile,
+  slate, composition shingles, stone-coated or standing-seam metal,
+  cement-fiberboard; metal must be free of glossy finish.
+- Product samples may be required (§1.5(II)(D)); **no property survey needed
+  for re-roofs** (§1.5(II)(E)).
+- **45-day review window**; no action within 45 days = automatic disapproval
+  (§1.5(III)(A),(B)(4)). Approval paths: Committee / Staff / Pre-Approval.
+- Appeals to DSC/DRC in writing within 10 days (§1.5(III)(C)).
+- Roof vents/stacks on rear slopes where possible; exposed roof accessories
+  must match/compat with roof color (§1.6(H)). Solar collectors flat-profile,
+  conforming to slope, painted to match (§1.6(J)).
+- Pre-approved without application: gutters, downspouts, roof stacks/vents
+  compatible with home color (§1.6).
+- Owners must keep roofs repaired and clear of "leaves, pine needles,
+  branches, etc." (§3.2 Home Maintenance).
+- If Standards conflict with building code, the code prevails (§1.6(G)).
+- Grogan's Forest Sections 5, 6 & 7 submit roof applications to the City of
+  Shenandoah, not the Township — SOURCE:
+  https://www.thewoodlandstownship-tx.gov/Departments/Covenant-Administration/Permitting-Process
+
+### Villages (opening years + distinct facts)
+
+- **Grogan's Mill** — first village, development began fall 1972, opened 1974;
+  named for the Grogan-Cochran Lumber Company; ~5,100 homes / 22 neighborhoods
+  (Wikipedia, undated — soften); The Woodlands Resort & Country Club, Sawmill
+  Park; GMVA village association — SOURCES:
+  https://communityimpact.com/features/2017/03/10/the-woodlands-villages/ ;
+  https://en.wikipedia.org/wiki/Grogan's_Mill
+- **Panther Creek** — second village, opened 1976 (CVB; Community Impact says
+  1977 — write "mid-1970s"); western shore of Lake Woodlands; Northshore/
+  Southshore waterfront parks — SOURCES:
+  https://www.visitthewoodlands.com/about/history/ ;
+  https://communityimpact.com/features/2017/03/10/the-woodlands-villages/ ;
+  https://thewoodlands.guide/villages/panther-creek-the-woodlands-texas/ (secondary)
+- **Cochran's Crossing** — opened 1983; named for the Cochran family
+  (Grogan-Cochran Lumber); Palmer Course; The Woodlands High School —
+  SOURCES: https://www.thewoodlands.com/community/history/ ;
+  https://communityimpact.com/features/2017/03/10/the-woodlands-villages/ ;
+  https://www.thewoodlandstownship-tx.gov/Community/My-area/Cochrans-Crossing/Cochrans-Crossing
+- **Indian Springs** — opened 1984; named for Bidai (Atakapan) artifacts found
+  on the property; George Mitchell Nature Preserve access, Falconwing Park —
+  SOURCES: https://communityimpact.com/features/2017/03/10/the-woodlands-villages/ ;
+  https://www.visitthewoodlands.com/about/history/ ;
+  https://thewoodlands.guide/villages/indian-springs-the-woodlands-texas/ (secondary)
+- **Alden Bridge** — opened 1994; named for Alden Bridge, Louisiana (hometown
+  of Roger Galatas); one of the largest villages (~7,000 homes / ~55 sections
+  — secondary, soften); NW corner, FM 1488/FM 2978/I-45; 26 parks —
+  SOURCES: https://communityimpact.com/features/2017/03/10/the-woodlands-villages/ ;
+  https://thewoodlandshub.com/villages/alden-bridge (secondary)
+- **College Park (incl. Harper's Landing)** — designated 1995 (realtor sites
+  say 2000 build-out — don't assert either explanation); only village east of
+  I-45; major neighborhoods Harper's Landing and Windsor Hills (opened 2000
+  per developer); College Park High School opened 2005 — SOURCES:
+  https://communityimpact.com/features/2017/03/10/the-woodlands-villages/ ;
+  https://www.thewoodlands.com/community/history/ ;
+  https://www.thewoodlandstx.com/collegepark/ (secondary)
+- **Sterling Ridge** — opened 1999 (developer page says 2001 — prefer 1999,
+  two sources); named for the community's sterling (25th) anniversary; western
+  end, surrounds Carlton Woods; Gary Player Signature course; May Valley —
+  SOURCES: https://communityimpact.com/features/2017/03/10/the-woodlands-villages/ ;
+  https://www.visitthewoodlands.com/about/history/
+- **Carlton Woods** — opened 2000; 24-hour manned gated community governed by
+  The Carlton Woods Association (secondary); two sections: original in
+  Sterling Ridge (Montgomery Co., 77382), Carlton Woods Creekside (2005,
+  Harris Co., 77389); Nicklaus Signature course (2001) + Fazio Championship
+  course (2005); Chevron Championship (LPGA major) since 2023 — SOURCES:
+  https://www.visitthewoodlands.com/about/history/ ;
+  https://www.houstonproperties.com/houston-neighborhoods/the-woodlands/carlton-woods (secondary) ;
+  https://www.thewoodlands.com/2018/08/14/the-tom-fazio-championship-golf-course-at-the-club-at-carlton-woods/ ;
+  https://www.where2golf.com/usa-texas/the-club-at-carlton-woods/
+- **Creekside Park** — opened October 19, 2007; the only Harris County
+  village; Tomball ISD; George Mitchell Nature Preserve (2007), Rob Fleming
+  Park; own RDRC (first Thursday, 3pm, Town Hall); village center 2015 —
+  SOURCES: https://www.visitthewoodlands.com/about/history/ ;
+  https://www.thewoodlandstownship-tx.gov/Community/My-area/Creekside-Park/Creekside-Park ;
+  https://en.wikipedia.org/wiki/The_Woodlands,_Texas ;
+  https://www.thewoodlands.com/community/history/
+- Community-wide: ~28,000 acres, ≥28% preserved open space/forest — SOURCES:
+  https://www.thewoodlands.com/community/history/ ;
+  https://www.visitthewoodlands.com/about/history/
+
+### Nearby incorporated cities (future city pages)
+
+- **Shenandoah** — own Community Development Dept (MyGovernmentOnline
+  permitting; 2021 I-Codes). Published roofing rules: 110-mph/3-sec-gust
+  6-nail pattern, ASTM D3161 Class F/G, earth-tone colors only, cut sheet
+  required, deck + shingle inspections, $1M GL insurance w/ City as
+  certificate holder — SOURCES: https://www.shenandoahtx.us/166/Community-Development ;
+  https://shenandoahtx.us/DocumentCenter/View/185/Residential-Roofing-Rules-and-Regulations-PDF
+- **Oak Ridge North** — own Building Department (permits@oakridgenorth.com,
+  832-381-3301); ~10-day plan review when drawings required — SOURCE:
+  https://www.oakridgenorth.com/departments/building_department/permits/index.php
+
+### Sheet 2 — UNVERIFIED (do not publish)
+
+1. Panther Creek 1976 vs 1977 — write "mid-1970s."
+2. Cochran's Crossing 1983 vs 1984 — use 1983 (two sources), don't state both.
+3. College Park 1995 vs 2000 — don't assert an explanation.
+4. Sterling Ridge 1999 vs 2001 — prefer 1999, flag.
+5. Township permit fees ("free base services", Jan 2025 changes) —
+   competitor-blog only; verify against Township fee schedule.
+6. Carlton Woods re-roof approval path (Association vs Township RDRC) —
+   unconfirmed; don't describe until confirmed.
+7. Total village count (8/9/10 depending on source) — enumerate, never count.
+8. Indian Springs "smallest village" / home counts — realtor-blog only.
+9. Whether unincorporated Montgomery County requires a permit for ordinary
+   re-roofs — county Development Permit is floodplain-oriented; confirm with
+   county (936-539-7836) before claiming "no permit needed."
+   (NOTE: the current the-woodlands permitHoaNote in service-areas.ts states
+   this — soften/verify against Sheet 3 when it lands.)
+10. Village home/resident counts — approximate, attribute or soften.
+11. Golf/neighborhood/price-tier details from realtor sites — attribute.
+12. Grogan's Mill: 1972 = development began; 1974 = opened. Don't conflate.
+
+---
+
+## Sheet 3 — Climate, storm history + roof-stress science
+
+### Major storm events (NWS/NOAA primary)
+
+- **May 16-17, 2024 derecho** — Houston metro; NWS surveys estimated ~100 mph
+  winds through parts of downtown Houston; NCEI Harris Co. entries: ~104 mph
+  estimated gust (Cypress), ~92 mph (Englewood), 71 mph measured (Houston);
+  1M+ customers lost power. **CAUTION: NCEI shows no severe-wind entries for
+  Montgomery County that day — describe as a Houston-metro event, never claim
+  100 mph in The Woodlands.** — SOURCES:
+  https://en.wikipedia.org/wiki/2024_Houston_derecho ;
+  https://www.ncei.noaa.gov/stormevents/ (Harris Co., 2024-05-16 query)
+- **Hurricane Beryl, July 8, 2024** — landfall near Matagorda, Cat 1, 80 mph;
+  measured gusts: Conroe 69 mph, IAH 83 mph, Hobby 84 mph; ~5-6 in rain in The
+  Woodlands area — SOURCE: https://www.weather.gov/hgx/beryl2024 (NWS HGX);
+  NHC report: https://www.nhc.noaa.gov/data/tcr/AL022024_Beryl.pdf
+- **Hurricane Harvey, Aug 2017** — storm totals: The Woodlands 25.66", Conroe
+  22.55", Spring 31.12"; Lake Conroe record release 70,000+ cfs — SOURCE:
+  https://www.weather.gov/hgx/hurricaneharvey
+- **Winter Storm Uri, Feb 2021** — Houston 13°F; ~9 days of continuous NWS
+  headlines; 3-6" snow toward Montgomery County; statewide 200+ deaths, ~10M
+  without power — SOURCES: https://www.weather.gov/hgx/2021ValentineStorm ;
+  https://www.ncei.noaa.gov/news/great-texas-freeze-february-2021
+- **Montgomery County hail (NCEI Storm Events, 2021-2026)**: 2021-04-15
+  Pinehurst 1.00" / Oak Ridge North 0.88"; 2021-06-02 New Caney 1.00";
+  2022-05-01 Tamina 1.00"; 2023-04-05 Willis 1.00"; 2023-05-23 1.00";
+  2023-09-24 Cut and Shoot 1.00"; 2024-05-02 Lake Conroe Dam 0.75";
+  2024-05-30 Montgomery 1.00" (×2); 2025-06-09 Shenandoah 1.00" + 1.25";
+  2026-03-15 Splendora 1.00" — SOURCE: NCEI Storm Events Database (Montgomery
+  Co. hail query). NWS: hail ≥3/4" classifies as damaging — SOURCE:
+  https://www.weather.gov/hgx/severe_weather_awareness_thunderstorm
+- **Jan 21, 2025 Gulf Coast snowstorm** — 1.2" at IAH (daily record), up to 6"
+  at La Porte — SOURCE:
+  https://www.houstonpublicmedia.org/articles/news/weather/2025/01/21/511534/houston-snowfall-totals-records-six-inches/
+- **May 26, 2025** — Montgomery Co. thunderstorm winds ~75-78 mph estimated
+  (Tamina/south county) — SOURCE: NCEI Storm Events (Montgomery Co. wind query)
+
+### Climate normals (NOAA 1991-2020)
+
+- Conroe (USW00053902): annual precip normal 48.49"; avg daily high 78.5°F —
+  SOURCE: NOAA NCEI U.S. Climate Normals (station USW00053902)
+- IAH (USW00012960): annual precip 49.77"; July/Aug normal highs 94.5/94.9°F —
+  SOURCE: NOAA NCEI U.S. Climate Normals (station USW00012960)
+- SE Texas: 50-60 thunderstorm days/yr, ~1/3 severe; downbursts 60-100+ mph —
+  SOURCE: https://www.weather.gov/hgx/severe_weather_awareness_thunderstorm
+- TX hurricane frequency: one per ~6 years per 50-mile coast segment; 0.8
+  TS/hurricane per year average — SOURCE:
+  https://www.wpc.ncep.noaa.gov/research/txhur.pdf (NWS Texas Hurricane History)
+- EPA UV Index scale: 8-10 "Very High", 11+ "Extreme" (keep local UV claims
+  qualitative) — SOURCE: https://www.epa.gov/sunsafety/uv-index-1
+
+### Roof-stress science
+
+- IBHS peer-reviewed (Frontiers in Materials, 2025): granules protect asphalt
+  from UV; once displaced, asphalt embrittles; repeated sub-severe hail
+  (0.7-1.0") + 2 yrs weathering ≈ decade-old performance — SOURCES:
+  https://www.frontiersin.org/journals/materials/articles/10.3389/fmats.2025.1603074/full ;
+  https://ibhs.org/hail/impact-testing-of-high-concentrations-of-small-hail/
+- ARMA: poorly-vented attic can hit **140°F on a 90°F day**; heat + moisture
+  deteriorates decking and shingles — SOURCE:
+  https://www.asphaltroofing.org/importance-proper-attic-ventilation-roofing-system/
+- Algae: Gloeocapsa magma most prevalent discoloration species; worst in Gulf
+  States; **never power-wash asphalt** — SOURCE:
+  https://www.asphaltroofing.org/algae-discoloration-of-roofs/ ; copper-granule
+  mechanism — SOURCE:
+  https://www.gaf.com/en-us/resources/roofing-technology/stainguard-algae-resistant-shingle-protection ;
+  UGA Extension: humid-area roofs often darken within 5-7 yrs; heaviest on
+  shaded/north slopes — SOURCE:
+  https://fieldreport.caes.uga.edu/news/spring-cleaning-start-at-top-clean-shingles/
+- Wind mechanics: seal strength is the key factor (IBHS); uplift → crease/tear
+  = wind damage (IIBEC); performance declines with age — SOURCES:
+  https://ibhs.org/wind/wind-uplift-of-asphalt-shingles/ ;
+  https://iibec.org/misconceptions-wind-damage-asphalt-composition-shingles/ ;
+  https://ibhs.org/hail/asphalt-shingle-durability/
+- Ratings: ASTM D3161 Class A=60/D=90/F=110 mph (2-hr test); ASTM D7158
+  Classes D/G/H (H highest); IRC Table R905.2.6.1 maps design wind speeds →
+  classes — SOURCES:
+  https://www.professionalroofing.net/Articles/The-wind-resistance-of-shingles--09-01-2018/4302 ;
+  https://up.codes/s/classification-of-asphalt-shingles
+- UL 2218: Class 1=1.25" ball … Class 4=2.00" from 12-20 ft; no mat crack to
+  pass; Class 4 highest — SOURCES:
+  https://ibhs.org/wp-content/uploads/member_docs/Relative-Impact-Resistance-of-Asphalt-Shingles_IBHS.pdf ;
+  https://www.asphaltmagazine.com/a-closer-look-at-roof-impact-testing/
+- Trees/debris: trim overhanging branches; keep gutters clear (NC State
+  Extension); shade keeps roofs damp → algae (UGA) — SOURCES:
+  https://content.ces.ncsu.edu/preventative-home-maintenance ;
+  https://fieldreport.caes.uga.edu/news/spring-cleaning-start-at-top-clean-shingles/
+
+### Sheet 3 — UNVERIFIED (do not publish)
+
+- Houston humidity "~90% 6am / 55% 3pm" (commercial-site only).
+- Houston numeric monthly UV values (commercial sites; keep qualitative + EPA).
+- Beryl 44 deaths / 2.7M outages (aggregation; quote NHC TCR directly).
+- Harvey 60.58" Nederland record (verify NHC TCR; verified: 56" Friendswood).
+- "Attics reach 130-150°F in TX summers" (blogs; use ARMA 140°F/90°F).
+- Any claim the 2024 derecho hit The Woodlands at 100 mph (not in NCEI).
+
+---
+
+## Sheet 4 — Permits, codes + Texas insurance law
+
+### Permits (primary sources)
+
+- **Unincorporated Montgomery County: NO permit for residential re-roofing.**
+  County FAQ verbatim: "Residential properties in Montgomery County do not
+  require a permit. However, it's always a good idea to check with your HOA or
+  POA…" — SOURCE:
+  https://www.mctx.org/departments/departments_d_-_f/environmental_health/permitting/faq.php
+- The Woodlands: the binding re-roof requirement is COVENANT approval (RDRC via
+  Township), not a county permit — see Sheet 2.
+- Unincorporated Harris County (Creekside Park): permits FAQ centers on
+  floodplain "development"; does not list residential re-roof permits.
+  **UNVERIFIED either way — call OCE Permits 713-274-3920 before publishing a
+  claim.** — SOURCE: https://oce.harriscountytx.gov/Services/Permits/FAQ
+- City of Houston (disambiguation only): re-roof permit IS required — SOURCE:
+  https://www.houstonpermittingcenter.org/hpwcode1140
+
+### Building codes
+
+- Tex. Local Gov't Code §233.153: new residential construction in
+  participating unincorporated counties must conform to the IRC (2008 version
+  or county-seat version); re-roofs are outside Subchapter F scope (§233.151);
+  county must have adopted a resolution (§233.152 — Montgomery adoption
+  UNVERIFIED) — SOURCE: https://statutes.capitol.texas.gov/Docs/LG/htm/LG.233.htm
+- TDI windstorm (TWIA) code + WPI-8 apply only to 14 coastal counties + Harris
+  Co. east of Hwy 146 — NOT Montgomery Co. or Creekside Park — SOURCE:
+  https://www.tdi.texas.gov/wind/twia-building-code.html
+- 2021 IRC citables: R903.2 flashing; R905.1.1 underlayment; R905.2.8.5 drip
+  edge (eaves+rakes, 2" overlap, ≤12" o.c.); R905.2.2 asphalt shingles need
+  slope ≥2:12; R806 attic ventilation 1/150 (reducible to 1/300); **R908.3
+  roof replacement = tear-off to deck required (no recover on water-soaked
+  decks or 2+ existing layers, R908.3.1.1)** — SOURCES:
+  https://up.codes/viewer/texas/irc-2021/chapter/9/roof-assemblies ;
+  https://codes.iccsafe.org/s/IRC2021P2/chapter-9-roof-assemblies/IRC2021P2-Pt03-Ch09-SecR908.3
+
+### Texas roofing/contractor law (primary statutes)
+
+- **No state roofing license in Texas.** RCAT: "Anyone can call themselves a
+  roofer in Texas…" RCAT voluntary license: 2+ yrs, $300k GL (residential),
+  exams, CEUs — SOURCE: https://www.rcat.net/licensing.html
+- **Deductible law**: Tex. Ins. Code §707.002 (HB 2102, eff. 2019-09-01) —
+  insured SHALL pay the deductible; Tex. Bus. & Com. Code §27.02 — contracts
+  $1,000+ paid from insurance proceeds need boldfaced notice; offense to pay/
+  waive/absorb/rebate a deductible. TDI: "up to a $2,000 fine and up to six
+  months in jail"; insurers may require proof of deductible payment before
+  releasing recoverable depreciation — SOURCES:
+  https://statutes.capitol.texas.gov/Docs/IN/htm/IN.707.htm ;
+  https://texas.public.law/statutes/tex._bus._and_com._code_section_27.02 ;
+  https://www.tdi.texas.gov/tips/state-law-cracks-down-on-roof-scams.html
+- **Roofers can't be public adjusters on the same property**: Tex. Ins. Code
+  §4102.163; report to AG 800-621-0508 / TDI 800-252-3439 — SOURCE:
+  https://www.tdi.texas.gov/consumer/storms/roofing-and-insurance-know-the-law.html
+- **Prompt payment (Tex. Ins. Code Ch. 542)**: §542.055 acknowledge/start
+  investigation within 15 days; §542.056 accept/reject within 15 business days
+  of receiving all items (45-day extension path); §542.057 pay within 5
+  business days of acceptance; §542.058 60-day delay damages; §542.059(b)
+  catastrophe extension +15 days; §542.060 interest + fees — SOURCE:
+  https://statutes.capitol.texas.gov/Docs/IN/htm/IN.542.htm
+- **Claim deadlines**: TDI — "Some policies have a one-year deadline"
+  (contractual, not universal); hard 1-year statutory deadline applies only to
+  TWIA coastal policies (§2210.573) — SOURCES:
+  https://www.tdi.texas.gov/pubs/consumer/cb025.html ;
+  https://texas.public.law/statutes/tex._ins._code_section_2210.573
+- TDI scam guidance (quotable): illegal for out-of-town contractors to take a
+  down payment before starting after a disaster; get 3 bids; don't sign
+  "for the value of insurance proceeds" contracts — SOURCES:
+  https://www.tdi.texas.gov/tips/contractor-scams.html ;
+  https://www.tdi.texas.gov/consumer/storms/know-signs-of-contractor-scam.html
+- **Class 4 insurance credits**: TDI — Class 4 "would receive the highest
+  premium credit" BUT discount amounts are set company-by-company (Form PC068
+  verification). **Never claim a mandated discount or "20-35% savings."** —
+  SOURCE: https://www.tdi.texas.gov/company/roofing-discounts.html
+
+### Insurance claim process (TDI consumer facts)
+
+- Replacement cost vs ACV; TDI example: $10,000 roof at ACV pays $8,500 at 5
+  yrs, $7,000 at 10, $4,000 at 20 (before deductible) — SOURCE:
+  https://www.tdi.texas.gov/tips/home-insurance-policies-replacement-cost-or-actual-cash-value.html
+- Two-part payment: first check ≈ ACV; remainder (recoverable depreciation)
+  paid after proof of repairs — SOURCE:
+  https://www.tdi.texas.gov/consumer/storms/home-damaged-faq.html
+- Appraisal clause: each side hires an appraiser; the two choose an umpire —
+  SOURCE: https://www.tdi.texas.gov/pubs/consumer/cb025.html
+- Caution before cashing checks: some companies consider a signed check final
+  settlement — SOURCE: https://www.tdi.texas.gov/consumer/storms/home-damaged-faq.html
+
+### Sheet 4 — UNVERIFIED (do not publish)
+
+1. Harris Co. unincorporated re-roof permit (call OCE 713-274-3920).
+2. Montgomery Co. adoption of LGC 233 Subchapter F resolution.
+3. "Supplement process" as a TDI-defined term (industry practice only —
+   describe as our practice, not law).
+4. Mandated Class 4 discounts / "20-35% savings."
+5. Universal one-year storm-claim deadline (contractual; TWIA-only statute).
+6. Harris County's adopted IRC edition (scanned PDF unverifiable).
+7. Conroe "IRC 2012" currency (confirm before relying on §233.153 hook).
+
+### ⚠ Corrections needed to EXISTING site copy (found during research)
+
+- services.ts storm page cites "§ 27.02" for a 3-day right to rescind —
+  §27.02 is the DEDUCTIBLE statute. The federal FTC Cooling-Off Rule /
+  Tex. Bus. & Com. Code Ch. 601 covers 3-day cancellation for door-to-door
+  sales. Fix the citation or drop the specific cite.
+- services.ts storm page cites "Tex. Ins. Code § 701" for public adjusters —
+  correct chapter is §4102 (and §4102.163 for the roofer prohibition).

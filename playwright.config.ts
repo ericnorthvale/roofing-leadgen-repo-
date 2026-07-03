@@ -14,6 +14,11 @@ export default defineConfig({
     baseURL: BASE_URL,
     trace: "on-first-retry",
     video: "retain-on-failure",
+    // Escape hatch for sandboxes with a pre-installed Chromium at a fixed path:
+    // PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium pnpm test:e2e
+    launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
+      ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE }
+      : {},
   },
   projects: [
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },

@@ -1,6 +1,11 @@
 ---
 import { getCollection, render } from "astro:content";
 import BlogLayout from "@layouts/BlogLayout.astro";
+import { SERVICES, SERVICE_TAGS } from "~/lib/services";
+import { SERVICE_AREAS } from "~/lib/service-areas";
+import { SERVICE_CLUSTERS, cityVersionsOfService } from "~/lib/internal-links";
+import type { LinkItem } from "~/lib/internal-links";
+import type { ServiceAreaSlug } from "~/lib/service-areas";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -11,6 +16,33 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+
+// Related pages from the post's taxonomy: the services whose clusters include
+// this post's cluster (city-specific version preferred), plus its related city.
+const related: LinkItem[] = [];
+for (const tag of SERVICE_TAGS) {
+  if (SERVICE_CLUSTERS[tag].includes(post.data.cluster)) {
+    const cityVersion = cityVersionsOfService(tag)[0];
+    const svc = SERVICES[tag];
+    related.push(
+      cityVersion ?? {
+        href: `/services/${svc.slug}`,
+        label: svc.title,
+        description: svc.summary,
+      },
+    );
+  }
+}
+if (post.data.relatedCity) {
+  const area = SERVICE_AREAS[post.data.relatedCity as ServiceAreaSlug];
+  if (area) {
+    related.push({
+      href: `/${area.slug}`,
+      label: `Roofing in ${area.name}`,
+      description: area.intro,
+    });
+  }
+}
 ---
 
 <BlogLayout
@@ -25,6 +57,7 @@ const { Content } = await render(post);
   pubDate={post.data.pubDate}
   updatedDate={post.data.updatedDate}
   author={post.data.author}
+  related={related.slice(0, 4)}
 >
   <Content />
 </BlogLayout>

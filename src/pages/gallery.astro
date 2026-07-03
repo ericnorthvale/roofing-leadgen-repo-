@@ -1,0 +1,50 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import PhotoGallery from "@components/PhotoGallery.astro";
+import LeadForm from "@components/LeadForm.astro";
+
+// Quality gate: stays noindex until REAL Northvale project photos exist.
+// Presenting stock imagery as our work would violate FTC rules (Hard Rule #2).
+const hasRealPhotos = false;
+---
+
+<BaseLayout
+  seo={{
+    title: "Project Gallery — Our Work",
+    description:
+      "Completed roof replacements and repairs by Northvale Roofing across The Woodlands and NW Houston — documented start to finish.",
+    pathname: "/gallery",
+    noindex: !hasRealPhotos,
+  }}
+>
+  {
+    !hasRealPhotos && (
+      <div class="border-b-2 border-[color:var(--color-gold-500)] bg-[color:var(--color-gold-50)] px-4 py-3 text-sm text-[color:var(--color-ink-800)]">
+        <div class="mx-auto max-w-6xl">
+          <strong>NEEDS REAL DATA — draft, not indexed.</strong> This page publishes when real
+          Northvale project photos land (CompanyCam → owner review). Stock imagery must never be
+          presented as our work.
+        </div>
+      </div>
+    )
+  }
+
+  <section class="mx-auto max-w-6xl px-4 py-10">
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Gallery" }]} />
+    <h1 class="mt-6 text-4xl md:text-5xl">Our work, documented</h1>
+    <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-800)]">
+      Every Northvale job produces a forty-photo record — this gallery fills with those photos, from
+      our own local projects, as they complete. Never stock imagery.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 py-6">
+    {/* Fills with real job photos (owner-supplied / CompanyCam) — renders nothing until then. */}
+    <PhotoGallery photos={[]} />
+  </section>
+
+  <section class="mx-auto max-w-xl px-4 py-12">
+    <LeadForm source="gallery-page" />
+  </section>
+</BaseLayout>
