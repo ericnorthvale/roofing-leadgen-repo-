@@ -65,6 +65,35 @@ plus the conversion/UX fixes that didn't depend on photography.
   authorization so the site could be viewed at the public production Vercel URL
   (previews are SSO-gated). Normal rule remains: branch → PR → review.
 
+## Admin panel (PRs #5–#12, merged to `main`)
+
+Self-service editing via **Keystatic** at `/keystatic`, behind an in-app Google
+sign-in (OAuth → signed session cookie, `@northvaleroofing.com` allowlist).
+Owners edit Business Info, Photos, Reviews, and Blog; city/service SEO pages stay
+Claude-authored. Hardened for Vercel production across these PRs (auth-callback
+error surfacing, `no-store` on auth redirects, `/api` + `/keystatic` excluded from
+ISR, `redirect_uri` built from the real host). Owner setup:
+`docs/setup-admin-panel.md`; day-to-day usage: `docs/using-the-admin-panel.md`.
+
+## CRM lead pipeline hardened (PR #17, merged to `main`)
+
+Form (`/api/lead`) + tracked calls (`/api/callrail-webhook`) → HighLevel contact
+**upsert** (de-dupes by phone/email) + pipeline **opportunity** (gated on
+`HIGHLEVEL_PIPELINE_ID` / `_STAGE_ID`) + instant SMS/email alert; form leads also
+fire a server-side Meta CAPI `Lead` event. One canonical `lead_source`
+(`src/lib/lead-source.ts`) travels across systems. Every integration is
+**env-gated + best-effort** — missing keys = clean skip, a provider failure never
+blocks a lead — so the pipeline is dormant until keys land in Vercel. Real
+business phone `(713) 449-7661` is set, which satisfies the NAP index gate (a
+street address is a trust/schema nice-to-have, not an index blocker). Owner setup:
+`docs/setup-highlevel.md`.
+
+## Partner overview doc (PR #18, merged to `main`)
+
+`docs/website-partner-overview.md` — an email-ready overview for sharing the
+site's current status, the self-serve editing workflow, and the roadmap with a
+business partner.
+
 ### Next phase
 
 See `TASKS_FOR_ERIC.md` for the ordered list of open asks.
