@@ -12,6 +12,7 @@ Run through before flipping northvaleroofing.com public. Each row either ships o
 ## Site
 
 - [ ] `PUBLIC_SITE_URL` set in Vercel to `https://northvaleroofing.com`.
+- [ ] Vercel primary domain set to the apex `northvaleroofing.com` with `www` 301-redirecting to it; both OAuth callbacks (Google + Keystatic GitHub App) registered on the apex host.
 - [ ] All eight service-area (city) pages render — complete ones indexable, drafts `noindex` + NEEDS-DATA per the quality gate.
 - [ ] All five service pages render with unique content.
 - [ ] `/blog` has at least 3 published posts (not drafts).

@@ -21,11 +21,17 @@ Format: date · decision · why · who.
      Fixed with `isr.exclude: [/^\/api\//, /^\/keystatic/]`.
   3. **Auth redirects must be `no-store`** (`noStoreRedirect`) so the edge never caches
      a per-user redirect.
-- **Canonical domain is `www.northvaleroofing.com` (the host Vercel serves).** This
-  bit us repeatedly: every OAuth callback (Google AND the Keystatic GitHub App) must
-  be registered for the **exact serving host**, i.e. the `www` form. OPEN CLEANUP:
-  pick one canonical (recommend `https://www.northvaleroofing.com`), redirect the
-  other, and set `PUBLIC_SITE_URL` to match so SEO + callbacks stay consistent. · Claude · 2026-06-28
+- **Canonical domain RESOLVED to the apex `https://northvaleroofing.com`; `www` 301-redirects
+  to it.** `PUBLIC_SITE_URL=https://northvaleroofing.com` (already the codebase default across
+  `astro.config.mjs`, every layout, `brand.ts`, and `robots.txt`). Every OAuth callback (Google
+  AND the Keystatic GitHub App) must be registered for the **exact serving host** — now the
+  **apex** form, e.g. `https://northvaleroofing.com/api/auth/callback`. This supersedes the
+  2026-06-28 note that recommended the `www` form. Owner actions: set the `xvp3` project's primary
+  domain to apex with `www` as a 301 redirect, and re-register both OAuth callbacks on the apex
+  host (if they were on `www`, sign-in throws `redirect_uri_mismatch` until updated). · Owner + Claude · 2026-07-03
+- **(Superseded 2026-07-03 by the entry above.)** Vercel initially served
+  `www.northvaleroofing.com`, so OAuth callbacks were first registered for the `www` form and
+  choosing one canonical was left as an open cleanup. Now resolved in favor of the apex. · Claude · 2026-06-28
 - **Production runs on the `xvp3` Vercel project; `northvaleroofing.com` moved onto it.**
   There were two Vercel projects for this repo — `roofing-leadgen-repo-xvp3` (correct,
   connected to `ericnorthvale/roofing-leadgen-repo-`) and an older duplicate (tied to a
