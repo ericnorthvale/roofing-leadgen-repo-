@@ -21,6 +21,16 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+
+      # Fail fast with a clear reason while the e2e script is unimplemented,
+      # instead of a confusing "module not found" (review item #14).
+      - name: Guard — e2e script not implemented yet
+        run: |
+          if [ ! -f src/scripts/e2e-lead-test.ts ]; then
+            echo "::error::src/scripts/e2e-lead-test.ts is not implemented yet. See src/scripts/README.md for what unblocks it (script + deployed site + HighLevel secrets)."
+            exit 1
+          fi
+
       - uses: pnpm/action-setup@v4
         with: { version: "9.15.0" }
       - uses: actions/setup-node@v4

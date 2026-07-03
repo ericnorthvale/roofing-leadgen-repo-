@@ -35,6 +35,20 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+
+      # Fail fast with a clear reason while the pipeline scripts are unimplemented,
+      # instead of a confusing mid-pipeline "module not found" (review item #14).
+      - name: Guard — pipeline scripts not implemented yet
+        run: |
+          missing=""
+          for f in src/scripts/keyword-brief-generator.ts src/scripts/content-draft.ts; do
+            [ -f "$f" ] || missing="$missing $f"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Content pipeline is not implemented yet — missing:$missing. See src/scripts/README.md for what unblocks it (scripts + ANTHROPIC_API_KEY secret)."
+            exit 1
+          fi
+
       - uses: pnpm/action-setup@v4
         with: { version: "9.15.0" }
       - uses: actions/setup-node@v4

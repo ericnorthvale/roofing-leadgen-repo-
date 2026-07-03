@@ -112,6 +112,13 @@ export default defineConfig({
       GOOGLE_PLACE_ID: envField.string({ context: "server", access: "secret", optional: true }),
       COMPANYCAM_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
       META_CAPI_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),
+      // Lead-persistence safety net — auto-injected by Vercel when a private
+      // Blob store is connected to the project. See src/lib/lead-store.ts.
+      BLOB_READ_WRITE_TOKEN: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       // Lead alerts (SMS via Twilio + email via Resend). Day-one safety net — see docs/setup-leads.md.
       TWILIO_ACCOUNT_SID: envField.string({ context: "server", access: "secret", optional: true }),
       TWILIO_AUTH_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),

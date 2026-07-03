@@ -4,12 +4,6 @@ on:
   schedule:
     - cron: "0 11 * * 1" # Mondays 06:00 CT (UTC 11:00)
   workflow_dispatch:
-    inputs:
-      days_back:
-        description: "Days to audit (default 7)"
-        type: string
-        required: false
-        default: "7"
 
 concurrency:
   group: weekly-compliance
@@ -17,7 +11,7 @@ concurrency:
 
 jobs:
   audit:
-    name: TCPA / quiet-hours / consent audit
+    name: Banned-phrase scan of the built site
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -30,13 +24,21 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
 
-      - name: Run compliance audit
-        id: audit
+      - name: Build the site
         env:
-          HIGHLEVEL_API_KEY: ${{ secrets.HIGHLEVEL_API_KEY }}
-          HIGHLEVEL_LOCATION_ID: ${{ secrets.HIGHLEVEL_LOCATION_ID }}
-          AUDIT_DAYS: ${{ github.event.inputs.days_back || '7' }}
-        run: pnpm tsx src/scripts/compliance-audit.ts | tee audit-report.json
+          PUBLIC_SITE_URL: https://northvaleroofing.com
+        run: pnpm build
+
+      # Greps dist/ for banned phrases (deductible-waiver offers, "hail-proof",
+      # uncited superlatives, fake scarcity) — see src/lib/compliance-rules.ts.
+      # A future CRM-side TCPA/quiet-hours audit needs HighLevel keys and is
+      # tracked in src/scripts/README.md.
+      - name: Run compliance scan
+        id: audit
+        # Explicit `shell: bash` turns on pipefail, so the scan's exit code
+        # survives the pipe into tee (the default runner shell drops it).
+        shell: bash
+        run: pnpm tsx src/scripts/compliance-scan.ts | tee audit-report.json
 
       - uses: actions/upload-artifact@v4
         if: always()

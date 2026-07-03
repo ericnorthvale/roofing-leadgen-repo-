@@ -49,7 +49,7 @@ Website + lead-gen + content engine for a premium residential roofing business s
 │   ├── lib/                  # brand, service-areas, personas, phone, utm, seo, legal, analytics, highlevel, callrail
 │   ├── middleware.ts         # UTM + geo capture
 │   ├── pages/                # home, /services/*, /[area], /for-[persona], /legal/*, /blog, /api/*
-│   ├── scripts/              # content-pipeline + reviews-sync + compliance-scan (stubbed)
+│   ├── scripts/              # compliance-scan (live); content-pipeline/reviews-sync planned (see its README)
 │   └── styles/globals.css    # Tailwind + brand tokens
 ├── tests/                    # unit (vitest) + e2e (playwright)
 ├── astro.config.mjs

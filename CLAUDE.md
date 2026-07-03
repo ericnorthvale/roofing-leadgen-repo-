@@ -97,13 +97,20 @@ certs, fake address/GBP. When in doubt, flag it for the owner — don't invent.
 - **Pattern:** every third-party integration is **env-gated + best-effort** —
   it never throws, missing keys = a clean skip, and a provider failure never
   blocks a lead. `src/lib/notify.ts` is the reference; `highlevel.ts`,
-  `meta-capi.ts`, and the CallRail webhook follow it. Use native `fetch`; keep
-  secrets in the `astro.config.mjs` env schema (server/secret).
+  `meta-capi.ts`, `lead-store.ts`, and the CallRail webhook follow it. Use
+  native `fetch`; keep secrets in the `astro.config.mjs` env schema
+  (server/secret). One approved exception to native-fetch: `lead-store.ts`
+  uses the official `@vercel/blob` SDK (the private-store REST surface is
+  undocumented; a silently drifting safety net would defeat its purpose).
 - **Flow:** form (`/api/lead`) + tracked calls (`/api/callrail-webhook`) →
-  HighLevel contact **upsert** (+ pipeline opportunity when
-  `HIGHLEVEL_PIPELINE_ID`/`_STAGE_ID` set) + instant SMS/email alert; form leads
-  also send a server-side Meta `Lead` conversion. One canonical `lead_source`
-  (`src/lib/lead-source.ts`) travels across every system.
+  durable lead record in a **private Vercel Blob store** first
+  (`lead-store.ts`, gated on `BLOB_READ_WRITE_TOKEN` — the never-lose-a-lead
+  net) → HighLevel contact **upsert** (+ pipeline opportunity when
+  `HIGHLEVEL_PIPELINE_ID`/`_STAGE_ID` set) + instant SMS/email alert; both
+  channels also send a server-side Meta `Lead` conversion (forms as
+  `website`, calls as `phone_call` with the CallRail call id as dedup event
+  id). One canonical `lead_source` (`src/lib/lead-source.ts`) travels across
+  every system.
 - **Caveat:** HighLevel v2 payload shapes in `highlevel.ts` were built to the
   docs — confirm against the live account once the real token exists.
 
