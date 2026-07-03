@@ -12,7 +12,7 @@ status: "published"
 Short answer: yes — wind and hail are standard covered perils on typical Texas
 homeowners policies, and the Texas Department of Insurance publishes an entire
 consumer playbook around exactly this kind of claim. The longer answer is where
-homeowners get burned: *how much* your policy pays, *when* it pays, and what a
+homeowners get burned: _how much_ your policy pays, _when_ it pays, and what a
 contractor is legally allowed (and not allowed) to do with your deductible.
 
 Here's the whole picture, with the statutes and TDI guidance to back it up.
@@ -43,7 +43,7 @@ matters more than almost anything else in it.
 
 - **Replacement cost** pays what it takes to replace the roof with materials of
   like kind and quality.
-- **ACV** pays replacement cost *minus depreciation* — the roof's age is
+- **ACV** pays replacement cost _minus depreciation_ — the roof's age is
   subtracted from the payout.
 
 TDI's own example makes it concrete: on a $10,000 roof, an ACV policy pays
@@ -51,7 +51,7 @@ about **$8,500 if the roof is 5 years old, $7,000 at 10 years, and $4,000 at
 20 years** — all before your deductible comes out
 ([TDI, replacement cost or actual cash value](https://www.tdi.texas.gov/tips/home-insurance-policies-replacement-cost-or-actual-cash-value.html)).
 If you have a 20-year-old roof on an ACV policy, the math on a claim can be
-brutal. Pull your declarations page and find out which one you have *before*
+brutal. Pull your declarations page and find out which one you have _before_
 storm season — and check whether wind/hail carries its own separate deductible.
 
 ## The two-check system (and recoverable depreciation)
@@ -100,11 +100,11 @@ clock:
   fees.
 
 And your own deadline to file? TDI says "some policies have a one-year
-deadline" — that's a *contractual* term in some policies, not a universal Texas
+deadline" — that's a _contractual_ term in some policies, not a universal Texas
 rule ([TDI consumer bulletin](https://www.tdi.texas.gov/pubs/consumer/cb025.html)).
 Check your policy, and don't sit on obvious damage either way.
 
-## When you should *not* file
+## When you should _not_ file
 
 Not every hailstorm is a claim. If an honest inspection finds cosmetic scuffs
 or normal wear rather than functional damage, filing can be worse than not
@@ -117,7 +117,7 @@ documented, slope-by-slope inspection looks like.
 
 ## If you and your carrier disagree: the appraisal clause
 
-When the dispute is about the *amount* of loss (not whether it's covered),
+When the dispute is about the _amount_ of loss (not whether it's covered),
 most policies include an appraisal clause. Per TDI, each side hires its own
 appraiser, and the two appraisers choose an umpire to resolve the difference
 ([TDI](https://www.tdi.texas.gov/pubs/consumer/cb025.html)). It's a built-in

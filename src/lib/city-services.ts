@@ -229,12 +229,24 @@ export const CITY_SERVICES: Record<string, CityService> = {
         heading: "What a Woodlands inspection covers",
         body: "Roofs here carry this community's specific stresses — five decades of village build-out, heavy tree canopy, Gulf Coast heat and humidity, and a real storm history. Our forty-photo inspection is built around those realities:",
         bullets: [
-          { text: "Every slope at roof level — north-facing and shaded slopes get extra attention, since they hold moisture and grow the algae streaking common to the Gulf States." },
-          { text: "Every penetration and detail: pipe boots (the early failure on 2000s-era homes), flashing, valleys, ridge caps and vents." },
-          { text: "Storm evidence: hail strikes on soft metals, granule loss patterns, wind creasing and lifted seals — checked against what actually moved through Montgomery County, which NOAA's database logs in detail." },
-          { text: "Debris load: valley and gutter buildup from the tree canopy the Township covenants require owners to keep off roofs." },
-          { text: "Attic where accessible: decking stains, moisture, and whether ventilation is anywhere near the 1-in-300 guideline — an under-vented attic can hit 140°F on a 90°F day per ARMA, quietly cooking shingles from below." },
-          { text: "A plain-English written summary with estimated remaining life, delivered within 24 hours." },
+          {
+            text: "Every slope at roof level — north-facing and shaded slopes get extra attention, since they hold moisture and grow the algae streaking common to the Gulf States.",
+          },
+          {
+            text: "Every penetration and detail: pipe boots (the early failure on 2000s-era homes), flashing, valleys, ridge caps and vents.",
+          },
+          {
+            text: "Storm evidence: hail strikes on soft metals, granule loss patterns, wind creasing and lifted seals — checked against what actually moved through Montgomery County, which NOAA's database logs in detail.",
+          },
+          {
+            text: "Debris load: valley and gutter buildup from the tree canopy the Township covenants require owners to keep off roofs.",
+          },
+          {
+            text: "Attic where accessible: decking stains, moisture, and whether ventilation is anywhere near the 1-in-300 guideline — an under-vented attic can hit 140°F on a 90°F day per ARMA, quietly cooking shingles from below.",
+          },
+          {
+            text: "A plain-English written summary with estimated remaining life, delivered within 24 hours.",
+          },
         ],
       },
       {
@@ -302,10 +314,18 @@ export const CITY_SERVICES: Record<string, CityService> = {
       {
         heading: "What hail and wind damage actually look like",
         bullets: [
-          { text: "Hail: fresh dents in gutters, downspouts and gutter aprons; dings on A/C condenser fins (a useful size proxy — photograph them); dark 'bruises' on shingles where granules crushed into the mat." },
-          { text: "Wind: creased or folded shingle tabs, lifted ridge caps, torn shingles at roof edges and corners where uplift concentrates. IBHS research is blunt — the sealant bond is what fails, and it fails easier as roofs age." },
-          { text: "The compounding problem: IBHS testing shows repeated sub-severe hail (0.7–1.0 inch) plus normal weathering makes shingles behave like decade-older material. A roof can be storm-weakened without one dramatic 'totaled' moment." },
-          { text: "Falling limbs: puncture and crush damage — common on preserve-edge and heavily-treed lots in villages like Indian Springs, Grogan's Mill and Creekside Park." },
+          {
+            text: "Hail: fresh dents in gutters, downspouts and gutter aprons; dings on A/C condenser fins (a useful size proxy — photograph them); dark 'bruises' on shingles where granules crushed into the mat.",
+          },
+          {
+            text: "Wind: creased or folded shingle tabs, lifted ridge caps, torn shingles at roof edges and corners where uplift concentrates. IBHS research is blunt — the sealant bond is what fails, and it fails easier as roofs age.",
+          },
+          {
+            text: "The compounding problem: IBHS testing shows repeated sub-severe hail (0.7–1.0 inch) plus normal weathering makes shingles behave like decade-older material. A roof can be storm-weakened without one dramatic 'totaled' moment.",
+          },
+          {
+            text: "Falling limbs: puncture and crush damage — common on preserve-edge and heavily-treed lots in villages like Indian Springs, Grogan's Mill and Creekside Park.",
+          },
         ],
       },
       {
@@ -313,14 +333,18 @@ export const CITY_SERVICES: Record<string, CityService> = {
         ordered: true,
         bullets: [
           { text: "Stop active water with emergency tarping (we do this first, questions later)." },
-          { text: "Get a documented inspection BEFORE filing — a denied claim helps no one. We tell you plainly if the damage doesn't justify a claim." },
+          {
+            text: "Get a documented inspection BEFORE filing — a denied claim helps no one. We tell you plainly if the damage doesn't justify a claim.",
+          },
           {
             html: "Know the law before anyone knocks: Texas made it illegal for contractors to pay, waive, or absorb your deductible (Tex. Ins. Code §707.002; Bus. & Com. Code §27.02) — TDI warns violators face fines and jail, and your insurer can require proof you paid it before releasing full claim funds. Anyone offering to 'eat the deductible' is proposing fraud with your name on it. See <a href=\"/services/insurance-claims\">our insurance claims guide</a>.",
           },
           {
             text: "Be wary of storm chasers: TDI's own guidance says it's against the law for out-of-town contractors to demand a down payment before starting after a disaster, recommends getting multiple bids, and warns against contracts that assign work 'for the value of insurance proceeds.'",
           },
-          { text: "If you file: Texas prompt-payment law (Ins. Code Ch. 542) requires your insurer to acknowledge the claim within 15 days, decide within 15 business days of having what it needs, and pay within 5 business days of accepting — with extensions in declared catastrophes." },
+          {
+            text: "If you file: Texas prompt-payment law (Ins. Code Ch. 542) requires your insurer to acknowledge the claim within 15 days, decide within 15 business days of having what it needs, and pay within 5 business days of accepting — with extensions in declared catastrophes.",
+          },
         ],
       },
       {
@@ -373,11 +397,19 @@ export const CITY_SERVICES: Record<string, CityService> = {
         body: "Texas prompt-payment law (Insurance Code Chapter 542) puts your claim on a clock:",
         ordered: true,
         bullets: [
-          { text: "Within 15 days of your notice: acknowledge the claim, start investigating, and request what they need (§542.055)." },
-          { text: "Within 15 business days of receiving everything requested: accept or reject in writing (§542.056) — extendable once to 45 days with written reasons." },
+          {
+            text: "Within 15 days of your notice: acknowledge the claim, start investigating, and request what they need (§542.055).",
+          },
+          {
+            text: "Within 15 business days of receiving everything requested: accept or reject in writing (§542.056) — extendable once to 45 days with written reasons.",
+          },
           { text: "Within 5 business days of accepting: pay (§542.057)." },
-          { text: "Delay past 60 days after they have everything: statutory damages — interest plus attorney's fees (§542.058, §542.060)." },
-          { text: "Declared weather catastrophe: all deadlines extend by 15 days (§542.059) — relevant after the kind of regional events this area actually sees." },
+          {
+            text: "Delay past 60 days after they have everything: statutory damages — interest plus attorney's fees (§542.058, §542.060).",
+          },
+          {
+            text: "Declared weather catastrophe: all deadlines extend by 15 days (§542.059) — relevant after the kind of regional events this area actually sees.",
+          },
         ],
       },
       {

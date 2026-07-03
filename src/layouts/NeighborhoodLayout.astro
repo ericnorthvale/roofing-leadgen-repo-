@@ -91,7 +91,11 @@ const relatedServices = spokes.length > 0 ? spokes : serviceLinks();
             ))}
           </ul>
         ) : (
-          <ul>{area.neighborhoods.map((n) => <li>{n}</li>)}</ul>
+          <ul>
+            {area.neighborhoods.map((n) => (
+              <li>{n}</li>
+            ))}
+          </ul>
         )
       }
 

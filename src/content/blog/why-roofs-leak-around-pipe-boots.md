@@ -48,8 +48,8 @@ exception** — the shingles were never the problem.
 Pipe-boot leaks are sneaky in a specific way:
 
 - **The water follows the pipe.** Rain slips through the split collar and runs
-  down the vent pipe into the attic, so the stain appears on a ceiling *near a
-  bathroom* — often not directly under the visible damage on the roof.
+  down the vent pipe into the attic, so the stain appears on a ceiling _near a
+  bathroom_ — often not directly under the visible damage on the roof.
 - **It's intermittent.** A hairline split leaks in wind-driven rain and stays
   dry in a drizzle, so the stain grows in steps and the "we couldn't find
   anything" cycle begins.
@@ -60,7 +60,7 @@ Meanwhile the attic side collects the real bill: wet insulation and, over
 time, decking damage around the penetration. Small leak, long runtime, big
 invoice.
 
-## Why this is *the* first roof problem in newer Woodlands villages
+## Why this is _the_ first roof problem in newer Woodlands villages
 
 Do the arithmetic on the newer villages. [Creekside Park](/the-woodlands/creekside-park)
 opened October 19, 2007; Sterling Ridge opened in 1999. A Creekside home built

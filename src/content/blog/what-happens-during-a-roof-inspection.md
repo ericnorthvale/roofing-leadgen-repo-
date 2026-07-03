@@ -48,7 +48,7 @@ or a lifted piece of step flashing, not the shingles at all.
   repeated sub-severe hail (0.7–1.0") plus two years of weathering left
   shingles performing like decade-old material. We look for granule
   accumulation in gutters and bare or shiny spots on the mat.
-- **Seal integrity.** IBHS's wind research identifies seal strength as *the*
+- **Seal integrity.** IBHS's wind research identifies seal strength as _the_
   key factor in wind performance, and it declines as shingles age. We check for
   unsealed tabs by hand along edges and ridges.
 - **Wind evidence.** Per IIBEC, uplift that creases or tears a shingle is wind
@@ -122,8 +122,8 @@ with them. Details on the
 
 If an inspector is on and off your roof in ten minutes with no photos, no
 attic check, and no written report — you didn't get an inspection, you got a
-sales call. Ask any roofer three questions first: *How many photos will I get?
-Do you check the attic? Is the report written?*
+sales call. Ask any roofer three questions first: _How many photos will I get?
+Do you check the attic? Is the report written?_
 
 Ours: forty, always, and yes — within 24 hours.
 [Book a free inspection](/contact) and see the difference on paper.

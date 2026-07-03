@@ -58,9 +58,7 @@ const relatedPosts = relatedPostLinks(posts, { serviceTag: service.serviceTag })
 
 const toc = [
   ...service.sections.map((s) => ({ id: headingId(s.heading), label: s.heading })),
-  ...(service.faqs && service.faqs.length > 0
-    ? [{ id: "faq", label: "Common questions" }]
-    : []),
+  ...(service.faqs && service.faqs.length > 0 ? [{ id: "faq", label: "Common questions" }] : []),
 ];
 ---
 

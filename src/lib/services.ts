@@ -351,7 +351,9 @@ export const SERVICES: Record<ServiceTag, Service> = {
       {
         heading: "What we don't do on an inspection call",
         bullets: [
-          { text: "We don't give a verbal quote and leave. The findings and any estimate are written." },
+          {
+            text: "We don't give a verbal quote and leave. The findings and any estimate are written.",
+          },
           {
             text: "We don't pressure a contract. If you need a repair or replacement, we'll follow up — you can ignore us forever.",
           },
@@ -434,7 +436,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
         heading: "Things we won't touch",
         bullets: [
           {
-            text: "Deductible games. Texas law (Ins. Code §707.002; Bus. & Com. Code §27.02) requires you to pay your deductible and makes it an offense for a contractor to pay, waive, or absorb it — TDI warns of fines and jail. Anyone offering to \"eat it\" is proposing fraud with your name attached.",
+            text: 'Deductible games. Texas law (Ins. Code §707.002; Bus. & Com. Code §27.02) requires you to pay your deductible and makes it an offense for a contractor to pay, waive, or absorb it — TDI warns of fines and jail. Anyone offering to "eat it" is proposing fraud with your name attached.',
           },
           {
             text: "Pressure signings at the door. TDI's own storm guidance: it's against the law for out-of-town contractors to demand a down payment before starting after a disaster, get multiple bids, and never sign a contract that assigns work \"for the value of insurance proceeds.\" We leave written estimates and let you decide on your schedule.",

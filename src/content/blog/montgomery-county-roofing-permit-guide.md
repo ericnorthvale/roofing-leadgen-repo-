@@ -26,7 +26,7 @@ residential re-roofs. The county's own permitting FAQ says it verbatim:
 it's always a good idea to check with your HOA or POA…"
 ([Montgomery County Environmental Health permitting FAQ](https://www.mctx.org/departments/departments_d_-_f/environmental_health/permitting/faq.php)).
 
-That second sentence is doing real work. No *county* permit doesn't mean no
+That second sentence is doing real work. No _county_ permit doesn't mean no
 approval — most subdivisions out here have an HOA or POA with its own
 architectural rules, and the biggest "HOA" of all is next.
 
@@ -103,7 +103,7 @@ If you're inside city limits, start there before scheduling a tear-off.
 ## Creekside Park: the Harris County question
 
 Creekside Park is the one Woodlands village in Harris County, and here we'll
-tell you what we *don't* know: Harris County's unincorporated permits FAQ
+tell you what we _don't_ know: Harris County's unincorporated permits FAQ
 centers on floodplain "development" and doesn't list residential re-roof
 permits either way. Rather than guess, call the Harris County Office of the
 County Engineer permits line at 713-274-3920 for your address. What is certain:
@@ -138,14 +138,14 @@ tries to sell you a "required windstorm certificate" here, that's a tell.
 
 ## The quick reference
 
-| Where you live | What you need |
-|---|---|
-| Unincorporated Montgomery Co. | No county permit; check your HOA/POA |
-| The Woodlands (any village) | Township RDRC covenant approval, Civic Access Portal |
-| Grogan's Forest Sec. 5–7 | Roof application to City of Shenandoah |
-| Shenandoah | Full city permit + inspections |
-| Oak Ridge North | City Building Department permit |
-| Creekside Park (Harris Co.) | RDRC approval; confirm county status at 713-274-3920 |
+| Where you live                | What you need                                        |
+| ----------------------------- | ---------------------------------------------------- |
+| Unincorporated Montgomery Co. | No county permit; check your HOA/POA                 |
+| The Woodlands (any village)   | Township RDRC covenant approval, Civic Access Portal |
+| Grogan's Forest Sec. 5–7      | Roof application to City of Shenandoah               |
+| Shenandoah                    | Full city permit + inspections                       |
+| Oak Ridge North               | City Building Department permit                      |
+| Creekside Park (Harris Co.)   | RDRC approval; confirm county status at 713-274-3920 |
 
 We handle the paperwork on every Northvale job — RDRC application, Shenandoah
 cut sheets, inspection scheduling, all of it. If you'd rather not learn four

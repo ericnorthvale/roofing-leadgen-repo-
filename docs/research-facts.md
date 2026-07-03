@@ -56,13 +56,13 @@ Compiled: July 3, 2026 (re-verify cost figures before major republishing).
 
 SOURCE: https://www.gaf.com/en-us/resources/warranties/residential
 
-| Warranty | Contractor required | Workmanship coverage |
-|---|---|---|
-| Shingle & Accessory Limited | Any contractor | None |
-| Roofing System Limited | Any contractor (≥3 qualifying accessories) | None |
-| System Plus Limited | GAF Certified+ | None |
-| Silver Pledge Limited | Certified Plus / Master Elite | 10-15 yrs |
-| Golden Pledge Limited | **Master Elite only** | 25-30 yrs |
+| Warranty                    | Contractor required                        | Workmanship coverage |
+| --------------------------- | ------------------------------------------ | -------------------- |
+| Shingle & Accessory Limited | Any contractor                             | None                 |
+| Roofing System Limited      | Any contractor (≥3 qualifying accessories) | None                 |
+| System Plus Limited         | GAF Certified+                             | None                 |
+| Silver Pledge Limited       | Certified Plus / Master Elite              | 10-15 yrs            |
+| Golden Pledge Limited       | **Master Elite only**                      | 25-30 yrs            |
 
 **What Northvale can honestly offer today (no GAF certification): Shingle &
 Accessory Limited, Roofing System Limited, and WindProven.** Never advertise
@@ -96,7 +96,7 @@ System Plus / Silver / Golden Pledge until certified at the matching level.
 - CertainTeed Landmark ClimateFlex: UL 2218 Class 4 at time of manufacture,
   polymer-modified (Landmark PRO IR is Class 3) — SOURCE:
   https://www.certainteed.com/products/residential-roofing-products/landmark-climateflex
-  + SureStart brochure footnote
+  - SureStart brochure footnote
 - Class 4 definition: highest UL 2218 rating — withstands a 2" steel ball
   dropped from 20 ft — SOURCE: https://www.gaf.com/en-us/plan-design/impact-resistant-roof
 - Insurance angle: use GAF's hedged "may be eligible for insurance discounts"
@@ -130,8 +130,8 @@ System Plus / Silver / Golden Pledge until certified at the matching level.
 - Attic ventilation: 1/300 rule (1 sq ft NFVA per 300 sq ft attic; base ratio
   1/150), 40–50% exhaust high + balance intake at soffits, intake ≥ exhaust —
   SOURCES: https://www.asphaltroofing.org/the-attic-needs-ventilation-but-how-much-exactly/
-  + GAF Technical Bulletin R-120
-  https://documents.gaf.com/technical-bulletins-&-notes/r-120-proper-attic-ventilation.pdf
+  - GAF Technical Bulletin R-120
+    https://documents.gaf.com/technical-bulletins-&-notes/r-120-proper-attic-ventilation.pdf
 - Synthetic underlayment vs. felt: higher tear resistance, lighter, better
   water resistance, longer UV tolerance — SOURCE (attribute):
   https://www.billraganroofing.com/blog/felt-underlayment-vs-synthetic-underlayment

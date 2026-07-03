@@ -67,15 +67,24 @@ certs, fake address/GBP. When in doubt, flag it for the owner — don't invent.
   `public/placeholders/`) and replace with real Northvale photos before the real
   public launch — stock in before/after or "recent work" would violate Hard Rule
   #2 (FTC). See `TASKS_FOR_ERIC.md`.
-- Internal links via `RelatedLinks` — relevant, not stuffed.
+- Internal links via `RelatedLinks` fed by the gate-aware graph in
+  `src/lib/internal-links.ts` — relevant, not stuffed.
+- **One primary query per page** — check `docs/keyword-map.md` before adding or
+  retitling any page (city-qualified queries belong to `/the-woodlands/*`, not
+  `/services/*`).
+- **Every published fact traces to `docs/research-facts.md`** (with source URL).
+  Anything on an UNVERIFIED list there stays off the site. New facts get added
+  to that doc (sourced) before they get published.
 - Sitemap + robots auto-exclude `noindex` pages (`src/lib/routes.ts`). Don't
   add a page to the sitemap by hand.
 
 ## Data model + quality gate
 
 - Locations: `src/lib/service-areas.ts`. Services: `src/lib/services.ts`.
-  Each record has a `dataCompleteness` flag.
-- `src/lib/quality-gate.ts` `isIndexable(record)` decides index vs. `noindex`.
+  Neighborhoods (villages): `src/lib/neighborhoods.ts`. Service-in-city pages:
+  `src/lib/city-services.ts`. Each record has a `dataCompleteness` flag.
+- `src/lib/quality-gate.ts` (`evaluateArea` / `evaluateService` /
+  `evaluateNeighborhood` / `evaluateCityService`) decides index vs. `noindex`.
   Pages pass their record's verdict into `buildSeo({ noindex })`.
 - To publish a page: fill the record with real distinct content, set
   `dataCompleteness: "complete"`, and confirm NAP is real. Don't flip the flag

@@ -114,7 +114,11 @@ const services = spokes.length > 0 ? [] : serviceLinks();
         n.landmarks && n.landmarks.length > 0 && (
           <Fragment>
             <h2>Around the village</h2>
-            <ul>{n.landmarks.map((l) => <li>{l}</li>)}</ul>
+            <ul>
+              {n.landmarks.map((l) => (
+                <li>{l}</li>
+              ))}
+            </ul>
           </Fragment>
         )
       }

@@ -26,6 +26,29 @@ Ordered by the point in the launch path where they're blocking. Check off as the
 - [ ] **Google Business Profile**: claim and verify. Request Place ID (see comment in `.env.example`). Set `GOOGLE_PLACE_ID`.
 - [ ] **Google Places API key** issued and scoped for reviews pull. Set `GOOGLE_PLACES_API_KEY`.
 
+## Tier 2.5 — data that unlocks gated SEO pages (added July 2026)
+
+The local-authority expansion shipped with several pages gated `noindex` until
+you supply real data (enter it in the /keystatic admin panel or hand it to the
+next Claude session):
+
+- [ ] **GBP + social profile URLs** — Business Info → "profile URLs". Feeds the
+      `sameAs` structured data on every page. (Set up the Google Business
+      Profile first if it doesn't exist yet.)
+- [ ] **Financing** — provider + plan terms in Business Info. `/financing`
+      publishes automatically once filled. Never let anyone invent rates.
+- [ ] **Team** — real names, roles, photos → unlocks `/team`.
+- [ ] **Standard workmanship warranty term** (years/coverage) → stated on
+      `/warranty` (today it says "on your estimate", which must stay true).
+- [ ] **Real project photos** → unlocks `/gallery` + "our work" sections on the
+      nine village pages. Real reviews unlock the AggregateRating schema.
+- [ ] **Drone**: pages currently make NO drone-inspection claims — tell Claude
+      if you buy one so the inspection pages can say so truthfully.
+- [ ] **Re-verify before quoting anywhere**: Angi's Houston-specific cost
+      figures and CertainTeed Landmark wind/algae warranty numbers are on the
+      research do-not-publish list (docs/research-facts.md) — they need a
+      manual check before use.
+
 ## Tier 3a — performance + accessibility (Lighthouse 0.95 budgets)
 
 Lighthouse CI runs with production budgets (a11y/best-practices/SEO ≥ 0.95, performance ≥ 0.90, and Google's official "good" Core Web Vitals: LCP ≤ 2500ms, TBT ≤ 200ms, CLS ≤ 0.10 on mobile throttle). Budgets are **skipped on draft PRs** so scaffold iteration isn't blocked — ready-for-review PRs and pushes to `main` enforce them. The four pages in `.lighthouserc.json` currently pass all budgets.
