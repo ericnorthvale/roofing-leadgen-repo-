@@ -44,6 +44,11 @@ Compiled: July 3, 2026 (re-verify cost figures before major republishing).
   spec sheet + https://www.gaf.com/en-us/resources/warranties/residential
 - 25-year StainGuard Plus algae-protection limited warranty (packages bearing
   the logo) — SOURCE: spec sheet
+- GAF marketing claims (attribute to GAF when published, e.g. "GAF calls it…"):
+  Timberline HDZ is "America's #1-selling shingle"; WindProven is "an
+  industry-first wind warranty" with no maximum wind speed limitation — SOURCE:
+  https://www.gaf.com/en-us/resources/warranties/windproven ;
+  https://www.gaf.com/en-us/roofing-materials/residential-roofing-materials/shingles/timberline-hdz
 - Lifetime limited warranty against manufacturing defects (original owner,
   single-family) — SOURCE: spec sheet
 - HDZ passes UL 2218 at **Class 3**; "may be eligible for insurance discounts";
@@ -313,6 +318,55 @@ https://www.thewoodlandstownship-tx.gov/files/sharedassets/main/v/2/covenant-adm
   https://www.thewoodlands.com/community/history/ ;
   https://www.visitthewoodlands.com/about/history/
 
+### Village facts verified 2026-07-03 (copy-review sweep)
+
+- Panther Creek has thirteen public parks — SOURCES:
+  https://thewoodlands.guide/where-to-go/public-parks/panther-creek/ ;
+  https://www.thewoodlandstx.com/panthercreek/ (4 major + 9 smaller). Named for
+  the creek running THROUGH the village (not an "eastern boundary") — SOURCE:
+  https://www.panthercreekvillage.org/about
+- Grogan-Cochran Lumber Company was "the last sawmill to operate in the area" —
+  SOURCES: https://en.wikipedia.org/wiki/Grogan%27s_Mill ;
+  https://communityimpact.com/news/2012/01/19/the-grogan-cochran-lumber-company/
+- Tamarac Park (1300 N. Millbend Dr., Grogan's Mill; pond was the sawmill's log
+  pond) and Lake Harrison (behind Grogan's Mill Village Center) are real —
+  SOURCES: https://www.woodlandsonline.com/cdps/cditem.cfm?nid=5957 ;
+  https://www.fishinginthewoodlands.com/lake-harrison
+- College Park named for proximity to Lone Star College–Montgomery and SHSU's
+  Woodlands Center (both on College Park Drive, at the village's edge — say "in
+  and adjacent to") — SOURCES: https://www.themcclunggroup.com/college-park ;
+  https://www.lonestar.edu/montgomery.htm ;
+  https://www.shsu.edu/academics/woodlands-center/
+- Falconwing Park (Indian Springs) has a pool but **NO skate park** (the skate
+  park is at Tamarac Park, Grogan's Mill); the Indian Springs green space is
+  **Trace Creek Park**, not "Trace Creek Trail" — SOURCES:
+  https://www.thewoodlandsparks.com/Parks/Community-Parks/Parks-Directory/Indian-Springs-Parks/Falconwing-Park ;
+  https://www.woodlandsonline.com/cdps/cditem.cfm?nid=6248
+- **Alden Bridge Park is in Alden Bridge village, NOT Cochran's Crossing** —
+  SOURCE: https://www.woodlandsonline.com/cdps/cditem.cfm?nid=5622
+- Spindle Tree is a named Sterling Ridge neighborhood (Spindle Tree Ponds Park
+  on the Township site) — SOURCE:
+  https://www.thewoodlandstownship-tx.gov/Departments/Parks-Recreation/Parks/Parks/Sterling-Ridge-Parks/Spindle-Tree-Ponds-Park
+  (the "400 acres of forest and meadow" framing is realtor-marketing only — do
+  not publish)
+- Township's own Cochran's Crossing page: "known for its scenic parks, top-rated
+  schools, and The Woodlands Country Club's Palmer Course" (say "Palmer Course",
+  not "Arnold Palmer course", when quoting) — SOURCE:
+  https://www.thewoodlandstownship-tx.gov/Community/My-area/Cochrans-Crossing/Cochrans-Crossing
+- Creekside Park village opened 2007-10-19 AND the George Mitchell Nature
+  Preserve is separately dated 2007-10-19 (dates match across independent
+  sources; no single source says "same day") — SOURCES:
+  https://www.woodlandsonline.com/npps/story.cfm?nppage=59912 ;
+  https://www.thewoodlandstx.com/parks/george-mitchell-nature-preserve.php
+  ("named for proximity to Spring Creek" remains UNVERIFIED — say "set along
+  Spring Creek")
+- Carlton Woods: the Carlton Woods Association has an architectural review
+  committee enforcing guidelines for property modifications (houstonproperties,
+  secondary) — but whether it replaces or supplements the Township RDRC for
+  re-roofs is STILL UNVERIFIED (Sheet 2 UNVERIFIED #6 stands; don't assert the
+  approval path) — SOURCE:
+  https://www.houstonproperties.com/houston-neighborhoods/the-woodlands/carlton-woods
+
 ### Nearby incorporated cities (future city pages)
 
 - **Shenandoah** — own Community Development Dept (MyGovernmentOnline
@@ -500,6 +554,15 @@ https://www.thewoodlandstownship-tx.gov/files/sharedassets/main/v/2/covenant-adm
 - **Roofers can't be public adjusters on the same property**: Tex. Ins. Code
   §4102.163; report to AG 800-621-0508 / TDI 800-252-3439 — SOURCE:
   https://www.tdi.texas.gov/consumer/storms/roofing-and-insurance-know-the-law.html
+- **3-day home-solicitation cancellation right**: Tex. Bus. & Com. Code ch. 601 —
+  buyer may cancel a home-solicitation contract (>$25, agreed to away from the
+  seller's place of business) until midnight of the third business day after
+  signing; the FTC Cooling-Off Rule (16 CFR 429) parallels it for door-to-door
+  sales ≥$25. Does NOT apply to contracts signed at the contractor's office or
+  after prior negotiation there — scope carefully. NEVER cite this right to
+  §27.02 (that statute covers deductibles/insurance-proceeds notices) — SOURCES:
+  https://www.texasattorneygeneral.gov/consumer-protection/home-real-estate-and-travel/door-door-sales-3-day-right-rescission ;
+  https://consumer.ftc.gov/articles/buyers-remorse-ftcs-cooling-rule-may-help
 - **Prompt payment (Tex. Ins. Code Ch. 542)**: §542.055 acknowledge/start
   investigation within 15 days; §542.056 accept/reject within 15 business days
   of receiving all items (45-day extension path); §542.057 pay within 5
