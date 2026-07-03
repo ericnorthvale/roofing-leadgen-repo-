@@ -94,13 +94,13 @@ flag just for setup.
 ### Production gotchas (learned the hard way — match the exact host you serve)
 
 The single biggest trap: **OAuth callbacks must use the EXACT host the site serves
-on.** Our site serves `www.northvaleroofing.com` (not the bare apex), so **both** of
-these must be registered with the `www` form:
+on.** Our canonical host is the apex `northvaleroofing.com` (with `www` 301-redirecting
+to it), so **both** of these must be registered with the apex form:
 
 - **Google OAuth client → Authorized redirect URIs:**
-  `https://www.northvaleroofing.com/api/auth/callback`
+  `https://northvaleroofing.com/api/auth/callback`
 - **Keystatic GitHub App → Callback URL:**
-  `https://www.northvaleroofing.com/api/keystatic/github/oauth/callback`
+  `https://northvaleroofing.com/api/keystatic/github/oauth/callback`
 
 If you ever switch the canonical domain (e.g. drop `www`), update both. If sign-in
 shows `redirect_uri_mismatch` (Google) or "redirect_uri is not associated with this
