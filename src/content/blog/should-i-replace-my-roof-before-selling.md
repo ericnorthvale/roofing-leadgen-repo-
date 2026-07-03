@@ -49,10 +49,9 @@ moment.
 ## The recoup math: a new roof rarely pays 100 cents on the dollar
 
 The _Remodeling_ Cost vs. Value report — the standard industry reference —
-tracks what an asphalt-shingle roof replacement returns at resale nationally.
-Its recent national figures have been widely reported at under 60% recoup
-(roughly 57 cents on the dollar in the 2024 report, as secondary sources cite
-it). Treat the exact percentage loosely, but the direction is consistent:
+tracks what an asphalt-shingle roof replacement returns at resale nationally,
+and its consistent finding is that a replacement returns well under its full
+cost at sale. The direction matters more than any one year's exact percentage:
 **replacing a roof purely to sell usually returns most — not all — of its cost.**
 
 So why does anyone do it? Because recoup percentage isn't the whole equation.
@@ -108,7 +107,7 @@ Undisclosed roof problems have a way of resurfacing after closing, angrier and
 more expensive. A documented, honestly disclosed roof — even an imperfect one —
 sells better than a mystery.
 
-## Bottom line
+## The decision, condensed
 
 Don't reflexively buy a new roof to sell a house — the recoup data doesn't
 support it as a default. Get the roof inspected, fix what's actually broken,

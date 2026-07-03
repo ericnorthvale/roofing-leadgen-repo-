@@ -8,6 +8,7 @@ import TrustBar from "@components/TrustBar.astro";
 import Faq from "@components/Faq.astro";
 import RelatedLinks from "@components/RelatedLinks.astro";
 import BeforeAfter from "@components/BeforeAfter.astro";
+import { USE_DEMO_IMAGES } from "~/lib/demo-images";
 import Resources from "@components/Resources.astro";
 import TableOfContents from "@components/TableOfContents.astro";
 import { getCollection } from "astro:content";
@@ -138,7 +139,8 @@ const toc = [
     </aside>
   </section>
 
-  {beforeAfter && <BeforeAfter heading="Recent work" />}
+  {/* FTC hard-block: never render "Recent work" over demo/stock imagery. */}
+  {beforeAfter && !USE_DEMO_IMAGES && <BeforeAfter heading="Recent work" />}
 
   {
     service.faqs && (

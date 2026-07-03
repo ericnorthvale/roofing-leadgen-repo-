@@ -11,14 +11,20 @@ const reviews = await getSiteReviews();
 const siteUrl = Astro.site?.toString() ?? "https://northvaleroofing.com";
 // null while there are zero real reviews — never emitted fabricated.
 const aggregateRating = aggregateRatingJsonLd(siteUrl, reviews);
+
+// Quality gate: stays noindex (and meta stays neutral) until real reviews
+// exist — the title/description must never assert reviews that don't.
+const hasReviews = reviews.length > 0;
 ---
 
 <BaseLayout
   seo={{
-    title: "Reviews from Woodlands + Spring neighbors",
-    description:
-      "Verified Google and direct customer reviews from homeowners across The Woodlands, Spring, Tomball, Magnolia, Conroe, and Cypress.",
+    title: hasReviews ? "Reviews from Woodlands + Spring neighbors" : "Reviews — Northvale Roofing",
+    description: hasReviews
+      ? "Verified Google and direct customer reviews from homeowners across The Woodlands, Spring, Tomball, Magnolia, Conroe, and Cypress."
+      : "Customer reviews will be published here as jobs close. We only ever publish real reviews.",
     pathname: "/reviews",
+    noindex: !hasReviews,
     ...(aggregateRating ? { jsonLd: aggregateRating } : {}),
   }}
 >

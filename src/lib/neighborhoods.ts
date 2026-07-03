@@ -108,7 +108,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     intro:
       "Panther Creek runs from Lake Woodlands' western shore through some of the community's most established streets. We know the village's roof stock — and the Township paperwork every re-roof here needs.",
     localContext:
-      "Panther Creek was the second village of The Woodlands, opened in the mid-1970s and named for the creek that forms its eastern boundary and feeds Lake Woodlands. It begins at the lake's western shore — Northshore Park and Southshore Park anchor the waterfront — and the village's thirteen parks and Country Club fairways thread between neighborhoods that have had decades to grow real tree cover. Roofs here are on their second or third generation, and the village mixes carefully-maintained originals with extensively remodeled homes, so two houses on the same street can need very different roofing conversations.",
+      "Panther Creek was the second village of The Woodlands, opened in the mid-1970s and named for the creek that winds through the village and feeds Lake Woodlands. It begins at the lake's western shore — Northshore Park and Southshore Park anchor the waterfront — and the village's thirteen parks and Country Club fairways thread between neighborhoods that have had decades to grow real tree cover. Roofs here are on their second or third generation, and the village mixes carefully-maintained originals with extensively remodeled homes, so two houses on the same street can need very different roofing conversations.",
     developmentEra:
       "Second village of The Woodlands, opened in the mid-1970s — housing stock nearly as mature as Grogan's Mill's. Most homes have been re-roofed at least once; the current question is usually whether the last re-roof was done well.",
     housingStock:
@@ -149,7 +149,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     intro:
       "Cochran's Crossing pairs 1980s and '90s housing stock with some of the strongest schools and parks in The Woodlands — and a wave of roofs in their natural replacement window. We handle the whole process, Township paperwork included.",
     localContext:
-      "Cochran's Crossing opened in 1983, named for the Cochran family — co-owners of the Grogan-Cochran Lumber Company that once logged this land. The Township describes the village by its scenic parks, top-rated schools, and the Country Club's Arnold Palmer course; it's home to The Woodlands High School and a cluster of well-regarded elementary and intermediate campuses. Housing here largely dates to the mid-1980s through the 1990s, which puts many original and first-replacement roofs squarely in their end-of-life window — and makes honest repair-versus-replace guidance the conversation we have most on these streets.",
+      "Cochran's Crossing opened in 1983, named for the Cochran family — co-owners of the Grogan-Cochran Lumber Company that once logged this land. The Township describes the village by its scenic parks, top-rated schools, and the Country Club's Palmer Course; it's home to The Woodlands High School and a cluster of well-regarded elementary and intermediate campuses. Housing here largely dates to the mid-1980s through the 1990s, which puts many original and first-replacement roofs squarely in their end-of-life window — and makes honest repair-versus-replace guidance the conversation we have most on these streets.",
     developmentEra:
       "Opened 1983. The village built out through the mid-'80s and '90s, so its roofs cluster in the 25-40 year band — prime replacement territory for first- and second-generation shingle roofs.",
     housingStock:
@@ -159,7 +159,6 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     landmarks: [
       "The Woodlands High School",
       "Palmer Golf Course",
-      "Alden Bridge Park boundary trails",
       "Cochran's Crossing Village Center",
     ],
     faqs: [
@@ -190,7 +189,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     intro:
       "Indian Springs sits against the George Mitchell Nature Preserve — deep forest on one side, mid-'80s-and-newer rooflines on the other. We work both realities: preserve-edge tree load and Township-compliant re-roofs.",
     localContext:
-      "Indian Springs opened in 1984, its name recorded from artifacts of the Bidai tribe of Atakapan Indians discovered on the property during development. The village runs along some of the community's best green space — direct access to the George Mitchell Nature Preserve, Falconwing Park's pool and skate park, Trace Creek's trails — and its homes back up to genuinely wild forest more than almost anywhere else in The Woodlands. For roofs, that adjacency is the story: heavy shade, constant organic debris in valleys and gutters, algae-friendly humidity on north slopes, and limb exposure in every serious wind event.",
+      "Indian Springs opened in 1984, its name recorded from artifacts of the Bidai tribe of Atakapan Indians discovered on the property during development. The village runs along some of the community's best green space — direct access to the George Mitchell Nature Preserve, Falconwing Park and its pool, little Trace Creek Park — and its homes back up to genuinely wild forest more than almost anywhere else in The Woodlands. For roofs, that adjacency is the story: heavy shade, constant organic debris in valleys and gutters, algae-friendly humidity on north slopes, and limb exposure in every serious wind event.",
     developmentEra:
       "Opened 1984, building out through the 1990s. Original and first-replacement roofs are now deep into their service life; homes nearer the preserve age faster on the shaded slopes than the calendar suggests.",
     housingStock:
@@ -200,7 +199,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     landmarks: [
       "George Mitchell Nature Preserve",
       "Falconwing Park",
-      "Trace Creek Trail",
+      "Trace Creek Park",
       "Indian Springs Village Center",
     ],
     faqs: [
@@ -276,7 +275,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     intro:
       "College Park — including Harper's Landing — is the only piece of The Woodlands east of I-45, and its 1990s-2000s rooflines are hitting replacement age on their own schedule. We cover both sides of the freeway, same standards, same paperwork.",
     localContext:
-      "College Park was designated in 1995, named for the educational institutions inside it — Lone Star College and Sam Houston State University's local campus among them — and The Woodlands College Park High School opened in 2005. It's the only village on the east side of I-45, anchored by its two major residential neighborhoods, Harper's Landing and Windsor Hills (the latter opened in 2000 per the developer's history). For roofing, College Park behaves like Alden Bridge's younger sibling across the freeway: a concentrated cohort of mid-'90s-through-2000s production homes whose builder-grade shingles are aging out together.",
+      "College Park was designated in 1995, named for the educational institutions in and adjacent to it — Lone Star College–Montgomery and Sam Houston State University's Woodlands Center among them — and The Woodlands College Park High School opened in 2005. It's the only village on the east side of I-45, anchored by its two major residential neighborhoods, Harper's Landing and Windsor Hills (the latter opened in 2000 per the developer's history). For roofing, College Park behaves like Alden Bridge's younger sibling across the freeway: a concentrated cohort of mid-'90s-through-2000s production homes whose builder-grade shingles are aging out together.",
     developmentEra:
       "Designated 1995; residential build-out ran through the 2000s (Windsor Hills opened 2000). Original roofs across Harper's Landing and Windsor Hills are now in or approaching their replacement window.",
     housingStock:
@@ -317,7 +316,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     intro:
       "Sterling Ridge anchors the western end of The Woodlands — 1999-and-newer rooflines around the Gary Player course, wrapping the gates of Carlton Woods. First-generation roofs here are coming due, and we're already on these streets.",
     localContext:
-      "Sterling Ridge opened in 1999, named to honor the sterling (twenty-fifth) anniversary of The Woodlands. It spans the community's western end, surrounds the gated Carlton Woods enclave, and hosts the Gary Player Signature course at The Woodlands Country Club; its newer sections include May Valley, with roughly 400 acres of forest and meadow at the village's edge. Housing runs from late-'90s production streets to substantial customs near the fairways — which means the village's first big wave of original-roof replacements is arriving now, on homes whose owners expect the job done to a premium standard.",
+      "Sterling Ridge opened in 1999, named to honor the sterling (twenty-fifth) anniversary of The Woodlands. It spans the community's western end, surrounds the gated Carlton Woods enclave, and hosts the Gary Player Signature course at The Woodlands Country Club; its newer sections include May Valley and Spindle Tree at the village's wooded western edge. Housing runs from late-'90s production streets to substantial customs near the fairways — which means the village's first big wave of original-roof replacements is arriving now, on homes whose owners expect the job done to a premium standard.",
     developmentEra:
       "Opened 1999, building out through the 2000s (May Valley and Spindle Tree among the newer sections). Original roofs from the village's first sections are crossing the 20-25 year line — the front edge of the replacement wave.",
     housingStock:
@@ -341,7 +340,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
       },
       {
         q: "Do you also work inside Carlton Woods?",
-        a: "Yes — Carlton Woods is the gated enclave within the Sterling Ridge area, and we serve it as its own neighborhood page explains. Access and approvals work differently behind the gates, and we confirm the current requirements with the association before scheduling.",
+        a: "Yes — Carlton Woods is the gated enclave within the Sterling Ridge area, and we serve it as its own neighborhood page explains. Access works differently behind the gates, and we confirm the current approval and access requirements before scheduling.",
       },
     ],
     dataCompleteness: "complete",
@@ -364,7 +363,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     housingStock:
       "Custom and estate homes on golf-course and forest lots. Premium roof systems dominate: concrete and clay tile, natural slate, standing-seam metal, and designer architectural shingle — often combined on one roofline. These systems fail at the details (flashing, underlayment, fasteners) long before the field material wears out, which is exactly what our inspections target.",
     hoaNote:
-      "Carlton Woods is governed as a gated community with its own association alongside The Woodlands Township's community-wide Standards (muted colors; tile, slate, composition, stone-coated or non-glossy standing-seam metal among accepted materials). Because the approval path for work behind the gates runs through the association, we confirm the current application and access requirements with the association before scheduling — and handle that coordination for you.",
+      "Carlton Woods is governed as a gated community with its own association — whose architectural review committee enforces guidelines for property modifications — alongside The Woodlands Township's community-wide Standards (muted colors; tile, slate, composition, stone-coated or non-glossy standing-seam metal among accepted materials). We confirm the current application and access requirements before scheduling — and handle that coordination for you.",
     landmarks: [
       "The Club at Carlton Woods (Nicklaus Signature Course)",
       "Tom Fazio Championship Course (Creekside)",
@@ -398,7 +397,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     intro:
       "Creekside Park is the newest village in The Woodlands and the only one in Harris County — and its first-generation builder roofs are quietly reaching the age where problems start. We're here before they do.",
     localContext:
-      "Creekside Park opened on October 19, 2007 — the community's newest village, named for its proximity to Spring Creek, and the only village located in Harris County (all others are in Montgomery County); its residents attend Tomball ISD schools. The George Mitchell Nature Preserve opened the same day and wraps the village in protected forest; Rob Fleming Park anchors recreation, the village center arrived in 2015, and Creekside has its own Residential Design Review Committee meeting monthly at Township Town Hall. The roofing story is generational: a village built almost entirely from 2007 onward means nearly every home is still on its original builder roof — a cohort now moving into the years where builder-grade shingles, flashing details and pipe boots begin to fail.",
+      "Creekside Park opened on October 19, 2007 — the community's newest village, set along Spring Creek, and the only village located in Harris County (all others are in Montgomery County); its residents attend Tomball ISD schools. The George Mitchell Nature Preserve opened the same day and wraps the village in protected forest; Rob Fleming Park anchors recreation, the village center arrived in 2015, and Creekside has its own Residential Design Review Committee meeting monthly at Township Town Hall. The roofing story is generational: a village built almost entirely from 2007 onward means nearly every home is still on its original builder roof — a cohort now moving into the years where builder-grade shingles, flashing details and pipe boots begin to fail.",
     developmentEra:
       "Opened October 19, 2007 — the newest village. Nearly all homes are on original builder roofs now in the second half of their expected service life; the village's first big replacement wave is forming, not finished.",
     housingStock:
