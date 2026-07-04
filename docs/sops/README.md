@@ -18,14 +18,15 @@ chat.
 
 ## Index
 
-| SOP                                                                    | Purpose                                                              | Primary owner               |
-| ---------------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------- |
-| [crm-hygiene.md](./crm-hygiene.md)                                     | Lead Source + pipeline + data-entry standard (the attribution spine) | GM / Sales                  |
-| [sales-process.md](./sales-process.md)                                 | Lead → inspection → estimate → close                                 | Sales                       |
-| [insurance-supplement-workflow.md](./insurance-supplement-workflow.md) | Claim → adjuster → supplement → approval                             | Production / GM             |
-| [subcontractor-onboarding.md](./subcontractor-onboarding.md)           | Vetting + COIs + DWC-083 + agreement                                 | GM / Production Coordinator |
-| [rep-onboarding.md](./rep-onboarding.md)                               | §3508 reps + canvassers onboarding                                   | Sales Manager               |
-| [review-request.md](./review-request.md)                               | Post-job review generation (real reviews only)                       | Production Coordinator      |
+| SOP                                                                    | Purpose                                                                   | Primary owner               |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------- |
+| [crm-hygiene.md](./crm-hygiene.md)                                     | Lead Source + pipeline + data-entry standard (the attribution spine)      | GM / Sales                  |
+| [sales-process.md](./sales-process.md)                                 | Lead → inspection → estimate → close                                      | Sales                       |
+| [insurance-supplement-workflow.md](./insurance-supplement-workflow.md) | Claim → adjuster → supplement → approval                                  | Production / GM             |
+| [subcontractor-onboarding.md](./subcontractor-onboarding.md)           | Vetting + COIs + DWC-083 + agreement                                      | GM / Production Coordinator |
+| [rep-onboarding.md](./rep-onboarding.md)                               | §3508 reps + canvassers onboarding                                        | Sales Manager               |
+| [review-request.md](./review-request.md)                               | Post-job review generation (real reviews only)                            | Production Coordinator      |
+| [revenue-attribution.md](./revenue-attribution.md)                     | Weekly HighLevel→QuickBooks join; which channel made money (manual first) | GM                          |
 
 Governance: [../decision-log.md](../decision-log.md) ·
 [../major-decision-request-template.md](../major-decision-request-template.md)

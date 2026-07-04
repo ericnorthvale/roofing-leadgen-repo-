@@ -69,6 +69,18 @@ pnpm test:e2e      # Playwright against dev server (or staging with E2E_BASE_URL
 pnpm lhci          # Lighthouse CI (needs `pnpm build` first)
 ```
 
-## Day-90 north star
+## Day-90 north star (capacity-matched)
 
-By day 90: 50+ homeowner leads/wk @ ≤$75 CPL, 15+ signed agent referrers, 4+ signed insurance partners, 4 weekly content pieces auto-shipping with human review gate, GBP 20+ reviews ≥4.8, all 5 paid channels live, revenue-attributed to source for ≥60% of closed deals.
+By day 90: **10–15 qualified homeowner leads/wk at ≤ ~$100 blended CPL with ≥40%
+contact-to-inspection** — sized to a launch delivery capacity of **4–8 jobs/wk** so we
+never buy leads we can't service (over-generation is what produces the bad reviews that
+kill a young GBP). Plus: **GBP claimed/verified with 20+ reviews ≥4.8**, speed-to-lead
+under 5 minutes on every lead (auto-responder + missed-call text-back live), LSA + a
+modest Google Search campaign running, and revenue attributed to source for ≥60% of
+closed deals (manual HighLevel→QuickBooks join is fine to start).
+
+> Ramp ad spend to capacity, don't blast it: start with LSA + modest Search (~$2–3k/mo),
+> hold Meta ~14 days until conversion-event volume supports optimization, and scale only
+> on jobs booked — not leads generated. The earlier "50+ leads/wk @ ≤$75 CPL / all 5
+> channels live" target was retired: 50 leads/wk implies ~15 jobs/wk ≈ a $15M+ run-rate,
+> far beyond first-year crew capacity (see `docs/decision-log.md`).

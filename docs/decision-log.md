@@ -8,6 +8,52 @@ Format: date · decision · why · who.
 
 ## 2026 — Operating-system & website build
 
+- **Roadmap re-sequenced for revenue-ASAP with two part-time owners.** Owner set the
+  near-term goal to **revenue ASAP**, launch delivery capacity to **4–8 jobs/wk**, the
+  go-to-market owner to **both owners, part-time**, and tool spend to **turn on the full
+  stack now**. Because the scarcest resource is owner hours and the SEO site is a 6–12mo
+  asset (won't ring the phone in the revenue window), the plan was re-weighted:
+  (1) **GBP + Local Services Ads + review velocity promoted to a first-class GTM
+  workstream, co-equal with the site** (they're the near-term revenue engine, not Tier-2);
+  (2) **speed-to-lead automated before the first ad dollar** — HighLevel auto-responder SMS
+  plus missed-call text-back, so a lead never waits on two busy people
+  (`docs/runbooks/speed-to-lead.md`); (3) **SEO effort goes deep on The Woodlands first**,
+  not a speculative 8-city fan-out (the model is content-labor-bound: ~15 sourced pages per
+  city). Why: revenue-ASAP + part-time owners means fast, low-labor phone-ringers beat a
+  bigger slow-maturing content moat. · Owner + Claude · 2026-07-04
+- **Day-90 north star retired and replaced with a capacity-matched target.** Old:
+  "50+ leads/wk @ ≤$75 CPL, all 5 channels live." New: **10–15 qualified leads/wk at ≤
+  ~$100 blended CPL, ≥40% contact-to-inspection, GBP 20+ reviews ≥4.8.** Why: 50 leads/wk
+  ≈ ~15 jobs/wk ≈ a $15M+ run-rate — far beyond first-year 4–8-job capacity; buying more
+  leads than you can service produces the bad reviews that kill a young GBP. · Owner + Claude · 2026-07-04
+- **Ad spend ramps to capacity, does not blast across five channels.** Start with LSA + a
+  modest Google Search brand/non-brand campaign (~$2–3k/mo) targeting 10–15 qualified
+  leads/wk; hold Meta ~14 days post-launch until conversion-event volume supports
+  optimization; scale spend only on jobs booked, not leads generated. Why: right-sizes the
+  ~$4.5–7k/mo launch-plan spend to 4–8-job capacity and protects review quality. · Owner + Claude · 2026-07-04
+- **Revenue attribution starts as a manual sheet — not gated behind n8n.** A weekly manual
+  join of HighLevel opportunities → QuickBooks invoices in a Google Sheet
+  (`date, lead_source, city, service, revenue, gross_margin`) gives ~80% of the value at
+  20+ jobs today; the offline-conversion upload (closed revenue → Google/Meta) is the most
+  compounding automation in the plan and shouldn't wait on infrastructure. Automate later
+  (n8n Workflow 1) once the manual process proves the schema. · Owner + Claude · 2026-07-04
+- **n8n: use managed cloud (~$20–50/mo) or defer — do not self-host on a VPS.** Why:
+  self-hosting a 24/7 automation server is an ops liability for two part-time non-technical
+  owners (if it breaks, no one on the team can fix it), and the manual attribution sheet +
+  HighLevel-native automation cover the near-term need, so custom glue is non-urgent. This
+  refines the earlier "n8n on a cheap cloud instance" decision toward _managed_ hosting.
+  · Owner + Claude · 2026-07-04
+- **JobNimbus and CompanyCam deferred to the first job (~Aug), not turned on now.** Even
+  under "turn on the full stack now," these two produce zero value pre-jobs: JobNimbus
+  manages jobs that don't exist yet (a seat for an empty system) and CompanyCam's ROI is
+  real geotagged job photos there's nothing to shoot yet. Everything that _makes or measures
+  revenue now_ — HighLevel, CallRail, GA4, Meta, GBP, LSA — is still turned on immediately.
+  · Owner + Claude · 2026-07-04
+- **Content auto-draft pipeline deprioritized (no LLM keys provisioned yet).** The
+  `keyword-brief-generator.ts` / `content-draft.ts` scripts + ANTHROPIC/OPENAI keys are a
+  scale-phase feature; for revenue-ASAP they're not on the path. Woodlands content is
+  hand-authored + human-gated regardless. · Owner + Claude · 2026-07-04
+
 - **Vercel SSR gotchas that cost us a long debugging session (admin sign-in).** Three
   related traps, all now fixed — keep in mind for any future server route:
   1. **`request.url` is `https://localhost` on Vercel SSR.** Anything that builds a

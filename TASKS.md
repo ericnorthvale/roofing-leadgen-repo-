@@ -124,6 +124,23 @@ later (Mac mini for dev); **lightweight security now, harden before scaling**.
 Re-sequenced after the BOS audit (see `docs/decision-log.md`): the attribution
 spine and knowledge base were moved up.
 
+**Re-sequenced again 2026-07-04 for revenue-ASAP + part-time owners + 4–8-job
+capacity** (`docs/decision-log.md`): a **go-to-market workstream (GBP + LSA + review
+velocity + speed-to-lead)** is now co-equal with the site and sits at the top of
+`TASKS_FOR_ERIC.md` (Tier 0); speed-to-lead automation and manual revenue attribution
+moved up into Foundation; the day-90 north star was retired for a capacity-matched target;
+ad spend ramps to capacity; n8n → managed (not self-hosted); JobNimbus/CompanyCam deferred
+to the first job; the content auto-draft pipeline was deprioritized.
+
+**Go-to-market (phone-ringers) — owner workstream, do first (see `TASKS_FOR_ERIC.md` Tier 0):**
+
+- [ ] Claim + verify Google Business Profile.
+- [ ] Apply for Local Services Ads (day LLC + GL insurance exist).
+- [ ] Speed-to-lead live in HighLevel — auto-responder + missed-call text-back
+      (`docs/runbooks/speed-to-lead.md`), before the first ad dollar.
+- [ ] Review-request SOP running at job #1 (`docs/sops/review-request.md`).
+- [ ] Lead-qualification fields + follow-up/recycle cadences in HighLevel.
+
 **Phase 1 — Foundation (stop the leaks):**
 
 - [x] **D1 — Lead alerts + safety net:** SMS (Twilio) + email (Resend), env-gated;
@@ -149,10 +166,23 @@ spine and knowledge base were moved up.
       dedup `event_id`), env-gated (`src/lib/meta-capi.ts`).
 - [x] Owner guide `docs/setup-highlevel.md`; 64 unit tests pass; all env-gated.
 
+**Phase 1.7 — Revenue attribution (manual first, moved up 2026-07-04):**
+
+- [ ] Weekly HighLevel→QuickBooks join in a Google Sheet
+      (`date, lead_source, city, service, revenue, gross_margin`); then offline-conversion
+      uploads (closed revenue → Google/Meta). ~80% of the value with zero infra; proves the
+      schema n8n Workflow 1 later automates.
+- [ ] Guard the HighLevel→JobNimbus seam: an SOP acceptance test that `lead_source` +
+      contact id carry across the CRM-to-CRM handoff (where attribution dies in practice).
+- [ ] **Storm kit** (pre-staged runbook): pre-drafted GBP post, LSA/Search budget-bump
+      procedure, geo-targeted Meta creative, hail-map landing section — fires within hours
+      of a Montgomery County hail event (harden `docs/runbooks/storm-window.md`).
+
 **Phase 2 — Automation (30–90d):**
 
-- [ ] n8n (cheap cloud): revenue-attribution loop (lead→job→revenue), auto monthly
-      owner report (QBO+HighLevel+GA4), review-request engine, CompanyCam→site (D3/D4).
+- [ ] **Managed** n8n (~$20–50/mo, not self-hosted): automate the now-proven manual
+      revenue-attribution loop (lead→job→revenue), the auto monthly owner report
+      (QBO+HighLevel+GA4), and CompanyCam→site (D3/D4, once jobs produce photos).
 
 **Phase 3 — Scale (90+d):**
 

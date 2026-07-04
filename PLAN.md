@@ -119,6 +119,24 @@ Website (Vercel) → **HighLevel** (leads/automation) → **JobNimbus** (jobs) �
 glues the gaps + scheduled jobs. Source of truth per domain: content = GitHub;
 leads = HighLevel; jobs = JobNimbus; money = QuickBooks; photos = CompanyCam.
 
+## Go-to-market workstream (co-equal with the website — the near-term revenue engine)
+
+Re-sequenced 2026-07-04 for **revenue-ASAP with two part-time owners and 4–8 jobs/wk of
+capacity** (`docs/decision-log.md`). The website is a 6–12 month asset; it will not ring
+the phone in the revenue window. What does, in month one, is **GBP + Local Services Ads +
+review velocity + sub-5-minute speed-to-lead** — and because the owners are part-time, the
+speed-to-lead pieces must be _automated_, not manual. This workstream runs in parallel
+with (and ahead of) the SEO expansion, and is the top of `TASKS_FOR_ERIC.md` (Tier 0):
+
+- **Google Business Profile** claimed + verified (local 3-pack + LSA sit above organic).
+- **Local Services Ads** applied for the day LLC + GL insurance exist (CPL ≈ $55–90,
+  ~half of Google Ads CPL, Google Screened badge).
+- **Speed-to-lead automation in HighLevel** — auto-responder SMS + missed-call text-back,
+  live _before the first ad dollar_ (`docs/runbooks/speed-to-lead.md`).
+- **Review velocity** — review-request SOP fires at job #1 (`docs/sops/review-request.md`).
+- **Ad spend ramps to capacity** — start LSA + modest Google Search (~$2–3k/mo) at 10–15
+  qualified leads/wk; hold Meta ~14 days; scale on jobs booked, not leads generated.
+
 ## Build sequencing (3-phase, post-BOS-audit)
 
 A BOS audit (recorded in `docs/decision-log.md`) re-prioritized the work to attack
@@ -135,10 +153,19 @@ blind) and the **knowledge base** (so ops knowledge leaves one person's head).
    carried website → HighLevel (field + tag); maps 1:1 into JobNimbus/QBO as they go live.
 4. **D2 — Admin panel** (Keystatic + Google SSO): owners edit Business Info, photos,
    reviews, blog. City/service SEO pages stay Claude-crafted.
+5. **Speed-to-lead + review engine** (moved up from Phase 3): HighLevel auto-responder +
+   missed-call text-back + lead-qualification fields + follow-up/recycle cadences, and the
+   review-request SOP running manually at job #1. These are the highest-leverage items for
+   part-time owners and must exist before ad spend.
+6. **Revenue attribution — manual first** (moved up from Phase 2): a weekly HighLevel→QBO
+   join in a Google Sheet (`date, lead_source, city, service, revenue, gross_margin`),
+   then offline-conversion uploads to Google/Meta. ~80% of the value with zero infra; n8n
+   automates it later once the schema is proven.
 
-**Phase 2 — Automation (30–90d): run unattended.** n8n (cheap cloud): revenue-
-attribution loop, auto-assembled monthly owner report, review-request engine,
-CompanyCam→site (D3/D4 fold in here).
+**Phase 2 — Automation (30–90d): run unattended.** Managed n8n (~$20–50/mo — _not_
+self-hosted, per 2026-07-04 decision) automates what the manual processes above proved:
+revenue-attribution loop, auto-assembled monthly owner report, and CompanyCam→site (D3/D4
+fold in here once jobs are producing photos).
 
 **Phase 3 — Scale (90+d): make adding people cheap.** Role-based access + lead
 routing for the §3508 team; AI layers (HighLevel SMS responder, lead scoring,
@@ -163,10 +190,16 @@ version-controlled in git, tested before prod.
 
 ## Cost (approx monthly run-rate, USD — verify; excludes ad spend + payroll)
 
-Launch ≈ **$330–500/mo** (Vercel, Google Workspace, HighLevel, CompanyCam,
-QuickBooks, n8n VPS, call tracking, Twilio/Resend usage). At scale ≈
-**$900–1,400/mo** (+ JobNimbus seats). Ad spend is separate (~$4.5k–7k/mo per
-launch plan: LSA + Google + Facebook).
+Launch ≈ **$330–500/mo** (Vercel, Google Workspace, HighLevel, QuickBooks, call
+tracking, Twilio/Resend usage). At scale ≈ **$900–1,400/mo** (+ JobNimbus seats,
+managed n8n, CompanyCam). Note (2026-07-04): **JobNimbus + CompanyCam are deferred to the
+first job (~Aug)** — they produce no value pre-jobs — and **n8n, when it lands, is managed
+cloud (~$20–50/mo), not a self-hosted VPS.**
+
+Ad spend is separate and **ramps to 4–8-job capacity — it is not blasted across five
+channels at once.** Start LSA + a modest Google Search campaign (~$2–3k/mo) targeting
+10–15 qualified leads/wk; hold Meta ~14 days; scale on jobs booked. (The launch plan's
+~$4.5k–7k/mo is the _scaled_ figure, not the launch figure.)
 
 ## Maintenance
 
