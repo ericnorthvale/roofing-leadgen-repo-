@@ -97,11 +97,52 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
       "Old Town Spring",
       "Champions Forest",
       "Augusta Pines",
+      "Harmony",
     ],
-    intro: "Based off I-45 in Spring. Most jobs are within a short drive of home base.",
+    intro:
+      "Spring is home base — off I-45 near Klein, Gleannloch Farms, and Champions Forest — so most jobs here are a short drive away, and we know which roofs in which subdivisions are coming due.",
+    seoDescription:
+      "Roofing in Spring, TX by a local company based here — IKO roof replacement, repair, and storm/insurance help across Klein, Gleannloch Farms, Champions, and Augusta Pines.",
     localContext:
-      "Spring sits in the hail-and-wind corridor north of Houston, where spring storms regularly bring large hail and straight-line winds. Housing ranges from established Klein-area subdivisions to newer master-planned communities like Gleannloch Farms.",
-    dataCompleteness: "draft",
+      "Spring is our home base, straddling the Harris–Montgomery county line north of Houston along I-45. It's a patchwork of eras: Klein and Champions Forest built out largely in the 1970s and '80s, so those roofs are well into replacement age, while Gleannloch Farms, Augusta Pines, and Harmony are 1990s-through-2010s master-planned communities whose original builder roofs are now aging out in waves. Old Town Spring anchors the historic railroad district. Because we're based here, we can be on a Spring roof quickly after a storm — and we already know the covenant expectations street to street.",
+    climateNote:
+      "Spring sits squarely in the hail-and-wind corridor north of Houston. The National Weather Service Houston/Galveston office counts roughly 50–60 thunderstorm days a year regionally, about a third of them severe, and NCEI's storm records log repeated quarter-size-and-larger hail across the Spring/Klein area most years. Straight-line downbursts of 60–100+ mph are the routine threat, with the occasional tropical system on top — Hurricane Beryl (2024) drove damaging gusts across the metro. Add relentless summer heat and UV, and asphalt roofs here tend to reach the early end of their rated life.",
+    permitHoaNote:
+      "Most of Spring is unincorporated Harris County. The county's Office of the County Engineer permits things like septic systems, driveway culverts, and floodplain work — it does not run a general residential building-permit program — so a straightforward re-roof is typically governed by your HOA or deed restrictions rather than a county building permit. Many Spring subdivisions (Gleannloch Farms, Augusta Pines, and others) do have architectural guidelines on shingle color, so we handle the HOA submittal. Note that northern Spring extends into Montgomery County and a few incorporated pockets differ — we confirm your specific address before we assume anything.",
+    commonRoofTypes: [
+      "Architectural (dimensional) asphalt shingle — the standard across Klein, Champions, and the master-planned communities; our IKO Dynasty line fits here",
+      "Class 4 impact-resistant asphalt (IKO Nordic) — worth pricing given the area's hail record and any insurance discount your carrier offers",
+      "Standing-seam or stone-coated metal — chosen on some custom and acreage homes for longevity",
+    ],
+    faqs: [
+      {
+        q: "Do I need a permit to replace my roof in Spring?",
+        a: "For most Spring homes — which are in unincorporated Harris County — there's no county building permit for a re-roof; the county's permitting focuses on septic, driveways, and floodplain work, not residential roofs. Your HOA or deed restrictions usually govern shingle color instead, and we handle that paperwork. Because northern Spring reaches into Montgomery County and a few areas are incorporated, we confirm your exact address first.",
+      },
+      {
+        q: "My Klein/Champions-area roof is original — is it time?",
+        a: "Much of Klein and Champions Forest was built in the 1970s–80s, so a lot of those roofs are past or near the end of architectural-shingle life for this climate. We'll document the actual condition with photos and give you an honest remaining-life estimate — repair if it's sound, replace only if it's truly due.",
+      },
+      {
+        q: "How fast can you get to my Spring home after a storm?",
+        a: "Spring is our home base off I-45, so we're usually close by — we prioritize a documented, free inspection quickly after a hail or wind event, while the evidence is fresh and before any claim deadline pressure.",
+      },
+      {
+        q: "Which shingle is best for Spring's hail exposure?",
+        a: "We install IKO Dynasty (Class 3) as standard and IKO Nordic (Class 4, the highest impact rating) as the upgrade. Class 4 can help you qualify for an insurance premium discount where your carrier offers one — ask yours — though the rating isn't a hail guarantee and hail isn't covered by the shingle warranty.",
+      },
+    ],
+    projects: [
+      {
+        summary:
+          "Reopened a denied claim on a renovated Spring home: we documented covered storm damage, pursued the appraisal process after the initial denial, and secured a full roof replacement — managing the whole process. (Full story under Projects.)",
+        photo: {
+          src: "/projects/iko-roof-replacement-spring-tx.jpg",
+          alt: "Aerial view of a completed IKO shingle roof replaced by Northvale Roofing on a Spring, TX home",
+        },
+      },
+    ],
+    dataCompleteness: "complete",
   },
   cypress: {
     slug: "cypress",
@@ -241,24 +282,107 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     slug: "magnolia",
     name: "Magnolia",
     county: "Montgomery",
-    landmarks: ["High Meadow Ranch", "Mostyn Manor", "FM 1488 corridor", "Magnolia Ridge"],
-    neighborhoods: ["High Meadow Ranch", "Mostyn Manor", "Magnolia Ridge", "Audubon"],
+    landmarks: [
+      "High Meadow Ranch",
+      "Mostyn Manor",
+      "FM 1488 corridor",
+      "Audubon",
+      "Magnolia Reserve",
+    ],
+    neighborhoods: [
+      "High Meadow Ranch",
+      "Mostyn Manor",
+      "Magnolia Ridge",
+      "Audubon",
+      "Sendera Ranch",
+    ],
     intro:
-      "Magnolia homes are larger, more exposed, and harder-hit by open-country storms than most of NW Houston.",
+      "Magnolia is acreage country — one-acre-plus wooded homesites, bigger and more complex roofs, and tall pines and oaks that drop limbs and shade in every storm.",
+    seoDescription:
+      "Roofing in Magnolia, TX for acreage and custom homes — IKO roof replacement, repair, storm and insurance help across High Meadow Ranch, Audubon, Mostyn Manor, and the FM 1488 corridor.",
     localContext:
-      "Magnolia's larger, more exposed lots off the FM 1488 corridor catch the full force of supercell storms moving off Lake Conroe, making wind and hail damage a recurring concern for homeowners here.",
-    dataCompleteness: "draft",
+      "Magnolia is the rural, wooded edge of southern Montgomery County along the FM 1488 corridor. Where The Woodlands is dense villages, Magnolia is acreage: one-acre-plus homesites in communities like High Meadow Ranch and High Meadow Estates (gated, heavily treed), newer master-planned Audubon, Mostyn Manor, Magnolia Reserve, and 1-to-5-acre spreads like Sendera Ranch. That means bigger, more complex roofs — more valleys, dormers, and steep pitches — and a canopy of tall pines and oaks directly overhead. Those trees are the local story: they drop limbs in wind, pile debris in valleys, and shade north-facing slopes that then streak with algae.",
+    climateNote:
+      "Magnolia catches the same Montgomery County hail and thunderstorm-wind exposure documented by the National Weather Service and NCEI — roughly 50–60 thunderstorm days a year regionally, about a third severe, with quarter-size-and-larger hail logged across the county most years. What's different here is the tree canopy: mature pines and oaks over acreage lots turn a wind event into a falling-limb-and-debris event, and heavy shade keeps roofs damp longer, accelerating the blue-green algae streaking common on Gulf-Coast roofs. Open stretches along FM 1488 also take the full force of straight-line winds.",
+    permitHoaNote:
+      "Most Magnolia-addressed property is unincorporated Montgomery County, which — like the unincorporated parts of The Woodlands — does not require a county building permit for a residential re-roof; deed restrictions and HOAs govern instead. Gated and master-planned communities such as High Meadow Ranch and Audubon do have architectural guidelines on materials and color, and we prepare that submittal. The small City of Magnolia itself is incorporated, so if your address is inside the city limits the rules differ — we confirm before ordering material.",
+    commonRoofTypes: [
+      "Architectural (dimensional) asphalt shingle — the standard on most Magnolia homes; IKO Dynasty in muted, tree-friendly colors",
+      "Class 4 impact-resistant asphalt (IKO Nordic) — a common upgrade on exposed acreage lots given hail and falling-limb risk",
+      "Standing-seam or stone-coated metal, tile, and slate — seen on larger custom and estate homes in the acreage communities",
+    ],
+    faqs: [
+      {
+        q: "Do I need a permit to re-roof in Magnolia?",
+        a: "For most Magnolia homes — unincorporated Montgomery County — there's no county building permit for a re-roof; your HOA or deed restrictions govern shingle and color, and we handle that submittal. If your address is inside the City of Magnolia limits, city rules apply, so we confirm your exact jurisdiction first.",
+      },
+      {
+        q: "The trees over my roof cause problems — what should I watch for?",
+        a: "On Magnolia's wooded acreage, three things: falling and abrading limbs in wind (trim back overhang), debris packing into valleys and behind chimneys (a leak path we clear and inspect), and heavy shade that keeps north slopes damp and algae-streaked. The IKO shingles we install carry a 10-year algae-resistance warranty, and we never pressure-wash asphalt — ARMA warns it causes damage.",
+      },
+      {
+        q: "My home is on acreage with a big, complex roof — does that change the job?",
+        a: "Yes — more valleys, dormers, and steep pitch mean more flashing detail and more of the labor that actually determines whether a roof lasts. We price every roof from its own size, pitch, and complexity and put the exact number in writing; a large custom roof simply has more of the details we document in your 40-photo packet.",
+      },
+      {
+        q: "Is a Class 4 shingle worth it out here?",
+        a: "For exposed acreage lots that see both hail and falling-limb impacts, IKO Nordic's Class 4 rating is worth pricing — and it can qualify you for an insurance premium discount where your carrier offers one. It isn't a hail guarantee, and hail isn't covered by the shingle warranty, but the impact resistance and any discount often pencil out.",
+      },
+    ],
+    projects: [
+      {
+        summary:
+          "Helped a Magnolia homeowner choose the right roof, not the cheapest — comparing IKO Dynasty and Nordic, colors, and ventilation to finish a major renovation. (Full story under Projects.)",
+        photo: {
+          src: "/projects/iko-roof-replacement-magnolia-tx.jpg",
+          alt: "Aerial view of a completed IKO shingle roof replaced by Northvale Roofing on a Magnolia, TX home",
+        },
+      },
+    ],
+    dataCompleteness: "complete",
   },
   conroe: {
     slug: "conroe",
     name: "Conroe",
     county: "Montgomery",
-    landmarks: ["Lake Conroe", "April Sound", "Bentwater", "Grand Central Park", "Woodforest"],
-    neighborhoods: ["April Sound", "Bentwater", "Grand Central Park", "Woodforest"],
-    intro: "Lake Conroe waterfront plus inland Conroe — wind exposure and humidity age roofs fast.",
+    landmarks: ["Lake Conroe", "April Sound", "Bentwater", "Grand Central Park", "Downtown Conroe"],
+    neighborhoods: [
+      "April Sound",
+      "Bentwater",
+      "Grand Central Park",
+      "Graystone Hills",
+      "Longmire",
+    ],
+    intro:
+      "Conroe spans gated Lake Conroe communities, new master-planned neighborhoods, and older inland homes — and unlike most of our area, roofs inside the city limits are permitted work.",
+    seoDescription:
+      "Roofing in Conroe, TX — IKO roof replacement, repair, storm and insurance help across Lake Conroe communities (April Sound, Bentwater), Grand Central Park, and inland Conroe. City permits handled.",
     localContext:
-      "Lake-adjacent roofs around Conroe see accelerated fastener corrosion and ridge-cap lift from sustained wind and humidity, while inland subdivisions face the same regional hail exposure as the rest of Montgomery County.",
-    dataCompleteness: "draft",
+      "Conroe is the Montgomery County seat, and it's really three roofing markets in one. On Lake Conroe, gated communities like April Sound and Bentwater sit on open water, where sustained wind and humidity work harder on fasteners, sealant, and ridge caps than on a sheltered inland lot. Around I-45 and the Grand Parkway, new master-planned neighborhoods like Grand Central Park are filling in with builder roofs. And across older inland Conroe — Graystone Hills, Longmire, and the neighborhoods near downtown — you'll find roofs of every era. The wrinkle that sets Conroe apart from the rest of our service area: much of it is inside an incorporated city with a building department, so re-roofs there are permitted work.",
+    climateNote:
+      "Conroe carries the standard Montgomery County storm exposure the National Weather Service and NCEI document — roughly 50–60 thunderstorm days a year regionally, about a third severe, with quarter-size-and-larger hail logged across the county most years, plus occasional tropical systems. Lake Conroe adds a local twist: roofs facing the open water get sustained, less-obstructed wind that stresses edges and ridge caps, and the lake humidity keeps shingles damp — accelerating the algae streaking and the sealant and fastener wear we see on waterfront homes.",
+    permitHoaNote:
+      "Conroe is the exception in our area: the City of Conroe requires a building permit for residential work inside the city limits, administered by its Building Inspections & Permits Department (permit applications run through the city's OpenGov portal). We pull and manage that permit as part of the job. If your address has a Conroe mailing address but is actually in unincorporated Montgomery County, the county doesn't require a re-roof permit — your HOA governs instead — so the first thing we confirm is which jurisdiction you're in. Lake communities like April Sound and Bentwater also have their own architectural review.",
+    commonRoofTypes: [
+      "Architectural (dimensional) asphalt shingle — the standard across inland and master-planned Conroe; IKO Dynasty in Standards-friendly colors",
+      "Class 4 impact-resistant asphalt (IKO Nordic) — worth pricing for both hail and the sustained wind on exposed lakefront lots",
+      "Standing-seam or stone-coated metal — chosen on some lakefront and custom homes for wind and longevity",
+    ],
+    faqs: [
+      {
+        q: "Do I need a permit to replace my roof in Conroe?",
+        a: "If your home is inside the City of Conroe limits, yes — the city requires a building permit for a re-roof, and we pull and manage it (applications go through the city's OpenGov portal). If your Conroe-addressed home is actually in unincorporated Montgomery County, there's no county re-roof permit and your HOA governs instead. We confirm which applies to your address before we start.",
+      },
+      {
+        q: "My home is on Lake Conroe — does the waterfront change anything?",
+        a: "It does. Open-water wind hits edges, rakes, and ridge caps harder than on a sheltered lot, and lake humidity keeps roofs damp, which speeds algae streaking and sealant/fastener wear. We pay extra attention to edge sealing and ventilation on lakefront roofs, and the IKO shingles we install carry a 130-mph wind warranty and a 10-year algae-resistance warranty.",
+      },
+      {
+        q: "Which shingle holds up best around Conroe?",
+        a: "We install IKO Dynasty (Class 3) as standard and IKO Nordic (Class 4) as the upgrade. For exposed lakefront and hail-prone lots, Nordic's polymer-modified mat and top impact rating are worth pricing — and Class 4 can help you qualify for an insurance premium discount where your carrier offers one.",
+      },
+    ],
+    dataCompleteness: "complete",
   },
 };
 

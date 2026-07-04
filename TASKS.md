@@ -133,7 +133,12 @@ Executing the owner's full "Website Updates V1.1" doc. Plan file:
       `/api/lead`, and a 30-question FAQ. Product + FAQPage JSON-LD; nav link.
       build + 166 unit + lint pass; Playwright drove all 5 islands (visualizer
       recolor verified, configurator encodes the selection, zero console errors).
-- [ ] **Expand 7 draft city pages** (Phase 4) — Spring → Magnolia → Conroe → rest.
+- [~] **Expand draft city pages** (Phase 4) — **batch 1 shipped: Spring,
+  Magnolia, Conroe** now `complete` and indexable with distinct, sourced
+  content (jurisdiction/permits, neighborhoods, climate, roof types, FAQs;
+  Spring + Magnolia carry their real project). Facts logged in
+  `docs/research-facts.md` Sheet 5. Remaining: Houston, Cypress, Kingwood,
+  Tomball (batch 2).
 - [ ] **EEAT + schema + blog top-up** (Phase 5).
 
 ## Phase 3 — Gated expansion (batches of 5–20)

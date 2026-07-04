@@ -725,3 +725,68 @@ re-verified against live copy: `services.ts`, `city-services.ts`, and
 `storm-response.astro` now cite Ins. Code §707.002 + Bus. & Com. Code §27.02
 for the deductible rules and Ins. Code §4102.163 for the public-adjuster
 prohibition. No remaining copy cites "§701" or a §27.02 rescission right.
+
+---
+
+## Sheet 5 — Secondary service-area cities (jurisdiction + local specifics)
+
+Compiled July 4, 2026 for the Phase-4 city-page expansion. Regional climate/storm
+facts reuse Sheet 3 (NWS Houston/Galveston, NCEI Montgomery County hail). Below
+are the city-DISTINCT facts that keep each page from being a doorway page.
+
+### Spring (mostly unincorporated Harris County; north edge in Montgomery Co.)
+
+- Harris County's Office of the County Engineer permits **septic, driveway
+  culverts, and floodplain/development** work — it does **not** run a general
+  residential building-permit program, so a straightforward re-roof in
+  unincorporated Harris County is governed by deed restrictions/HOA, not a county
+  building permit. **Always confirm the specific address** (incorporated pockets
+  and Montgomery-County portions differ) — SOURCE:
+  https://oce.harriscountytx.gov/Services/Permits/FAQ (resolves Sheet 4 UNVERIFIED
+  #1 for the "no general county re-roof permit" point; still tell homeowners to
+  confirm their address).
+- Spring straddles the Harris/Montgomery line: 77373/77388/77379 lean Harris;
+  77386/77389 extend toward Montgomery County near The Woodlands.
+- Established roof stock: Klein and Champions Forest date largely to the
+  1970s–80s (prime replacement age); Gleannloch Farms, Augusta Pines, and
+  Harmony are 1990s–2010s builds. Klein ISD anchors the area. Old Town Spring is
+  the historic railroad district. — SOURCE (neighborhood/era, attribute):
+  har.com community pages; texasrealestatesource.com Spring subdivisions.
+
+### Conroe (City of Conroe incorporated + unincorporated Montgomery Co.; Lake Conroe)
+
+- **The City of Conroe requires a building permit for residential work within
+  the city limits**, administered by its Building Inspections & Permits Department
+  (300 W. Davis St.; OpenGov permit portal effective Dec 2025; 936-522-3110). A
+  re-roof inside the city limits is permitted work — a genuine difference from the
+  unincorporated norm. Addresses with a Conroe mailing address that are actually
+  in unincorporated Montgomery County follow the county rule (no county re-roof
+  permit). **Confirm which jurisdiction the address is in** — SOURCE:
+  https://cityofconroe.org/services/building_inspections_permits/index.php
+- Conroe is the Montgomery County seat; Lake Conroe (~21,000 acres) drives
+  waterfront wind exposure over open water and humidity. Communities: April Sound
+  and Bentwater (gated, lake, HOA), Grand Central Park (new master-planned near
+  I-45/Grand Parkway), Graystone Hills, Longmire, Water Crest. — SOURCE
+  (attribute): har.com; community sites.
+
+### Magnolia (mostly unincorporated southern Montgomery Co.; small City of Magnolia)
+
+- Predominantly **rural/acreage** southern Montgomery County — one-acre-plus
+  wooded homesites (tall oaks and pines, creeks/ponds) in communities like High
+  Meadow Ranch/Estates (gated, 1-acre+), Audubon (new master-planned), Mostyn
+  Manor, Magnolia Reserve, and Sendera Ranch (1–5 acre, bridle trails) — SOURCE:
+  https://highmeadowtx.com/ ; https://www.texasrealestatesource.com/magnolia-tx/subdivisions/
+- Jurisdiction: most Magnolia-addressed property is unincorporated Montgomery
+  County (no county re-roof permit, same as The Woodlands' unincorporated norm);
+  the City of Magnolia itself is small/incorporated (confirm if inside city
+  limits). Heavy tree canopy = falling-limb risk in wind, shaded north slopes
+  that streak with algae, and debris load in valleys.
+
+### Sheet 5 — UNVERIFIED (do not publish)
+
+1. Exact City of Conroe / City of Magnolia adopted IRC edition and roofing
+   amendments — confirm before citing a specific code section for those cities.
+2. Whether specific named subdivisions are inside vs. outside city limits — tell
+   homeowners to confirm their address rather than asserting per-neighborhood.
+3. Lake Conroe acreage (~21,000 ac) is widely cited but secondary-sourced here;
+   attribute or re-verify before publishing the number.
