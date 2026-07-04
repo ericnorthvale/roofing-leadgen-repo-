@@ -121,9 +121,13 @@ the PDF (it embeds raster only) and auto-traced to SVG as a stopgap.
       backgrounds), measured WCAG pairing table, named supporting tones, full
       navy/gold/neutral 50–950 ramps, two-font type system, art direction,
       photography, applications (web/favicon/signage/vehicle), asset inventory
-- [x] `docs/brand-assets/` — 8 traced SVG + 8 transparent PNG logo variants
-      (wordmark + monogram × gold/navy/white/black), fidelity-checked at
-      150px/32px against the PDF originals
+- [x] `docs/brand-assets/` — 8 traced SVG logo variants (wordmark + monogram
+      × gold/navy/white/black), fidelity-checked at 150px/32px, plus the
+      designer's 8 original PNG exports recovered from the owner's Drive
+      Branding folder (`original/`)
+- [x] Drive sync: brand guidelines + voice guide uploaded to the owner's
+      Branding folder as Google Docs; traced SVGs uploaded alongside the
+      original PNGs (Drive had no vector versions)
 - [ ] **Owner/designer (NEEDS DATA):** true vector masters, Pantone coated +
       uncoated refs, `#1E1E2E` intent (purple cast) — see guide §8
 - [ ] **Next phase (not started):** apply the identity to the site — swap

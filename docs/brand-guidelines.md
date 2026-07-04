@@ -15,7 +15,8 @@ here were made by the owner on 2026-07-04:
 1. **Art direction:** light-first pages with navy-dominant "dark moments"
    (hero, footer, CTA bands).
 2. **Typography:** Cormorant Garamond + Montserrat (Open Sans dropped).
-3. **Logo assets:** extracted from the PDF and auto-traced to SVG as a
+3. **Logo assets:** designer's original PNG exports recovered from the
+   owner's Drive Branding folder; vectors auto-traced from the PDF as a
    stopgap — see [Asset inventory](#asset-inventory).
 
 ---
@@ -300,16 +301,30 @@ navy monogram (32px PNG), phone + domain as navy links. No banners, no quotes.
 ## 8. Asset inventory
 
 All files in [`docs/brand-assets/`](./brand-assets/). Transparent backgrounds
-throughout. **Provenance:** extracted from the 2026 brand PDF (the PDF embeds
-raster art only) and auto-traced to vector; shapes verified side-by-side
-against the originals at 150px and 32px.
+throughout.
 
-| File                                         | What it is                     |
-| -------------------------------------------- | ------------------------------ |
-| `northvale_logo_{gold,navy,white,black}.svg` | Full wordmark, traced vector   |
-| `northvale_logo_{gold,navy,white,black}.png` | Full wordmark, 1243×277 raster |
-| `northvale_N_{gold,navy,white,black}.svg`    | Monogram, traced vector        |
-| `northvale_N_{gold,navy,white,black}.png`    | Monogram, 217×223 raster       |
+**Canonical rasters** — `docs/brand-assets/original/` holds the designer's
+original PNG exports, recovered 2026-07-04 from the owner's Drive
+`Branding/Logos/Brand Assets Northvale/transparent/` folder (a
+`with_background/` set also exists in Drive; not mirrored here):
+
+| File                                      | What it is                         |
+| ----------------------------------------- | ---------------------------------- |
+| `northvale_roofing_logo_transparent.png`  | Full wordmark, **gold**, 1359×1008 |
+| `northvale_logo_{navy,white,black}.png`   | Full wordmark variants, 1359×1008  |
+| `northvale_N_{gold,navy,white,black}.png` | Monogram variants, 536×536         |
+
+Note: the designer's exported gold measures `#CAA36D` — one unit off the PDF's
+own spec. Per the PDF's rule ("reproduce gold as #C9A26C in all digital
+work"), **`#C9A26C` remains canonical**; treat the export's value as rounding.
+
+**Traced vectors (stopgap)** — top level of `brand-assets/`; auto-traced from
+the PDF art and verified side-by-side against the originals at 150px and 32px:
+
+| File                                         | What it is                   |
+| -------------------------------------------- | ---------------------------- |
+| `northvale_logo_{gold,navy,white,black}.svg` | Full wordmark, traced vector |
+| `northvale_N_{gold,navy,white,black}.svg`    | Monogram, traced vector      |
 
 **NEEDS DATA (owner/designer):**
 
@@ -318,8 +333,6 @@ against the originals at 150px and 32px.
    "never redraw."
 2. **Pantone coated + uncoated** references for navy and gold (§3.1).
 3. **Ink Navy `#1E1E2E` intent** — keep, correct, or drop (§3.2).
-4. Original high-res PNGs referenced by the PDF's asset table
-   (`northvale_roofing_logo_transparent.png` etc.), if they exist.
 
 ---
 
