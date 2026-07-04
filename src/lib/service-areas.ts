@@ -75,10 +75,35 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     landmarks: ["Memorial", "Spring Branch", "Champions", "Cypress-Fairbanks", "Heights"],
     neighborhoods: ["Memorial", "Spring Branch", "Champions", "Cypress-Fairbanks", "The Heights"],
     intro:
-      "Serving Greater Houston from our Spring base. From mature inner-loop bungalows to sprawling suburban builds, every Houston roof has its own history.",
+      "We serve Greater Houston from our Spring base — from mature inner-loop bungalows to sprawling suburban builds, and unlike the unincorporated suburbs, a re-roof inside the city limits is permitted work we handle.",
+    seoDescription:
+      "Roofing in Houston, TX — IKO roof replacement, repair, storm and insurance help across Memorial, Spring Branch, the Heights, Champions, and Cy-Fair. City of Houston roof permits handled.",
     localContext:
-      "Greater Houston sits squarely in the Gulf Coast storm corridor: hurricane and tropical-system exposure, spring and early-summer hail, and relentless heat and humidity that age shingles faster than in drier climates.",
-    dataCompleteness: "draft",
+      "Greater Houston is the most varied roofing market we serve. Inner-loop neighborhoods like the Heights and parts of Memorial mix early- and mid-century homes — often with steeper pitches, additions, and complex flashing — while Spring Branch, Champions, and the Cypress-Fairbanks corridor run from 1970s subdivisions to newer suburban builds. The through-line is exposure: Houston sits squarely in the Gulf Coast storm corridor, and it's one of the few parts of our area where a re-roof inside the city limits requires a permit. We work Houston from our Spring base to the north.",
+    climateNote:
+      "Houston takes the full Gulf Coast hazard set. The National Weather Service documents hurricane and tropical-system exposure (Hurricane Beryl drove damaging gusts across the metro in 2024, and the May 2024 derecho produced ~100-mph thunderstorm winds through parts of the city), spring and early-summer hail, and relentless heat, UV, and humidity. That heat-and-humidity load dries out asphalt binder and feeds the blue-green algae streaking common on Gulf-Coast roofs — so Houston shingles tend to reach the early end of their rated life.",
+    permitHoaNote:
+      "Jurisdiction is the thing to get right in Houston. Inside the City of Houston limits, a roof replacement requires a permit through the Houston Permitting Center — the permit confirms the new roof meets current wind-resistance code, and we pull and manage it. If the address is in unincorporated Harris County instead, there's no general county building permit for a re-roof and deed restrictions/HOA govern. Many Houston-area neighborhoods also have their own architectural guidelines. We confirm which jurisdiction your address is in before we start.",
+    commonRoofTypes: [
+      "Architectural (dimensional) asphalt shingle — the standard across Houston's suburban and updated inner-loop homes; IKO Dynasty",
+      "Class 4 impact-resistant asphalt (IKO Nordic) — worth pricing given metro hail exposure and any insurance discount your carrier offers",
+      "Standing-seam metal and, on some historic inner-loop homes, steeper architectural applications",
+    ],
+    faqs: [
+      {
+        q: "Do I need a permit to replace my roof in Houston?",
+        a: "If your home is inside the City of Houston limits, yes — the city requires a roof permit through the Houston Permitting Center, and we handle it. The permit exists to confirm the roof meets current wind-resistance code. If your address is in unincorporated Harris County, there's typically no county building permit for a re-roof and your HOA governs instead. We confirm which applies to your address.",
+      },
+      {
+        q: "My inner-loop home is older with a complex roof — can you handle it?",
+        a: "Yes. Older Heights and Memorial-area homes often have steeper pitches, additions, and more flashing detail than a standard suburban roof — which is exactly the labor that determines whether a roof lasts. We document every detail in a 40-photo packet and price from your roof's actual size, pitch, and complexity.",
+      },
+      {
+        q: "How does Houston's climate affect my roof?",
+        a: "Hard. Hurricanes and tropical systems, spring hail, and constant heat/UV/humidity all shorten asphalt life here, and shaded, humid slopes streak with algae. We size ventilation on every replacement and install IKO shingles with a 130-mph wind warranty and a 10-year algae-resistance warranty.",
+      },
+    ],
+    dataCompleteness: "complete",
   },
   spring: {
     slug: "spring",
@@ -157,10 +182,35 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
       "Blackhorse Ranch",
     ],
     intro:
-      "Bridgeland and Towne Lake lead our Cypress work — master-planned communities with specific shingle and color approvals.",
+      "Cypress is master-planned country — Bridgeland, Towne Lake, and Fairfield — where getting the architectural-review submittal right the first time is half the job.",
+    seoDescription:
+      "Roofing in Cypress (Cy-Fair), TX — IKO roof replacement, repair, storm and insurance help across Bridgeland, Towne Lake, Fairfield, and Blackhorse Ranch. ARC submittals handled.",
     localContext:
-      "Cypress is dominated by master-planned communities with strict architectural review committees that approve specific shingle lines and colors. Getting the ARC submittal right the first time is part of the job here.",
-    dataCompleteness: "draft",
+      "Cypress — Cy-Fair to locals — is unincorporated Harris County inside the City of Houston's extraterritorial jurisdiction, so it's not a city but a sprawling corridor of master-planned communities: Bridgeland, Towne Lake, Fairfield, Cypress Creek Lakes, and Blackhorse Ranch. Nearly all of them were built on Municipal Utility District (MUD) land with strict architectural-review committees that approve specific shingle lines and colors. Roof age runs the full range here — 1990s Fairfield roofs are aging out while Bridgeland is still adding phases — but the constant is that the ARC submittal, not a city permit, is what governs your re-roof.",
+    climateNote:
+      "Cypress carries the same NW-Houston Gulf Coast exposure the National Weather Service documents — hurricane and tropical-system risk, spring and early-summer hail, and 60–100+ mph thunderstorm downbursts, on top of relentless heat and humidity. The area's many man-made lakes and open, newer subdivisions offer little wind obstruction, so edge and ridge detailing matters, and the heat/UV/humidity load shortens asphalt-shingle life and feeds algae streaking.",
+    permitHoaNote:
+      "Because Cypress is unincorporated (in Houston's ETJ, not its city limits), there's no city building permit for a re-roof — but the architectural-review committee is strict. Communities like Bridgeland and Towne Lake approve specific shingle lines and colors, and getting that submittal right the first time avoids a costly re-do. We prepare and file the ARC paperwork with compliant IKO color samples as part of the job, and confirm your community's current requirements before ordering material.",
+    commonRoofTypes: [
+      "Architectural (dimensional) asphalt shingle — the ARC-approved standard across the master-planned communities; IKO Dynasty in approved colors",
+      "Class 4 impact-resistant asphalt (IKO Nordic) — worth pricing for hail exposure and any insurance discount, in the same muted palettes",
+      "Standing-seam or stone-coated metal on select custom homes where the ARC permits it",
+    ],
+    faqs: [
+      {
+        q: "Do I need a permit to re-roof in Cypress?",
+        a: "Cypress is unincorporated Harris County (inside Houston's ETJ, not its city limits), so there's typically no city building permit for a re-roof. What governs instead is your community's architectural-review committee — and in master-planned Cypress, those are strict about shingle line and color. We handle that ARC submittal.",
+      },
+      {
+        q: "Will my Bridgeland/Towne Lake HOA approve my shingle and color?",
+        a: "That's exactly what the ARC process decides, and it's the step people most often get wrong. We bring IKO color samples that fit your community's approved palette and file the submittal for you, so your choice clears review the first time and we don't order material before approval.",
+      },
+      {
+        q: "My Fairfield roof is from the '90s — is it due?",
+        a: "Quite possibly — a lot of Fairfield's original builder roofs are now past typical architectural-shingle life for this climate. We'll document the actual condition and give you an honest remaining-life estimate before recommending replacement.",
+      },
+    ],
+    dataCompleteness: "complete",
   },
   // The Woodlands — Phase 2 flagship. Facts below are sourced (NWS Houston/Galveston,
   // U.S. Census, The Woodlands Township Standards & RDRC pages). Marked "complete";
@@ -255,10 +305,35 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
       "Greentree",
     ],
     intro:
-      'Kingwood — the "Livable Forest" of far northeast Houston. Heavy tree cover makes roof condition a year-round concern.',
+      'Kingwood — the "Livable Forest" of far northeast Houston. Its tree canopy is beautiful and brutal on roofs, and because Kingwood is part of the City of Houston, a re-roof here is permitted work.',
+    seoDescription:
+      "Roofing in Kingwood, TX (the Livable Forest) — IKO roof replacement, repair, storm and insurance help across Kings Point, Bear Branch, Elm Grove, and Kings Forest. City permits handled.",
     localContext:
-      "Kingwood's signature tree canopy is beautiful and brutal on roofs: overhanging limbs, constant leaf-and-debris load on valleys and gutters, and limb-strike risk in every wind event. Many of its villages date to earlier build eras and HOA approvals still apply.",
-    dataCompleteness: "draft",
+      'Kingwood is a ~14,000-acre master-planned community northeast of downtown, marketed for decades as "The Livable Forest" — and that dense tree canopy defines roofing here. Its villages, from Kings Point and Bear Branch to Elm Grove and Kings Forest, largely date to earlier build eras, so many roofs are well into replacement age. Two things set Kingwood apart from our other suburbs: it was annexed into the City of Houston at the end of 1996, so City of Houston roof permits apply; and it flooded severely during Hurricane Harvey in 2017, which put a lot of local attention on doing roof and building work correctly.',
+    climateNote:
+      "Kingwood's tree canopy is the local roofing story. Overhanging limbs abrade and strike roofs in every wind event, leaves and debris pack valleys and gutters (a direct leak path), and heavy shade keeps north-facing slopes damp — accelerating the blue-green algae streaking common on Gulf-Coast roofs. On top of that, Kingwood carries the region's standard hail and tropical-system exposure documented by the National Weather Service, and its Harvey flooding history is a reminder that water intrusion here compounds fast.",
+    permitHoaNote:
+      "Kingwood was annexed into the City of Houston on December 31, 1996, so a roof replacement here requires a City of Houston permit through the Houston Permitting Center — which we pull and manage. On top of the city permit, Kingwood's village associations have their own architectural guidelines on shingle color, so we prepare that submittal too. We confirm your village's current requirements before ordering material.",
+    commonRoofTypes: [
+      "Architectural (dimensional) asphalt shingle — the standard across Kingwood's villages; IKO Dynasty in muted, tree-friendly colors",
+      "Class 4 impact-resistant asphalt (IKO Nordic) — worth pricing given hail plus the limb-strike risk under the canopy",
+      "Standing-seam or stone-coated metal on some custom homes",
+    ],
+    faqs: [
+      {
+        q: "Do I need a permit to replace my roof in Kingwood?",
+        a: "Yes — Kingwood was annexed into the City of Houston in 1996, so a re-roof requires a City of Houston permit through the Houston Permitting Center. We pull and manage it, and we also handle your village association's architectural submittal for shingle color.",
+      },
+      {
+        q: "The trees over my Kingwood roof are a problem — what should I do?",
+        a: "In the Livable Forest, watch three things: overhanging limbs that abrade and strike the roof in wind (trim them back), debris packing valleys and gutters (a common leak path we clear and inspect), and heavy shade that keeps slopes damp and algae-streaked. The IKO shingles we install carry a 10-year algae-resistance warranty, and we never pressure-wash asphalt.",
+      },
+      {
+        q: "My village roof is original — is it time to replace?",
+        a: "Many Kingwood villages date to earlier build eras, so a lot of roofs are past typical architectural-shingle life for this climate — especially under heavy shade and debris. We'll document the condition with photos and give you an honest remaining-life estimate before recommending replacement.",
+      },
+    ],
+    dataCompleteness: "complete",
   },
   tomball: {
     slug: "tomball",
@@ -271,12 +346,43 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
       "Vintage Oaks",
       "Downtown Tomball",
     ],
-    neighborhoods: ["Rose Hill", "Lakewood Crossing", "Willowcreek Ranch", "Vintage Oaks"],
+    neighborhoods: [
+      "Rose Hill",
+      "Lakewood Crossing",
+      "Willowcreek Ranch",
+      "Vintage Oaks",
+      "Old Town Tomball",
+    ],
     intro:
-      "We cover Tomball up FM 2920 from Spring — same-day response is rarely more than a short drive.",
+      "We cover Tomball up FM 2920 from Spring — from historic Old Town to fast-growing new subdivisions — and inside the city limits a re-roof is permitted work we handle.",
+    seoDescription:
+      "Roofing in Tomball, TX — IKO roof replacement, repair, storm and insurance help across Old Town Tomball, Willowcreek Ranch, Rose Hill, and Vintage Oaks. City of Tomball permits handled.",
     localContext:
-      "Tomball has grown quickly with large new-build subdivisions. Builder-grade shingle roofs in these neighborhoods commonly need attention as they reach the end of their service life, and the area sees the same Gulf Coast hail and wind exposure as the rest of NW Houston.",
-    dataCompleteness: "draft",
+      "Tomball blends a historic railroad-and-German-heritage Old Town with a fast wave of new master-planned growth on its fringes (Willowcreek Ranch, Rose Hill, and newer communities like Amira and Rosehill Reserve). That gives it two roof populations: older homes near downtown, and builder-grade shingle roofs in newer subdivisions that reach end-of-life in waves. Tomball is an incorporated city in Harris County near the Montgomery line, so — unlike the surrounding unincorporated areas — a re-roof inside the city limits is permitted work. We reach Tomball up FM 2920 from our Spring base.",
+    climateNote:
+      "Tomball sees the same NW-Houston Gulf Coast exposure the National Weather Service and NCEI document — spring and early-summer hail, 60–100+ mph thunderstorm downbursts, occasional tropical systems, and heavy heat, UV, and humidity. Newer open subdivisions on the city's growing edge offer little wind obstruction, so edge and ridge detailing matters, and the heat/humidity load shortens asphalt-shingle life and drives algae streaking.",
+    permitHoaNote:
+      "The City of Tomball requires a permit before construction work starts, including a residential roofing permit (applications run through the city's online SmartGov portal), and the city has adopted current building/energy codes. We pull and manage that permit inside the city limits. Homes on the surrounding unincorporated fringe follow the county rule (no county re-roof permit) with HOA guidelines instead — so we confirm which jurisdiction your address is in before we start.",
+    commonRoofTypes: [
+      "Architectural (dimensional) asphalt shingle — the standard across new Tomball subdivisions; IKO Dynasty",
+      "Class 4 impact-resistant asphalt (IKO Nordic) — worth pricing for hail exposure and any insurance discount",
+      "Standing-seam metal on some Old Town and custom/acreage homes",
+    ],
+    faqs: [
+      {
+        q: "Do I need a permit to replace my roof in Tomball?",
+        a: "If your home is inside the City of Tomball limits, yes — the city requires a roofing permit before work starts (submitted through its online portal), and we pull and manage it. If your Tomball-addressed home is on the unincorporated fringe, there's typically no county re-roof permit and your HOA governs. We confirm which applies to your address.",
+      },
+      {
+        q: "My newer Tomball subdivision roof is builder-grade — how long will it last?",
+        a: "Builder-grade roofs in the fast-growing Tomball subdivisions commonly need attention as they reach the end of their service life, sooner in this heat. We document the actual condition and give you an honest remaining-life estimate — and when it's time, we install IKO with a 130-mph wind warranty and 15-year non-prorated Iron Clad coverage.",
+      },
+      {
+        q: "Which shingle is best for Tomball's storm exposure?",
+        a: "We install IKO Dynasty (Class 3) as standard and IKO Nordic (Class 4) as the upgrade. On open, newer subdivisions that take unobstructed wind and hail, Nordic's top impact rating is worth pricing — and Class 4 can help you qualify for an insurance premium discount where your carrier offers one.",
+      },
+    ],
+    dataCompleteness: "complete",
   },
   magnolia: {
     slug: "magnolia",

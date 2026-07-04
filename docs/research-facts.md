@@ -782,11 +782,58 @@ are the city-DISTINCT facts that keep each page from being a doorway page.
   limits). Heavy tree canopy = falling-limb risk in wind, shaded north slopes
   that streak with algae, and debris load in valleys.
 
+### Houston (City of Houston + unincorporated Harris Co.)
+
+- **The City of Houston requires a permit to replace a roof**, via the Houston
+  Permitting Center — the permit exists to confirm the new roof meets current
+  wind-resistance code. Homes in the city limits are permitted work; addresses in
+  unincorporated Harris County follow the county rule (no general residential
+  building permit). **Confirm which applies** — SOURCE:
+  https://www.houstonpermittingcenter.org/hpwcode1140 ;
+  https://oce.harriscountytx.gov/Services/Permits/FAQ
+- Greater Houston housing spans inner-loop early/mid-century bungalows to sprawling
+  suburban builds; full Gulf Coast exposure (hurricanes/tropical systems + spring
+  hail + heat/humidity). — SOURCE: Sheet 3 climate facts.
+
+### Cypress / Cy-Fair (unincorporated Harris Co., City of Houston ETJ)
+
+- Cypress is **unincorporated Harris County, entirely inside the City of Houston's
+  extraterritorial jurisdiction** — it is not a city, so there's no city building
+  permit for a re-roof; deed restrictions/ARCs govern. Nearly every community is a
+  master-planned development on **MUD** (Municipal Utility District) land
+  (Bridgeland, Towne Lake, Fairfield, Cypress Creek Lakes, Blackhorse Ranch), each
+  with strict architectural-review committees on shingle line + color — SOURCE:
+  https://en.wikipedia.org/wiki/Cypress,_Texas ; https://livtexas.com/blog/mud-districts-in-cypress-what-buyers-should-know
+- Cy-Fair ISD anchors the identity; roofs range from 1990s Fairfield (aging) to
+  brand-new Bridgeland phases.
+
+### Kingwood ("The Livable Forest" — annexed into the City of Houston, 1996)
+
+- Kingwood was **annexed into the City of Houston on Dec 31, 1996**, so City of
+  Houston roof permits apply — SOURCE: https://en.wikipedia.org/wiki/Kingwood,_Texas
+- A ~14,000-acre master-planned "Livable Forest" with dense tree canopy (heavy
+  shade, limb/debris load, algae on shaded slopes) northeast of downtown; suffered
+  severe flooding from Hurricane Harvey (2017) — SOURCE: same + Super Neighborhood
+  43 (houstontx.gov/superneighborhoods/43.html).
+
+### Tomball (City of Tomball incorporated + surrounding unincorporated)
+
+- **The City of Tomball requires construction permits before work starts**,
+  including a residential roofing permit (SmartGov online portal); residential
+  buildings meet the 2021 IECC per city ordinance — SOURCE:
+  https://tomballtx.gov/200/Building-Permits ;
+  https://tomballtx.gov/DocumentCenter/View/2166/Roofing-Permit-Application-Residential
+- Historic Old Town Tomball (railroad district, German heritage) plus fast-growing
+  master-planned communities (e.g., Amira, Rosehill Reserve) on the unincorporated
+  fringe; the city is in Harris County near the Montgomery line.
+
 ### Sheet 5 — UNVERIFIED (do not publish)
 
-1. Exact City of Conroe / City of Magnolia adopted IRC edition and roofing
-   amendments — confirm before citing a specific code section for those cities.
+1. Exact City of Conroe / Magnolia / Tomball / Houston adopted IRC edition and
+   roofing amendments — confirm before citing a specific code section per city.
 2. Whether specific named subdivisions are inside vs. outside city limits — tell
    homeowners to confirm their address rather than asserting per-neighborhood.
 3. Lake Conroe acreage (~21,000 ac) is widely cited but secondary-sourced here;
    attribute or re-verify before publishing the number.
+4. Kingwood's ~14,000-acre figure + exact current City of Houston re-roof permit
+   process — attribute/confirm before quoting specifics.

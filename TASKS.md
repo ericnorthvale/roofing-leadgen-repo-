@@ -133,12 +133,13 @@ Executing the owner's full "Website Updates V1.1" doc. Plan file:
       `/api/lead`, and a 30-question FAQ. Product + FAQPage JSON-LD; nav link.
       build + 166 unit + lint pass; Playwright drove all 5 islands (visualizer
       recolor verified, configurator encodes the selection, zero console errors).
-- [~] **Expand draft city pages** (Phase 4) — **batch 1 shipped: Spring,
-  Magnolia, Conroe** now `complete` and indexable with distinct, sourced
-  content (jurisdiction/permits, neighborhoods, climate, roof types, FAQs;
-  Spring + Magnolia carry their real project). Facts logged in
-  `docs/research-facts.md` Sheet 5. Remaining: Houston, Cypress, Kingwood,
-  Tomball (batch 2).
+- [x] **Expand draft city pages** (Phase 4) — **all 7 shipped.** Batch 1: Spring,
+      Magnolia, Conroe. Batch 2: Houston (City permit + hurricane), Cypress (Cy-Fair
+      MUD/ARC, Houston ETJ), Kingwood (annexed into City of Houston 1996 +
+      Livable-Forest canopy + Harvey), Tomball (City of Tomball permits + Old Town).
+      Every city now `complete`/indexable with distinct, sourced jurisdiction/permit,
+      neighborhood, climate, roof-type, and FAQ content (research-facts.md Sheet 5).
+      All 8 service-area hubs are now live.
 - [ ] **EEAT + schema + blog top-up** (Phase 5).
 
 ## Phase 3 — Gated expansion (batches of 5–20)
