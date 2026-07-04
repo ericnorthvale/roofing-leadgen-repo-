@@ -55,17 +55,21 @@ const gtagLoaderId = ga4Id ?? adsId;
     {s.noindex && <meta name="robots" content="noindex,nofollow" />}
     {gscVerification && <meta name="google-site-verification" content={gscVerification} />}
 
+    {/* Favicon/app-icon set from the N monogram (docs/brand-guidelines.md §7.2). */}
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link
       rel="preload"
-      href="/fonts/inter-latin-wght-normal.woff2"
+      href="/fonts/montserrat-latin-wght-normal.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="/fonts/fraunces-latin-wght-normal.woff2"
+      href="/fonts/cormorant-garamond-latin-wght-normal.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -78,7 +82,7 @@ const gtagLoaderId = ga4Id ?? adsId;
     <meta property="og:url" content={s.canonical} />
     <meta property="og:image" content={s.ogImageAbsolute} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#172f52" />
+    <meta name="theme-color" content="#060E21" />
 
     <script type="application/ld+json" set:html={JSON.stringify(biz)} />
     {

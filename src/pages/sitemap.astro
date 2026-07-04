@@ -39,7 +39,7 @@ const liveAreas = SERVICE_AREA_SLUGS.map((slug) => SERVICE_AREAS[slug]).filter(
 
     <div class="mt-10 grid gap-10 md:grid-cols-2">
       <div>
-        <h2 class="font-serif text-2xl">Main pages</h2>
+        <h2 class="font-sans text-2xl font-semibold">Main pages</h2>
         <ul class="mt-4 space-y-2">
           {
             corePages.map((p) => (
@@ -52,7 +52,7 @@ const liveAreas = SERVICE_AREA_SLUGS.map((slug) => SERVICE_AREAS[slug]).filter(
       </div>
 
       <div>
-        <h2 class="font-serif text-2xl">Services</h2>
+        <h2 class="font-sans text-2xl font-semibold">Services</h2>
         <ul class="mt-4 space-y-2">
           {
             SERVICE_LIST.map((s) => (
@@ -65,7 +65,7 @@ const liveAreas = SERVICE_AREA_SLUGS.map((slug) => SERVICE_AREAS[slug]).filter(
       </div>
 
       <div>
-        <h2 class="font-serif text-2xl">Service areas</h2>
+        <h2 class="font-sans text-2xl font-semibold">Service areas</h2>
         {
           liveAreas.length > 0 ? (
             <ul class="mt-4 space-y-2">
@@ -85,7 +85,7 @@ const liveAreas = SERVICE_AREA_SLUGS.map((slug) => SERVICE_AREAS[slug]).filter(
       </div>
 
       <div>
-        <h2 class="font-serif text-2xl">For your situation</h2>
+        <h2 class="font-sans text-2xl font-semibold">For your situation</h2>
         <ul class="mt-4 space-y-2">
           {
             PERSONA_SLUGS.map((slug) => (
@@ -98,7 +98,7 @@ const liveAreas = SERVICE_AREA_SLUGS.map((slug) => SERVICE_AREAS[slug]).filter(
       </div>
 
       <div>
-        <h2 class="font-serif text-2xl">Legal</h2>
+        <h2 class="font-sans text-2xl font-semibold">Legal</h2>
         <ul class="mt-4 space-y-2">
           {
             legalPages.map((p) => (

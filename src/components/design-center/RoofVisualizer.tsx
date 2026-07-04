@@ -266,7 +266,7 @@ export default function RoofVisualizer() {
                 }}
                 className={`block h-10 w-full rounded-md border-2 ${
                   color.name === c.name
-                    ? "border-[color:var(--color-gold-500)]"
+                    ? "border-[color:var(--color-gold-600)]"
                     : "border-transparent"
                 }`}
                 style={{ backgroundColor: c.swatch }}

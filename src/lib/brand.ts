@@ -43,8 +43,13 @@ export const SIGNATURE_PHRASES = [
   "Built for the next storm, not the last one.",
 ] as const;
 
+// Brand palette anchors (docs/brand-guidelines.md §3). `goldDeep` is the only
+// gold allowed as body-size text/icons on light backgrounds (gold itself fails
+// WCAG on white at 2.37:1); full tint ramps live in src/styles/globals.css.
 export const COLORS = {
-  navy: "#172f52",
-  gold: "#d98a1f",
-  ink: "#1f1f1f",
+  navy: "#060E21",
+  gold: "#C9A26C",
+  goldDeep: "#956E37",
+  cream: "#E8D5B0",
+  ink: "#1d1e20",
 } as const;

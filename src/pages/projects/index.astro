@@ -43,10 +43,10 @@ const projects = await getPublishedProjects();
                 </a>
               )}
               <div class="p-5">
-                <p class="text-xs font-semibold tracking-wide text-[color:var(--color-gold-700)] uppercase">
+                <p class="text-xs font-semibold tracking-wide text-[color:var(--color-gold-600)] uppercase">
                   {p.data.area}
                 </p>
-                <h2 class="mt-1 text-xl">
+                <h2 class="mt-1 font-sans text-xl font-semibold">
                   <a href={`/projects/${p.id}/`}>{p.data.title}</a>
                 </h2>
                 <p class="mt-2 text-[color:var(--color-ink-800)]">{p.data.shortStory}</p>

@@ -22,7 +22,8 @@ export interface SeoOutput extends SeoInput {
   titleWithBrand: string;
 }
 
-const DEFAULT_OG = "/og/default.svg";
+// PNG, not SVG — social crawlers (FB/LinkedIn/X) don't rasterize SVG og:images.
+const DEFAULT_OG = "/og/default.png";
 
 export function buildSeo(input: SeoInput, siteUrl: string): SeoOutput {
   const base = siteUrl.replace(/\/+$/, "");

@@ -47,8 +47,12 @@ const isDark = variant === "dark";
             isDark ? "border-white/25 bg-white/5" : "border-[color:var(--color-navy-100)] bg-white",
           ]}
         >
+          {/* Brand gold only on dark; Gold Deep for icons on light (§3.3). */}
           <svg
-            class="h-3.5 w-3.5 shrink-0 text-[color:var(--color-gold-500)]"
+            class:list={[
+              "h-3.5 w-3.5 shrink-0",
+              isDark ? "text-[color:var(--color-gold-400)]" : "text-[color:var(--color-gold-600)]",
+            ]}
             viewBox="0 0 20 20"
             fill="currentColor"
             aria-hidden="true"
