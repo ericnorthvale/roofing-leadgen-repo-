@@ -187,6 +187,17 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
         a: "Yes — Grogan's Mill, Panther Creek, Cochran's Crossing, Indian Springs, Alden Bridge, College Park, Sterling Ridge, Carlton Woods (behind the gates — we confirm the current application and access requirements before scheduling), and Creekside Park. Each village has its own page covering roof ages and covenant specifics.",
       },
     ],
+    // Real completed project (full story at /projects). Never fabricated.
+    projects: [
+      {
+        summary:
+          "Reopened a denied hail claim: after another contractor missed the adjuster meeting, we re-inspected, documented one-inch hail damage, met the adjuster on-site, and secured a full roof replacement — then added a solar-powered attic fan. (See the full story under Projects.)",
+        photo: {
+          src: "/projects/iko-roof-replacement-the-woodlands-tx.jpg",
+          alt: "Aerial view of a completed IKO shingle roof replaced by Northvale Roofing on a Woodlands, TX home",
+        },
+      },
+    ],
     dataCompleteness: "complete",
   },
   kingwood: {

@@ -77,6 +77,17 @@ next Claude session):
       nine village pages. Real reviews unlock the AggregateRating schema.
 - [ ] **Drone**: pages currently make NO drone-inspection claims — tell Claude
       if you buy one so the inspection pages can say so truthfully.
+- [ ] **IKO ROOFPRO tier** — confirm Northvale's actual IKO ROOFPRO enrollment
+      status/tier. The site says "IKO ROOFPRO applicant" everywhere; a confirmed
+      Select+ tier unlocks the "extended Iron Clad, up to 25 years" warranty claim
+      (kept off the site until then). See `docs/research-facts.md` Sheet 1B.
+- [ ] **IKO colors sold in TX** — the color gallery/config will list IKO's full
+      published Dynasty/Nordic palettes; tell Claude which colors Northvale
+      actually stocks so we can prune to the real offering.
+- [ ] **Project photos ↔ stories** — the 4 homeowner-story photos in
+      `public/projects/` were paired to cities in the order supplied
+      (Woodlands/Spring/Magnolia/Humble). Confirm each photo is really from that
+      city, or send the correct mapping, so filenames + alt text stay truthful.
 - [ ] **Re-verify before quoting anywhere**: Angi's Houston-specific cost
       figures and CertainTeed Landmark wind/algae warranty numbers are on the
       research do-not-publish list (docs/research-facts.md) — they need a

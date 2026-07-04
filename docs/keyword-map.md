@@ -37,7 +37,8 @@ sitewide (enforced by tests/unit/seo-content.test.ts).
 | `/warranty`                      | roof warranty explained / IKO warranty tiers   | indexable                          |
 | `/financing`                     | roof financing                                 | noindex until owner supplies terms |
 | `/team`                          | (brand)                                        | noindex until real people          |
-| `/gallery`                       | (brand)                                        | noindex until real photos          |
+| `/gallery`                       | (brand) / our work                             | indexable (real project photos)    |
+| `/projects`, `/projects/*`       | Northvale roofing projects / case studies      | indexable (real homeowner stories) |
 | `/about`, `/reviews`, `/contact` | brand queries                                  | existing                           |
 
 ## Blog (informational long-tail; each links up to its money page)

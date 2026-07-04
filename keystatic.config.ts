@@ -32,7 +32,7 @@ export default config({
     brand: { name: "Northvale Roofing" },
     navigation: {
       Business: ["businessInfo"],
-      Customers: ["reviews"],
+      Customers: ["reviews", "projects"],
     },
   },
   singletons: {
@@ -116,6 +116,61 @@ export default config({
         cityTag: fields.text({
           label: "City slug (optional)",
           description: "e.g. the-woodlands, spring",
+        }),
+      },
+    }),
+    projects: collection({
+      label: "Projects / Homeowner stories (REAL only)",
+      path: "src/content/projects/*",
+      slugField: "title",
+      format: { data: "json" },
+      entryLayout: "form",
+      schema: {
+        title: fields.slug({
+          name: {
+            label: "Project title",
+            description:
+              "A REAL completed job only. Inventing a project story is a fabricated fact (FTC). Do not name the homeowner's insurance carrier.",
+          },
+        }),
+        area: fields.text({ label: "Area (display)", description: 'e.g. "The Woodlands, TX"' }),
+        citySlug: fields.text({
+          label: "City slug (optional)",
+          description: "Links to that city hub, e.g. the-woodlands, spring, magnolia",
+        }),
+        serviceTags: fields.array(fields.text({ label: "Service tag" }), {
+          label: "Service tags",
+          description: "e.g. replacement, repair, inspection, storm, insurance",
+          itemLabel: (props) => props.value || "tag",
+        }),
+        shortStory: fields.text({ label: "Short story (teaser)", multiline: true }),
+        longStory: fields.text({
+          label: "Long story",
+          description: "Full narrative. Separate paragraphs with a blank line.",
+          multiline: true,
+        }),
+        date: fields.date({ label: "Completed / published date" }),
+        photo: fields.object({
+          src: fields.text({
+            label: "Photo path",
+            description:
+              "A REAL Northvale photo, e.g. /projects/iko-roof-replacement-spring-tx.jpg",
+          }),
+          alt: fields.text({ label: "Photo alt text (truthful description)" }),
+        }),
+        featured: fields.checkbox({ label: "Featured", defaultValue: false }),
+        placeholder: fields.checkbox({
+          label: "Placeholder (never rendered)",
+          defaultValue: false,
+        }),
+        status: fields.select({
+          label: "Status",
+          options: [
+            { label: "Draft", value: "draft" },
+            { label: "Published", value: "published" },
+            { label: "Archived", value: "archived" },
+          ],
+          defaultValue: "draft",
         }),
       },
     }),

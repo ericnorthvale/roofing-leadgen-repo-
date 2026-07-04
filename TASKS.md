@@ -108,6 +108,29 @@ roof-inspection,storm-damage,insurance-claims}` via `city-services.ts` +
 - [x] Tests: 88 unit (21 new SEO guards: unique titles, lengths, gates,
       anti-cannibalization, sitemap parity) + 60 e2e pass
 
+## Phase 2.6 — Website Updates V1.1 (this branch, PR #31) — in progress
+
+Executing the owner's full "Website Updates V1.1" doc. Plan file:
+`root-claude-uploads-…-tender-steele.md`.
+
+- [x] **IKO-only rebrand** (Phase 1 of the plan): retired GAF/TAMKO/CertainTeed
+      from all published content; IKO Dynasty (Class 3) + Nordic (Class 4) are the
+      only shingles. New sourced `docs/research-facts.md` Sheet 1B + single-source
+      `src/lib/iko-products.ts`. Cert → "IKO ROOFPRO applicant". Blog
+      `tamko-…-timberline` → `iko-dynasty-vs-nordic` + 301 redirect. New
+      `tests/unit/no-competitor-brands.test.ts` guard. build + 166 unit + lint pass.
+- [x] **Homeowner stories / case studies** (Phase 2 of the plan): owner-editable
+      `projects` collection (Keystatic) + `src/lib/projects.ts`; 4 real stories
+      (carrier names generalized; Humble = project-only, no city page); `/projects`
+      index + detail with Article/ImageObject JSON-LD; 4 optimized real photos in
+      `public/projects/`; `/gallery` now indexes (real photos); Woodlands hub shows
+      a real project; footer link added.
+- [ ] **Roof Design Center** (Phase 3 of the plan) — IKO product cards, comparison,
+      color gallery, roof visualizer, configurator, warranty center, roof-system
+      diagram, 30+ FAQ. (next)
+- [ ] **Expand 7 draft city pages** (Phase 4) — Spring → Magnolia → Conroe → rest.
+- [ ] **EEAT + schema + blog top-up** (Phase 5).
+
 ## Phase 3 — Gated expansion (batches of 5–20)
 
 - [ ] (per batch) build real-data pages; noindex drafts for the rest

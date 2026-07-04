@@ -3,10 +3,15 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import PhotoGallery from "@components/PhotoGallery.astro";
 import LeadForm from "@components/LeadForm.astro";
+import { getPublishedProjects } from "~/lib/projects";
 
-// Quality gate: stays noindex until REAL Northvale project photos exist.
-// Presenting stock imagery as our work would violate FTC rules (Hard Rule #2).
-const hasRealPhotos = false;
+// Real Northvale project photos, sourced from the published project stories
+// (single source of truth). Presenting stock imagery as our work would violate
+// FTC rules (Hard Rule #2), so this only ever shows real jobs.
+const photos = (await getPublishedProjects())
+  .filter((p) => p.data.photo)
+  .map((p) => ({ url: p.data.photo!.src, alt: p.data.photo!.alt }));
+const hasRealPhotos = photos.length > 0;
 ---
 
 <BaseLayout
@@ -40,8 +45,17 @@ const hasRealPhotos = false;
   </section>
 
   <section class="mx-auto max-w-6xl px-4 py-6">
-    {/* Fills with real job photos (owner-supplied / CompanyCam) — renders nothing until then. */}
-    <PhotoGallery photos={[]} />
+    {/* Real job photos from the published project stories. */}
+    <PhotoGallery photos={photos} />
+    {
+      hasRealPhotos && (
+        <p class="mt-6 text-center">
+          <a class="font-semibold underline" href="/projects">
+            Read the stories behind these roofs →
+          </a>
+        </p>
+      )
+    }
   </section>
 
   <section class="mx-auto max-w-xl px-4 py-12">
