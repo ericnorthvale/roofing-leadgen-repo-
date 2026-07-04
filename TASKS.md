@@ -125,9 +125,14 @@ Executing the owner's full "Website Updates V1.1" doc. Plan file:
       index + detail with Article/ImageObject JSON-LD; 4 optimized real photos in
       `public/projects/`; `/gallery` now indexes (real photos); Woodlands hub shows
       a real project; footer link added.
-- [ ] **Roof Design Center** (Phase 3 of the plan) — IKO product cards, comparison,
-      color gallery, roof visualizer, configurator, warranty center, roof-system
-      diagram, 30+ FAQ. (next)
+- [x] **Roof Design Center** (Phase 3 of the plan): `/roof-design-center` with the
+      first React islands — product cards, comparison table, interactive color
+      gallery (all TX colors), brush-to-mask **roof visualizer** (photo stays
+      on-device), color recommender, warranty center, why-IKO, clickable
+      roof-system diagram, 5-step **configurator** that submits the selection to
+      `/api/lead`, and a 30-question FAQ. Product + FAQPage JSON-LD; nav link.
+      build + 166 unit + lint pass; Playwright drove all 5 islands (visualizer
+      recolor verified, configurator encodes the selection, zero console errors).
 - [ ] **Expand 7 draft city pages** (Phase 4) — Spring → Magnolia → Conroe → rest.
 - [ ] **EEAT + schema + blog top-up** (Phase 5).
 

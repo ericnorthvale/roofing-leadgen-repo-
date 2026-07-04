@@ -1,0 +1,466 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import Faq from "@components/Faq.astro";
+import RelatedLinks from "@components/RelatedLinks.astro";
+import ColorGallery from "@components/design-center/ColorGallery.tsx";
+import ColorRecommender from "@components/design-center/ColorRecommender.tsx";
+import RoofVisualizer from "@components/design-center/RoofVisualizer.tsx";
+import RoofSystemDiagram from "@components/design-center/RoofSystemDiagram.tsx";
+import RoofConfigurator from "@components/design-center/RoofConfigurator.tsx";
+import { IKO_SHINGLES, IKO_WARRANTY } from "~/lib/iko-products";
+import { faqPageJsonLd } from "~/lib/seo";
+import { serviceLinks } from "~/lib/internal-links";
+
+// Product structured data for the two shingle lines (facts from iko-products.ts).
+const productLd = IKO_SHINGLES.map((s) => ({
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: s.name,
+  brand: { "@type": "Brand", name: "IKO" },
+  category: "Roofing shingles",
+  description: `${s.tagline} ${s.impactLabel} impact rating, ${s.windWarrantyMph}-mph limited wind warranty, Limited Lifetime + ${s.ironCladYears}-year Iron Clad Protection.`,
+  material: "Asphalt (fiberglass-reinforced)",
+  additionalProperty: [
+    { "@type": "PropertyValue", name: "Impact rating", value: s.impactLabel },
+    { "@type": "PropertyValue", name: "Wind warranty", value: `${s.windWarrantyMph} mph` },
+  ],
+}));
+
+const faqs = [
+  {
+    q: "What's the difference between IKO Dynasty and IKO Nordic?",
+    a: "Dynasty is our standard architectural shingle (UL 2218 Class 3). Nordic is the upgrade: polymer-modified (SBS) asphalt that earns the highest hail rating, UL 2218 Class 4. They share the ArmourZone nailing band, the 130-mph limited wind warranty, Limited Lifetime coverage, 15-year Iron Clad Protection, and the 10-year algae warranty.",
+  },
+  {
+    q: "Is Class 4 (Nordic) worth the extra cost?",
+    a: "Often, yes — but do the math first. Call your insurer and ask what annual premium discount a Class 4 roof earns you; over the life of the roof that discount frequently covers the upgrade. If your street sees repeated hail, the added durability is a bonus on top of the discount.",
+  },
+  {
+    q: "Will my insurance company give me a discount for a Class 4 roof?",
+    a: "Many Texas carriers offer a wind/hail premium credit for UL 2218 Class 4 roofs, and the Texas Department of Insurance notes Class 4 receives the highest available credit — but each company sets its own amount, and some offer none. Always confirm with your carrier before deciding.",
+  },
+  {
+    q: "Does the impact rating mean my roof is hail-proof?",
+    a: "No. IKO is explicit that the UL 2218 rating is a lab classification, not a guarantee against hail, and hail damage is not covered by the shingle warranty. Its purpose is to help you qualify for an insurance discount. No shingle is hail-proof.",
+  },
+  {
+    q: "What is the ArmourZone?",
+    a: "It's IKO's reinforced nailing band — a wider, tougher, woven target for the fasteners. It gives installers a bigger margin for correct nail placement and helps the shingle resist the wind uplift that peels ordinary shingles.",
+  },
+  {
+    q: "What wind warranty do Dynasty and Nordic carry?",
+    a: "Both carry a 130-mph limited high-wind warranty when installed to IKO's application requirements — which is how we nail every roof, with a properly sealed starter course at the eaves and rakes where wind failures usually start.",
+  },
+  {
+    q: "What is Iron Clad Protection?",
+    a: "It's IKO's non-prorated coverage period: the first 15 years are full coverage for manufacturing defects, with no depreciation math — right through the window when a defect is most likely to show.",
+  },
+  {
+    q: "How long should my IKO roof last?",
+    a: "The product warranty is Limited Lifetime against manufacturing defects. Real-world service life depends on ventilation, install quality, and our climate — Gulf-Coast heat and UV shorten asphalt life, which is why we size ventilation on every job and offer free annual inspections.",
+  },
+  {
+    q: "Which roof color is most popular in The Woodlands?",
+    a: "Granite Black and Summit Grey are the most-requested here — both are versatile and read clean on almost any exterior. Weatherwood blends and Shadow Brown are popular on tan-brick and wooded lots. Your village's design-review palette has the final say.",
+  },
+  {
+    q: "Does a darker roof make my house hotter?",
+    a: "A darker roof absorbs more heat, but attic temperature is driven far more by ventilation than shingle color. We size balanced intake and exhaust on every replacement; a well-vented attic under a dark roof stays cooler than a poorly vented one under a light roof.",
+  },
+  {
+    q: "Are the colors on this page exact?",
+    a: "No — the on-screen swatches and the visualizer are representative previews. Granule color shifts with lot and lighting, so we always bring physical samples to your estimate before you commit.",
+  },
+  {
+    q: "How does the roof visualizer work?",
+    a: "Upload a photo of your house (it stays in your browser — we never receive it), brush over the roof, and tap colors to preview them in real time. A Northvale rep can also walk through it with you and bring real samples.",
+  },
+  {
+    q: "Can I see physical samples before deciding?",
+    a: "Yes. We bring real IKO shingle samples in your candidate colors to the free inspection, so you're choosing off the actual product, not a screen.",
+  },
+  {
+    q: "What colors does Nordic come in?",
+    a: "Nordic offers six colors: Olde Style Weatherwood, Granite Black, Shadow Brown, Summit Grey, Glacier, and Driftshake. Dynasty offers a wider range of fifteen. All are muted enough for Woodlands covenant approval — but confirm your village palette.",
+  },
+  {
+    q: "Will my HOA or the Township approve my color?",
+    a: "The Woodlands Township requires prior written approval from your village's Residential Design Review Committee for any re-roof, and colors must be muted and harmonize with the landscape. We prepare and file that paperwork and bring compliant samples so your choice clears review the first time.",
+  },
+  {
+    q: "What products are included in a complete IKO roof?",
+    a: "Shingles (Dynasty or Nordic), IKO Leading Edge Plus starter, Hip & Ridge cap, synthetic underlayment (RoofGard-Cool Grey / Stormtite), ice-and-water protector (ArmourGard / GoldShield / StormShield) in the vulnerable details, plus balanced ventilation and new flashing. The shingle is the visible part; the system is what lasts.",
+  },
+  {
+    q: "How does Northvale install its roofing systems?",
+    a: "Tear-off to the deck, deck inspection and replacement where needed, synthetic underlayment, ice-and-water at valleys and penetrations, new drip edge, pipe boots and flashing, and shingles nailed through the ArmourZone to IKO spec — six-nail patterns where wind exposure calls for it. Every layer is photographed in your 40-photo packet.",
+  },
+  {
+    q: "Why does Northvale install IKO?",
+    a: "IKO performs well in Southeast Texas: strong wind resistance via the ArmourZone, a Class 4 option for hail, reliable sealing, a straightforward warranty (Limited Lifetime + 15-year Iron Clad + 130-mph wind + 10-year algae), and a wide muted color range that fits our covenant communities — good long-term value without overpromising.",
+  },
+  {
+    q: "Do you install anything other than IKO?",
+    a: "We standardize on IKO shingles because it lets us master one system and stand behind it. For homeowners who want a non-asphalt roof, we also quote standing-seam and stone-coated metal, which the Township allows in non-glossy finishes.",
+  },
+  {
+    q: "What's the algae warranty about?",
+    a: "Gulf-Coast humidity causes blue-green algae streaking, worst on shaded, north-facing slopes. The IKO shingles we install carry a 10-year limited algae-resistance warranty. Never pressure-wash asphalt shingles — ARMA warns it causes damage.",
+  },
+  {
+    q: "Can I get an extended (up to 25-year) Iron Clad warranty?",
+    a: "IKO offers extended Iron Clad coverage only through higher ROOFPRO membership tiers. We're an IKO ROOFPRO applicant and won't advertise coverage we can't yet register — your estimate always states the exact warranty for your job in writing.",
+  },
+  {
+    q: "How much does a new IKO roof cost?",
+    a: "Every roof is priced from its own size, pitch, material, and decking condition — we put your exact price in writing before we leave. Nordic costs more than Dynasty for the Class 4 upgrade; the color you choose doesn't change the price.",
+  },
+  {
+    q: "Does color affect the price?",
+    a: "No. Within a line, all colors are priced the same. The price difference is between Dynasty and Nordic (the Class 4 upgrade) and any system upgrades you choose, not the color.",
+  },
+  {
+    q: "How long does installation take?",
+    a: "Most single-family roofs install in one day; larger or steep, complex homes take two. In The Woodlands the longer pole is covenant approval, which is why we file the RDRC application early.",
+  },
+  {
+    q: "What if I'm not sure which color to pick?",
+    a: "Use the color recommender to narrow it by your home's exterior, preview your top choices in the visualizer, then let us bring physical samples. Many homeowners decide at the estimate once they see the real shingle against their brick or siding.",
+  },
+  {
+    q: "Is my uploaded photo private?",
+    a: "Yes. The visualizer runs entirely in your browser — your photo is never uploaded to Northvale or any third party. Nothing leaves your device unless you choose to send it to us.",
+  },
+  {
+    q: "Can a Northvale rep help me use the Design Center?",
+    a: "Absolutely — most homeowners do this with a rep. We can screen-share or sit down together, mask your roof, and compare colors and options live, then finalize with real samples.",
+  },
+  {
+    q: "What upgrades can I add to my roof?",
+    a: "Common ones: stepping up to Nordic for Class 4 impact, upgraded ridge ventilation, extra ice-and-water coverage, and solar-ready flashing if panels are in your plans. The configurator lets you add these to your estimate request.",
+  },
+  {
+    q: "Do you handle solar panels during a re-roof?",
+    a: "Yes — we coordinate solar panel removal and reinstallation with trusted specialists, including on insurance-covered replacements. See our Humble project story for a real example.",
+  },
+  {
+    q: "What happens after I submit my roof design?",
+    a: "Your selection (shingle, color, and any upgrades) comes to us with your request, so we arrive prepared — with the right samples and a written estimate at a free inspection. You'll hear back in under 60 seconds during business hours.",
+  },
+  {
+    q: "Can I change my selection later?",
+    a: "Of course. The design you build here is a starting point for the conversation, not a contract. Nothing is final until you approve a written estimate.",
+  },
+];
+---
+
+<BaseLayout
+  seo={{
+    title: "Roof Design Center — Design Your IKO Roof | Northvale Roofing",
+    description:
+      "Compare IKO Dynasty and Nordic, explore every Texas color, preview colors on a photo of your house, and build your roof — then request a free inspection from Northvale Roofing.",
+    pathname: "/roof-design-center",
+    jsonLd: [...productLd, faqPageJsonLd(faqs)],
+  }}
+>
+  <section class="mx-auto max-w-6xl px-4 py-10">
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Roof Design Center" }]} />
+    <h1 class="mt-6 text-4xl md:text-6xl">Design your roof</h1>
+    <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-800)]">
+      Explore IKO shingles the way you'd design anything you care about — compare the lines, see
+      every Texas color on a photo of your own house, and build your roof end to end. Then we bring
+      it (and real samples) to a free inspection.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a href="#build-your-roof" class="btn btn-primary">Build your roof</a>
+      <a href="#colors" class="btn btn-secondary">Explore colors</a>
+    </div>
+  </section>
+
+  <!-- 1. Choose your shingle -->
+  <section id="shingles" class="mx-auto max-w-6xl px-4 py-12">
+    <h2 class="text-3xl">Choose your shingle</h2>
+    <p class="mt-2 max-w-2xl text-[color:var(--color-ink-800)]">
+      We standardize on IKO. Two lines cover almost every home in our area.
+    </p>
+    <div class="mt-6 grid gap-6 md:grid-cols-2">
+      {
+        IKO_SHINGLES.map((s) => (
+          <article class="rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6">
+            <div class="flex items-center gap-2">
+              <span class="rounded-[var(--radius-pill)] bg-[color:var(--color-navy-900)] px-3 py-1 text-xs font-semibold text-white">
+                {s.impactLabel}
+              </span>
+              {s.impactClass === "Class 4" && (
+                <span class="rounded-[var(--radius-pill)] bg-[color:var(--color-gold-500)] px-3 py-1 text-xs font-semibold text-[color:var(--color-navy-900)]">
+                  Insurance-discount eligible
+                </span>
+              )}
+            </div>
+            <h3 class="mt-3 text-2xl">{s.name}</h3>
+            <p class="mt-2 text-[color:var(--color-ink-800)]">{s.tagline}</p>
+            <ul class="mt-4 grid gap-1 text-sm text-[color:var(--color-ink-800)]">
+              <li>· {s.windWarrantyMph}-mph limited high-wind warranty</li>
+              <li>
+                · {s.limitedWarranty} + {s.ironCladYears}-yr non-prorated Iron Clad
+              </li>
+              <li>
+                · {s.algaeYears}-yr algae-resistance warranty · {s.fireClass}
+              </li>
+            </ul>
+            <p class="mt-4 text-sm text-[color:var(--color-ink-500)]">{s.bestFor}</p>
+            <div class="mt-5 flex flex-wrap gap-3">
+              <a href="#build-your-roof" class="btn btn-primary">
+                Select this shingle
+              </a>
+              <a href="#compare" class="text-sm font-semibold underline">
+                Compare
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 2. Compare -->
+  <section id="compare" class="mx-auto max-w-6xl px-4 py-12">
+    <h2 class="text-3xl">Compare the two lines</h2>
+    <div class="mt-6 overflow-x-auto">
+      <table class="w-full min-w-[560px] border-collapse text-left text-sm">
+        <thead>
+          <tr class="border-b border-[color:var(--color-navy-200)]">
+            <th class="py-3 pr-4 font-semibold">&nbsp;</th>
+            <th class="py-3 pr-4 font-semibold">IKO Dynasty</th>
+            <th class="py-3 font-semibold">IKO Nordic</th>
+          </tr>
+        </thead>
+        <tbody
+          class="[&_td]:border-b [&_td]:border-[color:var(--color-navy-100)] [&_td]:py-3 [&_td]:pr-4"
+        >
+          <tr
+            ><td class="text-[color:var(--color-ink-500)]">Impact rating (UL 2218)</td><td
+              >Class 3</td
+            ><td><strong>Class 4 (highest)</strong></td></tr
+          >
+          <tr
+            ><td class="text-[color:var(--color-ink-500)]">Construction</td><td
+              >Laminated architectural</td
+            ><td>Polymer-modified (SBS)</td></tr
+          >
+          <tr
+            ><td class="text-[color:var(--color-ink-500)]">Wind warranty</td><td>130 mph</td><td
+              >130 mph</td
+            ></tr
+          >
+          <tr
+            ><td class="text-[color:var(--color-ink-500)]">Product warranty</td><td
+              >Limited Lifetime</td
+            ><td>Limited Lifetime</td></tr
+          >
+          <tr
+            ><td class="text-[color:var(--color-ink-500)]">Iron Clad (non-prorated)</td><td
+              >15 years</td
+            ><td>15 years</td></tr
+          >
+          <tr
+            ><td class="text-[color:var(--color-ink-500)]">Algae warranty</td><td>10 years</td><td
+              >10 years</td
+            ></tr
+          >
+          <tr
+            ><td class="text-[color:var(--color-ink-500)]">Insurance discount potential</td><td
+              >Limited</td
+            ><td>Highest available credit*</td></tr
+          >
+          <tr><td class="text-[color:var(--color-ink-500)]">Colors</td><td>15</td><td>6</td></tr>
+          <tr
+            ><td class="text-[color:var(--color-ink-500)]">Best for</td><td>Most homes</td><td
+              >Hail-exposed / discount-seeking</td
+            ></tr
+          >
+        </tbody>
+      </table>
+    </div>
+    <p class="mt-3 text-xs text-[color:var(--color-ink-500)]">
+      *The impact rating is a UL 2218 lab classification, not a hail guarantee (hail isn't covered
+      by the shingle warranty). Discount amounts vary by carrier — confirm with yours.
+    </p>
+  </section>
+
+  <!-- 3. Color gallery -->
+  <section id="colors" class="bg-[color:var(--color-navy-50)] py-12">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="text-3xl">Explore the colors</h2>
+      <p class="mt-2 max-w-2xl text-[color:var(--color-ink-800)]">
+        Every color IKO offers on Dynasty and Nordic. Tap one to see where it looks best — then
+        preview it on your own house below.
+      </p>
+      <div class="mt-6">
+        <ColorGallery client:visible />
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Visualizer -->
+  <section id="visualizer" class="mx-auto max-w-6xl px-4 py-12">
+    <h2 class="text-3xl">See it on your roof</h2>
+    <p class="mt-2 max-w-2xl text-[color:var(--color-ink-800)]">
+      Upload a photo, brush over the roof, and tap colors to preview them instantly. Your photo
+      never leaves your browser.
+    </p>
+    <div class="mt-6">
+      <RoofVisualizer client:visible />
+    </div>
+  </section>
+
+  <!-- 5. Recommender -->
+  <section id="recommender" class="bg-[color:var(--color-navy-50)] py-12">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="text-3xl">Not sure? Get a recommendation</h2>
+      <p class="mt-2 max-w-2xl text-[color:var(--color-ink-800)]">
+        Tell us your home's exterior and we'll suggest colors that tend to work best.
+      </p>
+      <div class="mt-6">
+        <ColorRecommender client:visible />
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Warranty center -->
+  <section id="warranty" class="mx-auto max-w-6xl px-4 py-12">
+    <h2 class="text-3xl">Warranty, in plain language</h2>
+    <div class="mt-6 grid gap-4 md:grid-cols-2">
+      <div
+        class="rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-5"
+      >
+        <h3 class="text-lg">Limited Lifetime product warranty</h3>
+        <p class="mt-2 text-sm text-[color:var(--color-ink-800)]">{IKO_WARRANTY.limitedLifetime}</p>
+      </div>
+      <div
+        class="rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-5"
+      >
+        <h3 class="text-lg">15-year Iron Clad Protection</h3>
+        <p class="mt-2 text-sm text-[color:var(--color-ink-800)]">{IKO_WARRANTY.ironClad}</p>
+      </div>
+      <div
+        class="rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-5"
+      >
+        <h3 class="text-lg">130-mph wind warranty</h3>
+        <p class="mt-2 text-sm text-[color:var(--color-ink-800)]">{IKO_WARRANTY.wind}</p>
+      </div>
+      <div
+        class="rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-5"
+      >
+        <h3 class="text-lg">10-year algae resistance</h3>
+        <p class="mt-2 text-sm text-[color:var(--color-ink-800)]">{IKO_WARRANTY.algae}</p>
+      </div>
+    </div>
+    <p class="mt-4 text-sm text-[color:var(--color-ink-500)]">
+      {IKO_WARRANTY.transfer} We're an IKO ROOFPRO applicant; IKO's extended Iron Clad coverage requires
+      a higher ROOFPRO tier, so we don't advertise it until it's ours to register. Full detail on our
+      <a class="underline" href="/warranty">warranty page</a>.
+    </p>
+  </section>
+
+  <!-- 7. Why IKO -->
+  <section class="bg-[color:var(--color-navy-900)] py-12 text-white">
+    <div class="mx-auto max-w-3xl px-4">
+      <h2 class="text-3xl">Why we install IKO</h2>
+      <p class="mt-4 text-white/85">
+        We could stock a dozen brands and master none. Instead we standardize on IKO because it
+        earns it in Southeast Texas: the reinforced ArmourZone holds up to Gulf-Coast wind, Nordic
+        gives hail-exposed homes a true Class 4 option, the sealing technology is dependable in our
+        heat, and the warranty is honest and easy to explain — Limited Lifetime, 15-year
+        non-prorated Iron Clad, 130-mph wind, 10-year algae. The color range is wide enough to clear
+        our covenant communities, and the value is strong without overpromising. Standardizing lets
+        our crews install one system exceptionally well and stand behind it.
+      </p>
+    </div>
+  </section>
+
+  <!-- 8. Roof system diagram -->
+  <section id="system" class="mx-auto max-w-6xl px-4 py-12">
+    <h2 class="text-3xl">Inside a complete IKO roof</h2>
+    <p class="mt-2 max-w-2xl text-[color:var(--color-ink-800)]">
+      Tap each layer to see what it does and what we install.
+    </p>
+    <div class="mt-6">
+      <RoofSystemDiagram client:visible />
+    </div>
+  </section>
+
+  <!-- 9. Build your roof -->
+  <section id="build-your-roof" class="bg-[color:var(--color-navy-50)] py-12">
+    <div class="mx-auto max-w-3xl px-4">
+      <h2 class="text-3xl">Build your roof</h2>
+      <p class="mt-2 text-[color:var(--color-ink-800)]">
+        Five quick steps. Your selection comes to us with your request, so we arrive prepared.
+      </p>
+      <div class="mt-6">
+        <RoofConfigurator client:load />
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. FAQ -->
+  <section class="mx-auto max-w-3xl px-4 py-12">
+    <h2 class="text-3xl">Roof Design Center FAQ</h2>
+    <div class="mt-6">
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <RelatedLinks heading="Explore our services" links={serviceLinks()} />
+</BaseLayout>
+
+<script>
+  // Sync the hidden utm + conversion-event-id fields on every /api/lead form on
+  // this page (the configurator posts here). Mirrors LeadForm's inline script so
+  // Design Center leads keep full attribution + Meta dedup.
+  (() => {
+    const forms = document.querySelectorAll<HTMLFormElement>("form[action='/api/lead']");
+    if (!forms.length) return;
+    let payload: Record<string, string> = {};
+    try {
+      const saved = localStorage.getItem("nv_utm");
+      const live = new URL(window.location.href);
+      payload = saved ? JSON.parse(saved) : {};
+      for (const k of [
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_content",
+        "utm_term",
+        "gclid",
+        "fbclid",
+      ]) {
+        const v = live.searchParams.get(k);
+        if (v) payload[k.replace(/^utm_/, "")] = v;
+      }
+      if (!payload.firstTouchAt) payload.firstTouchAt = new Date().toISOString();
+      if (!payload.landingPath) payload.landingPath = live.pathname;
+      localStorage.setItem("nv_utm", JSON.stringify(payload));
+    } catch {
+      /* no-op */
+    }
+    const eventId = "randomUUID" in crypto ? crypto.randomUUID() : "";
+    if (eventId) {
+      try {
+        sessionStorage.setItem("nv_event_id", eventId);
+      } catch {
+        /* no-op */
+      }
+    }
+    // The configurator hydrates after this runs, so also sync on submit.
+    for (const form of forms) {
+      form.addEventListener("submit", () => {
+        const utm = form.querySelector<HTMLInputElement>("[data-utm-field]");
+        const eid = form.querySelector<HTMLInputElement>("[data-event-id-field]");
+        if (utm) utm.value = JSON.stringify(payload);
+        if (eid && eventId) eid.value = eventId;
+      });
+    }
+  })();
+</script>
