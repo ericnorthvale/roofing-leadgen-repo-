@@ -22,7 +22,7 @@ export default function RoofSystemDiagram() {
               <span
                 className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
                   active === p.key
-                    ? "bg-[color:var(--color-gold-500)] text-[color:var(--color-navy-900)]"
+                    ? "bg-[color:var(--color-gold-400)] text-[color:var(--color-navy-900)]"
                     : "bg-[color:var(--color-navy-50)] text-[color:var(--color-navy-900)]"
                 }`}
               >
@@ -36,7 +36,7 @@ export default function RoofSystemDiagram() {
 
       <div className="rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6">
         <h3 className="text-2xl">{part.label}</h3>
-        <p className="mt-1 text-sm font-semibold tracking-wide text-[color:var(--color-gold-700)] uppercase">
+        <p className="mt-1 text-sm font-semibold tracking-wide text-[color:var(--color-gold-600)] uppercase">
           What Northvale installs: {part.product}
         </p>
         <p className="mt-4 text-[color:var(--color-ink-800)]">{part.role}</p>

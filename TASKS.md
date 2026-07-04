@@ -130,9 +130,7 @@ the PDF (it embeds raster only) and auto-traced to SVG as a stopgap.
       original PNGs (Drive had no vector versions)
 - [ ] **Owner/designer (NEEDS DATA):** true vector masters, Pantone coated +
       uncoated refs, `#1E1E2E` intent (purple cast) — see guide §8
-- [ ] **Next phase (not started):** apply the identity to the site — swap
-      `@theme` ramps in `globals.css`, `COLORS` in `brand.ts`, logo/favicon/OG
-      assets, Cormorant+Montserrat self-hosted fonts (guide §9)
+- [x] **Next phase:** apply the identity to the site — done in Phase 2.8 below
 
 ## Phase 2.7 — Website Updates V1.1 (PR #31)
 
@@ -171,6 +169,28 @@ Executing the owner's full "Website Updates V1.1" doc. Plan file:
       new `best-iko-roof-colors-the-woodlands` blog post, footer + keyword-map
       wiring. (Organization identity is already covered sitewide by the
       `RoofingContractor` JSON-LD node; Review/ImageObject ship on `/projects`.)
+
+## Phase 2.8 — Brand identity site migration (this branch)
+
+Applied the Phase 2.6 brand system (docs/brand-guidelines.md) to the live site
+per guide §9. No NAP values changed; layout anatomy untouched (already
+light-first with navy dark moments).
+
+- [x] `@theme` ramps in `globals.css` → guide §3.5 (navy/gold/neutral 50–950;
+      gold-400 = brand gold, gold-600 = Gold Deep for text/icons/rings on light)
+- [x] Typography → Cormorant Garamond (display, h1/h2 ≥28px only) + Montserrat
+      (everything else), self-hosted variable woff2, same zero-CLS
+      `font-display` pattern; h3/h4 + all sub-28px headings moved to
+      Montserrat; section h2s normalized to text-3xl (30px)
+- [x] Buttons/links/focus per §7.1: gold fill + navy text, Gold Deep hover with
+      white text, Gold Deep focus ring (holds ≥3:1 on white AND navy)
+- [x] Logos: header = traced navy wordmark, footer = traced gold wordmark
+      (stopgap vectors; swap when designer masters arrive — TASKS_FOR_ERIC 2.7)
+- [x] Favicon/app-icon set from the N monogram (§7.2): favicon.svg,
+      favicon.ico 16/32/48, apple-touch-icon 180, icon-192/512 + maskable 512,
+      site.webmanifest, theme-color `#060E21`
+- [x] OG image rebuilt on-brand (wordmark + Montserrat) and served as **PNG**
+      (crawlers don't rasterize SVG); `brand.ts` COLORS → new palette anchors
 
 ## Phase 3 — Gated expansion (batches of 5–20)
 

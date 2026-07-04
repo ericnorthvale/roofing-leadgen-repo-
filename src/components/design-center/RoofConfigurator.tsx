@@ -94,7 +94,7 @@ export default function RoofConfigurator() {
                   aria-pressed={line === s.slug}
                   className={`rounded-[var(--radius-card)] border p-4 text-left transition ${
                     line === s.slug
-                      ? "border-[color:var(--color-gold-500)] ring-2 ring-[color:var(--color-gold-500)]"
+                      ? "border-[color:var(--color-gold-600)] ring-2 ring-[color:var(--color-gold-600)]"
                       : "border-[color:var(--color-navy-100)] hover:border-[color:var(--color-navy-300)]"
                   }`}
                 >
@@ -123,7 +123,7 @@ export default function RoofConfigurator() {
                     title={c.name}
                     className={`block w-full overflow-hidden rounded-[var(--radius-card)] border-2 ${
                       color === c.name
-                        ? "border-[color:var(--color-gold-500)]"
+                        ? "border-[color:var(--color-gold-600)]"
                         : "border-transparent"
                     }`}
                   >

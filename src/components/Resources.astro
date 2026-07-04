@@ -22,7 +22,7 @@ const {
 {
   links.length > 0 && (
     <section class="mx-auto max-w-6xl px-4 py-12" aria-labelledby="resources-heading">
-      <h2 id="resources-heading" class="text-2xl md:text-3xl">
+      <h2 id="resources-heading" class="text-3xl">
         {heading}
       </h2>
       {intro && <p class="mt-2 max-w-2xl text-sm text-[color:var(--color-ink-500)]">{intro}</p>}
@@ -33,12 +33,12 @@ const {
               href={r.href}
               target="_blank"
               rel="noopener noreferrer"
-              class="group block h-full rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-4 transition hover:border-[color:var(--color-gold-500)]"
+              class="group block h-full rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-4 transition hover:border-[color:var(--color-gold-400)]"
             >
-              <span class="text-[10px] font-semibold tracking-wider text-[color:var(--color-gold-700)] uppercase">
+              <span class="text-[10px] font-semibold tracking-wider text-[color:var(--color-gold-600)] uppercase">
                 {r.source}
               </span>
-              <span class="mt-1 block font-serif text-lg text-[color:var(--color-navy-900)]">
+              <span class="mt-1 block text-lg font-semibold text-[color:var(--color-navy-900)]">
                 {r.label}{" "}
                 <span aria-hidden="true" class="text-[color:var(--color-ink-500)]">
                   ↗

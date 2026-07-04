@@ -50,7 +50,7 @@ export default function ColorGallery() {
                 aria-pressed={active.name === c.name}
                 className={`w-full overflow-hidden rounded-[var(--radius-card)] border text-left transition ${
                   active.name === c.name
-                    ? "border-[color:var(--color-gold-500)] ring-2 ring-[color:var(--color-gold-500)]"
+                    ? "border-[color:var(--color-gold-600)] ring-2 ring-[color:var(--color-gold-600)]"
                     : "border-[color:var(--color-navy-100)] hover:border-[color:var(--color-navy-300)]"
                 }`}
               >

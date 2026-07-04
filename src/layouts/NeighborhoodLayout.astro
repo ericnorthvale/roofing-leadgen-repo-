@@ -52,7 +52,7 @@ const relatedServices = spokes.length > 0 ? spokes : serviceLinks();
 <BaseLayout seo={seo}>
   {
     !verdict.indexable && (
-      <div class="border-b-2 border-[color:var(--color-gold-500)] bg-[color:var(--color-gold-50)] px-4 py-3 text-sm text-[color:var(--color-ink-800)]">
+      <div class="border-b-2 border-[color:var(--color-gold-400)] bg-[color:var(--color-gold-50)] px-4 py-3 text-sm text-[color:var(--color-ink-800)]">
         <div class="mx-auto max-w-6xl">
           <strong>NEEDS REAL DATA — draft, not indexed.</strong> This page is set to{" "}
           <code>noindex</code> and is excluded from the sitemap until a human adds real local
@@ -174,7 +174,7 @@ const relatedServices = spokes.length > 0 ? spokes : serviceLinks();
   {
     verdict.indexable && (
       <section class="mx-auto max-w-6xl px-4 py-12">
-        <h2 class="text-2xl md:text-3xl">Recent work in {area.name}</h2>
+        <h2 class="text-3xl">Recent work in {area.name}</h2>
         <p class="mt-2 max-w-2xl text-sm text-[color:var(--color-ink-500)]">
           Our own {area.name} projects — these slots fill with real local photos, never stock
           imagery.
