@@ -32,7 +32,9 @@ if (area.faqs && area.faqs.length > 0) jsonLd.push(faqPageJsonLd(area.faqs));
 const seo = buildSeo(
   {
     title: `Roofing in ${area.name}, TX`,
-    description: `${area.intro} Free inspection, written estimate, forty-photo documentation packet.`,
+    description:
+      area.seoDescription ??
+      `${area.intro} Free inspection, written estimate, forty-photo documentation packet.`,
     pathname: `/${area.slug}`,
     noindex: !verdict.indexable,
     jsonLd,

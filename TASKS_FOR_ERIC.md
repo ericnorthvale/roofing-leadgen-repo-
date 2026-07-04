@@ -49,6 +49,32 @@ next Claude session):
       research do-not-publish list (docs/research-facts.md) — they need a
       manual check before use.
 
+## Tier 2.6 — copy facts questionnaire (added July 2026 copy review)
+
+The copy review found claims that are probably TRUE given your background but
+need your confirmation to be defensible (CLAUDE.md: experience claims are
+allowed "once owner supplies numbers"). Answer these and hand them to the next
+Claude session — each unlocks stronger copy or fixes a placeholder:
+
+- [ ] **Years in the local roofing market** — how many years have you (and your
+      lead crews/foremen) worked roofs in the Houston/Woodlands market? Unlocks
+      anchored experience claims site-wide ("N years working Woodlands-area roofs").
+- [ ] **Carriers you've actually worked claims with** — name 4–5. The insurance
+      page's "Carrier claim processes we know" section was neutralized pending
+      this list (`src/lib/services.ts`, NEEDS DATA comment).
+- [ ] **Crew model** — W-2 crews, vetted subs, or both? Is "a 10+ year foreman
+      on every crew" true and something you'll stand behind? `about.astro` now
+      says "our crew or a vetted partner crew" — confirm or tighten.
+- [ ] **Manual accessibility testing** — `/legal/accessibility` states we test
+      manually with screen readers + keyboard navigation. Confirm this happens
+      (or will), otherwise it gets rephrased as a target.
+- [ ] **Physical mailing address** — `/legal/tcpa` promises CAN-SPAM-compliant
+      marketing email including a physical address; `emailFooterAddress` in
+      `src/lib/legal.ts` is blank until the LLC's address is final (Tier 3 item).
+- [ ] **Coverage list check** — the draft blog `welcome.mdx` names Bridgeland,
+      April Sound, and Magnolia as areas the blog will cover. Confirm these are
+      in scope before that post publishes.
+
 ## Tier 3a — performance + accessibility (Lighthouse 0.95 budgets)
 
 Lighthouse CI runs with production budgets (a11y/best-practices/SEO ≥ 0.95, performance ≥ 0.90, and Google's official "good" Core Web Vitals: LCP ≤ 2500ms, TBT ≤ 200ms, CLS ≤ 0.10 on mobile throttle). Budgets are **skipped on draft PRs** so scaffold iteration isn't blocked — ready-for-review PRs and pushes to `main` enforce them. The four pages in `.lighthouserc.json` currently pass all budgets.

@@ -279,7 +279,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
     slug: "roof-inspection",
     title: "Free roof inspection",
     serviceTag: "inspection",
-    seoTitle: "Free roof inspection — same day",
+    seoTitle: "Free same-day roof inspection — Montgomery County",
     seoDescription:
       "Free roof inspection with a forty-photo documentation packet and written findings within 24 hours. No obligation, no pressure, no door-knocking.",
     summary:
@@ -398,7 +398,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
     sections: [
       {
         heading: "The storms this region actually gets",
-        body: "The risk here isn't hypothetical — it's federal record. NWS counts 50–60 thunderstorm days a year in southeast Texas, about a third severe, with downbursts of 60 to 100+ mph. NOAA's Storm Events Database logs damaging hail in Montgomery County nearly every year. Hurricane Beryl (2024) pushed a measured 69-mph gust to Conroe, forty miles inland; the May 2024 derecho crossed the metro with winds estimated near 100 mph in places; Harvey dropped over 25 inches of rain on The Woodlands. Roofs here are systems designed against a certainty, not a maybe.",
+        body: "The risk here isn't hypothetical — it's federal record. NWS counts 50–60 thunderstorm days a year in southeast Texas, about a third severe, with downbursts of 60 to 100+ mph. NOAA's Storm Events Database logs damaging hail in Montgomery County nearly every year. Hurricane Beryl (2024) pushed a measured 69-mph gust to Conroe, well inland; the May 2024 derecho crossed the metro with winds estimated near 100 mph in places; Harvey dropped over 25 inches of rain on The Woodlands. Roofs here are systems designed against a certainty, not a maybe.",
       },
       {
         heading: "How to tell if your roof took a hit",
@@ -439,7 +439,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
             text: 'Deductible games. Texas law (Ins. Code §707.002; Bus. & Com. Code §27.02) requires you to pay your deductible and makes it an offense for a contractor to pay, waive, or absorb it — TDI warns of fines and jail. Anyone offering to "eat it" is proposing fraud with your name attached.',
           },
           {
-            text: "Pressure signings at the door. TDI's own storm guidance: it's against the law for out-of-town contractors to demand a down payment before starting after a disaster, get multiple bids, and never sign a contract that assigns work \"for the value of insurance proceeds.\" We leave written estimates and let you decide on your schedule.",
+            text: "Pressure signings at the door. It's against the law for out-of-town contractors to demand a down payment before starting work after a disaster. TDI's storm guidance adds: get multiple bids, and never sign a contract that assigns work \"for the value of insurance proceeds.\" We leave written estimates and let you decide on your schedule.",
           },
           {
             text: "Acting as your public adjuster. Texas Insurance Code §4102.163 prohibits a roofing contractor from adjusting the same property's claim. We're the contractor: we document and build; you (or a licensed PA you hire separately) negotiate.",
@@ -528,7 +528,9 @@ export const SERVICES: Record<ServiceTag, Service> = {
       },
       {
         heading: "Carrier claim processes we know",
-        body: "We're fluent in the claim processes and Xactimate preferences of the major Texas carriers, including State Farm, Allstate, USAA, Farmers, Liberty Mutual, Progressive, Nationwide, Travelers, Chubb, and Texas Farm Bureau.",
+        // NEEDS DATA: confirm with owner which carriers he has actually worked
+        // claims with, then name those (4-5 max) — see TASKS_FOR_ERIC.md.
+        body: "We build every scope of loss in Xactimate — the same estimating platform the major Texas carriers use — with photo documentation keyed to the line items an adjuster has to approve. Whoever your carrier is, your claim file arrives in the format their desk reviewer expects.",
       },
     ],
     faqs: [
