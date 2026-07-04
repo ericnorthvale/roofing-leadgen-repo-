@@ -222,6 +222,15 @@ to the first job; the content auto-draft pipeline was deprioritized.
 
 Merged to `main` (newest first; reconstructed from history — branch noted where notable):
 
+- **PR #26** — Owner next-steps execution plan (Tier 0–2) as `docs/execution-plan-next-steps.docx`. Branch `claude/execution-plan-docs-fivp6q` (squash-merged; owner-authorized session-end merge).
+- **PR #25** — docs: re-sequence roadmap for revenue-ASAP with two part-time owners (Tier 0 phone-ringers first; content engine deprioritized).
+- **PR #24** — Copy review: fix statute citations, unverified facts, and legal-exposure claims (+ `docs/copy-review-2026-07-copy.md`, Tier 2.6 questionnaire).
+- **PR #23** — Lead persistence net (private Vercel Blob), phone Meta CAPI + webhook rate limit, compliance scan.
+- **PR #22** — docs: standardize canonical domain on apex northvaleroofing.com.
+- **PR #21** — Full project review: P0 conversion-layer fixes + `docs/project-review-2026-07.md`.
+- **PR #20** — Local-authority SEO expansion: Woodlands hub-and-spoke, village pages, definitive guides.
+- **PR #19** — docs(status): record admin panel + CRM pipeline milestones.
+- **PR #18** — docs: partner-facing website & tech overview (`docs/website-partner-overview.md`).
 - **PR #17** — CRM lead pipeline hardened (HighLevel upsert + opportunity, CallRail→HighLevel, Meta CAPI). Branch `claude/crm-lead-gen-integrations-ijcx6k` (squash-merged; owner-authorized session-end merge).
 - **PR #16** — fix(callrail): mask customer phone in webhook logs + record session decisions.
 - **PR #15** — AI-generated-code security review checklist (`docs/security/ai-code-review-checklist.md`). Branch `claude/ai-code-security-checklist-t86f8r`.

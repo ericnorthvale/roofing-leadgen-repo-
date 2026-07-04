@@ -2,6 +2,11 @@
 
 Ordered by the point in the launch path where they're blocking. Check off as they're done; add new ones at the appropriate tier.
 
+> **Printable version:** `docs/execution-plan-next-steps.docx` is a Word-doc
+> walkthrough of Tier 0–2 (generated 2026-07-04, PR #26). It's a **snapshot** —
+> this file stays the source of truth; ask a Claude session to regenerate the
+> doc when tiers change or you want the next installment (Tier 2.5+).
+
 > **▶ Goal = revenue ASAP, with two part-time owners and 4–8 jobs/wk of capacity.**
 > The website is a 6–12 month asset — it will not ring the phone in the revenue window.
 > What rings the phone in month one is **Google Business Profile + Local Services Ads +
