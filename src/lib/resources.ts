@@ -9,23 +9,24 @@ export interface ResourceLink {
   label: string;
   href: string;
   description: string;
-  /** Short source name shown as a tag, e.g. "GAF", "IBHS". */
+  /** Short source name shown as a tag, e.g. "IKO", "IBHS". */
   source: string;
 }
 
 export const RESOURCES = {
   replacement: [
     {
-      label: "GAF Timberline HDZ shingles",
-      href: "https://www.gaf.com/en-us/roofing-products/residential-roofing-products/shingles/timberline/timberline-hdz",
+      label: "IKO Dynasty shingles",
+      href: "https://www.iko.com/na/product/dynasty/",
       description: "Manufacturer specs for the architectural shingle we install as standard.",
-      source: "GAF",
+      source: "IKO",
     },
     {
-      label: "GAF homeowner warranties",
-      href: "https://www.gaf.com/en-us/for-homeowners/warranties",
-      description: "How manufacturer system warranties (incl. Golden Pledge) actually work.",
-      source: "GAF",
+      label: "IKO homeowner warranty information",
+      href: "https://www.iko.com/na/warranty-information-homeowners/",
+      description:
+        "How IKO's Limited Lifetime, Iron Clad Protection, and wind coverage actually work.",
+      source: "IKO",
     },
     {
       label: "ENERGY STAR roof products",

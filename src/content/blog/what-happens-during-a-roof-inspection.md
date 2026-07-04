@@ -74,9 +74,9 @@ From below we check:
   moisture combination deteriorates decking and shingles from underneath. The
   benchmark is the 1-in-300 rule: one square foot of net free ventilation area
   per 300 square feet of attic (the code base ratio is 1/150), split between
-  high exhaust and soffit intake, with intake at least equal to exhaust (ARMA
-  and GAF Technical Bulletin R-120). A roof that "aged fast" often turns out
-  to have been cooking from below.
+  high exhaust and soffit intake, with intake at least equal to exhaust (per the
+  Asphalt Roofing Manufacturers Association). A roof that "aged fast" often turns
+  out to have been cooking from below.
 
 ## Then: everything in writing, fast
 

@@ -47,11 +47,11 @@ export interface Service {
  * city-qualified money queries belong to city-services.ts pages — keep titles
  * and content from cannibalizing them (see docs/keyword-map.md).
  *
- * Facts sourced in docs/research-facts.md. Costs are attributed market data.
- * Warranty claims are certification-honest: we register what any contractor
- * can register (manufacturer lifetime limited, GAF Roofing System Limited,
- * WindProven on qualifying HDZ systems) and say plainly which tiers require
- * certifications we're still earning.
+ * Facts sourced in docs/research-facts.md (IKO line = Sheet 1B). Costs are
+ * attributed market data. Warranty claims are certification-honest: we register
+ * the IKO Limited Lifetime + 15-year Iron Clad + 130-mph wind coverage that any
+ * installer can register, and never claim ROOFPRO-tier extended coverage until
+ * Northvale's enrollment is confirmed (see Sheet 1B).
  */
 export const SERVICES: Record<ServiceTag, Service> = {
   replacement: {
@@ -80,10 +80,10 @@ export const SERVICES: Record<ServiceTag, Service> = {
             text: "New drip edge at eaves and rakes (a code requirement — IRC R905.2.8.5), new pipe boots, new flashing where it's aged, and ridge ventilation sized to the job.",
           },
           {
-            text: "Architectural shingles nailed to manufacturer spec — six-nail patterns where wind exposure calls for it.",
+            text: "IKO architectural shingles nailed through the reinforced ArmourZone to manufacturer spec — six-nail patterns where wind exposure calls for it.",
           },
           {
-            text: "Manufacturer warranty registered on every install: lifetime limited coverage on the shingle lines we install, and on GAF Timberline HDZ systems built with four qualifying GAF accessories, the WindProven limited wind warranty — no maximum wind speed limitation, and no special contractor certification required to offer it.",
+            text: "IKO manufacturer warranty registered on every install: a Limited Lifetime product warranty, the 15-year non-prorated Iron Clad Protection period, a 130-mph limited high-wind warranty, and a 10-year algae-resistance warranty — coverage any installer can register, with no special certification required.",
           },
           {
             text: "Forty-photo documentation packet at close — yours to keep, plus a copy for your insurance file.",
@@ -92,22 +92,18 @@ export const SERVICES: Record<ServiceTag, Service> = {
       },
       {
         heading: "Materials we install",
-        body: "We quote from the major manufacturer lines and put the options side by side in writing:",
+        body: "We standardize on IKO and put your options side by side in writing:",
         bullets: [
           {
-            lead: "GAF Timberline HDZ",
-            text: "LayerLock technology, ASTM D7158 Class H / D3161 Class F wind ratings, 25-year StainGuard Plus algae warranty — and WindProven eligibility as a system.",
+            lead: "IKO Dynasty (standard)",
+            text: "our default architectural shingle — the reinforced ArmourZone nailing band, a 130-mph limited wind warranty, Limited Lifetime coverage, 15-year Iron Clad Protection, a 10-year algae warranty, and Class A fire, in more colors than any other IKO line.",
           },
           {
-            lead: "TAMKO Titan XT",
-            text: "reinforced nailing zone, polymer-modified sealant, 15-year high-wind warranty up to 160 mph under its specified application, UL 2218 Class 3 impact rating.",
+            lead: "IKO Nordic (Class 4 upgrade)",
+            text: "IKO's highest-performing line — polymer-modified (SBS) asphalt that flexes for the highest hail rating, UL 2218 Class 4, with the same 130-mph wind, Limited Lifetime, and Iron Clad coverage as Dynasty.",
           },
           {
-            lead: "CertainTeed Landmark",
-            text: "dual-layer architectural line with SureStart protection — 100% materials and labor for defects, non-prorated, for the first ten years.",
-          },
-          {
-            html: '<strong>Class-4 impact-resistant options</strong> — GAF Timberline AS II and CertainTeed Landmark ClimateFlex carry UL 2218 Class 4, the highest impact rating. TDI notes Class 4 coverings receive the highest premium credit where insurers offer roofing discounts (amounts vary by company). See <a href="/blog/class-4-impact-resistant-shingles-texas">our Class-4 breakdown</a>.',
+            html: "<strong>Class 3 vs. Class 4 & insurance</strong> — Class 4 (Nordic) is the highest UL 2218 impact rating, but it's a lab classification, not a hail guarantee, and hail isn't covered by the shingle warranty. Its value is qualifying you for an insurance premium discount where your carrier offers one. See <a href=\"/blog/class-4-impact-resistant-shingles-texas\">our Class-4 breakdown</a>.",
           },
           {
             lead: "Standing-seam metal",
@@ -176,7 +172,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       },
       {
         q: "What warranty comes with a new roof?",
-        a: "Every install registers the manufacturer's lifetime limited warranty, and qualifying GAF Timberline HDZ systems carry the WindProven wind warranty with no maximum wind-speed limit — coverage any contractor can legitimately register. Extended workmanship-backed tiers like GAF's Golden Pledge require Master Elite certification, which we're in the process of earning — we'll never sell coverage we can't register, and your estimate states your exact warranty in writing.",
+        a: "Every IKO install registers a Limited Lifetime product warranty, the 15-year non-prorated Iron Clad Protection period, a 130-mph limited high-wind warranty, and a 10-year algae-resistance warranty — coverage any installer can legitimately register. IKO's longer, extended Iron Clad coverage is only available through higher ROOFPRO membership tiers, which we're in the process of earning as an IKO ROOFPRO applicant — we'll never sell coverage we can't register, and your estimate states your exact warranty in writing.",
       },
       {
         q: "Do you handle the HOA approval?",

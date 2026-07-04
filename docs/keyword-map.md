@@ -34,7 +34,7 @@ sitewide (enforced by tests/unit/seo-content.test.ts).
 | Page                             | Query                                          | Status                             |
 | -------------------------------- | ---------------------------------------------- | ---------------------------------- |
 | `/process`                       | Northvale process / how roof replacement works | indexable                          |
-| `/warranty`                      | roof warranty explained / GAF warranty tiers   | indexable                          |
+| `/warranty`                      | roof warranty explained / IKO warranty tiers   | indexable                          |
 | `/financing`                     | roof financing                                 | noindex until owner supplies terms |
 | `/team`                          | (brand)                                        | noindex until real people          |
 | `/gallery`                       | (brand)                                        | noindex until real photos          |
@@ -45,7 +45,7 @@ sitewide (enforced by tests/unit/seo-content.test.ts).
 | Post                                               | Query family                                                                                      |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | best-roofing-shingles-the-woodlands-climate        | best shingles for Texas/Woodlands climate                                                         |
-| tamko-titan-xt-vs-gaf-timberline-hdz               | Titan XT vs Timberline HDZ                                                                        |
+| iko-dynasty-vs-nordic                              | IKO Dynasty vs Nordic / Class 3 vs Class 4 (301 from tamko-titan-xt-vs-gaf-timberline-hdz)        |
 | roof-replacement-cost-the-woodlands                | roof replacement cost The Woodlands (informational; the money page holds the transactional query) |
 | what-wind-rating-should-i-buy-near-houston         | shingle wind ratings Houston                                                                      |
 | should-i-replace-my-roof-before-selling            | replace roof before selling                                                                       |

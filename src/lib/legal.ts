@@ -21,7 +21,7 @@ export const LEGAL = {
   // NEEDS OWNER CONFIRMATION: state only certifications actually held. Add RCAT
   // membership/certification back here once confirmed by the owner.
   licenseLine:
-    "Texas does not license residential roofing contractors. Northvale Roofing LLC is a GAF Master Elite applicant.",
+    "Texas does not license residential roofing contractors. Northvale Roofing LLC is an IKO ROOFPRO applicant.",
   priorWrittenConsentCopy:
     "TCPA prior express written consent — Northvale Roofing uses automated systems to call and text the phone number you provide.",
 } as const;

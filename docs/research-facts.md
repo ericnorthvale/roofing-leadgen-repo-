@@ -12,6 +12,14 @@ Compiled: July 3, 2026 (re-verify cost figures before major republishing).
 
 ## Sheet 1 — Materials & costs (manufacturer + industry sources)
 
+> **⚠ DEPRECATED for publishing (2026-07 — IKO-only site).** Northvale
+> standardized its installed shingle line on **IKO** (see Sheet 1B). The
+> GAF / TAMKO / CertainTeed product + warranty facts below are retained for
+> reference and historical accuracy only — **do not publish them in site copy,
+> schema, or blog content.** Generic, brand-neutral material education (metal,
+> architectural vs. 3-tab, lifespans, cost ranges, component/code facts) in this
+> sheet remains publishable.
+
 ### TAMKO Titan XT (official data sheet, Rev. 11/15/2023)
 
 - Premium architectural (laminated) shingle; two fiberglass mats, polyester
@@ -193,6 +201,108 @@ System Plus / Silver / Golden Pledge until certified at the matching level.
    single contractor claim; use "one of the most common causes" instead.
 8. 3-tab "~60–70 mph wind rating" — contractor-blog-sourced; contrast verified
    manufacturer warranties instead.
+
+---
+
+## Sheet 1B — IKO product line (the installed line — IKO-only site)
+
+Compiled July 4, 2026 from IKO's own product/warranty/program pages. This is the
+ONLY shingle brand Northvale publishes. Everything below traces to iko.com.
+
+### IKO Dynasty (Performance line — standard architectural shingle)
+
+- Laminated (architectural) fiberglass-reinforced asphalt shingle with the
+  **ArmourZone®** reinforced nailing zone (1¼" wide woven band), FastLock
+  sealant, and the True Square Advantage exposure — SOURCE:
+  https://www.iko.com/na/product/dynasty/ ;
+  https://www.iko.com/na/blog/amazing-facts-about-iko-dynasty-roofing-shingles/
+- **UL 2218 Class 3 impact resistance** rating against hail — SOURCE:
+  https://www.iko.com/na/blog/iko-dynasty-class-3-impact-resistant-shingles/ ;
+  https://www.iko.com/na/product/dynasty/
+- **Limited Wind Warranty: 130 mph (210 km/h)** — SOURCE: product page above
+- **Class A fire** (ASTM E108/UL 790, over approved deck) — SOURCE: product page
+- **Limited Lifetime** warranty; **Iron Clad® Protection: 15 years**; **Limited
+  Algae Resistance Warranty: 10 years** (blue-green algae) — SOURCE: product page
+  - https://www.iko.com/na/warranty-information-homeowners/
+- Available US color names (15): Olde Style Weatherwood, Granite Black,
+  Cornerstone Weatherwood, Atlantic Blue, Glacier, Shadow Brown, Summit Grey,
+  Biscayne, Monaco Red, Frostone Grey, Emerald Green, Driftshake, Brownstone,
+  Sentinel Slate, Blackstone — SOURCE: https://www.iko.com/na/product/dynasty/
+  (⚠ confirm which of these Northvale actually stocks/sells in TX — see UNVERIFIED)
+
+### IKO Nordic (highest-performing line — impact-resistant upgrade)
+
+- IKO's highest-performing shingle, **reinforced with polymer-modified (SBS)
+  asphalt** for flexibility + tear resistance; ArmourZone® nailing surface;
+  extra-large True Square Advantage exposure — SOURCE:
+  https://www.iko.com/na/product/nordic/
+- **FM 4473 / UL 2218 Class 4 impact resistance** (highest hail rating) — SOURCE:
+  product page above
+- **Limited Wind Warranty: 130 mph (210 km/h)**; **ASTM E108/UL 790 Class A
+  fire**; **Limited Lifetime**; **Iron Clad Protection: 15 years**; **algae: 10
+  years (blue-green)** — SOURCE: product page above
+- Available color names (6): Olde Style Weatherwood, Granite Black, Shadow Brown,
+  Summit Grey, Glacier, Driftshake — SOURCE:
+  https://www.iko.com/na/product/nordic/
+
+### IKO warranty facts (CRITICAL — publish exactly)
+
+- **Iron Clad® Protection** = the first **15 years** of **full, non-prorated**
+  coverage for manufacturing defects on IKO Performance shingles (Dynasty,
+  Nordic) — SOURCE: https://www.iko.com/na/warranty-information-homeowners/
+- Wind coverage is part of the limited warranty; **high-wind limited warranty
+  130 mph** on Dynasty + Nordic — SOURCE: product pages
+- **Hail damage is NOT covered** by the limited warranty. IKO states the impact
+  rating "is solely for the purpose of enabling residential property owners to
+  obtain a reduction in their residential insurance premium, if available" — this
+  is NOT a guarantee of hail resistance. **Always publish this hedge.** — SOURCE:
+  product pages above
+- Conditionally **transferable** (terms vary by year + product; consult the
+  Limited Warranty in effect at install) — SOURCE: warranty page above ;
+  https://www.iko.com/na/document-library/usa-iko-limited-warranty-en.pdf
+- **Iron Clad Extended Protection (up to 25 years)** is available ONLY through
+  qualifying **Select+ ROOFPRO** contractors — SOURCE:
+  https://www.iko.com/na/document/roofpro-extended-warranty-u-s/ .
+  **DO NOT publish any extended-warranty / "up to 25-year" claim until Northvale's
+  ROOFPRO tier is confirmed at Select or above** (see UNVERIFIED).
+
+### IKO ROOFPRO installer program (for honest cert language)
+
+- Three membership tiers: **Advantage** (entry; no purchase minimum), **Select**
+  (~1,200+ squares/yr; marketing fund; may offer extended Iron Clad), **Craftsman
+  Premier** (~5,000+ squares/yr; top tier) — SOURCE:
+  https://www.iko.com/na/roofpro-program/
+- **Northvale's honest status today = "IKO ROOFPRO applicant"** (a new contractor
+  enrolling; not a confirmed Select/Craftsman member). Never state a tier or an
+  extended-warranty capability until enrollment is confirmed. Mirrors CLAUDE.md's
+  "applicant, not held" rule.
+
+### IKO roofing-system components (real product names — for the system diagram)
+
+SOURCE: https://www.iko.com/na/blog/roofing-accessories-elevated/ ;
+https://www.buildsite.com/pdf/iko/ArmourGard-Ice-Water-Protector-Summary-Brochure-2326033.pdf
+
+- **Starter strips:** Leading Edge Plus, Armour Starter, EdgeSeal
+- **Hip & Ridge cap:** Hip & Ridge, Hip & Ridge 12, Hip & Ridge Plus, Ultra HP /
+  Ultra HP IR
+- **Synthetic underlayment:** RoofGard-Cool Grey, Stormtite
+- **Ice & Water Protector:** ArmourGard™, GoldShield™, StormShield® Ice & Water,
+  GoldSeam Tape
+
+### Sheet 1B — UNVERIFIED (do not publish until checked)
+
+1. **Northvale's actual ROOFPRO tier.** Publish "applicant" only. No "Select",
+   no "extended Iron Clad up to 25 years" until IKO confirms the tier.
+2. Dynasty ASTM D3161 (Class F) / D7158 (Class H) letter classes — on the
+   technical data sheet PDF (binary; not machine-parsed here). Publish the
+   product-page "130 mph limited wind warranty" wording; confirm the ASTM letter
+   grades in the TDS before quoting them:
+   https://www.iko.com/na/document/iko-dynastyreg-technical-data-sheet/
+3. Which specific Dynasty/Nordic colors Northvale actually stocks/sells in Texas
+   — the gallery lists all published colors "sold in TX"; prune to the real
+   offering once Eric confirms.
+4. Whether Northvale offers Dynasty Cool Colors Plus (solar-reflective) — only
+   list it if actually installed.
 
 ---
 

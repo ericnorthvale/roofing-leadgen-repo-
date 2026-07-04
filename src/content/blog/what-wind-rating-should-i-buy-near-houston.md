@@ -29,11 +29,11 @@ these letters aren't just marketing — they're a code-compliance item.
 **UL 790** also shows up next to these, but don't confuse it: that's the _fire_
 rating (Class A is best), not wind.
 
-The good news: the two premium architectural shingles you'll hear quoted most
-around here — GAF Timberline HDZ and TAMKO Titan XT — both carry ASTM D3161
-Class F and D7158 Class H, the top marks on both scales. At that level, the ratings stop being
-the differentiator, and the warranty conditions and installation become the
-whole game.
+The good news: the IKO shingles we install — Dynasty and the Class 4 Nordic —
+back their wind resistance with a **130-mph limited high-wind warranty** and the
+reinforced ArmourZone nailing band that resists uplift. Once you're at that level,
+the class letters stop being the differentiator, and the warranty conditions and
+installation become the whole game.
 
 ## What our storms actually deliver
 
@@ -74,28 +74,27 @@ performance **declines with age**. Two consequences for buyers:
 ## Wind _warranties_: the number that's actually enforceable
 
 Lab classes are pass/fail tests. Warranties are promises with conditions, and
-the conditions are where buyers get burned. The two strongest on our shelf:
+the conditions are where buyers get burned. Here's the coverage on the IKO
+shingles we install:
 
-- **GAF WindProven (Timberline HDZ and other LayerLock shingles):** a 15-year
-  limited wind warranty with **no maximum wind speed limitation** — but only
-  when installed with four qualifying GAF accessory categories (starter strips,
-  roof deck protection, ridge cap, and leak barrier or attic ventilation). No
-  contractor certification required. Skip the qualifying accessories and you
-  don't have WindProven.
-- **TAMKO Titan XT:** a 15-year limited warranty for winds **up to 160 mph** —
-  but only when applied per TAMKO's High Wind Application Instructions. A
-  standard application doesn't earn the 160-mph coverage.
+- **IKO Dynasty & Nordic:** a **130-mph limited high-wind warranty** — but only
+  when the shingles are installed to IKO's application requirements, which lean
+  hard on the reinforced ArmourZone nailing band and a properly sealed starter
+  course at the edges.
+- **The edges matter as much as the field.** Most wind failures start at the
+  eaves and rakes, so a purpose-made starter strip (IKO Leading Edge Plus) sealing
+  those wind-driven zones is part of earning the coverage, not an upsell.
 
-Notice the pattern: in both cases the shingle alone isn't the warranty — the
-_system and the installation method_ are. Make your contract name the warranty
-and the components or application spec that earn it. (For a fuller comparison
-of these two shingles, see [Titan XT vs. Timberline HDZ](/blog/tamko-titan-xt-vs-gaf-timberline-hdz).)
+Notice the pattern: the shingle alone isn't the warranty — the _system and the
+installation method_ are. Make your contract name the warranty and the components
+and application spec that earn it. (For a fuller comparison of the two IKO lines,
+see [Dynasty vs. Nordic](/blog/iko-dynasty-vs-nordic).)
 
 ## Nailing patterns: cheap insurance
 
-Fastening is the other half of wind resistance. Standard application for Titan
-XT, for example, is four nails per shingle; high-wind specs call for enhanced
-fastening per the manufacturer's application instructions. Some local authorities
+Fastening is the other half of wind resistance. Standard application is typically
+four nails per shingle; high-wind specs call for enhanced fastening per the
+manufacturer's application instructions. Some local authorities
 mandate it outright — the City of Shenandoah's published residential roofing
 rules require a **six-nail pattern** rated for 110-mph three-second gusts, with
 ASTM D3161 Class F or G shingles. Six nails per shingle costs little on a full
@@ -106,9 +105,10 @@ replacement, and we think Shenandoah has the right idea for the whole area.
 For a [roof replacement](/the-woodlands/roof-replacement) near Houston, our
 straight answer:
 
-1. **Floor spec:** ASTM D3161 Class F + D7158 Class H. Don't go below it.
-2. **Buy the warranty system, not just the shingle** — WindProven's qualifying
-   accessories or Titan XT's high-wind application, named in the contract.
+1. **Floor spec:** a premium architectural shingle with a strong high-wind
+   warranty — the IKO lines we install carry 130-mph coverage. Don't go below it.
+2. **Buy the warranty system, not just the shingle** — IKO's 130-mph coverage,
+   with the ArmourZone install and sealed starter course named in the contract.
 3. **Upgrade the fastening** to the manufacturer's high-wind pattern.
 4. Worried about hail too? That's a separate rating — see our
    [Class 4 impact-resistant shingle guide](/blog/class-4-impact-resistant-shingles-texas).

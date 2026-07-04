@@ -66,7 +66,7 @@ export default config({
         certStatus: fields.text({
           label: "Certification status",
           description:
-            "Only certs actually held or applied for, e.g. 'GAF Master Elite applicant'. Never claim a cert you don't hold.",
+            "Only certs actually held or applied for, e.g. 'IKO ROOFPRO applicant'. Never claim a cert you don't hold.",
           multiline: true,
         }),
         warranties: fields.text({ label: "Warranties offered", multiline: true }),

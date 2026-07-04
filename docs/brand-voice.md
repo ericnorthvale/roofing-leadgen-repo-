@@ -16,7 +16,7 @@ We live here. We drive through Creekside Park on the way to work. We know the Pa
 
 We're not the cheapest. We're the ones you call when you want it done right the first time. We use specific materials, specific warranties, specific processes. No bluster, no awards-parade. The confidence of someone with a 25-year manufacturer's warranty on every job.
 
-**Say:** "GAF Timberline HDZ, nailed to manufacturer specs, 50-year non-prorated warranty." · "Each job gets a named project manager and a 40-photo documentation packet." · "Our average job: $14,800. If someone quotes you $7K for a full replacement, call us — we'll tell you what they're cutting."
+**Say:** "IKO Dynasty, nailed through the ArmourZone to manufacturer specs, with a 130-mph wind warranty and 15-year non-prorated Iron Clad coverage." · "Each job gets a named project manager and a 40-photo documentation packet." · "If someone quotes a full replacement for far less than everyone else, call us — we'll tell you what they're cutting."
 
 **Don't say:** "affordable" · "cheap" · "lowest price in town" · "best-kept secret in The Woodlands" · "we'll beat any competitor's quote" (race-to-bottom signaling).
 

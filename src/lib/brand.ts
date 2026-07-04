@@ -17,8 +17,8 @@ export const BRAND = {
   email: businessInfo.email,
   hoursSummary: businessInfo.hoursSummary,
   foundedYear: businessInfo.foundedYear,
-  licenseNote: `Texas does not license residential roofing contractors. Northvale Roofing LLC is a ${
-    businessInfo.certStatus || "GAF Master Elite applicant"
+  licenseNote: `Texas does not license residential roofing contractors. Northvale Roofing LLC is an ${
+    businessInfo.certStatus || "IKO ROOFPRO applicant"
   }.`,
   addressLine1: businessInfo.addressLine1,
   city: businessInfo.city,
