@@ -71,7 +71,7 @@ Allowed: confident premium voice; the operator's and crews' REAL experience
 (once owner supplies numbers); strong warranties / written-estimate promise /
 financing the company will honor; serving all 8 cities; true regional
 climate/storm facts (sourced, e.g. NOAA); accurate certification _status_
-(e.g. "GAF Master Elite applicant", not "GAF Master Elite" unless held).
+(e.g. "IKO ROOFPRO applicant", not a named ROOFPRO tier unless held).
 Forbidden: fake reviews, invented specific numbers presented as fact, false
 certs, fake address/GBP. When in doubt, flag it for the owner — don't invent.
 

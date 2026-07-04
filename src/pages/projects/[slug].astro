@@ -1,0 +1,95 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import RoofImage from "@components/RoofImage.astro";
+import LeadForm from "@components/LeadForm.astro";
+import RelatedLinks from "@components/RelatedLinks.astro";
+import { getPublishedProjects, storyParagraphs } from "~/lib/projects";
+import { projectStoryJsonLd } from "~/lib/seo";
+import { SERVICES, SERVICE_TAGS, type ServiceTag } from "~/lib/services";
+import { cityHubLink } from "~/lib/internal-links";
+import type { LinkItem } from "~/lib/internal-links";
+import type { ServiceAreaSlug } from "~/lib/service-areas";
+
+export async function getStaticPaths() {
+  const projects = await getPublishedProjects();
+  return projects.map((p) => ({ params: { slug: p.id }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const d = project.data;
+const paragraphs = storyParagraphs(d.longStory);
+
+// Related links: the services this job covered + the city hub (when indexable).
+const related: LinkItem[] = [];
+for (const tag of d.serviceTags) {
+  if ((SERVICE_TAGS as readonly string[]).includes(tag)) {
+    const svc = SERVICES[tag as ServiceTag];
+    related.push({ href: `/services/${svc.slug}`, label: svc.title, description: svc.summary });
+  }
+}
+if (d.citySlug) {
+  const hub = cityHubLink(d.citySlug as ServiceAreaSlug);
+  if (hub) related.push(hub);
+}
+
+const jsonLd = projectStoryJsonLd(Astro.site!.toString(), {
+  title: d.title,
+  description: d.shortStory,
+  pathname: `/projects/${project.id}/`,
+  datePublished: d.date,
+  image: d.photo,
+});
+---
+
+<BaseLayout
+  seo={{
+    title: `${d.title} — Northvale Roofing`,
+    description: d.shortStory.slice(0, 155),
+    pathname: `/projects/${project.id}/`,
+    ogImage: d.photo?.src,
+    jsonLd,
+  }}
+>
+  <article class="mx-auto max-w-3xl px-4 py-10">
+    <Breadcrumbs
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Projects", href: "/projects" },
+        { label: d.area },
+      ]}
+    />
+    <p
+      class="mt-6 text-sm font-semibold tracking-wide text-[color:var(--color-gold-700)] uppercase"
+    >
+      {d.area}
+    </p>
+    <h1 class="mt-1 text-3xl md:text-4xl">{d.title}</h1>
+
+    {
+      d.photo && (
+        <RoofImage
+          src={d.photo.src}
+          alt={d.photo.alt}
+          priority={true}
+          class="mt-6 aspect-[16/9] w-full rounded-[var(--radius-card)] object-cover"
+        />
+      )
+    }
+
+    <div class="prose-northvale mt-8">
+      {paragraphs.map((p) => <p>{p}</p>)}
+    </div>
+
+    <p class="mt-6 text-sm text-[color:var(--color-ink-500)]">
+      Details generalized to protect the homeowner's privacy; insurer names are omitted. Every
+      project shown is a real Northvale Roofing job.
+    </p>
+
+    <div class="mt-10">
+      <LeadForm source={`project-${project.id}`} />
+    </div>
+  </article>
+
+  {related.length > 0 && <RelatedLinks heading="Related services" links={related.slice(0, 4)} />}
+</BaseLayout>

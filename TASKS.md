@@ -108,7 +108,7 @@ roof-inspection,storm-damage,insurance-claims}` via `city-services.ts` +
 - [x] Tests: 88 unit (21 new SEO guards: unique titles, lengths, gates,
       anti-cannibalization, sitemap parity) + 60 e2e pass
 
-## Phase 2.6 — Brand identity refresh (this branch, doc-only)
+## Phase 2.6 — Brand identity refresh (PR #30, doc-only)
 
 Owner supplied a new brand identity PDF (navy `#060E21` / gold `#C9A26C`,
 serif wordmark + "N" monogram, Cormorant Garamond type). Critique delivered;
@@ -133,6 +133,44 @@ the PDF (it embeds raster only) and auto-traced to SVG as a stopgap.
 - [ ] **Next phase (not started):** apply the identity to the site — swap
       `@theme` ramps in `globals.css`, `COLORS` in `brand.ts`, logo/favicon/OG
       assets, Cormorant+Montserrat self-hosted fonts (guide §9)
+
+## Phase 2.7 — Website Updates V1.1 (PR #31)
+
+Executing the owner's full "Website Updates V1.1" doc. Plan file:
+`root-claude-uploads-…-tender-steele.md`.
+
+- [x] **IKO-only rebrand** (Phase 1 of the plan): retired GAF/TAMKO/CertainTeed
+      from all published content; IKO Dynasty (Class 3) + Nordic (Class 4) are the
+      only shingles. New sourced `docs/research-facts.md` Sheet 1B + single-source
+      `src/lib/iko-products.ts`. Cert → "IKO ROOFPRO applicant". Blog
+      `tamko-…-timberline` → `iko-dynasty-vs-nordic` + 301 redirect. New
+      `tests/unit/no-competitor-brands.test.ts` guard. build + 166 unit + lint pass.
+- [x] **Homeowner stories / case studies** (Phase 2 of the plan): owner-editable
+      `projects` collection (Keystatic) + `src/lib/projects.ts`; 4 real stories
+      (carrier names generalized; Humble = project-only, no city page); `/projects`
+      index + detail with Article/ImageObject JSON-LD; 4 optimized real photos in
+      `public/projects/`; `/gallery` now indexes (real photos); Woodlands hub shows
+      a real project; footer link added.
+- [x] **Roof Design Center** (Phase 3 of the plan): `/roof-design-center` with the
+      first React islands — product cards, comparison table, interactive color
+      gallery (all TX colors), brush-to-mask **roof visualizer** (photo stays
+      on-device), color recommender, warranty center, why-IKO, clickable
+      roof-system diagram, 5-step **configurator** that submits the selection to
+      `/api/lead`, and a 30-question FAQ. Product + FAQPage JSON-LD; nav link.
+      build + 166 unit + lint pass; Playwright drove all 5 islands (visualizer
+      recolor verified, configurator encodes the selection, zero console errors).
+- [x] **Expand draft city pages** (Phase 4) — **all 7 shipped.** Batch 1: Spring,
+      Magnolia, Conroe. Batch 2: Houston (City permit + hurricane), Cypress (Cy-Fair
+      MUD/ARC, Houston ETJ), Kingwood (annexed into City of Houston 1996 +
+      Livable-Forest canopy + Harvey), Tomball (City of Tomball permits + Old Town).
+      Every city now `complete`/indexable with distinct, sourced jurisdiction/permit,
+      neighborhood, climate, roof-type, and FAQ content (research-facts.md Sheet 5).
+      All 8 service-area hubs are now live.
+- [x] **EEAT + blog top-up** (Phase 5): honest `/certifications` page (IKO
+      ROOFPRO applicant status + registered warranties + what we won't claim yet),
+      new `best-iko-roof-colors-the-woodlands` blog post, footer + keyword-map
+      wiring. (Organization identity is already covered sitewide by the
+      `RoofingContractor` JSON-LD node; Review/ImageObject ship on `/projects`.)
 
 ## Phase 3 — Gated expansion (batches of 5–20)
 

@@ -77,11 +77,11 @@ export const CITY_SERVICES: Record<string, CityService> = {
         bullets: [
           {
             lead: "Architectural asphalt shingle",
-            text: "the dominant choice village-wide. We install GAF Timberline HDZ, TAMKO Titan XT, and CertainTeed Landmark lines in Standards-compliant colors.",
+            text: "the dominant choice village-wide. We install IKO Dynasty in Standards-compliant muted colors as our standard architectural line.",
           },
           {
             lead: "Impact-resistant upgrades",
-            text: "UL 2218 Class 3 and Class 4 products (like GAF Timberline AS II or CertainTeed Landmark ClimateFlex for Class 4) in the same muted palettes — worth pricing given this county's hail history.",
+            text: "IKO Nordic carries UL 2218 Class 4, the highest impact rating, in the same muted palettes — worth pricing given this county's hail history and any insurance discount your carrier offers.",
           },
           {
             lead: "Standing-seam metal",
@@ -95,7 +95,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
       },
       {
         heading: "Tear-off to the deck — because code and climate both say so",
-        body: "We replace roofs by removing everything down to the decking. The residential code (IRC R908.3) requires removing existing layers before new covering goes on, with narrow exceptions — and prohibits a roof-over where the deck is water-soaked or two layers already exist. In this climate the code is just common sense: Gulf Coast heat bakes a second layer from below, and you can't inspect or repair decking you never see. Tear-off is also when we replace what actually fails on Woodlands roofs — flashing, pipe boots, and ventilation sized to the ARMA/GAF 1-in-300 guideline, because a poorly-vented attic here can run decades of extra heat stress through your shingles.",
+        body: "We replace roofs by removing everything down to the decking. The residential code (IRC R908.3) requires removing existing layers before new covering goes on, with narrow exceptions — and prohibits a roof-over where the deck is water-soaked or two layers already exist. In this climate the code is just common sense: Gulf Coast heat bakes a second layer from below, and you can't inspect or repair decking you never see. Tear-off is also when we replace what actually fails on Woodlands roofs — flashing, pipe boots, and ventilation sized to the ARMA 1-in-300 guideline, because a poorly-vented attic here can run decades of extra heat stress through your shingles.",
       },
       {
         heading: "When roofs come due, village by village",

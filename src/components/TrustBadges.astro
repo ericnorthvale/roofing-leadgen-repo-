@@ -13,7 +13,7 @@ import { BRAND } from "~/lib/brand";
 import ImagePlaceholder from "@components/ImagePlaceholder.astro";
 
 interface Props {
-  /** Show the logo placeholder slots (GAF / BBB / financing). */
+  /** Show the logo placeholder slots (IKO ROOFPRO / BBB / financing). */
   showLogos?: boolean;
   /** Dark band (e.g. footer CTA) vs light section. */
   variant?: "light" | "dark";
@@ -26,7 +26,7 @@ const claims = [
   BRAND.promise, // "Written estimate before we leave the driveway."
   "Named project manager on every job",
   "Forty-photo documentation packet",
-  BRAND.certStatus || "GAF Master Elite applicant",
+  BRAND.certStatus || "IKO ROOFPRO applicant",
 ];
 
 const isDark = variant === "dark";
@@ -69,9 +69,9 @@ const isDark = variant === "dark";
     showLogos && (
       <div class="mt-5 grid grid-cols-3 gap-3 sm:mx-auto sm:max-w-md">
         <ImagePlaceholder
-          slot="TRUST BADGE: GAF (when held)"
+          slot="TRUST BADGE: IKO ROOFPRO (when held)"
           ratio="1/1"
-          alt="GAF certification badge"
+          alt="IKO ROOFPRO contractor badge"
           tone="navy"
         />
         <ImagePlaceholder

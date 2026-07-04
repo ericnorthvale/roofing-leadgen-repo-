@@ -35,7 +35,7 @@ Keystatic GitHub app). Once that's done:
    - **Street address**, **City**, **State**, **ZIP**
    - **Email**, **Business hours**, **Founded year**
    - **Experience** — a TRUE line, e.g. "Crews with 20+ years across Houston"
-   - **Certification status** — only what's real (e.g. "GAF Master Elite applicant")
+   - **Certification status** — only what's real (e.g. "IKO ROOFPRO applicant")
    - **Warranties** and **Financing** you actually offer
 3. Click **Save**.
 

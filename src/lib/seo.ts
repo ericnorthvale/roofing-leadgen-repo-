@@ -172,3 +172,45 @@ export function aggregateRatingJsonLd(
     },
   };
 }
+
+/**
+ * CreativeWork / case-study structured data for a completed-project story.
+ * Uses `Article` (a project story is editorial content about a real job), with
+ * an embedded `ImageObject` when a real photo exists. Never fabricated — only
+ * emitted for real, published projects.
+ */
+export function projectStoryJsonLd(
+  siteUrl: string,
+  project: {
+    title: string;
+    description: string;
+    pathname: string;
+    datePublished: Date;
+    image?: { src: string; alt: string };
+  },
+): Record<string, unknown> {
+  const base = siteUrl.replace(/\/+$/, "");
+  const url = `${base}${project.pathname}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: project.title,
+    description: project.description,
+    url,
+    mainEntityOfPage: url,
+    datePublished: project.datePublished.toISOString(),
+    author: { "@id": `${base}#business` },
+    publisher: { "@id": `${base}#business` },
+    ...(project.image
+      ? {
+          image: {
+            "@type": "ImageObject",
+            url: project.image.src.startsWith("http")
+              ? project.image.src
+              : `${base}${project.image.src}`,
+            caption: project.image.alt,
+          },
+        }
+      : {}),
+  };
+}

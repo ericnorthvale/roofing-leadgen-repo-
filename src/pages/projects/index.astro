@@ -1,0 +1,70 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import Breadcrumbs from "@components/Breadcrumbs.astro";
+import RoofImage from "@components/RoofImage.astro";
+import LeadForm from "@components/LeadForm.astro";
+import { getPublishedProjects } from "~/lib/projects";
+
+const projects = await getPublishedProjects();
+---
+
+<BaseLayout
+  seo={{
+    title: "Homeowner Stories — Completed Roofing Projects",
+    description:
+      "Real Northvale Roofing projects across The Woodlands, Spring, Magnolia, Humble, and NW Houston — insurance claims reopened, storm damage documented, and IKO roofs installed.",
+    pathname: "/projects",
+    noindex: projects.length === 0,
+  }}
+>
+  <section class="mx-auto max-w-6xl px-4 py-10">
+    <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Projects" }]} />
+    <h1 class="mt-6 text-4xl md:text-5xl">Homeowner stories</h1>
+    <p class="mt-4 max-w-2xl text-lg text-[color:var(--color-ink-800)]">
+      Real Northvale Roofing projects — how we reopened denied insurance claims, documented storm
+      damage, and installed IKO roofs across The Woodlands, Spring, Magnolia, Humble, and NW
+      Houston.
+    </p>
+  </section>
+
+  {
+    projects.length > 0 && (
+      <section class="mx-auto max-w-6xl px-4 pb-12">
+        <ul class="grid gap-8 md:grid-cols-2">
+          {projects.map((p) => (
+            <li class="overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white">
+              {p.data.photo && (
+                <a href={`/projects/${p.id}/`}>
+                  <RoofImage
+                    src={p.data.photo.src}
+                    alt={p.data.photo.alt}
+                    class="aspect-[16/10] w-full object-cover"
+                  />
+                </a>
+              )}
+              <div class="p-5">
+                <p class="text-xs font-semibold tracking-wide text-[color:var(--color-gold-700)] uppercase">
+                  {p.data.area}
+                </p>
+                <h2 class="mt-1 text-xl">
+                  <a href={`/projects/${p.id}/`}>{p.data.title}</a>
+                </h2>
+                <p class="mt-2 text-[color:var(--color-ink-800)]">{p.data.shortStory}</p>
+                <a
+                  class="mt-3 inline-block font-semibold text-[color:var(--color-navy-900)] underline"
+                  href={`/projects/${p.id}/`}
+                >
+                  Read the full story →
+                </a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="mx-auto max-w-xl px-4 py-12">
+    <LeadForm source="projects-index" />
+  </section>
+</BaseLayout>

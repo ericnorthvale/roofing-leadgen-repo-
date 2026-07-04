@@ -254,7 +254,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
       },
       {
         q: "Is a Class 3 or Class 4 impact-resistant shingle worth it in Alden Bridge?",
-        a: "If you're replacing anyway, upgrading to a UL 2218 Class 3 or Class 4 product is worth pricing: this area sees real hail, and GAF notes impact-rated shingles may be eligible for insurance discounts — ask your carrier what they credit. We quote both standard and impact-rated options in writing so you can compare.",
+        a: "If you're replacing anyway, upgrading to a UL 2218 Class 4 shingle like IKO Nordic is worth pricing: this area sees real hail, and IKO notes the impact rating may help you qualify for an insurance premium discount where your carrier offers one — though it isn't a hail guarantee, and hail isn't covered by the shingle warranty. We quote both our standard IKO Dynasty and the Class 4 Nordic in writing so you can compare.",
       },
       {
         q: "Can you handle several homes on the same street?",

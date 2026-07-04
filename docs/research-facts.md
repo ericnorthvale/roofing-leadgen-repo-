@@ -12,6 +12,14 @@ Compiled: July 3, 2026 (re-verify cost figures before major republishing).
 
 ## Sheet 1 — Materials & costs (manufacturer + industry sources)
 
+> **⚠ DEPRECATED for publishing (2026-07 — IKO-only site).** Northvale
+> standardized its installed shingle line on **IKO** (see Sheet 1B). The
+> GAF / TAMKO / CertainTeed product + warranty facts below are retained for
+> reference and historical accuracy only — **do not publish them in site copy,
+> schema, or blog content.** Generic, brand-neutral material education (metal,
+> architectural vs. 3-tab, lifespans, cost ranges, component/code facts) in this
+> sheet remains publishable.
+
 ### TAMKO Titan XT (official data sheet, Rev. 11/15/2023)
 
 - Premium architectural (laminated) shingle; two fiberglass mats, polyester
@@ -193,6 +201,108 @@ System Plus / Silver / Golden Pledge until certified at the matching level.
    single contractor claim; use "one of the most common causes" instead.
 8. 3-tab "~60–70 mph wind rating" — contractor-blog-sourced; contrast verified
    manufacturer warranties instead.
+
+---
+
+## Sheet 1B — IKO product line (the installed line — IKO-only site)
+
+Compiled July 4, 2026 from IKO's own product/warranty/program pages. This is the
+ONLY shingle brand Northvale publishes. Everything below traces to iko.com.
+
+### IKO Dynasty (Performance line — standard architectural shingle)
+
+- Laminated (architectural) fiberglass-reinforced asphalt shingle with the
+  **ArmourZone®** reinforced nailing zone (1¼" wide woven band), FastLock
+  sealant, and the True Square Advantage exposure — SOURCE:
+  https://www.iko.com/na/product/dynasty/ ;
+  https://www.iko.com/na/blog/amazing-facts-about-iko-dynasty-roofing-shingles/
+- **UL 2218 Class 3 impact resistance** rating against hail — SOURCE:
+  https://www.iko.com/na/blog/iko-dynasty-class-3-impact-resistant-shingles/ ;
+  https://www.iko.com/na/product/dynasty/
+- **Limited Wind Warranty: 130 mph (210 km/h)** — SOURCE: product page above
+- **Class A fire** (ASTM E108/UL 790, over approved deck) — SOURCE: product page
+- **Limited Lifetime** warranty; **Iron Clad® Protection: 15 years**; **Limited
+  Algae Resistance Warranty: 10 years** (blue-green algae) — SOURCE: product page
+  - https://www.iko.com/na/warranty-information-homeowners/
+- Available US color names (15): Olde Style Weatherwood, Granite Black,
+  Cornerstone Weatherwood, Atlantic Blue, Glacier, Shadow Brown, Summit Grey,
+  Biscayne, Monaco Red, Frostone Grey, Emerald Green, Driftshake, Brownstone,
+  Sentinel Slate, Blackstone — SOURCE: https://www.iko.com/na/product/dynasty/
+  (⚠ confirm which of these Northvale actually stocks/sells in TX — see UNVERIFIED)
+
+### IKO Nordic (highest-performing line — impact-resistant upgrade)
+
+- IKO's highest-performing shingle, **reinforced with polymer-modified (SBS)
+  asphalt** for flexibility + tear resistance; ArmourZone® nailing surface;
+  extra-large True Square Advantage exposure — SOURCE:
+  https://www.iko.com/na/product/nordic/
+- **FM 4473 / UL 2218 Class 4 impact resistance** (highest hail rating) — SOURCE:
+  product page above
+- **Limited Wind Warranty: 130 mph (210 km/h)**; **ASTM E108/UL 790 Class A
+  fire**; **Limited Lifetime**; **Iron Clad Protection: 15 years**; **algae: 10
+  years (blue-green)** — SOURCE: product page above
+- Available color names (6): Olde Style Weatherwood, Granite Black, Shadow Brown,
+  Summit Grey, Glacier, Driftshake — SOURCE:
+  https://www.iko.com/na/product/nordic/
+
+### IKO warranty facts (CRITICAL — publish exactly)
+
+- **Iron Clad® Protection** = the first **15 years** of **full, non-prorated**
+  coverage for manufacturing defects on IKO Performance shingles (Dynasty,
+  Nordic) — SOURCE: https://www.iko.com/na/warranty-information-homeowners/
+- Wind coverage is part of the limited warranty; **high-wind limited warranty
+  130 mph** on Dynasty + Nordic — SOURCE: product pages
+- **Hail damage is NOT covered** by the limited warranty. IKO states the impact
+  rating "is solely for the purpose of enabling residential property owners to
+  obtain a reduction in their residential insurance premium, if available" — this
+  is NOT a guarantee of hail resistance. **Always publish this hedge.** — SOURCE:
+  product pages above
+- Conditionally **transferable** (terms vary by year + product; consult the
+  Limited Warranty in effect at install) — SOURCE: warranty page above ;
+  https://www.iko.com/na/document-library/usa-iko-limited-warranty-en.pdf
+- **Iron Clad Extended Protection (up to 25 years)** is available ONLY through
+  qualifying **Select+ ROOFPRO** contractors — SOURCE:
+  https://www.iko.com/na/document/roofpro-extended-warranty-u-s/ .
+  **DO NOT publish any extended-warranty / "up to 25-year" claim until Northvale's
+  ROOFPRO tier is confirmed at Select or above** (see UNVERIFIED).
+
+### IKO ROOFPRO installer program (for honest cert language)
+
+- Three membership tiers: **Advantage** (entry; no purchase minimum), **Select**
+  (~1,200+ squares/yr; marketing fund; may offer extended Iron Clad), **Craftsman
+  Premier** (~5,000+ squares/yr; top tier) — SOURCE:
+  https://www.iko.com/na/roofpro-program/
+- **Northvale's honest status today = "IKO ROOFPRO applicant"** (a new contractor
+  enrolling; not a confirmed Select/Craftsman member). Never state a tier or an
+  extended-warranty capability until enrollment is confirmed. Mirrors CLAUDE.md's
+  "applicant, not held" rule.
+
+### IKO roofing-system components (real product names — for the system diagram)
+
+SOURCE: https://www.iko.com/na/blog/roofing-accessories-elevated/ ;
+https://www.buildsite.com/pdf/iko/ArmourGard-Ice-Water-Protector-Summary-Brochure-2326033.pdf
+
+- **Starter strips:** Leading Edge Plus, Armour Starter, EdgeSeal
+- **Hip & Ridge cap:** Hip & Ridge, Hip & Ridge 12, Hip & Ridge Plus, Ultra HP /
+  Ultra HP IR
+- **Synthetic underlayment:** RoofGard-Cool Grey, Stormtite
+- **Ice & Water Protector:** ArmourGard™, GoldShield™, StormShield® Ice & Water,
+  GoldSeam Tape
+
+### Sheet 1B — UNVERIFIED (do not publish until checked)
+
+1. **Northvale's actual ROOFPRO tier.** Publish "applicant" only. No "Select",
+   no "extended Iron Clad up to 25 years" until IKO confirms the tier.
+2. Dynasty ASTM D3161 (Class F) / D7158 (Class H) letter classes — on the
+   technical data sheet PDF (binary; not machine-parsed here). Publish the
+   product-page "130 mph limited wind warranty" wording; confirm the ASTM letter
+   grades in the TDS before quoting them:
+   https://www.iko.com/na/document/iko-dynastyreg-technical-data-sheet/
+3. Which specific Dynasty/Nordic colors Northvale actually stocks/sells in Texas
+   — the gallery lists all published colors "sold in TX"; prune to the real
+   offering once Eric confirms.
+4. Whether Northvale offers Dynasty Cool Colors Plus (solar-reflective) — only
+   list it if actually installed.
 
 ---
 
@@ -615,3 +725,115 @@ re-verified against live copy: `services.ts`, `city-services.ts`, and
 `storm-response.astro` now cite Ins. Code §707.002 + Bus. & Com. Code §27.02
 for the deductible rules and Ins. Code §4102.163 for the public-adjuster
 prohibition. No remaining copy cites "§701" or a §27.02 rescission right.
+
+---
+
+## Sheet 5 — Secondary service-area cities (jurisdiction + local specifics)
+
+Compiled July 4, 2026 for the Phase-4 city-page expansion. Regional climate/storm
+facts reuse Sheet 3 (NWS Houston/Galveston, NCEI Montgomery County hail). Below
+are the city-DISTINCT facts that keep each page from being a doorway page.
+
+### Spring (mostly unincorporated Harris County; north edge in Montgomery Co.)
+
+- Harris County's Office of the County Engineer permits **septic, driveway
+  culverts, and floodplain/development** work — it does **not** run a general
+  residential building-permit program, so a straightforward re-roof in
+  unincorporated Harris County is governed by deed restrictions/HOA, not a county
+  building permit. **Always confirm the specific address** (incorporated pockets
+  and Montgomery-County portions differ) — SOURCE:
+  https://oce.harriscountytx.gov/Services/Permits/FAQ (resolves Sheet 4 UNVERIFIED
+  #1 for the "no general county re-roof permit" point; still tell homeowners to
+  confirm their address).
+- Spring straddles the Harris/Montgomery line: 77373/77388/77379 lean Harris;
+  77386/77389 extend toward Montgomery County near The Woodlands.
+- Established roof stock: Klein and Champions Forest date largely to the
+  1970s–80s (prime replacement age); Gleannloch Farms, Augusta Pines, and
+  Harmony are 1990s–2010s builds. Klein ISD anchors the area. Old Town Spring is
+  the historic railroad district. — SOURCE (neighborhood/era, attribute):
+  har.com community pages; texasrealestatesource.com Spring subdivisions.
+
+### Conroe (City of Conroe incorporated + unincorporated Montgomery Co.; Lake Conroe)
+
+- **The City of Conroe requires a building permit for residential work within
+  the city limits**, administered by its Building Inspections & Permits Department
+  (300 W. Davis St.; OpenGov permit portal effective Dec 2025; 936-522-3110). A
+  re-roof inside the city limits is permitted work — a genuine difference from the
+  unincorporated norm. Addresses with a Conroe mailing address that are actually
+  in unincorporated Montgomery County follow the county rule (no county re-roof
+  permit). **Confirm which jurisdiction the address is in** — SOURCE:
+  https://cityofconroe.org/services/building_inspections_permits/index.php
+- Conroe is the Montgomery County seat; Lake Conroe (~21,000 acres) drives
+  waterfront wind exposure over open water and humidity. Communities: April Sound
+  and Bentwater (gated, lake, HOA), Grand Central Park (new master-planned near
+  I-45/Grand Parkway), Graystone Hills, Longmire, Water Crest. — SOURCE
+  (attribute): har.com; community sites.
+
+### Magnolia (mostly unincorporated southern Montgomery Co.; small City of Magnolia)
+
+- Predominantly **rural/acreage** southern Montgomery County — one-acre-plus
+  wooded homesites (tall oaks and pines, creeks/ponds) in communities like High
+  Meadow Ranch/Estates (gated, 1-acre+), Audubon (new master-planned), Mostyn
+  Manor, Magnolia Reserve, and Sendera Ranch (1–5 acre, bridle trails) — SOURCE:
+  https://highmeadowtx.com/ ; https://www.texasrealestatesource.com/magnolia-tx/subdivisions/
+- Jurisdiction: most Magnolia-addressed property is unincorporated Montgomery
+  County (no county re-roof permit, same as The Woodlands' unincorporated norm);
+  the City of Magnolia itself is small/incorporated (confirm if inside city
+  limits). Heavy tree canopy = falling-limb risk in wind, shaded north slopes
+  that streak with algae, and debris load in valleys.
+
+### Houston (City of Houston + unincorporated Harris Co.)
+
+- **The City of Houston requires a permit to replace a roof**, via the Houston
+  Permitting Center — the permit exists to confirm the new roof meets current
+  wind-resistance code. Homes in the city limits are permitted work; addresses in
+  unincorporated Harris County follow the county rule (no general residential
+  building permit). **Confirm which applies** — SOURCE:
+  https://www.houstonpermittingcenter.org/hpwcode1140 ;
+  https://oce.harriscountytx.gov/Services/Permits/FAQ
+- Greater Houston housing spans inner-loop early/mid-century bungalows to sprawling
+  suburban builds; full Gulf Coast exposure (hurricanes/tropical systems + spring
+  hail + heat/humidity). — SOURCE: Sheet 3 climate facts.
+
+### Cypress / Cy-Fair (unincorporated Harris Co., City of Houston ETJ)
+
+- Cypress is **unincorporated Harris County, entirely inside the City of Houston's
+  extraterritorial jurisdiction** — it is not a city, so there's no city building
+  permit for a re-roof; deed restrictions/ARCs govern. Nearly every community is a
+  master-planned development on **MUD** (Municipal Utility District) land
+  (Bridgeland, Towne Lake, Fairfield, Cypress Creek Lakes, Blackhorse Ranch), each
+  with strict architectural-review committees on shingle line + color — SOURCE:
+  https://en.wikipedia.org/wiki/Cypress,_Texas ; https://livtexas.com/blog/mud-districts-in-cypress-what-buyers-should-know
+- Cy-Fair ISD anchors the identity; roofs range from 1990s Fairfield (aging) to
+  brand-new Bridgeland phases.
+
+### Kingwood ("The Livable Forest" — annexed into the City of Houston, 1996)
+
+- Kingwood was **annexed into the City of Houston on Dec 31, 1996**, so City of
+  Houston roof permits apply — SOURCE: https://en.wikipedia.org/wiki/Kingwood,_Texas
+- A ~14,000-acre master-planned "Livable Forest" with dense tree canopy (heavy
+  shade, limb/debris load, algae on shaded slopes) northeast of downtown; suffered
+  severe flooding from Hurricane Harvey (2017) — SOURCE: same + Super Neighborhood
+  43 (houstontx.gov/superneighborhoods/43.html).
+
+### Tomball (City of Tomball incorporated + surrounding unincorporated)
+
+- **The City of Tomball requires construction permits before work starts**,
+  including a residential roofing permit (SmartGov online portal); residential
+  buildings meet the 2021 IECC per city ordinance — SOURCE:
+  https://tomballtx.gov/200/Building-Permits ;
+  https://tomballtx.gov/DocumentCenter/View/2166/Roofing-Permit-Application-Residential
+- Historic Old Town Tomball (railroad district, German heritage) plus fast-growing
+  master-planned communities (e.g., Amira, Rosehill Reserve) on the unincorporated
+  fringe; the city is in Harris County near the Montgomery line.
+
+### Sheet 5 — UNVERIFIED (do not publish)
+
+1. Exact City of Conroe / Magnolia / Tomball / Houston adopted IRC edition and
+   roofing amendments — confirm before citing a specific code section per city.
+2. Whether specific named subdivisions are inside vs. outside city limits — tell
+   homeowners to confirm their address rather than asserting per-neighborhood.
+3. Lake Conroe acreage (~21,000 ac) is widely cited but secondary-sourced here;
+   attribute or re-verify before publishing the number.
+4. Kingwood's ~14,000-acre figure + exact current City of Houston re-roof permit
+   process — attribute/confirm before quoting specifics.

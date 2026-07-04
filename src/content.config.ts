@@ -73,4 +73,34 @@ const reviews = defineCollection({
   }),
 });
 
-export const collections = { blog, reviews };
+/**
+ * Real completed-project case studies ("Homeowner Stories"). REAL jobs only —
+ * publishing an invented project story is a fabricated fact (Hard Rule #2 / FTC).
+ * Owner-editable in the Keystatic admin panel. Drafts never render or hit the
+ * sitemap until a human flips `status` to "published".
+ */
+const projects = defineCollection({
+  loader: glob({ pattern: "**/*.json", base: "./src/content/projects" }),
+  schema: z.object({
+    title: z.string(),
+    /** Human display area, e.g. "The Woodlands, TX". */
+    area: z.string(),
+    /** Optional service-area slug so the story can link to that city hub. */
+    citySlug: z.enum(SERVICE_AREA_SLUGS).optional(),
+    /** Service categories this job covered, e.g. ["replacement","insurance"]. */
+    serviceTags: z.array(z.string()).default([]),
+    /** 2–3 sentence teaser shown on the index + city proof sections. */
+    shortStory: z.string(),
+    /** Full narrative (paragraphs separated by blank lines). */
+    longStory: z.string(),
+    date: z.coerce.date(),
+    /** Real Northvale photo for this job. Truthful alt only. */
+    photo: z.object({ src: z.string(), alt: z.string() }).optional(),
+    featured: z.boolean().default(false),
+    /** Seed/template entries are never rendered (FTC). Filtered in src/lib/projects.ts. */
+    placeholder: z.boolean().default(false),
+    status: z.enum(["draft", "published", "archived"]).default("draft"),
+  }),
+});
+
+export const collections = { blog, reviews, projects };

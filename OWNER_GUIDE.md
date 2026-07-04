@@ -80,7 +80,7 @@ The fastest path: open the admin panel → **Business Info**, and fill in:
 
 - **Phone & address** (your real NAP — replaces the current placeholders)
 - **Experience** (a TRUE statement, e.g. "Crews with 20+ years across Houston")
-- **Certification status** (only what's held or applied for — e.g. "GAF Master Elite applicant")
+- **Certification status** (only what's held or applied for — e.g. "IKO ROOFPRO applicant")
 - **Warranties** and **financing** you actually offer
 
 Photos: upload in the panel, or connect **CompanyCam** so real job photos flow in

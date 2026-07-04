@@ -46,6 +46,14 @@ function keystaticWithHostFix() {
 export default defineConfig({
   site: SITE,
   output: "static",
+  // Permanent redirects for renamed content (preserve link equity + avoid 404s).
+  redirects: {
+    // Renamed when the site standardized on IKO (was a TAMKO-vs-GAF comparison).
+    "/blog/tamko-titan-xt-vs-gaf-timberline-hdz": {
+      status: 301,
+      destination: "/blog/iko-dynasty-vs-nordic",
+    },
+  },
   adapter: vercel({
     webAnalytics: { enabled: false }, // we use GA4 + server-side GTM, not Vercel Analytics
     imageService: true,

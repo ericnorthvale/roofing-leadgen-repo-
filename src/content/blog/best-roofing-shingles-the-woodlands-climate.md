@@ -1,6 +1,6 @@
 ---
 title: "The Best Roofing Shingles for The Woodlands Climate"
-description: "How heat, humidity, algae, and hail wear out roofs in The Woodlands — and how GAF, TAMKO, CertainTeed, Class 4, and metal options hold up."
+description: "How heat, humidity, algae, and hail wear out roofs in The Woodlands — and how IKO Dynasty, the Class 4 IKO Nordic, and metal options hold up."
 pubDate: 2026-07-03
 author: "Northvale Roofing"
 cluster: "materials"
@@ -62,49 +62,32 @@ Woodlands](/the-woodlands/roof-replacement).
 
 ## The main contenders
 
-### GAF Timberline HDZ
+We standardize on IKO, so the real decision here is Dynasty vs. the Class 4
+Nordic — with metal as the long-horizon alternative.
 
-The workhorse architectural shingle. Per GAF's spec sheet, LayerLock technology
-powers what GAF calls the industry's largest nailing zone, paired with Dura Grip
-sealant. The standout is the **WindProven limited wind warranty: 15 years with no
-maximum wind speed limitation** — it requires LayerLock shingles plus four
-qualifying GAF accessory categories, but no special contractor certification, so
-it's a warranty we can honestly deliver today. Add a **25-year StainGuard Plus
-algae-protection limited warranty** on packages bearing the logo — a big deal
-under these pine canopies — plus ASTM D7158 Class H, ASTM D3161 Class F, UL 790
-Class A fire, and a spec sheet that states it meets Texas Department of Insurance
-requirements. Impact rating is UL 2218 Class 3, and GAF is upfront that hail
-damage isn't covered by the limited warranty.
+### IKO Dynasty — the workhorse
 
-### TAMKO Titan XT
+Our standard architectural shingle, built around the **ArmourZone**: a 1¼-inch
+reinforced, woven nailing band that gives fasteners a wider, tougher target and
+resists wind uplift. It carries a **130-mph limited high-wind warranty**, a
+**Limited Lifetime** product warranty, IKO's **15-year non-prorated Iron Clad
+Protection**, a **10-year algae-resistance warranty** — meaningful under these
+pine canopies — and a Class A fire rating, in more colors than any other IKO line.
+Its impact rating is UL 2218 Class 3, and IKO is upfront that hail damage isn't
+covered by the shingle warranty.
 
-A premium architectural shingle built around wind performance: two fiberglass
-mats with a polyester reinforcing strip in the common bond area, a polymer-modified
-sealant, and a **15-year limited warranty for winds up to 160 mph** when installed
-per TAMKO's High Wind Application Instructions. It carries ASTM D7158 Class H,
-D3161 Class F, UL 790 Class A, and Miami-Dade approval. Impact rating is **UL 2218
-Class 3 — not Class 4**, despite what some sales pitches imply. Its algae coverage
-is a 10-year Algae Cleaning limited warranty — shorter than GAF's 25 years, which
-matters here.
+### IKO Nordic — the Class 4 upgrade
 
-### CertainTeed Landmark
-
-Landmark's calling card is the warranty structure: a lifetime limited warranty for
-individual homeowners with a **10-year SureStart period covering 100% of materials
-and labor, not prorated, transferable once**. It carries StreakFighter algae
-protection, and Landmark PRO lists ASTM D3462, D3161 Class F, D7158 Class H, and
-UL 790 Class A. A solid, proven choice.
-
-### Class 4 impact-resistant options
-
-If hail is your top worry, step up to a UL 2218 Class 4 shingle — the highest
-impact rating, meaning the shingle withstands a 2-inch steel ball dropped from 20
-feet. GAF's Timberline AS II (SBS polymer-modified, WindProven-eligible, 25-year
-StainGuard Plus) and Timberline UHDZ, and CertainTeed's Landmark ClimateFlex, all
-test at Class 4. Per TDI, a Class 4 roof would receive the highest premium credit
-insurers offer for impact-rated roofs — but discount amounts are set
-company-by-company, so ask your carrier what they'd credit. We've written a full
-breakdown in [our Class 4 shingle guide](/blog/class-4-impact-resistant-shingles-texas).
+If hail is your top worry, step up to Nordic, IKO's highest-performing line. Its
+mat is **polymer-modified (SBS) asphalt** that flexes like a shock absorber,
+earning the highest hail rating, **UL 2218 Class 4** (the shingle withstands a
+2-inch steel ball dropped from 20 feet in testing). It shares Dynasty's ArmourZone,
+130-mph wind warranty, Limited Lifetime coverage, 15-year Iron Clad Protection, and
+10-year algae warranty. Per TDI, a Class 4 roof receives the highest premium credit
+insurers offer — but the rating is a lab classification, not a hail guarantee, and
+discount amounts are set company-by-company, so ask your carrier what they'd credit.
+Full breakdown in [our Class 4 shingle guide](/blog/class-4-impact-resistant-shingles-texas)
+and a head-to-head in [Dynasty vs. Nordic](/blog/iko-dynasty-vs-nordic).
 
 ### Standing-seam metal
 
@@ -118,10 +101,11 @@ finish isn't glossy and the color is muted.
 ## Our honest take
 
 For most homes in The Woodlands, a modern architectural shingle with a strong
-algae warranty and a real wind warranty is the sweet spot — Timberline HDZ earns
-its popularity here. If your street has taken hail more than once, price the
-Class 4 upgrade next to it and let your insurer's actual credit settle the math.
-If you're planning to stay 30+ years, standing seam deserves a serious look.
+algae warranty and a real wind warranty is the sweet spot — IKO Dynasty is our
+standard for exactly that reason. If your street has taken hail more than once,
+price the Class 4 Nordic upgrade next to it and let your insurer's actual credit
+settle the math. If you're planning to stay 30+ years, standing seam deserves a
+serious look.
 
 Want numbers instead of generalities? Book a [free inspection](/the-woodlands/roof-inspection)
 and we'll quote two or three of these options side by side — written estimate
