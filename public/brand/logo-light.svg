@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Northvale Roofing — horizontal wordmark, LIGHT/inverted variant for DARK
+  backgrounds (e.g. the navy-950 footer). Same geometry as logo.svg; the house
+  outline and wordmark are white, the plumb line is navy-300, and the gold
+  accent is kept for contrast. Transparent background. Size via CSS (h-* w-auto).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 18 760 164"
+     role="img" aria-label="Northvale Roofing"
+     preserveAspectRatio="xMidYMid meet">
+  <!-- Icon: house outline with plumb-line crosshair -->
+  <g transform="translate(34,20)">
+    <path d="M8 60 L62 12 L116 60 V150 H8 Z" fill="none" stroke="#ffffff" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+    <line x1="24" y1="92" x2="100" y2="92" stroke="#7896b8" stroke-width="4" stroke-linecap="round"/>
+    <line x1="62" y1="48" x2="62" y2="136" stroke="#e09a3c" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="196" y="118" font-family="Georgia, 'Times New Roman', serif" font-size="58" fill="#ffffff" letter-spacing="3">NORTHVALE</text>
+  <text x="200" y="152" font-family="Arial, Helvetica, sans-serif" font-size="19" fill="#aebfd7" letter-spacing="7">ROOFING &#183; NW HOUSTON</text>
+</svg>
