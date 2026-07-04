@@ -2,10 +2,36 @@
 
 Ordered by the point in the launch path where they're blocking. Check off as they're done; add new ones at the appropriate tier.
 
-> **▶ Do next: HighLevel.** The CRM lead pipeline is built and live in code
-> (form + tracked calls → contact + opportunity; form leads → Meta conversion),
-> all dormant until keys are set. Follow **`docs/setup-highlevel.md`** to turn it
-> on — that's the highest-leverage unblock right now (see the Tier 2 items below).
+> **▶ Goal = revenue ASAP, with two part-time owners and 4–8 jobs/wk of capacity.**
+> The website is a 6–12 month asset — it will not ring the phone in the revenue window.
+> What rings the phone in month one is **Google Business Profile + Local Services Ads +
+> review velocity + sub-5-minute lead response.** So the top priority is **Tier 0**
+> below, not the SEO expansion. The CRM lead pipeline is already built and dormant in
+> code — turning on HighLevel (Tier 0 / Tier 2) is what powers the speed-to-lead
+> automation, so it stays a top unblock. See `docs/decision-log.md` (2026-07-04) for the
+> reasoning behind this re-sequencing.
+
+## Tier 0 — phone-ringers & speed-to-lead (do these first; they produce near-term revenue)
+
+These are the fastest path to a ringing phone and mostly live _outside the codebase_.
+Because both owners are part-time, the automated pieces matter most — a lead can't wait
+on a busy person.
+
+- [ ] **Claim + verify Google Business Profile.** The local 3-pack + LSA sit above
+      organic search; this is the single biggest near-term lever. Then paste the GBP URL
+      into the admin panel (feeds `sameAs`) and request the Place ID (Tier 2).
+- [ ] **Apply for Google Local Services Ads** the day the LLC + GL insurance exist.
+      Roofing LSA CPL ≈ $55–90 (about half of blended Google Ads CPL) plus the Google
+      Screened badge. Requires the background check + insurance.
+- [ ] **Turn on speed-to-lead in HighLevel** — auto-responder SMS (<60s on every form/call
+      lead) + **missed-call text-back**. This exists _before the first ad dollar_. See
+      **`docs/runbooks/speed-to-lead.md`** for the exact workflow config.
+- [ ] **Run the review-request SOP at job #1** (not later) — review _velocity_ is the GBP
+      wedge. The process already exists: `docs/sops/review-request.md`. Real reviews only.
+- [ ] **Add lead-qualification fields + follow-up cadences in HighLevel** — retail vs.
+      insurance claim, roof age, timeline (→ different nurture tracks); a no-answer ×3 →
+      90-day recycle cadence; a quote-follow-up sequence (20–30% of signable jobs are lost
+      to post-estimate silence). Cheap now, expensive to retrofit.
 
 ## Tier 1 — blocks anything going live
 
@@ -94,7 +120,13 @@ Lighthouse CI runs with production budgets (a11y/best-practices/SEO ≥ 0.95, pe
 - [ ] **Photograph crew + trucks + finished-job sites** for about + reviews + service pages. Replace stock copy slots. No unlicensed stock.
 - [ ] **Remove demo placeholder images before launch.** The site currently shows royalty-free STOCK photos in every image slot for design preview (`public/placeholders/`, wired via `src/lib/demo-images.ts`). Set `USE_DEMO_IMAGES = false` (or delete the folder) and replace each slot with a real Northvale photo via the `src` prop. **Required:** before/after + "recent work" must show only real Northvale jobs (FTC).
 
-## Tier 4 — content engine wiring
+## Tier 4 — content engine wiring (SCALE PHASE — not now)
+
+> **Deprioritized for the revenue-ASAP window.** The automated blog-drafting pipeline is
+> a scale-phase feature; it does not produce near-term revenue and adds LLM cost. Woodlands
+> content is hand-authored + human-gated regardless. Do **not** provision `ANTHROPIC_API_KEY`
+> / `OPENAI_API_KEY` yet. Revisit once the flagship is converting and you're expanding to a
+> second city. (Decision: `docs/decision-log.md`, 2026-07-04.)
 
 - [ ] **Implement `src/scripts/keyword-brief-generator.ts`** — consumes `keyword-seeds.json`, expands a slot into `briefs/queue/<slug>.json`.
 - [ ] **Implement `src/scripts/content-draft.ts`** — consumes a brief, drafts full MDX blog post, writes with `status: draft`, opens a labeled PR.
