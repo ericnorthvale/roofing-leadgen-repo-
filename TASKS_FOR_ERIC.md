@@ -119,6 +119,25 @@ Claude session — each unlocks stronger copy or fixes a placeholder:
       April Sound, and Magnolia as areas the blog will cover. Confirm these are
       in scope before that post publishes.
 
+## Tier 2.7 — brand identity refresh (added July 2026 brand review)
+
+The new brand guide (`docs/brand-guidelines.md`) is written and the logo art
+was recovered from your PDF, but three things only you (or your designer) can
+supply — none block launch, all block a clean brand rollout:
+
+- [ ] **Get the original vector logo files** (AI, EPS, or SVG source) from
+      whoever made the brand PDF — the PDF only contains pictures of the logo,
+      not the master artwork. Our traced copies are faithful but are a stopgap,
+      and the guide's own rule is "never redraw the logo."
+- [ ] **Lock Pantone colors with your print vendor** — pick the official
+      coated + uncoated Pantone matches for the navy and gold before ordering
+      yard signs, truck wraps, or embroidered gear, so the gold looks the same
+      on every surface. One short email to the vendor with hex `#060E21` and
+      `#C9A26C` does it.
+- [ ] **Confirm one odd color** — the PDF lists a dark tone `#1E1E2E` that has
+      a slight purple tint next to the brand navy. Ask the designer if that was
+      intentional; if not, we drop it (details in the guide, section 3.2).
+
 ## Tier 3a — performance + accessibility (Lighthouse 0.95 budgets)
 
 Lighthouse CI runs with production budgets (a11y/best-practices/SEO ≥ 0.95, performance ≥ 0.90, and Google's official "good" Core Web Vitals: LCP ≤ 2500ms, TBT ≤ 200ms, CLS ≤ 0.10 on mobile throttle). Budgets are **skipped on draft PRs** so scaffold iteration isn't blocked — ready-for-review PRs and pushes to `main` enforce them. The four pages in `.lighthouserc.json` currently pass all budgets.
