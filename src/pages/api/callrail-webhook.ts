@@ -7,12 +7,21 @@ import {
 } from "~/lib/callrail";
 import { pushLeadToHighLevel } from "~/lib/highlevel";
 import { notifyNewLead } from "~/lib/notify";
+import { sendMetaLeadEvent } from "~/lib/meta-capi";
 import { canonicalLeadSource } from "~/lib/lead-source";
+import { rateLimit, clientKey } from "~/lib/rate-limit";
+import { persistLead } from "~/lib/lead-store";
 import { maskPhone } from "~/lib/phone";
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
+  // Best-effort rate limit, same policy as /api/lead — caps abuse before any
+  // signature work. Real CallRail traffic is far below the limit.
+  if (!rateLimit(clientKey(request.headers)).allowed) {
+    return new Response("Too many requests", { status: 429 });
+  }
+
   const raw = await request.text();
   const signature = request.headers.get("signature");
   const secret = import.meta.env.CALLRAIL_WEBHOOK_SECRET;
@@ -62,6 +71,33 @@ export const POST: APIRoute = async ({ request }) => {
     event.utm_source ? `utm_source:${event.utm_source}` : "utm_source:direct",
     event.utm_campaign ? `utm_campaign:${event.utm_campaign}` : "",
   ].filter(Boolean);
+
+  // Durable safety net FIRST (best-effort, env-gated): persist the call lead to
+  // the private Blob store before any other integration runs. See lead-store.ts.
+  const stored = await persistLead(
+    {
+      channel: "phone",
+      receivedAt: new Date().toISOString(),
+      lead: {
+        callrail_call_id: event.id,
+        phone: event.customer_phone_number,
+        tracking_number: event.tracking_phone_number ?? "",
+        duration: event.duration ?? null,
+        recording: event.recording ?? "",
+        callrail_source: event.source_name ?? "",
+        lead_source: leadSource,
+        utm_source: event.utm_source ?? "",
+        utm_medium: event.utm_medium ?? "",
+        utm_campaign: event.utm_campaign ?? "",
+        gclid: event.gclid ?? "",
+        fbclid: event.fbclid ?? "",
+      },
+    },
+    { BLOB_READ_WRITE_TOKEN: import.meta.env.BLOB_READ_WRITE_TOKEN },
+  );
+  if (stored.status === "error") {
+    console.error("[callrail-webhook] blob persistence failed:", stored.error);
+  }
 
   // Push the call as a contact (+ opportunity when a pipeline is configured).
   // Best-effort — a webhook must still 200 so CallRail doesn't retry forever.
@@ -118,6 +154,26 @@ export const POST: APIRoute = async ({ request }) => {
   );
   if (notify.errors.length > 0) {
     console.error("[callrail-webhook] alert errors:", notify.errors.join("; "));
+  }
+
+  // Server-side Meta conversion for phone leads (best-effort; env-gated), so
+  // ad optimization sees tracked calls, not just form fills. The CallRail call
+  // id is the event id — deterministic, so webhook retries de-dupe at Meta.
+  const meta = await sendMetaLeadEvent(
+    {
+      phone: event.customer_phone_number,
+      fbclid: event.fbclid,
+      leadSource,
+      actionSource: "phone_call",
+      eventId: event.id,
+    },
+    {
+      META_PIXEL_ID: import.meta.env.META_PIXEL_ID,
+      META_CAPI_TOKEN: import.meta.env.META_CAPI_TOKEN,
+    },
+  );
+  if (meta.status === "error") {
+    console.error("[callrail-webhook] Meta CAPI error:", meta.error);
   }
 
   return new Response("ok", { status: 200 });

@@ -1,12 +1,20 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { POST } from "~/pages/api/lead";
-import { _resetRateLimit } from "~/lib/rate-limit";
 
 /**
  * Integration test for the lead endpoint (the money path). No network: with no
- * env keys, HighLevel + notify no-op, so we exercise validation, honeypot, the
- * rate limiter, and the success redirect in isolation.
+ * env keys, HighLevel + notify + blob persistence no-op, so we exercise
+ * validation, honeypot, the rate limiter, and the success redirect in isolation.
+ *
+ * @vercel/blob is module-mocked (its Node build fetches via undici, which a
+ * fetch stub would not intercept). No mockClear/mockReset on the hoisted spy in
+ * beforeEach — a vitest 2.1 quirk turns later rejections into unhandled errors.
  */
+
+const putMock = vi.hoisted(() => vi.fn());
+vi.mock("@vercel/blob", () => ({ put: putMock }));
+
+import { POST } from "~/pages/api/lead";
+import { _resetRateLimit } from "~/lib/rate-limit";
 
 function ctx(body: Record<string, string>, headers: Record<string, string> = {}) {
   const request = new Request("https://northvaleroofing.com/api/lead", {
@@ -39,13 +47,46 @@ describe("POST /api/lead", () => {
   });
 
   it("makes no outbound calls when no integration keys are set (all gated no-ops)", async () => {
-    // HighLevel, notify (Twilio/Resend), and Meta CAPI must all cleanly skip
-    // with no env keys — so a valid lead never touches the network.
+    // HighLevel, notify (Twilio/Resend), Meta CAPI, and blob persistence must
+    // all cleanly skip with no env keys — so a valid lead never touches the
+    // network.
     const fetchSpy = vi.fn();
     vi.stubGlobal("fetch", fetchSpy);
     const res = await POST(ctx(validLead, { "x-forwarded-for": "9.9.9.9" }));
     expect(res.status).toBe(303);
     expect(fetchSpy).not.toHaveBeenCalled();
+    expect(putMock).not.toHaveBeenCalled();
+  });
+
+  it("still redirects (303) when the blob safety-net write fails — never blocks the lead", async () => {
+    vi.stubEnv("BLOB_READ_WRITE_TOKEN", "vercel_blob_rw_test");
+    putMock.mockRejectedValueOnce(new Error("store offline"));
+    const res = await POST(ctx(validLead, { "x-forwarded-for": "9.9.9.8" }));
+    expect(res.status).toBe(303);
+    expect(res.headers.get("location")).toBe("/thank-you");
+    vi.unstubAllEnvs();
+  });
+
+  it("persists the full lead record to the blob store when the token is set", async () => {
+    vi.stubEnv("BLOB_READ_WRITE_TOKEN", "vercel_blob_rw_test");
+    putMock.mockClear();
+    putMock.mockResolvedValue({ pathname: "leads/x.json" });
+
+    const res = await POST(ctx(validLead, { "x-forwarded-for": "7.7.7.7" }));
+    expect(res.status).toBe(303);
+    expect(putMock).toHaveBeenCalledTimes(1);
+
+    const [pathname, body, opts] = putMock.mock.calls[0]!;
+    expect(pathname).toMatch(/^leads\/\d{4}-\d{2}\/form-.+\.json$/);
+    expect(opts).toMatchObject({ access: "private", addRandomSuffix: false });
+    const record = JSON.parse(body as string);
+    expect(record.channel).toBe("form");
+    expect(record.lead.firstName).toBe("Jane");
+    expect(record.lead.phone).toBe("+12815550123");
+    expect(record.lead.consent.ip).toBe("7.7.7.7");
+    expect(record.lead.consent.textVersion).toMatch(/^\d{4}-\d{2}-\d{2}\.v\d+$/);
+
+    vi.unstubAllEnvs();
   });
 
   it("rejects a submission missing required fields (422)", async () => {

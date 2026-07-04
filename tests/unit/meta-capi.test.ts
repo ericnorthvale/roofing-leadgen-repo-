@@ -51,6 +51,23 @@ describe("sendMetaLeadEvent", () => {
     expect(event.custom_data.lead_source).toBe("facebook");
   });
 
+  it("defaults action_source to website; phone leads override to phone_call", async () => {
+    const fetchSpy = vi.fn(
+      async (_url: string, _init: RequestInit) =>
+        ({ ok: true, status: 200 }) as unknown as Response,
+    );
+    vi.stubGlobal("fetch", fetchSpy);
+
+    await sendMetaLeadEvent(lead, keys);
+    await sendMetaLeadEvent({ ...lead, actionSource: "phone_call", eventId: "CAL9" }, keys);
+
+    const first = JSON.parse(fetchSpy.mock.calls[0][1].body as string).data[0];
+    const second = JSON.parse(fetchSpy.mock.calls[1][1].body as string).data[0];
+    expect(first.action_source).toBe("website");
+    expect(second.action_source).toBe("phone_call");
+    expect(second.event_id).toBe("CAL9");
+  });
+
   it("returns error (never throws) when the API call fails", async () => {
     vi.stubGlobal(
       "fetch",

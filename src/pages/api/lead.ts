@@ -7,6 +7,7 @@ import { canonicalLeadSource } from "~/lib/lead-source";
 import { deserializeUtm } from "~/lib/utm";
 import { validateLead, isValidEventId } from "~/lib/lead-validation";
 import { CONSENT_TEXT_VERSION } from "~/lib/legal";
+import { persistLead } from "~/lib/lead-store";
 
 export const prerender = false;
 
@@ -100,6 +101,43 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
     utm.campaign ? `utm_campaign:${utm.campaign}` : "",
   ].filter(Boolean);
 
+  const receivedAt = new Date().toISOString();
+
+  // Durable safety net FIRST (best-effort, env-gated): persist the lead to the
+  // private Blob store before any other integration runs, so it can never be
+  // lost to an unconfigured or failing CRM/SMS/email stack. See lead-store.ts.
+  const stored = await persistLead(
+    {
+      channel: "form",
+      receivedAt,
+      lead: {
+        firstName: lead.firstName,
+        lastName: lead.lastName,
+        phone: lead.phone,
+        email: lead.email,
+        address: lead.address,
+        city: lead.city,
+        zip: lead.zip,
+        service: lead.service,
+        notes: lead.notes,
+        source: lead.source ?? "website",
+        lead_source: leadSource,
+        utm,
+        consent: {
+          given: true,
+          timestamp: receivedAt,
+          ip: clientIp ?? "",
+          textVersion: CONSENT_TEXT_VERSION,
+        },
+        geo: locals.geo ?? {},
+      },
+    },
+    { BLOB_READ_WRITE_TOKEN: import.meta.env.BLOB_READ_WRITE_TOKEN },
+  );
+  if (stored.status === "error") {
+    console.error("[lead] blob persistence failed:", stored.error);
+  }
+
   const hl = await pushLeadToHighLevel(
     {
       firstName: lead.firstName,
@@ -128,7 +166,7 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
         // when, and from where. The disclaimer text itself is versioned in
         // src/lib/legal.ts (CONSENT_TEXT_VERSION).
         consent_given: "true",
-        consent_timestamp: new Date().toISOString(),
+        consent_timestamp: receivedAt,
         consent_ip: clientIp ?? "",
         consent_text_version: CONSENT_TEXT_VERSION,
         // Vercel request geo — coarse anti-fraud / service-area signal.

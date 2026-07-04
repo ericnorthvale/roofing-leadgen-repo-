@@ -31,6 +31,7 @@
     "@keystatic/astro": "^5.1.0",
     "@keystatic/core": "^0.5.50",
     "@tailwindcss/vite": "^4.0.0",
+    "@vercel/blob": "^2.5.0",
     "astro": "^5.1.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
@@ -45,6 +46,7 @@
     "prettier": "^3.4.2",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.9",
+    "tsx": "^4.23.0",
     "vitest": "^2.1.8"
   }
 }

@@ -16,11 +16,15 @@ tests). Still open — tracked in the review doc:
       claim/verify GBP (promote to co-equal workstream with the site)
 - [ ] **Owner:** HighLevel keys + verify v2 payload shapes + build the
       speed-to-lead auto-responder and missed-call text-back workflows
-- [ ] Lead persistence fallback (Vercel Blob/KV) so an unconfigured stack can
-      never silently drop a lead
-- [ ] Meta CAPI for phone leads + rate limit on the CallRail webhook
-- [ ] Implement the stubbed content-pipeline scripts or disable their cron
-      workflows
+- [x] Lead persistence fallback so an unconfigured stack can never silently
+      drop a lead — private Vercel Blob store (`src/lib/lead-store.ts`), wired
+      into `/api/lead` + the CallRail webhook; owner setup: `docs/setup-leads.md` §3
+- [x] Meta CAPI for phone leads (`action_source: phone_call`, call id as dedup
+      event id) + rate limit on the CallRail webhook
+- [x] Content-pipeline crons: `compliance-scan.ts` implemented (weekly
+      banned-phrase scan of `dist/`, rules in `src/lib/compliance-rules.ts`);
+      brief/draft/e2e workflows guarded with fail-fast steps; `reviews-sync`
+      blocked on GBP — per-script status in `src/scripts/README.md`
 
 ## ▶ Next session — start here
 

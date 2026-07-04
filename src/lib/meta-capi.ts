@@ -28,6 +28,8 @@ export interface MetaLeadInput {
   eventSourceUrl?: string;
   /** Canonical lead source, sent as custom_data for reporting. */
   leadSource?: string;
+  /** Meta action_source — "website" for form leads (default), "phone_call" for tracked calls. */
+  actionSource?: "website" | "phone_call";
   /**
    * Deterministic event id used to de-dupe against a future client-side pixel
    * fire. If omitted, one is derived from the lead's hashed identity.
@@ -116,7 +118,7 @@ export async function sendMetaLeadEvent(
             event_name: "Lead",
             event_time: eventTime,
             event_id: eventId,
-            action_source: "website",
+            action_source: lead.actionSource ?? "website",
             event_source_url: lead.eventSourceUrl,
             user_data: userData,
             custom_data: { lead_source: lead.leadSource ?? "website" },

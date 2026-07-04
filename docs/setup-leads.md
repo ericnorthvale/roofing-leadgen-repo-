@@ -35,10 +35,27 @@ Vercel. **Claude never touches secrets, billing, or DNS** — these are your ste
    - `LEAD_ALERT_EMAIL_FROM` = `leads@resend.dev` (or your verified domain sender)
 5. Redeploy.
 
+## 3. Never-lose-a-lead storage (Vercel Blob) — free tier, 2 minutes
+
+Every valid lead (form **and** tracked phone call) can also be written to a
+private file store as a permanent record — so even if SMS, email, and HighLevel
+are all unconfigured or down, the lead is still saved and recoverable.
+
+1. In **Vercel → your project → Storage → Create Database → Blob**, create a
+   store and choose **Private** access (lead records contain customer PII —
+   private means no public URLs, ever).
+2. **Connect** the store to this project. Vercel adds the
+   `BLOB_READ_WRITE_TOKEN` env var automatically — there is no key to copy.
+3. Redeploy. Done.
+
+Recovery: each lead is one JSON file at `leads/<year-month>/…json` in the
+store — browse or download them from **Vercel → Storage → your Blob store**.
+
 ## How it behaves
 
-- Set **both**, **one**, or **neither** — each channel turns on only when its keys
-  are present. With no keys, the form still works; alerts are simply skipped.
+- Set **all**, **some**, or **none** — each channel (SMS, email, Blob storage)
+  turns on only when its keys are present. With no keys, the form still works;
+  the extras are simply skipped.
 - Alerts are **best-effort**: if a text/email provider hiccups, the lead still
   submits and still goes to HighLevel (once connected). Nothing blocks a lead.
 - Once **HighLevel** is connected, it becomes your system of record + nurture;

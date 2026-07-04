@@ -2,7 +2,7 @@
 
 **Purpose:** a single reference for the federal + Texas-specific legal constraints every page, every form, every outbound message must respect. Re-read before shipping anything marketing-facing.
 
-> Code-level enforcement lives in `src/lib/legal.ts` (the phrasing homeowners see) and `.github/workflows/weekly-compliance.yml` (which greps the built site for banned phrases).
+> Code-level enforcement lives in `src/lib/legal.ts` (the phrasing homeowners see) and `.github/workflows/weekly-compliance.yml`, which greps the built site for banned phrases every Monday — patterns + educational-context exemptions in `src/lib/compliance-rules.ts`, runner in `src/scripts/compliance-scan.ts`.
 
 ## 1. TCPA — Telephone Consumer Protection Act (47 U.S.C. § 227)
 
