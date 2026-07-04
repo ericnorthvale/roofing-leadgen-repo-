@@ -108,6 +108,32 @@ roof-inspection,storm-damage,insurance-claims}` via `city-services.ts` +
 - [x] Tests: 88 unit (21 new SEO guards: unique titles, lengths, gates,
       anti-cannibalization, sitemap parity) + 60 e2e pass
 
+## Phase 2.6 — Brand identity refresh (this branch, doc-only)
+
+Owner supplied a new brand identity PDF (navy `#060E21` / gold `#C9A26C`,
+serif wordmark + "N" monogram, Cormorant Garamond type). Critique delivered;
+owner decisions recorded: light-first pages with navy "dark moments";
+Cormorant Garamond + Montserrat (Open Sans dropped); logo art extracted from
+the PDF (it embeds raster only) and auto-traced to SVG as a stopgap.
+
+- [x] `docs/brand-guidelines.md` — full upgraded guide: accessible gold rules
+      (brand gold fails 2.37:1 on white → Gold Deep `#956E37` for light
+      backgrounds), measured WCAG pairing table, named supporting tones, full
+      navy/gold/neutral 50–950 ramps, two-font type system, art direction,
+      photography, applications (web/favicon/signage/vehicle), asset inventory
+- [x] `docs/brand-assets/` — 8 traced SVG logo variants (wordmark + monogram
+      × gold/navy/white/black), fidelity-checked at 150px/32px, plus the
+      designer's 8 original PNG exports recovered from the owner's Drive
+      Branding folder (`original/`)
+- [x] Drive sync: brand guidelines + voice guide uploaded to the owner's
+      Branding folder as Google Docs; traced SVGs uploaded alongside the
+      original PNGs (Drive had no vector versions)
+- [ ] **Owner/designer (NEEDS DATA):** true vector masters, Pantone coated +
+      uncoated refs, `#1E1E2E` intent (purple cast) — see guide §8
+- [ ] **Next phase (not started):** apply the identity to the site — swap
+      `@theme` ramps in `globals.css`, `COLORS` in `brand.ts`, logo/favicon/OG
+      assets, Cormorant+Montserrat self-hosted fonts (guide §9)
+
 ## Phase 3 — Gated expansion (batches of 5–20)
 
 - [ ] (per batch) build real-data pages; noindex drafts for the rest
