@@ -140,7 +140,11 @@ Executing the owner's full "Website Updates V1.1" doc. Plan file:
       Every city now `complete`/indexable with distinct, sourced jurisdiction/permit,
       neighborhood, climate, roof-type, and FAQ content (research-facts.md Sheet 5).
       All 8 service-area hubs are now live.
-- [ ] **EEAT + schema + blog top-up** (Phase 5).
+- [x] **EEAT + blog top-up** (Phase 5): honest `/certifications` page (IKO
+      ROOFPRO applicant status + registered warranties + what we won't claim yet),
+      new `best-iko-roof-colors-the-woodlands` blog post, footer + keyword-map
+      wiring. (Organization identity is already covered sitewide by the
+      `RoofingContractor` JSON-LD node; Review/ImageObject ship on `/projects`.)
 
 ## Phase 3 — Gated expansion (batches of 5–20)
 

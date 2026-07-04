@@ -31,15 +31,17 @@ sitewide (enforced by tests/unit/seo-content.test.ts).
 
 ## Trust / EEAT pages
 
-| Page                             | Query                                          | Status                             |
-| -------------------------------- | ---------------------------------------------- | ---------------------------------- |
-| `/process`                       | Northvale process / how roof replacement works | indexable                          |
-| `/warranty`                      | roof warranty explained / IKO warranty tiers   | indexable                          |
-| `/financing`                     | roof financing                                 | noindex until owner supplies terms |
-| `/team`                          | (brand)                                        | noindex until real people          |
-| `/gallery`                       | (brand) / our work                             | indexable (real project photos)    |
-| `/projects`, `/projects/*`       | Northvale roofing projects / case studies      | indexable (real homeowner stories) |
-| `/about`, `/reviews`, `/contact` | brand queries                                  | existing                           |
+| Page                             | Query                                               | Status                               |
+| -------------------------------- | --------------------------------------------------- | ------------------------------------ |
+| `/process`                       | Northvale process / how roof replacement works      | indexable                            |
+| `/warranty`                      | roof warranty explained / IKO warranty tiers        | indexable                            |
+| `/roof-design-center`            | IKO Dynasty/Nordic / roof colors / design your roof | indexable (interactive product page) |
+| `/certifications`                | IKO ROOFPRO / roofing certifications                | indexable                            |
+| `/financing`                     | roof financing                                      | noindex until owner supplies terms   |
+| `/team`                          | (brand)                                             | noindex until real people            |
+| `/gallery`                       | (brand) / our work                                  | indexable (real project photos)      |
+| `/projects`, `/projects/*`       | Northvale roofing projects / case studies           | indexable (real homeowner stories)   |
+| `/about`, `/reviews`, `/contact` | brand queries                                       | existing                             |
 
 ## Blog (informational long-tail; each links up to its money page)
 
@@ -55,6 +57,7 @@ sitewide (enforced by tests/unit/seo-content.test.ts).
 | what-happens-during-a-roof-inspection              | what happens during a roof inspection                                                             |
 | why-roofs-leak-around-pipe-boots                   | roof leak pipe boot                                                                               |
 | woodlands-hoa-roof-approval-guide                  | The Woodlands HOA roof approval / RDRC                                                            |
+| best-iko-roof-colors-the-woodlands                 | best IKO roof colors / Woodlands roof color                                                       |
 | class-4-impact-resistant-shingles-texas (existing) | Class 4 shingles Texas                                                                            |
 | storm-damage-what-to-do (existing)                 | what to do after storm damage                                                                     |
 
