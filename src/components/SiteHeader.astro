@@ -16,12 +16,15 @@ const navLinks = [
 ---
 
 <header class="relative border-b border-[color:var(--color-navy-100)] bg-white">
-  <div class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4">
-    <a href="/" class="flex items-center gap-3" aria-label={`${BRAND.name} — home`}>
-      <img src="/brand/logo.svg" alt="" width="40" height="40" loading="eager" decoding="async" />
-      <span class="font-serif text-xl font-semibold text-[color:var(--color-navy-900)]"
-        >{BRAND.name}</span
-      >
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:gap-6">
+    <a href="/" class="flex items-center" aria-label={`${BRAND.name} — home`}>
+      <img
+        src="/brand/logo.svg"
+        alt=""
+        class="h-10 w-auto sm:h-11"
+        loading="eager"
+        decoding="async"
+      />
     </a>
 
     <nav class="hidden items-center gap-6 md:flex" aria-label="Main">
@@ -35,14 +38,17 @@ const navLinks = [
     </nav>
 
     <div class="flex items-center gap-3">
-      <a
-        href={telHref(BRAND.phoneE164)}
-        data-cta-phone
-        class="hidden text-sm font-semibold text-[color:var(--color-navy-900)] md:inline"
-      >
-        {phone}
-      </a>
-      <CTAButton href="/contact" label="Book inspection" ctaId="header-book" />
+      {/* Desktop-only actions; on mobile the sticky Call/Text bar carries conversion. */}
+      <div class="hidden items-center gap-3 md:flex">
+        <a
+          href={telHref(BRAND.phoneE164)}
+          data-cta-phone
+          class="text-sm font-semibold text-[color:var(--color-navy-900)]"
+        >
+          {phone}
+        </a>
+        <CTAButton href="/contact" label="Book inspection" ctaId="header-book" />
+      </div>
 
       {/* Mobile menu — native <details> disclosure, no JS, keyboard + SR accessible. */}
       <details class="nv-menu md:hidden">
