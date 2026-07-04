@@ -42,6 +42,29 @@ plus SSR for `/api/*` and the `/keystatic` admin). pnpm + Node 20.
    If a task needs these, stop and tell the owner.
 7. **Confirm before** any bulk delete / move / rename.
 
+## Owner-facing instructions (when you send the owner outside the session)
+
+Whenever a task requires the owner to do something outside this session (claim
+an account, verify a profile, paste a key, change a setting on a third-party
+site), before handing it over you MUST:
+
+1. **Confirm it's truly yours-to-hand-off.** Verify you cannot do it yourself
+   from here. If any part is automatable in-session, do that part and only hand
+   off the rest.
+2. **Give the simplest path.** If a task has multiple routes, pick the one with
+   the fewest steps and least friction for a busy, non-technical owner — and say
+   why in one line if it's not obvious.
+3. **Write true step-by-step instructions.** Numbered, in order, one action per
+   step, nothing skipped or assumed. The owner should never have to guess what
+   to click next.
+4. **Speak non-technically.** Plain language, no jargon. When a technical term
+   is unavoidable, define it in the same breath ("the Pixel ID — a string of
+   digits Meta gives you").
+5. **Ground it in current documentation.** Third-party setup flows change often.
+   Check the most recent official docs/help pages you can find (web search/fetch)
+   before writing steps, and cite what you relied on, so the owner isn't given
+   stale or wrong information.
+
 ## Positioning: how to "look established" without lying
 
 Allowed: confident premium voice; the operator's and crews' REAL experience
