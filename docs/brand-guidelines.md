@@ -218,8 +218,8 @@ threshold, use Montserrat.
 --font-sans: "Montserrat", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 ```
 
-Note for the future site migration: current production uses Fraunces + Inter,
-which are the designated fallbacks above, so the swap degrades gracefully.
+The previous production faces (Fraunces + Inter) remain in the fallback
+stacks so the identity degrades gracefully if the brand fonts fail to load.
 
 ---
 
@@ -336,16 +336,22 @@ the PDF art and verified side-by-side against the originals at 150px and 32px:
 
 ---
 
-## 9. Relationship to the live site (migration notes — next phase)
+## 9. Relationship to the live site (migrated 2026-07-04)
 
-The site currently runs an older interim identity (navy `#172f52`, amber gold
-`#d98a1f`, Fraunces/Inter, placeholder house-glyph logo). Nothing in this
-document is wired into the site yet. When the owner approves migration:
+This identity is **live on the site** (PR #32). What shipped:
 
-- Swap the `@theme` ramps in `src/styles/globals.css` for §3.5 (the current
-  `gold-700`-style accessible-gold pattern maps to Gold Deep).
-- Update `COLORS` in `src/lib/brand.ts`, `theme-color`, favicon set (§7.2),
-  `public/brand/logo*.svg`, and the OG image.
-- Replace font files/`@font-face`/`--font-*` tokens per §4.
-- Keep the light-first/dark-moments anatomy of §5.1.
-- Re-run Lighthouse and the quality gate afterward; no NAP values change.
+- `@theme` ramps in `src/styles/globals.css` = §3.5 exactly (gold-400 = brand
+  gold, gold-600 = Gold Deep; every gold text/icon/ring on light uses
+  gold-600).
+- `COLORS` in `src/lib/brand.ts`, `theme-color`, favicon/app-icon set (§7.2,
+  built from the N monogram + `site.webmanifest`), `public/brand/logo*.svg`
+  (traced wordmarks — still the §8 stopgap), and the OG image (rebuilt
+  on-brand, served as PNG because social crawlers don't rasterize SVG).
+- Fonts per §4: self-hosted variable Cormorant Garamond + Montserrat
+  (`public/fonts/` + `@font-face` in `globals.css`, `font-display: optional`).
+  The ≥28px Cormorant rule is enforced: base h1/h2 are display serif; h3/h4
+  and all headings styled below 28px are Montserrat.
+- Light-first/dark-moments anatomy of §5.1 unchanged; no NAP values changed.
+
+Still open: swap in the designer's vector masters when they arrive (§8), and
+re-run Lighthouse (`pnpm lhci`) as part of the next perf pass.
