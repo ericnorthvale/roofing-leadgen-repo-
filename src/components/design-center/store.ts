@@ -7,10 +7,10 @@
  * `selectShingle` / `selectColor`, and the configurator subscribes to preselect.
  * Guarded for SSR (no `window`).
  */
-import type { ShingleLine } from "~/lib/iko-colors";
+import type { StudioLineKey } from "~/lib/design-studio";
 
 export interface RoofSelection {
-  line?: ShingleLine;
+  line?: StudioLineKey;
   color?: string;
 }
 
@@ -36,11 +36,11 @@ function write(next: RoofSelection) {
   window.dispatchEvent(new CustomEvent<RoofSelection>(EVENT, { detail: next }));
 }
 
-export function selectShingle(line: ShingleLine) {
+export function selectShingle(line: StudioLineKey) {
   write({ ...getSelection(), line });
 }
 
-export function selectColor(color: string, line?: ShingleLine) {
+export function selectColor(color: string, line?: StudioLineKey) {
   const cur = getSelection();
   write({ line: line ?? cur.line, color });
 }

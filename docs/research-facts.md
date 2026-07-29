@@ -289,6 +289,58 @@ https://www.buildsite.com/pdf/iko/ArmourGard-Ice-Water-Protector-Summary-Brochur
 - **Ice & Water Protector:** ArmourGard™, GoldShield™, StormShield® Ice & Water,
   GoldSeam Tape
 
+### IKO Cambridge (architectural essential line) — added 2026-07-29
+
+Primary source: **IKO Limited Warranty, US edition, effective 2025-02-01**,
+supplied by the owner and archived at `docs/vendor/iko-limited-warranty-us-2025.pdf`
+(the Limited Warranty Information Table + Chart A). Product page (for reference;
+iko.com unfetchable from the build environment on 2026-07-29):
+https://www.iko.com/na/product/cambridge/
+
+- Laminated (architectural) fiberglass asphalt shingle — SOURCE: product page +
+  owner-supplied IKO product photography (docs/vendor PDF covers warranty only)
+- **Limited Lifetime** warranty — SOURCE: warranty PDF, Information Table
+- **Iron Clad Protection: 120 months (10 years)** — SOURCE: warranty PDF, Chart A
+  (note: SHORTER than Dynasty/Nordic/Armourshake's 15 — publish per-line, never
+  blanket "15 years" across lines)
+- **Wind: 110 mph standard / 130 mph High Wind Application** — SOURCE: warranty
+  PDF, Information Table ("110/130") + High Wind Application section (Cambridge
+  requires two additional nails — six total — for 130)
+- **Algae resistance warranty: 120 months (10 years)** — SOURCE: warranty PDF,
+  Information Table (Cambridge® row; note Cambridge _Cool Colors_ shows N/A)
+- Colors shown on site (owner-supplied IKO photography): **Driftwood, Dual
+  Black, Weatherwood** — all appear in IKO's published Cambridge color range
+  (the Weatherwood close-up carries IKO's own "Cambridge Weatherwood" caption;
+  second owner batch, 2026-07-29)
+
+### IKO Armourshake (Designer collection) — added 2026-07-29
+
+Primary source: same warranty PDF as above. Product page (reference):
+https://www.iko.com/na/product/armourshake/
+
+- IKO's **Designer collection** premium shingle; random shake-look profile —
+  SOURCE: product page + IKO Armourshake brochure (MR9L022)
+- **Limited Lifetime**; **Iron Clad Protection: 180 months (15 years)** —
+  SOURCE: warranty PDF, Information Table
+- **Wind: 110 mph standard / 130 mph High Wind Application** (one additional
+  nail — six total) — SOURCE: warranty PDF, Information Table + High Wind section
+- **Algae resistance warranty: 120 months (10 years)** — SOURCE: warranty PDF,
+  Information Table
+- Colors shown on site (owner-supplied IKO photography): **Greystone, Shadow
+  Black, Weathered Stone** — all appear in IKO's published Armourshake range
+
+### IKO warranty information table (US, eff. 2025-02-01) — quick reference
+
+SOURCE: `docs/vendor/iko-limited-warranty-us-2025.pdf`, page 2 (verified by
+coordinate-preserving extraction 2026-07-29).
+
+| Line        | Product warranty | Iron Clad (full coverage) | Wind (std/high-wind) | Algae |
+| ----------- | ---------------- | ------------------------- | -------------------- | ----- |
+| Armourshake | Limited Lifetime | 15 yr                     | 110/130 mph          | 10 yr |
+| Nordic      | Limited Lifetime | 15 yr                     | 130 mph              | 10 yr |
+| Dynasty     | Limited Lifetime | 15 yr                     | 130 mph              | 10 yr |
+| Cambridge   | Limited Lifetime | **10 yr** (Chart A)       | 110/130 mph          | 10 yr |
+
 ### Sheet 1B — UNVERIFIED (do not publish until checked)
 
 1. **Northvale's actual ROOFPRO tier.** Publish "applicant" only. No "Select",
@@ -303,6 +355,17 @@ https://www.buildsite.com/pdf/iko/ArmourGard-Ice-Water-Protector-Summary-Brochur
    offering once Eric confirms.
 4. Whether Northvale offers Dynasty Cool Colors Plus (solar-reflective) — only
    list it if actually installed.
+5. **Cambridge impact rating.** Reseller listings claim "Class 3" — NOT on the
+   warranty PDF and unconfirmed on iko.com from this environment. Publish no
+   impact rating for Cambridge until verified.
+6. **Armourshake impact rating.** IKO brochure copy suggests Class 4 in Shadow
+   Black only. Too conditional to publish until confirmed on iko.com — publish
+   no impact rating for Armourshake.
+7. **Full Cambridge/Armourshake color ranges.** Only the owner-supplied colors
+   are shown (Cambridge: Driftwood, Weatherwood, Dual Black; Armourshake:
+   Greystone, Shadow Black, Weathered Stone). Confirm the full stocked range
+   before listing more. ✅ RESOLVED 2026-07-29: the Dynasty "Weatherwood.webp"
+   asset is **Cornerstone Weatherwood** — confirmed by the owner (Greg).
 
 ---
 
