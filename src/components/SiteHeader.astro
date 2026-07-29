@@ -18,7 +18,7 @@ const navLinks = [
 
 <header class="relative border-b border-[color:var(--color-navy-100)] bg-white">
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:gap-6">
-    <a href="/" class="flex items-center" aria-label={`${BRAND.name} — home`}>
+    <a href="/" class="flex shrink-0 items-center" aria-label={`${BRAND.name} — home`}>
       <img
         src="/brand/logo.svg"
         alt=""
@@ -28,7 +28,12 @@ const navLinks = [
       />
     </a>
 
-    <nav class="hidden items-center gap-6 md:flex" aria-label="Main">
+    {
+      /* Full nav only from lg up — below that the labels can't fit on one line,
+        so the hamburger takes over. whitespace-nowrap keeps every label on a
+        single line at any width. */
+    }
+    <nav class="hidden items-center gap-4 whitespace-nowrap lg:flex" aria-label="Main">
       {
         navLinks.map((link) => (
           <a href={link.href} class="text-sm font-medium">
@@ -38,13 +43,17 @@ const navLinks = [
       }
     </nav>
 
-    <div class="flex items-center gap-3">
-      {/* Desktop-only actions; on mobile the sticky Call/Text bar carries conversion. */}
-      <div class="hidden items-center gap-3 md:flex">
+    <div class="flex shrink-0 items-center gap-3">
+      {
+        /* Desktop-only actions; on mobile the sticky Call/Text bar carries conversion.
+          The phone number needs xl width to fit on one line next to the nav; the
+          hamburger menu and sticky bar carry it below that. */
+      }
+      <div class="hidden items-center gap-3 lg:flex">
         <a
           href={telHref(BRAND.phoneE164)}
           data-cta-phone
-          class="text-sm font-semibold text-[color:var(--color-navy-900)]"
+          class="hidden text-sm font-semibold whitespace-nowrap text-[color:var(--color-navy-900)] xl:block"
         >
           {phone}
         </a>
@@ -52,7 +61,7 @@ const navLinks = [
       </div>
 
       {/* Mobile menu — native <details> disclosure, no JS, keyboard + SR accessible. */}
-      <details class="nv-menu md:hidden">
+      <details class="nv-menu lg:hidden">
         <summary
           class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] text-[color:var(--color-navy-900)]"
           aria-label="Open menu"
