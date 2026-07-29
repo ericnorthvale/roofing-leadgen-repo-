@@ -14,7 +14,7 @@ const { href, title, blurb, badge, image } = Astro.props;
 
 <a
   href={href}
-  class="group grid content-start gap-2 overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-card-hover)]"
+  class="group grid content-start gap-2 overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white no-underline transition duration-200 hover:-translate-y-0.5 hover:border-[color:var(--color-navy-300)] hover:shadow-[var(--shadow-card-hover)]"
 >
   {
     image && (

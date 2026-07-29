@@ -17,13 +17,14 @@ const { items, heading = "Common questions" } = Astro.props;
 
 {
   items.length > 0 && (
-    <section class="mx-auto max-w-6xl px-4 py-12">
-      <h2 class="text-3xl">{heading}</h2>
-      <dl class="mt-6 divide-y divide-[color:var(--color-navy-100)]">
+    <section class="mx-auto max-w-6xl px-4 py-16 md:py-20">
+      <h2 class="text-3xl md:text-4xl">{heading}</h2>
+      <div class="rule-gold mt-5" aria-hidden="true" />
+      <dl class="mt-8 max-w-3xl divide-y divide-[color:var(--color-navy-100)]">
         {items.map((item) => (
-          <div class="py-5">
+          <div class="py-6">
             <dt class="text-lg font-semibold text-[color:var(--color-navy-900)]">{item.q}</dt>
-            <dd class="mt-2 text-[color:var(--color-ink-800)]">{item.a}</dd>
+            <dd class="mt-2.5 leading-relaxed text-[color:var(--color-ink-800)]">{item.a}</dd>
           </div>
         ))}
       </dl>
