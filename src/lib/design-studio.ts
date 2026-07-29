@@ -83,11 +83,20 @@ export const STUDIO_LINES: StudioLine[] = [
         home: `${DC}/cambridge/driftwood-home.webp`,
       },
       {
+        name: "Weatherwood",
+        slug: "weatherwood",
+        chip: "#4a443a",
+        note: "The classic wood-tone — deep brown-grey with golden flecks, at home under Woodlands tree cover.",
+        home: `${DC}/cambridge/weatherwood-home.webp`,
+        swatch: `${DC}/cambridge/weatherwood-swatch.webp`,
+      },
+      {
         name: "Dual Black",
         slug: "dual-black",
         chip: "#2e3032",
         note: "Two-tone black with real depth — the sharp, safe choice on almost any exterior.",
         home: `${DC}/cambridge/dual-black-home.webp`,
+        swatch: `${DC}/cambridge/dual-black-swatch.webp`,
       },
     ],
     moreColors:
@@ -115,6 +124,7 @@ export const STUDIO_LINES: StudioLine[] = [
         slug: "granite-black",
         chip: "#2f3133",
         note: "The safe, sharp choice — near-black that frames white trim and reads clean on almost any exterior.",
+        home: `${DC}/dynasty/granite-black-home.webp`,
         swatch: `${DC}/dynasty/granite-black-swatch.webp`,
       },
       {
@@ -122,6 +132,7 @@ export const STUDIO_LINES: StudioLine[] = [
         slug: "summit-grey",
         chip: "#6f7377",
         note: "A true mid-grey that suits contemporary and transitional homes without going stark.",
+        home: `${DC}/dynasty/summit-grey-home.webp`,
         swatch: `${DC}/dynasty/summit-grey-swatch.webp`,
       },
       {

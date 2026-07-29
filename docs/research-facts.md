@@ -309,7 +309,9 @@ https://www.iko.com/na/product/cambridge/
 - **Algae resistance warranty: 120 months (10 years)** — SOURCE: warranty PDF,
   Information Table (Cambridge® row; note Cambridge _Cool Colors_ shows N/A)
 - Colors shown on site (owner-supplied IKO photography): **Driftwood, Dual
-  Black** — both appear in IKO's published Cambridge color range
+  Black, Weatherwood** — all appear in IKO's published Cambridge color range
+  (the Weatherwood close-up carries IKO's own "Cambridge Weatherwood" caption;
+  second owner batch, 2026-07-29)
 
 ### IKO Armourshake (Designer collection) — added 2026-07-29
 
