@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { IKO_SHINGLES } from "~/lib/iko-products";
-import { colorsForLine, type ShingleLine } from "~/lib/iko-colors";
+import { STUDIO_LINES, studioLine, type StudioLineKey } from "~/lib/design-studio";
 import { LEGAL } from "~/lib/legal";
 import { getSelection, onSelection } from "./store";
 
@@ -32,13 +31,13 @@ const ZIP_PATTERN = "\\d{5}(-\\d{4})?";
 
 export default function RoofConfigurator() {
   const [step, setStep] = useState(1);
-  const [line, setLine] = useState<ShingleLine>("dynasty");
+  const [line, setLine] = useState<StudioLineKey>("dynasty");
   const [color, setColor] = useState<string>("");
   const [upgrades, setUpgrades] = useState<string[]>([]);
 
-  // Preselect from a gallery/visualizer/recommender handoff.
+  // Preselect from a Shingle Studio handoff.
   useEffect(() => {
-    const apply = (sel: { line?: ShingleLine; color?: string }) => {
+    const apply = (sel: { line?: StudioLineKey; color?: string }) => {
       if (sel.line) setLine(sel.line);
       if (sel.color) setColor(sel.color);
     };
@@ -46,17 +45,17 @@ export default function RoofConfigurator() {
     return onSelection(apply);
   }, []);
 
-  const colors = useMemo(() => colorsForLine(line), [line]);
+  const colors = useMemo(() => studioLine(line).colors, [line]);
   // Keep the chosen color valid for the chosen line.
   useEffect(() => {
     if (color && !colors.some((c) => c.name === color)) setColor("");
   }, [colors, color]);
 
-  const shingle = IKO_SHINGLES.find((s) => s.slug === line)!;
+  const shingle = studioLine(line);
   const chosenUpgrades = UPGRADES.filter((u) => upgrades.includes(u.key)).map((u) => u.label);
   const notes = [
     `Roof Design Center selection`,
-    `Shingle: ${shingle.name} (${shingle.impactLabel})`,
+    `Shingle: ${shingle.name}${shingle.impactLabel ? ` (${shingle.impactLabel})` : ""}`,
     `Color: ${color || "undecided"}`,
     `Upgrades: ${chosenUpgrades.length ? chosenUpgrades.join("; ") : "none selected"}`,
   ].join(" — ");
@@ -87,20 +86,24 @@ export default function RoofConfigurator() {
           <div>
             <h3 className="text-xl">Choose your shingle</h3>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              {IKO_SHINGLES.map((s) => (
+              {STUDIO_LINES.map((s) => (
                 <button
-                  key={s.slug}
-                  onClick={() => setLine(s.slug)}
-                  aria-pressed={line === s.slug}
+                  key={s.key}
+                  onClick={() => setLine(s.key)}
+                  aria-pressed={line === s.key}
                   className={`rounded-[var(--radius-card)] border p-4 text-left transition ${
-                    line === s.slug
+                    line === s.key
                       ? "border-[color:var(--color-gold-600)] ring-2 ring-[color:var(--color-gold-600)]"
                       : "border-[color:var(--color-navy-100)] hover:border-[color:var(--color-navy-300)]"
                   }`}
                 >
-                  <span className="block font-semibold">{s.name}</span>
+                  <span className="block text-[11px] font-semibold tracking-wide text-[color:var(--color-gold-600)] uppercase">
+                    {s.collection}
+                  </span>
+                  <span className="mt-0.5 block font-semibold">{s.name}</span>
                   <span className="mt-1 block text-sm text-[color:var(--color-ink-500)]">
-                    {s.impactLabel} · {s.windWarrantyMph}-mph wind warranty
+                    {s.windShort} wind · {s.ironCladYears}-yr Iron Clad
+                    {s.impactLabel ? ` · ${s.impactLabel}` : ""}
                   </span>
                   <span className="mt-2 block text-sm text-[color:var(--color-ink-800)]">
                     {s.bestFor}
@@ -129,7 +132,7 @@ export default function RoofConfigurator() {
                   >
                     <span
                       className="block h-14 w-full"
-                      style={{ backgroundColor: c.swatch }}
+                      style={{ backgroundColor: c.chip }}
                       aria-hidden="true"
                     />
                     <span className="block px-1 py-1 text-[11px] font-semibold">{c.name}</span>
@@ -177,7 +180,8 @@ export default function RoofConfigurator() {
               <div className="flex justify-between border-b border-[color:var(--color-navy-100)] py-2">
                 <dt className="text-[color:var(--color-ink-500)]">Shingle</dt>
                 <dd className="font-semibold">
-                  {shingle.name} ({shingle.impactLabel})
+                  {shingle.name}
+                  {shingle.impactLabel ? ` (${shingle.impactLabel})` : ""}
                 </dd>
               </div>
               <div className="flex justify-between border-b border-[color:var(--color-navy-100)] py-2">

@@ -132,7 +132,7 @@ export const IKO_SYSTEM_PARTS: IkoSystemPart[] = [
   {
     key: "shingles",
     label: "Shingles",
-    product: "IKO Dynasty or IKO Nordic",
+    product: "IKO Cambridge, Dynasty, Nordic, or Armourshake",
     role: "The visible, weather-facing layer — sheds water and takes the wind and UV.",
   },
   {
@@ -174,10 +174,10 @@ export const IKO_SYSTEM_PARTS: IkoSystemPart[] = [
  */
 export const IKO_WARRANTY = {
   limitedLifetime:
-    "A Limited Lifetime product warranty against manufacturing defects on IKO Dynasty and Nordic, registered to you when we close the job.",
+    "A Limited Lifetime product warranty against manufacturing defects on every IKO shingle line we install — Cambridge, Dynasty, Nordic, and Armourshake — registered to you when we close the job.",
   ironClad:
-    "IKO's Iron Clad Protection Period — the first 15 years are full, non-prorated coverage for manufacturing defects (no depreciation math in the years a defect is most likely to show).",
-  wind: "A 130-mph limited high-wind warranty on Dynasty and Nordic when installed to IKO's application requirements.",
+    "IKO's Iron Clad Protection Period — full, non-prorated coverage for manufacturing defects, with no depreciation math in the years a defect is most likely to show: the first 15 years on Dynasty, Nordic, and Armourshake; the first 10 on Cambridge.",
+  wind: "A 130-mph limited high-wind warranty on Dynasty and Nordic when installed to IKO's application requirements. Cambridge and Armourshake carry 110 mph as standard — upgradable to 130 mph with IKO's documented high-wind installation.",
   algae:
     "A 10-year limited algae-resistance warranty against the blue-green streaking that Gulf-Coast humidity causes.",
   transfer:
