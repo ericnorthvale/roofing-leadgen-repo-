@@ -17,26 +17,26 @@ const navLinks = [
 ---
 
 <header class="relative border-b border-[color:var(--color-navy-100)] bg-white">
-  <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:gap-6">
+  <div class="nv-bar mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:gap-6">
     <a href="/" class="flex shrink-0 items-center" aria-label={`${BRAND.name} — home`}>
       <img
         src="/brand/logo.svg"
         alt=""
-        class="h-10 w-auto sm:h-11"
+        class="nv-logo h-10 w-auto sm:h-11"
         loading="eager"
         decoding="async"
       />
     </a>
 
     {
-      /* Full nav only from lg up — below that the labels can't fit on one line,
-        so the hamburger takes over. whitespace-nowrap keeps every label on a
-        single line at any width. */
+      /* Full nav from lg up, on a single line at every width: link size and
+        spacing scale fluidly with the viewport (see .nv-nav below) so the row
+        never wraps, and the hamburger takes over below lg. */
     }
-    <nav class="hidden items-center gap-4 whitespace-nowrap lg:flex" aria-label="Main">
+    <nav class="nv-nav hidden items-center whitespace-nowrap lg:flex" aria-label="Main">
       {
         navLinks.map((link) => (
-          <a href={link.href} class="text-sm font-medium">
+          <a href={link.href} class="font-medium">
             {link.label}
           </a>
         ))
@@ -45,22 +45,21 @@ const navLinks = [
 
     <div class="flex shrink-0 items-center gap-3">
       {
-        /* Desktop-only actions; on mobile the sticky Call/Text bar carries conversion.
-          The phone number needs xl width to fit on one line next to the nav; the
-          hamburger menu and sticky bar carry it below that. */
+        /* Phone + CTA stay visible from md up — on tablets they sit next to the
+          hamburger. Below md the sticky Call/Text bar carries conversion. */
       }
-      <div class="hidden items-center gap-3 lg:flex">
+      <div class="hidden items-center gap-3 md:flex">
         <a
           href={telHref(BRAND.phoneE164)}
           data-cta-phone
-          class="hidden text-sm font-semibold whitespace-nowrap text-[color:var(--color-navy-900)] xl:block"
+          class="nv-phone font-semibold whitespace-nowrap text-[color:var(--color-navy-900)]"
         >
           {phone}
         </a>
         <CTAButton href="/contact" label="Book inspection" ctaId="header-book" />
       </div>
 
-      {/* Mobile menu — native <details> disclosure, no JS, keyboard + SR accessible. */}
+      {/* Mobile/tablet menu — native <details> disclosure, no JS, keyboard + SR accessible. */}
       <details class="nv-menu lg:hidden">
         <summary
           class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] text-[color:var(--color-navy-900)]"
@@ -123,6 +122,29 @@ const navLinks = [
 </header>
 
 <style>
+  /* Fluid one-line nav: between the lg breakpoint (1024px) and the max-w-6xl
+     container cap, link text and gaps scale with the viewport so the full row
+     (logo + 7 links + phone + CTA) always fits on a single line. */
+  .nv-nav {
+    gap: clamp(8px, 1.4vw, 16px);
+  }
+  .nv-nav a {
+    font-size: clamp(11.5px, 1.1vw, 14px);
+  }
+  .nv-phone {
+    font-size: clamp(12px, 1.05vw, 14px);
+  }
+  /* When the full nav row is visible, the logo and the gaps between the three
+     groups scale down too, so the row clears the narrowest one-line width. */
+  @media (min-width: 1024px) {
+    .nv-logo {
+      height: clamp(37px, 3.5vw, 44px);
+    }
+    .nv-bar {
+      gap: clamp(12px, 1.8vw, 24px);
+    }
+  }
+
   /* Hide the default disclosure triangle and swap the open/close icons. */
   .nv-menu > summary {
     list-style: none;
