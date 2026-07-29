@@ -40,3 +40,27 @@ remaining differences of any kind on all 10 pages.
 - Restore point: commit `4b1b225` (redeploy or `git revert` target). Local tag
   `restore-point-pre-reskin` also marks it (tag push was rejected by the git
   proxy — the immutable commit hash is the authoritative restore point).
+
+---
+
+## Phase 2 verification (full-site rollout) — 2026-07-29
+
+Same automated method, extended to **16 page types** (adding: city-service page,
+project story, Design Center, storm response, warranty, legal). Compared
+phase-2 against the phase-1 baseline (itself verified against production):
+
+| Category                                                                | Differences |
+| ----------------------------------------------------------------------- | ----------- |
+| Unauthorized content differences                                        | **0**       |
+| Functional differences                                                  | **0**       |
+| SEO differences (title/description/canonical/robots/JSON-LD count/alts) | **0**       |
+
+Phase 2 touched 29 files — all class/wrapper-level: page-header ivory band +
+gold rule on every remaining template (about, contact, team, process, gallery,
+certifications, financing, warranty, reviews, sitemap, thank-you, 404, blog
+index, projects index/detail, services index, personas, Design Center,
+CityServiceLayout, NeighborhoodPageLayout, BlogLayout, LegalLayout), the
+storm-response dark hero moved to navy-950 with tokenized dark-ghost button,
+and component polish (LeadForm fields, TableOfContents, RelatedLinks,
+BeforeAfter captions, sticky mobile bar). `pnpm lint` / `pnpm test` (166) /
+`pnpm build` green.

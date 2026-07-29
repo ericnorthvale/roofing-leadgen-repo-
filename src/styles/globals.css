@@ -233,6 +233,15 @@
     height: 2px;
     background: var(--color-gold-400);
   }
+
+  /* Full-bleed warm page-header band without restructuring markup: the section
+     stays the max-w container; the shadow paints the band edge-to-edge and the
+     clip-path stops it bleeding vertically into neighboring sections. */
+  .page-header-band {
+    background: var(--color-surface-ivory);
+    box-shadow: 0 0 0 100vmax var(--color-surface-ivory);
+    clip-path: inset(0 -100vmax);
+  }
   /* §7.1: gold fill always carries NAVY text (8.12:1) — never white.
      Hover: Gold Deep with white text (4.60:1). */
   .btn-primary {

@@ -21,6 +21,7 @@ const { seo, title, effectiveDate } = Astro.props;
       ]}
     />
     <h1 class="mt-6 text-4xl">{title}</h1>
+    <div class="rule-gold mt-6" aria-hidden="true"></div>
     <p class="mt-2 text-sm text-[color:var(--color-ink-500)]">Effective: {effectiveDate}</p>
     <article class="prose-northvale mt-8"><slot /></article>
   </section>
