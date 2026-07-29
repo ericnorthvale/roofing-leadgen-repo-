@@ -362,11 +362,10 @@ coordinate-preserving extraction 2026-07-29).
    Black only. Too conditional to publish until confirmed on iko.com — publish
    no impact rating for Armourshake.
 7. **Full Cambridge/Armourshake color ranges.** Only the owner-supplied colors
-   are shown (Cambridge: Driftwood, Dual Black; Armourshake: Greystone, Shadow
-   Black, Weathered Stone). Confirm the full stocked range before listing more,
-   and confirm the Dynasty "Weatherwood.webp" asset is Cornerstone Weatherwood
-   with the owner (labeled as such by elimination: Dynasty's only two
-   weatherwood blends are Olde Style — supplied separately — and Cornerstone).
+   are shown (Cambridge: Driftwood, Weatherwood, Dual Black; Armourshake:
+   Greystone, Shadow Black, Weathered Stone). Confirm the full stocked range
+   before listing more. ✅ RESOLVED 2026-07-29: the Dynasty "Weatherwood.webp"
+   asset is **Cornerstone Weatherwood** — confirmed by the owner (Greg).
 
 ---
 
