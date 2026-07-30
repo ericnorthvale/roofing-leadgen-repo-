@@ -149,7 +149,10 @@ const glyphSvg = (id: string, cls: string) =>
   </dl>
 
   {/* Interactive diagram — navigation & delight only; all content lives in the cards below */}
-  <div class="nv-anim-item nv-diagram relative mx-auto mt-10 hidden max-w-3xl sm:block">
+  <div
+    id="roof-diagram"
+    class="nv-anim-item nv-diagram relative mx-auto mt-10 hidden max-w-3xl sm:block"
+  >
     <svg
       viewBox="0 0 860 420"
       class="w-full"
@@ -278,14 +281,15 @@ const glyphSvg = (id: string, cls: string) =>
     class="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 md:grid md:grid-cols-2 md:overflow-visible md:pb-0 xl:grid-cols-3"
   >
     {
-      THREATS.map((t) => (
+      THREATS.map((t, i) => (
         <li
           id={t.id}
-          class="nv-anim-item nv-threat min-w-[85%] snap-center rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6 transition duration-300 md:min-w-0"
+          tabindex="-1"
+          class="nv-anim-item nv-threat min-w-[85%] snap-center rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6 transition duration-300 outline-none md:min-w-0"
         >
           <div class="flex items-baseline justify-between gap-3">
             <span class="flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] text-[color:var(--color-gold-600)]">
-              <Fragment set:html={glyphSvg(t.id, "h-4 w-4")} />
+              <span class="nv-glyph inline-flex" set:html={glyphSvg(t.id, "h-4 w-4")} />
               {t.n}
             </span>
             {t.stat ? (
@@ -317,6 +321,31 @@ const glyphSvg = (id: string, cls: string) =>
             </summary>
             <p class="mt-2 text-sm leading-relaxed text-[color:var(--color-ink-700)]">{t.tell}</p>
           </details>
+          <div class="mt-4 flex items-center justify-between gap-3 border-t border-[color:var(--color-navy-100)] pt-3 text-xs font-semibold tracking-[0.12em] uppercase">
+            <button
+              type="button"
+              data-goto={THREATS[(i + THREATS.length - 1) % THREATS.length].id}
+              aria-label={`Previous threat: ${THREATS[(i + THREATS.length - 1) % THREATS.length].title}`}
+              class="cursor-pointer text-[color:var(--color-ink-500)] transition-colors hover:text-[color:var(--color-navy-900)]"
+            >
+              ← Prev
+            </button>
+            <a
+              href="#roof-diagram"
+              data-to-diagram
+              class="hidden text-[color:var(--color-gold-600)] no-underline hover:text-[color:var(--color-gold-700)] sm:inline"
+            >
+              ↑ House diagram
+            </a>
+            <button
+              type="button"
+              data-goto={THREATS[(i + 1) % THREATS.length].id}
+              aria-label={`Next threat: ${THREATS[(i + 1) % THREATS.length].title}`}
+              class="cursor-pointer text-[color:var(--color-navy-900)] transition-colors hover:text-[color:var(--color-gold-600)]"
+            >
+              Next →
+            </button>
+          </div>
         </li>
       ))
     }
@@ -357,11 +386,43 @@ const glyphSvg = (id: string, cls: string) =>
       transition: none;
     }
   }
-  /* Hotspot → card highlight */
+  /* Hover: light highlight. Click: full spotlight — the chosen card is framed
+     in gold with a warm glow, its glyph takes one bow, siblings step back. */
   .nv-threat.is-hot {
     border-color: var(--color-gold-400);
     box-shadow: var(--shadow-card-hover);
     transform: translateY(-2px);
+  }
+  .nv-threat.is-spot {
+    border-color: var(--color-gold-400);
+    box-shadow:
+      0 0 0 2px var(--color-gold-400),
+      0 18px 44px rgb(201 162 108 / 0.32);
+    transform: translateY(-2px);
+  }
+  /* Both selectors: the second out-specifies the reveal rule's opacity:1. */
+  .nv-threat.is-dim,
+  html.nv-anim .nv-threat.is-in.is-dim {
+    opacity: 0.45;
+    filter: saturate(0.7);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .nv-threat.is-spot .nv-glyph {
+      animation: nv-bow 0.6s ease;
+    }
+  }
+  @keyframes nv-bow {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    45% {
+      transform: scale(1.35);
+    }
+  }
+  .nv-hotspot.is-live {
+    background: var(--color-navy-950);
+    color: var(--color-gold-300);
   }
   .nv-hotspot::after {
     content: "";
@@ -425,6 +486,29 @@ const glyphSvg = (id: string, cls: string) =>
   );
   document.querySelectorAll(".nv-anim-item").forEach((el) => io.observe(el));
 
+  // ── Spotlight engine: one card takes the stage, the rest step back ──────
+  const cards = [...document.querySelectorAll<HTMLElement>(".nv-threat")];
+  let spotTimer: ReturnType<typeof setTimeout> | undefined;
+
+  const clearSpot = () => {
+    clearTimeout(spotTimer);
+    cards.forEach((c) => c.classList.remove("is-spot", "is-dim"));
+    document.querySelectorAll(".nv-hotspot.is-live").forEach((h) => h.classList.remove("is-live"));
+  };
+
+  const spotlight = (card: HTMLElement) => {
+    clearSpot();
+    cards.forEach((c) => c.classList.add(c === card ? "is-spot" : "is-dim"));
+    document.querySelector(`[data-hotspot="${card.id}"]`)?.classList.add("is-live");
+    card.scrollIntoView({
+      behavior: reduced ? "auto" : "smooth",
+      block: "center",
+      inline: "center",
+    });
+    card.focus({ preventScroll: true });
+    spotTimer = setTimeout(clearSpot, 3200);
+  };
+
   for (const b of document.querySelectorAll<HTMLElement>("[data-hotspot]")) {
     const card = document.getElementById(b.dataset.hotspot ?? "");
     if (!card) continue;
@@ -435,9 +519,28 @@ const glyphSvg = (id: string, cls: string) =>
     b.addEventListener("focus", on);
     b.addEventListener("blur", off);
     b.addEventListener("click", () => {
-      card.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
-      on();
-      setTimeout(off, 1800);
+      off();
+      spotlight(card);
+    });
+  }
+
+  // Prev/Next on each card moves the spotlight to its neighbor.
+  for (const b of document.querySelectorAll<HTMLElement>("[data-goto]")) {
+    b.addEventListener("click", () => {
+      const card = document.getElementById(b.dataset.goto ?? "");
+      if (card) spotlight(card);
+    });
+  }
+
+  // "House diagram" hops back up (and clears the stage) so another marker
+  // can be picked.
+  for (const a of document.querySelectorAll<HTMLElement>("[data-to-diagram]")) {
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      clearSpot();
+      document
+        .getElementById("roof-diagram")
+        ?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
     });
   }
 </script>
