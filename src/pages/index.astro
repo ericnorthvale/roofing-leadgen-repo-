@@ -10,6 +10,7 @@ import Faq from "@components/Faq.astro";
 import TableOfContents from "@components/TableOfContents.astro";
 import VillageShowcase from "@components/VillageShowcase.astro";
 import ClimateThreats from "@components/ClimateThreats.astro";
+import PermitsCodes from "@components/PermitsCodes.astro";
 import { BRAND } from "~/lib/brand";
 import { SERVICE_AREAS } from "~/lib/service-areas";
 import { aggregateRatingJsonLd, faqPageJsonLd } from "~/lib/seo";
@@ -322,50 +323,9 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
           the first time is cheaper than doing it twice. (One quirk we track: homes in Grogan's
           Forest Sections 5, 6 &amp; 7 submit roof applications to the City of Shenandoah instead.)
         </p>
-
-        <h2 id="permits-codes">Permits & codes in Montgomery County</h2>
-        <p>
-          The permit picture surprises most homeowners: <strong
-            >unincorporated Montgomery County — which includes most of The Woodlands — does not
-            require a building permit for a residential re-roof.</strong
-          > That's the county's own permitting FAQ, not roofer folklore. The Harris County side (Creekside
-          Park) runs on a floodplain-oriented development-permit system that doesn't list re-roofs either;
-          incorporated neighbors differ (Shenandoah runs a full roofing permit program with wind-load
-          and color rules, and the City of Houston requires re-roof permits).
-        </p>
-        <p>
-          No permit doesn't mean no standards. The residential code still defines what a correct
-          roof is, and we build to it:
-        </p>
-        <ul>
-          <li>
-            <strong>Tear-off, not roof-over</strong> — IRC R908.3 requires removing existing coverings
-            down to the deck (and prohibits covering water-soaked decks or stacking a third layer).
-          </li>
-          <li>
-            <strong>Drip edge at eaves and rakes</strong> — R905.2.8.5, with proper overlaps and fastening.
-          </li>
-          <li>
-            <strong>Flashing that keeps water out of every joint</strong> — R903.2, the section your leak
-            was probably violating.
-          </li>
-          <li>
-            <strong>Balanced attic ventilation</strong> — R806's 1-in-150 baseline (1-in-300 with proper
-            high/low balance), which in this climate is the difference between a roof that lasts and an
-            attic oven.
-          </li>
-          <li>
-            <strong>Wind-rated products and fastening</strong> — the ASTM D3161/D7158 classes the code
-            maps to local design wind speeds; inland Montgomery County sits outside TDI's coastal windstorm
-            (TWIA) zone, but we spec and nail for the storms this county actually gets.
-          </li>
-        </ul>
-        <p>
-          The details — underlayment, ice-and-water membrane at valleys and penetrations, decking
-          replacement when rot appears — are covered in
-          <a href="/the-woodlands/roof-replacement"> our Woodlands roof replacement guide</a>.
-        </p>
       </article>
+
+      <PermitsCodes />
     </div>
   </section>
 
