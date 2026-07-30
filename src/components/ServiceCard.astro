@@ -17,18 +17,19 @@ const { href, title, blurb, badge, image } = Astro.props;
   class="group grid content-start gap-2 overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white no-underline transition duration-200 hover:-translate-y-0.5 hover:border-[color:var(--color-navy-300)] hover:shadow-[var(--shadow-card-hover)]"
 >
   {
-    image && (
+    /* Thumbnail renders only once a REAL photo exists — no placeholder boxes
+       or stock stand-ins on live cards (owner request 2026-07-30). */
+    image?.src && (
       <ImagePlaceholder
         slot={image.slot}
         alt={image.alt}
         src={image.src}
-        demoKey={image.demoKey}
         ratio="3/2"
         tone="mixed"
       />
     )
   }
-  <div class:list={["grid gap-2", image ? "px-6 pt-4 pb-6" : "p-6"]}>
+  <div class:list={["grid gap-2", image?.src ? "px-6 pt-4 pb-6" : "p-6"]}>
     {
       badge && (
         <span class="mb-1 self-start rounded-full bg-[color:var(--color-gold-100)] px-2 py-0.5 text-xs font-semibold tracking-wider text-[color:var(--color-gold-900)] uppercase">

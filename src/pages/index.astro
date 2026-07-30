@@ -6,7 +6,6 @@ import ServiceCard from "@components/ServiceCard.astro";
 import LeadForm from "@components/LeadForm.astro";
 import Reviews from "@components/Reviews.astro";
 import BeforeAfter from "@components/BeforeAfter.astro";
-import ImagePlaceholder from "@components/ImagePlaceholder.astro";
 import Faq from "@components/Faq.astro";
 import TableOfContents from "@components/TableOfContents.astro";
 import VillageShowcase from "@components/VillageShowcase.astro";
@@ -404,22 +403,10 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
         <li><strong>Under-60-second response</strong> — text us 8am–9pm CT and hear back fast.</li>
       </ul>
       <p><a href="/about">Read our story →</a></p>
-      <div class="mt-6 grid grid-cols-2 gap-3">
-        <ImagePlaceholder
-          slot="CREW: named project manager on a job site"
-          alt="Northvale Roofing project manager reviewing a roof with a homeowner"
-          demoKey="crew-pm"
-          ratio="3/2"
-          tone="navy"
-        />
-        <ImagePlaceholder
-          slot="TRUCK: branded Northvale vehicle on a local street"
-          alt="Branded Northvale Roofing truck parked at a job in The Woodlands"
-          demoKey="truck"
-          ratio="3/2"
-          tone="mixed"
-        />
-      </div>
+      {
+        /* Crew/truck photo strip removed until real Northvale photos exist
+          (owner request 2026-07-30) — restore from git history when ready. */
+      }
     </div>
     <div>
       <LeadForm source="home-hero-sidebar" />

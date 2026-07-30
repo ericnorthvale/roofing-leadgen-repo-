@@ -2,7 +2,6 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import LeadForm from "@components/LeadForm.astro";
-import ImagePlaceholder from "@components/ImagePlaceholder.astro";
 
 // Quality gate: stays noindex until real team members (names, roles, photos)
 // are supplied by the owner. NEVER invent people (FTC + Hard Rule #2).
@@ -49,26 +48,10 @@ const hasRealTeam = false;
           stock-photo "teams," no invented bios.
         </em>
       </p>
-      <div class="not-prose mt-6 grid grid-cols-2 gap-3 md:grid-cols-3">
-        <ImagePlaceholder
-          slot="TEAM: owner/operator portrait"
-          alt="Northvale Roofing owner portrait"
-          ratio="3/4"
-          tone="navy"
-        />
-        <ImagePlaceholder
-          slot="TEAM: project manager portrait"
-          alt="Northvale Roofing project manager portrait"
-          ratio="3/4"
-          tone="mixed"
-        />
-        <ImagePlaceholder
-          slot="TEAM: crew lead portrait"
-          alt="Northvale Roofing crew lead portrait"
-          ratio="3/4"
-          tone="gold"
-        />
-      </div>
+      {
+        /* Portrait placeholder grid removed until real team photos exist
+          (owner request 2026-07-30) — restore from git history when ready. */
+      }
       <h2>The standards everyone works to</h2>
       <ul>
         <li>Same-day inspection, written estimate before we leave the driveway.</li>
