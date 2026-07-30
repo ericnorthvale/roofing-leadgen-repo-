@@ -30,48 +30,56 @@ interface VillageCard {
 const CARDS: VillageCard[] = [
   {
     slug: "grogans-mill",
+    photo: "/villages/grogans-mill.webp",
     est: "Est. 1974",
     story:
       "Where The Woodlands began. Five decades of canopy hang over the community's oldest rooflines, and most homes are on their second or third roof — a decision that starts at the decking, flashing, and ventilation, not the shingle color.",
   },
   {
     slug: "panther-creek",
+    photo: "/villages/panther-creek.webp",
     est: "Est. mid-1970s",
     story:
       "The lakeside village, from Lake Woodlands' western shore through thirteen parks. Carefully kept originals sit next to full remodels, so the roofing question here is usually how well the last re-roof was done.",
   },
   {
     slug: "cochrans-crossing",
+    photo: "/villages/cochrans-crossing.webp",
     est: "Est. 1983",
     story:
       "Built out around the Palmer course and The Woodlands High School through the '80s and '90s — roofs cluster in the 25–40-year band, where the honest repair-versus-replace conversation matters most.",
   },
   {
     slug: "indian-springs",
+    photo: "/villages/indian-springs.webp",
     est: "Est. 1984",
     story:
       "Pressed against the George Mitchell Nature Preserve, these roofs live under real forest: heavy shade, constant debris in the valleys, algae-friendly humidity. Streets where a roof ages faster than the calendar says.",
   },
   {
     slug: "alden-bridge",
+    photo: "/villages/alden-bridge.webp",
     est: "Est. 1994",
     story:
       "On the order of seven thousand homes, most built mid-'90s through early 2000s — an enormous cohort of builder-grade roofs crossing the 20–30-year threshold together. The busiest replacement territory in town.",
   },
   {
     slug: "college-park",
+    photo: "/villages/college-park.webp",
     est: "Est. 1995",
     story:
       "The only village east of I-45, anchored by Harper's Landing and Windsor Hills — Alden Bridge's younger sibling, its '90s-to-2000s production roofs now aging out on the same schedule.",
   },
   {
     slug: "sterling-ridge",
+    photo: "/villages/sterling-ridge.webp",
     est: "Est. 1999",
     story:
       "The western village around the Gary Player course. Premium homes at the front edge of their first replacement wave — where the step up from builder shingle to designer lines gets decided.",
   },
   {
     slug: "carlton-woods",
+    photo: "/villages/carlton-woods.webp",
     est: "Est. 2000",
     story:
       "The gated golf enclave: estate roofs in tile, slate, metal, and designer shingle behind 24-hour gates — systems whose weak points are underlayment, flashing, and fasteners, exactly what our inspections target.",
@@ -110,7 +118,11 @@ const villages = CARDS.map((c) => ({ ...c, data: NEIGHBORHOODS[c.slug] })).filte
           >
             <ImagePlaceholder
               slot={`STREET: ${v.data.name} — tree-lined street or home with roofline`}
-              alt={`Residential street in ${v.data.name}, The Woodlands`}
+              alt={
+                v.photo
+                  ? `Village of ${v.data.name} entrance monument in The Woodlands`
+                  : `Residential street in ${v.data.name}, The Woodlands`
+              }
               src={v.photo}
               ratio="3/2"
               tone="mixed"
