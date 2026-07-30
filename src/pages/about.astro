@@ -1,97 +1,625 @@
 ---
+/**
+ * /about — "A roofing company built around trust."
+ *
+ * COPY: the narrative sections are the owner's own words (Greg Labbe, supplied
+ * 2026-07-30 — see docs/research-facts.md Sheet 6), lightly typeset, never
+ * re-invented. The "lines we won't cross" clauses carry over from the
+ * previously published about copy (TDI + Tex. Bus. & Com. Code § 27.02,
+ * research-facts Sheet 4).
+ *
+ * SEO CONTRACT (same as ClimateThreats): every word is server-rendered.
+ * Interactivity — scroll reveals, the drawing gold checks, the count-up — is
+ * progressive enhancement gated on `html.nv-anim`; crawlers and no-JS users
+ * see the complete page. This page owns the brand query family ("about
+ * Northvale Roofing" / "who owns Northvale Roofing") per docs/keyword-map.md —
+ * local terms appear naturally but never target another page's money query.
+ * Its structural job is E-E-A-T: a real named owner (Person + AboutPage
+ * JSON-LD linked to the sitewide business node) behind every other page.
+ */
 import BaseLayout from "@layouts/BaseLayout.astro";
 import CTAButton from "@components/CTAButton.astro";
-import ImagePlaceholder from "@components/ImagePlaceholder.astro";
-import { BRAND } from "~/lib/brand";
+import PhoneCTAButton from "@components/PhoneCTAButton.astro";
+import RoofImage from "@components/RoofImage.astro";
+import { NEIGHBORHOODS } from "~/lib/neighborhoods";
+
+const siteUrl = (Astro.site?.toString() ?? "https://northvaleroofing.com").replace(/\/+$/, "");
+
+// Owner-attested (research-facts Sheet 6): what Greg committed to build.
+const COMMITMENTS = [
+  { k: "Communicates clearly and consistently." },
+  { k: "Gives homeowners honest information without unnecessary pressure." },
+  {
+    k: "Explains roofing products, pricing, warranties, and insurance-related options in understandable terms.",
+  },
+  { k: "Treats each property with care and respect." },
+  { k: "Uses experienced roofing professionals." },
+  { k: "Takes responsibility when something needs attention." },
+  { k: "Remains available after the project is complete." },
+];
+
+// "We take the time to explain" — the educate-before-recommend checklist.
+const EXPLAIN = [
+  { t: "Your roof's current condition", icon: "roof" },
+  { t: "Whether repair or replacement makes the most sense", icon: "scale" },
+  { t: "Shingle classifications and performance levels", icon: "layers" },
+  { t: "Colors and how they change the look of the home", icon: "palette" },
+  { t: "Ventilation and attic airflow", icon: "wind" },
+  { t: "Manufacturer and workmanship warranty options", icon: "shield" },
+  { t: "Insurance-related considerations", icon: "doc" },
+  { t: "The complete scope of work before we begin", icon: "list" },
+];
+
+const ICONS: Record<string, string> = {
+  roof: '<path d="M3 12L12 4l9 8"/><path d="M6 10.5V20h12v-9.5"/>',
+  scale:
+    '<path d="M12 4v16"/><path d="M5 8h14"/><path d="M5 8l-2.5 5a3 3 0 0 0 5 0z"/><path d="M19 8l-2.5 5a3 3 0 0 0 5 0z"/>',
+  layers: '<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 17l9 5 9-5"/>',
+  palette:
+    '<path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.4-2.2-.7-1.3.2-2.8 1.7-2.8H17a4 4 0 0 0 4-4c0-5-4-9-9-9z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7" r="1"/>',
+  wind: '<path d="M3 8h9a2.5 2.5 0 1 0-2.5-2.5"/><path d="M3 13h13a2.5 2.5 0 1 1-2.5 2.5"/><path d="M3 18h7"/>',
+  shield: '<path d="M12 3l8 3v6c0 4.5-3.2 7.6-8 9-4.8-1.4-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  doc: '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10 12h5M10 16h5"/>',
+  list: '<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/>',
+};
+const iconSvg = (id: string, cls: string) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="${cls}" aria-hidden="true">${ICONS[id]}</svg>`;
+
+// The lines we won't cross — carried over verbatim in substance from the
+// previously published about copy; citations verified (research-facts Sheet 4).
+const WONT = [
+  {
+    clause: "We don't knock doors after a storm.",
+    why: "TDI publishes contractor-scam warnings because of what happens on those doorsteps — and more importantly, it's how neighbors get burned.",
+    tag: "Texas Dept. of Insurance consumer alerts",
+  },
+  {
+    clause: "We don't waive deductibles.",
+    why: "It's a criminal offense in Texas — not a gray area.",
+    tag: "Tex. Bus. & Com. Code § 27.02",
+  },
+  {
+    clause: "We don't bid against $7K full-replacement numbers.",
+    why: "If that's the price you need, we're not your roofer. We'll happily tell you what's missing in that bid.",
+    tag: "Our standard",
+  },
+];
+
+// Local-roots strip: the nine village pages, real entrance-monument photos.
+const VILLAGE_ORDER = [
+  "grogans-mill",
+  "panther-creek",
+  "cochrans-crossing",
+  "indian-springs",
+  "alden-bridge",
+  "college-park",
+  "sterling-ridge",
+  "carlton-woods",
+  "creekside-park",
+];
+const villages = VILLAGE_ORDER.map((slug) => ({ slug, data: NEIGHBORHOODS[slug] })).filter(
+  (v) => v.data,
+);
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "@id": `${siteUrl}/about`,
+    url: `${siteUrl}/about`,
+    name: "About Northvale Roofing",
+    description:
+      "Who is behind Northvale Roofing: owner Greg Labbe on why he started the company, the standard it is built to, and how it serves The Woodlands, Spring, and the greater Houston area.",
+    about: { "@id": `${siteUrl}#business` },
+    mainEntity: { "@id": `${siteUrl}/about#greg-labbe` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${siteUrl}/about#greg-labbe`,
+    name: "Greg Labbe",
+    jobTitle: "Owner",
+    worksFor: { "@id": `${siteUrl}#business` },
+    image: `${siteUrl}/about/greg-labbe.webp`,
+    description:
+      "Owner of Northvale Roofing. Oversees day-to-day operations including customer experience, sales, project coordination, team development, and quality control.",
+  },
+];
 ---
 
 <BaseLayout
   seo={{
-    title: "About Northvale Roofing",
+    title: "About Northvale Roofing — Meet the Owner, Greg Labbe",
     description:
-      "Why we built Northvale Roofing: same-day inspections, written estimates before we leave the driveway, and a named project manager on every job.",
+      "Meet Greg Labbe, owner of Northvale Roofing, and the standard the company is built on — honest guidance and clear communication for The Woodlands and Spring.",
     pathname: "/about",
+    jsonLd,
   }}
 >
-  <section class="page-header-band mx-auto max-w-3xl px-4 py-12">
-    <h1 class="text-4xl md:text-5xl">
-      We built Northvale because we were tired of how roofing usually goes.
-    </h1>
+  {/* ————— 1 · Opening: the founding idea, in the owner's words ————— */}
+  <section class="page-header-band mx-auto max-w-3xl px-4 py-14 md:py-16">
+    <p class="eyebrow">About Northvale Roofing</p>
+    <h1 class="mt-4 text-4xl md:text-5xl">A roofing company built around trust.</h1>
     <div class="rule-gold mt-6" aria-hidden="true"></div>
     <article class="prose-northvale mt-8">
       <p>
-        Most roofing sales look the same: a stranger in a truck, a verbal number, a pressure close
-        before the neighbor next door signs with someone else. The homeowner ends up either
-        overpaying for what they got, or underpaying for something that fails in year seven.
+        Northvale Roofing was created with a straightforward goal: to build the kind of local
+        roofing company homeowners can trust before, during, and long after the project is complete.
       </p>
       <p>
-        We built {BRAND.name} to do it the way we'd want it done to our own houses. <strong
-          >Same-day inspection. Written estimate before we leave the driveway. A named project
-          manager on every job.</strong
-        > No dispatcher, no "one of our team members will reach out."
+        I have seen how frustrating the roofing process can become when communication is poor,
+        expectations are unclear, and homeowners feel pressured into making decisions they do not
+        fully understand. <strong>I believed there was a better way to do it.</strong>
       </p>
-      <h2>What you get</h2>
-      <ul>
-        <li>A 10+ year foreman on every crew — not a first-week helper running a nail gun.</li>
-        <li>
-          A forty-photo documentation packet at job close. It's yours; we also send a copy to your
-          insurance file.
-        </li>
-        <li>
-          IKO Dynasty as the default — a Limited Lifetime product warranty, IKO's 15-year
-          non-prorated Iron Clad Protection, and a 130-mph limited high-wind warranty. Registered to
-          you at close, with IKO Nordic's Class 4 impact upgrade quoted alongside it.
-        </li>
-        <li>
-          <!-- NEEDS DATA: confirm crew model (W-2 vs. vetted subs) with owner — see TASKS_FOR_ERIC.md -->
-          Every job — whether run by our crew or a vetted partner crew — is led by a 10+ year foreman
-          and signed off by a named Northvale project manager.
-        </li>
-      </ul>
-      <h2>What we won't do</h2>
-      <ul>
-        <li>
-          We don't knock doors after a storm. TDI publishes contractor-scam warnings because of what
-          happens on those doorsteps — and more importantly, it's how neighbors get burned.
-        </li>
-        <li>
-          We don't waive deductibles. It's a criminal offense in Texas (Bus. & Com. Code § 27.02) —
-          not a gray area.
-        </li>
-        <li>
-          We don't bid against $7K full-replacement numbers. If that's the price you need, we're not
-          your roofer. We'll happily tell you what's missing in that bid.
-        </li>
-      </ul>
+      <p>
+        Northvale Roofing was built to give homeowners honest information, dependable communication,
+        experienced workmanship, and a clear understanding of exactly what is happening with their
+        property. We are not here to make the roofing process feel complicated. We are here to help
+        you make a confident decision and ensure the work is completed correctly.
+      </p>
     </article>
+  </section>
 
-    <div class="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
-      <ImagePlaceholder
-        slot="CREW: foreman / named project manager"
-        alt="Northvale Roofing foreman on a job site"
-        demoKey="crew-foreman"
-        ratio="3/2"
-        tone="navy"
-      />
-      <ImagePlaceholder
-        slot="CREW: team installing a roof"
-        alt="Northvale Roofing crew installing a new roof"
-        demoKey="crew-install"
-        ratio="3/2"
-        tone="mixed"
-      />
-      <ImagePlaceholder
-        slot="TRUCK: branded Northvale vehicle"
-        alt="Branded Northvale Roofing truck on a local street"
-        demoKey="truck"
-        ratio="3/2"
-        tone="gold"
-      />
+  {/* ————— 2 · Meet the owner ————— */}
+  <section class="border-y border-[color:var(--color-navy-100)] bg-white">
+    <div
+      class="mx-auto grid max-w-6xl items-start gap-10 px-4 py-14 md:grid-cols-[0.85fr_1.15fr] md:gap-14 md:py-20"
+    >
+      <figure class="nv-anim-item mx-auto w-full max-w-sm md:sticky md:top-24">
+        <div class="relative">
+          <div
+            class="absolute -right-3 -bottom-3 h-full w-full border border-[color:var(--color-gold-400)]"
+            aria-hidden="true"
+          >
+          </div>
+          <div
+            class="relative overflow-hidden rounded-[var(--radius-card)]"
+            style="aspect-ratio:4/5;"
+          >
+            <RoofImage
+              src="/about/greg-labbe.webp"
+              alt="Greg Labbe, owner of Northvale Roofing, in front of a home"
+              class="block h-full w-full object-cover"
+            />
+          </div>
+        </div>
+        <figcaption class="mt-5 flex items-baseline justify-between gap-3">
+          <span>
+            <span
+              class="block font-serif text-[30px] leading-none text-[color:var(--color-navy-900)]"
+              >Greg Labbe</span
+            >
+            <span
+              class="mt-2 block text-[11px] font-semibold tracking-[0.18em] text-[color:var(--color-gold-600)] uppercase"
+              >Owner · Northvale Roofing</span
+            >
+          </span>
+        </figcaption>
+      </figure>
+
+      <div class="nv-anim-item">
+        <p class="eyebrow">Meet the owner</p>
+        <h2 class="mt-3 text-3xl md:text-4xl">The person behind the name</h2>
+        <div class="rule-gold mt-5" aria-hidden="true"></div>
+        <div class="prose-northvale mt-6">
+          <p>
+            My name is Greg Labbe, and I am the owner of Northvale Roofing. I oversee the day-to-day
+            operations of the company, including the customer experience, sales, project
+            coordination, team development, and quality control.
+          </p>
+          <p>
+            My focus is making sure every homeowner receives clear communication, practical
+            guidance, and a roofing experience that feels organized from the first inspection
+            through the final walkthrough. I believe homeowners should never feel pressured,
+            ignored, or left wondering what happens next. It is my responsibility to make sure the
+            entire Northvale Roofing team delivers on that standard.
+          </p>
+          <p>
+            Northvale Roofing is not being built as a temporary storm company. I am building a
+            dependable local business that homeowners throughout
+            <a href="/the-woodlands">The Woodlands</a>, <a href="/spring">Spring</a>, and the
+            greater Houston area can trust for years to come.
+          </p>
+        </div>
+        <p
+          class="mt-8 font-serif text-[34px] leading-none text-[color:var(--color-navy-900)] italic"
+          aria-hidden="true"
+        >
+          — Greg
+        </p>
+      </div>
     </div>
+  </section>
 
-    <div class="mt-10 flex gap-3">
-      <CTAButton href="/contact" label="Book my inspection" ctaId="about-book" />
-      <CTAButton href="/reviews" variant="ghost" label="Read reviews" />
+  {/* ————— 3 · Why I started it: the seven commitments (dark band) ————— */}
+  <section class="bg-[color:var(--color-navy-950)]">
+    <div class="mx-auto max-w-6xl px-4 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="eyebrow text-[color:var(--color-gold-300)]!">Why I started Northvale Roofing</p>
+        <h2 class="mt-3 text-3xl text-white md:text-4xl">
+          A company you'd recommend to your neighbor
+        </h2>
+        <div class="rule-gold mt-5" aria-hidden="true"></div>
+        <p class="mt-6 text-lg leading-relaxed text-[color:var(--color-navy-100)]">
+          I started Northvale Roofing because I wanted to create a roofing company homeowners could
+          feel comfortable recommending to their family, friends, and neighbors. I wanted to build a
+          company that:
+        </p>
+      </div>
+
+      <ol class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          COMMITMENTS.map((c, i) => (
+            <li
+              class="nv-anim-item nv-vow relative rounded-[var(--radius-card)] border border-white/10 bg-white/[0.04] p-5"
+              style={`--vow-delay:${i * 90}ms`}
+            >
+              <div class="flex items-start gap-3">
+                <svg
+                  class="nv-check mt-0.5 h-6 w-6 shrink-0 text-[color:var(--color-gold-400)]"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path class="nv-check-path" d="M4.5 12.5l5 5 10-11" />
+                </svg>
+                <p class="text-[15px] leading-relaxed text-white">{c.k}</p>
+              </div>
+            </li>
+          ))
+        }
+        <li
+          class="nv-anim-item flex items-center rounded-[var(--radius-card)] border border-[color:var(--color-gold-400)]/60 bg-[color:var(--color-gold-500)]/10 p-5 sm:col-span-2 lg:col-span-2"
+        >
+          <p class="text-[15px] leading-relaxed text-[color:var(--color-navy-100)]">
+            Our goal is not simply to install roofs.
+            <strong class="text-white">
+              Our goal is to build lasting relationships and become the roofing company local
+              homeowners know they can call when they need honest guidance.</strong
+            >
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  {/* ————— 4 · Crews + real communication ————— */}
+  <section class="bg-white">
+    <div class="mx-auto max-w-6xl px-4 py-14 md:py-20">
+      <div class="grid gap-12 md:grid-cols-2 md:gap-14">
+        <div class="nv-anim-item">
+          <p class="eyebrow">Experienced roofing crews</p>
+          <h2 class="mt-3 text-3xl md:text-4xl">The people on your roof</h2>
+          <div class="rule-gold mt-5" aria-hidden="true"></div>
+          <p
+            class="mt-7 font-serif text-[64px] leading-none text-[color:var(--color-navy-900)] md:text-[76px]"
+          >
+            <span data-countup="15">15</span><span class="text-[color:var(--color-gold-600)]"
+              >+</span
+            >
+          </p>
+          <p
+            class="mt-2 text-[11px] font-semibold tracking-[0.18em] text-[color:var(--color-ink-500)] uppercase"
+          >
+            years of roofing experience on our lead crews
+          </p>
+          <div class="prose-northvale mt-6">
+            <p>
+              The quality of a roofing system depends on more than the materials selected. It also
+              depends on the people installing it. Northvale Roofing works with experienced lead
+              crews who bring more than 15 years of roofing experience to the jobsite.
+            </p>
+            <p>
+              That experience matters when evaluating roof conditions, protecting the property,
+              addressing decking or ventilation concerns, installing roofing components correctly,
+              and maintaining quality throughout the project. Every project is also supported by
+              professional project management and documented communication, helping ensure the work
+              stays organized from material delivery through final cleanup.
+            </p>
+          </div>
+        </div>
+
+        <div class="nv-anim-item md:border-l md:border-[color:var(--color-navy-100)] md:pl-14">
+          <p class="eyebrow">Real communication</p>
+          <h2 class="mt-3 text-3xl md:text-4xl">From real people</h2>
+          <div class="rule-gold mt-5" aria-hidden="true"></div>
+          <div class="prose-northvale mt-6">
+            <p>
+              When you call Northvale Roofing, you are not being sent into an anonymous national
+              call center. Your call is answered or returned by a Northvale Roofing project manager
+              who understands the roofing process and can help determine what you need.
+            </p>
+            <p>
+              From the beginning of the project, you will know who your point of contact is, what
+              the next step will be, and who to reach when you have a question.
+            </p>
+            <p>
+              <strong
+                >We believe good communication should not be an extra feature. It should be part of
+                the service.</strong
+              >
+            </p>
+          </div>
+          <div class="mt-7">
+            <PhoneCTAButton ctaId="about-call" variant="primary" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ————— 5 · Local knowledge + village strip (cream band) ————— */}
+  <section class="bg-[color:var(--color-surface-cream)]">
+    <div class="mx-auto max-w-6xl px-4 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="eyebrow">Local knowledge matters</p>
+        <h2 class="mt-3 text-3xl md:text-4xl">Roofs built for Southeast Texas</h2>
+        <div class="rule-gold mt-5" aria-hidden="true"></div>
+        <div class="prose-northvale mt-6">
+          <p>
+            Northvale Roofing serves homeowners throughout
+            <a href="/the-woodlands">The Woodlands</a>, <a href="/spring">Spring</a>, and the
+            greater <a href="/houston">Houston</a> area. Roofing here presents unique challenges: severe
+            thunderstorms, hail, high winds, extreme heat, humidity, heavy rainfall, ventilation concerns,
+            and changing insurance requirements.
+          </p>
+          <p>
+            Our team understands the conditions local roofs face and helps homeowners evaluate
+            roofing systems based on durability, performance, appearance, warranty protection, and
+            long-term value. Whether you are dealing with storm damage, an active leak, an aging
+            roof, or planning a retail roof replacement, our job is to explain your options clearly
+            and help you determine the right solution for your home.
+          </p>
+        </div>
+      </div>
+
+      {/* The streets we work: nine village pages, real entrance monuments. */}
+      <div class="mt-10">
+        <p
+          class="text-[11px] font-semibold tracking-[0.18em] text-[color:var(--color-ink-500)] uppercase"
+        >
+          The Woodlands, village by village
+        </p>
+        <ul
+          class="mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 [scrollbar-width:thin]"
+        >
+          {
+            villages.map((v) => (
+              <li class="min-w-[190px] snap-start sm:min-w-[210px]">
+                <a
+                  href={`/${v.data.citySlug}/${v.slug}`}
+                  class="group block overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white no-underline transition duration-200 hover:-translate-y-0.5 hover:border-[color:var(--color-navy-300)] hover:shadow-[var(--shadow-card-hover)]"
+                >
+                  <div class="overflow-hidden" style="aspect-ratio:3/2;">
+                    <RoofImage
+                      src={`/villages/${v.slug}.webp`}
+                      alt={`Village of ${v.data.name} entrance monument in The Woodlands`}
+                      class="block h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+                    />
+                  </div>
+                  <p class="px-3 py-2.5 text-sm font-semibold text-[color:var(--color-navy-800)] group-hover:text-[color:var(--color-gold-600)]">
+                    {v.data.name} →
+                  </p>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* ————— 6 · We educate before we recommend ————— */}
+  <section class="bg-white">
+    <div class="mx-auto max-w-6xl px-4 py-14 md:py-20">
+      <div class="max-w-3xl">
+        <p class="eyebrow">We educate before we recommend</p>
+        <h2 class="mt-3 text-3xl md:text-4xl">The decision stays yours</h2>
+        <div class="rule-gold mt-5" aria-hidden="true"></div>
+        <p class="mt-6 text-lg leading-relaxed text-[color:var(--color-ink-700)]">
+          There is no single roofing product that is perfect for every homeowner. The right solution
+          depends on the condition of the property, your goals, how long you expect to own the home,
+          the budget, insurance considerations, and the level of protection you want. So before we
+          recommend anything, we take the time to explain:
+        </p>
+      </div>
+      <ul class="mt-10 grid gap-x-10 gap-y-5 sm:grid-cols-2">
+        {
+          EXPLAIN.map((e) => (
+            <li class="nv-anim-item flex items-center gap-4">
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[color:var(--color-navy-100)] bg-[color:var(--color-surface-ivory)] text-[color:var(--color-gold-600)]">
+                <Fragment set:html={iconSvg(e.icon, "h-5 w-5")} />
+              </span>
+              <span class="text-[15px] leading-snug font-medium text-[color:var(--color-navy-900)]">
+                {e.t}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-10 max-w-3xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
+        <strong class="text-[color:var(--color-navy-900)]"
+          >Our responsibility is to give you the information. The final decision should always
+          belong to you.</strong
+        >
+      </p>
+    </div>
+  </section>
+
+  {/* ————— 7 · More than the lowest price + the lines we won't cross ————— */}
+  <section class="bg-[color:var(--color-navy-950)]">
+    <div class="mx-auto max-w-6xl px-4 py-14 md:py-20">
+      <div class="grid gap-12 md:grid-cols-[1fr_1.1fr] md:gap-14">
+        <div class="nv-anim-item">
+          <p class="eyebrow text-[color:var(--color-gold-300)]!">More than the lowest price</p>
+          <h2 class="mt-3 text-3xl text-white md:text-4xl">What your estimate buys</h2>
+          <div class="rule-gold mt-5" aria-hidden="true"></div>
+          <div
+            class="mt-6 space-y-5 text-[15px] leading-relaxed text-[color:var(--color-navy-100)]"
+          >
+            <p>
+              Northvale Roofing may not always be the least expensive roofing company a homeowner
+              speaks with. Our priority is to provide strong value through experienced installation,
+              reliable project management, quality materials, thorough communication, property
+              protection, and accountability after the job is complete.
+            </p>
+            <p>
+              A roof protects everything beneath it. Choosing a roofing contractor should involve
+              more than comparing the final number at the bottom of an estimate. We want every
+              Northvale customer to understand what they are purchasing, why it is being
+              recommended, and what they can expect throughout the project.
+            </p>
+          </div>
+        </div>
+
+        <div class="nv-anim-item">
+          <p class="eyebrow text-[color:var(--color-gold-300)]!">And in writing</p>
+          <h2 class="mt-3 text-3xl text-white md:text-4xl">The lines we won't cross</h2>
+          <div class="rule-gold mt-5" aria-hidden="true"></div>
+          <ul class="mt-6 space-y-4">
+            {
+              WONT.map((w) => (
+                <li class="rounded-[var(--radius-card)] border border-white/10 bg-white/[0.04] p-5">
+                  <p class="font-serif text-[28px] leading-tight text-white">{w.clause}</p>
+                  <p class="mt-2 text-[15px] leading-relaxed text-[color:var(--color-navy-100)]">
+                    {w.why}
+                  </p>
+                  <p class="mt-3 inline-block border border-[color:var(--color-gold-400)]/50 px-2 py-1 text-[10px] font-semibold tracking-[0.16em] text-[color:var(--color-gold-300)] uppercase">
+                    {w.tag}
+                  </p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ————— 8 · Built for the long term — the coda ————— */}
+  <section class="bg-[color:var(--color-surface-ivory)]">
+    <div class="mx-auto max-w-3xl px-4 py-14 text-center md:py-20">
+      <p class="eyebrow">Built to be here for the long term</p>
+      <div class="prose-northvale mx-auto mt-6 text-left">
+        <p>
+          I am building Northvale Roofing as a permanent local company. That means creating
+          dependable systems, maintaining professional standards, documenting our work, standing
+          behind completed projects, and developing lasting relationships throughout the communities
+          we serve. I want Northvale Roofing to be the company you call today and the company you
+          confidently recommend years from now.
+        </p>
+      </div>
+      <p
+        class="mx-auto mt-10 max-w-2xl font-serif text-[32px] leading-snug text-[color:var(--color-navy-900)] md:text-[40px]"
+      >
+        Trust is not created by a slogan. It is created one inspection, one conversation, and one
+        completed roof at a time.
+      </p>
+      <div class="rule-gold mx-auto mt-8" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  {/* ————— 9 · CTA ————— */}
+  <section class="border-t border-[color:var(--color-navy-100)] bg-white">
+    <div class="mx-auto max-w-3xl px-4 py-14 text-center md:py-16">
+      <h2 class="text-3xl md:text-4xl">Experience roofing the Northvale way</h2>
+      <p class="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
+        Whether you need an honest roof inspection, help understanding storm damage, repairs for an
+        active leak, or a complete roof replacement, our team is ready to help. Speak with a
+        Northvale Roofing project manager and get clear, straightforward guidance about your
+        property.
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <CTAButton href="/contact" label="Schedule your roof inspection" ctaId="about-book" />
+        <PhoneCTAButton ctaId="about-call-footer" />
+      </div>
+      <p
+        class="mt-8 text-[11px] font-semibold tracking-[0.18em] text-[color:var(--color-ink-500)] uppercase"
+      >
+        Serving The Woodlands · Spring · the Greater Houston Area
+      </p>
     </div>
   </section>
 </BaseLayout>
+
+<style is:global>
+  /* Reveal styles engage ONLY when JS adds .nv-anim to <html> — crawlers and
+     no-JS users always see the full page. (Shared convention with the
+     homepage climate section.) */
+  html.nv-anim .nv-anim-item {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.55s ease,
+      transform 0.55s ease;
+  }
+  html.nv-anim .nv-anim-item.is-in {
+    opacity: 1;
+    transform: none;
+  }
+  html.nv-anim .nv-vow {
+    transition-delay: var(--vow-delay, 0ms);
+  }
+  /* The gold check draws itself when its card reveals. */
+  html.nv-anim .nv-check-path {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    transition: stroke-dashoffset 0.5s ease 0.35s;
+  }
+  html.nv-anim .nv-anim-item.is-in .nv-check-path {
+    stroke-dashoffset: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html.nv-anim .nv-anim-item,
+    html.nv-anim .nv-vow {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    html.nv-anim .nv-check-path {
+      stroke-dashoffset: 0;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Progressive enhancement only — see the SEO contract in the frontmatter.
+  document.documentElement.classList.add("nv-anim");
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        e.target.classList.add("is-in");
+        const count = e.target.querySelector<HTMLElement>("[data-countup]");
+        if (count && !count.dataset.done) {
+          count.dataset.done = "1";
+          startCount(count);
+        }
+        io.unobserve(e.target);
+      }
+    },
+    { threshold: 0.2 },
+  );
+  document.querySelectorAll(".nv-anim-item").forEach((el) => io.observe(el));
+
+  function startCount(el: HTMLElement) {
+    const target = parseFloat(el.dataset.countup ?? "");
+    if (!Number.isFinite(target) || reduced) return;
+    const t0 = performance.now();
+    const dur = 1100;
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - t0) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = String(Math.round(target * eased));
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+</script>
