@@ -10,13 +10,20 @@ import { telHref, formatPhoneDisplay } from "~/lib/phone";
 interface Props {
   ctaId?: string;
   label?: string;
-  variant?: "primary" | "ghost";
+  variant?: "primary" | "ghost" | "ghost-dark";
 }
 const { ctaId = "call", label, variant = "ghost" } = Astro.props;
 ---
 
 <a
-  class:list={["btn", variant === "primary" ? "btn-primary" : "btn-ghost"]}
+  class:list={[
+    "btn",
+    variant === "primary"
+      ? "btn-primary"
+      : variant === "ghost-dark"
+        ? "btn-ghost-dark"
+        : "btn-ghost",
+  ]}
   href={telHref(BRAND.phoneE164)}
   data-cta-id={ctaId}
 >

@@ -11,68 +11,172 @@ interface Props {
   secondaryCta?: { href: string; label: string; ctaId?: string };
   /**
    * Optional hero visual. When omitted, the hero is text-only (no LCP image).
-   * Pass `src` once a real photo exists — preload it in BaseLayout at that point
-   * (see TASKS_FOR_ERIC "preload the LCP image once a real hero exists").
+   * With `src` + `fullBleed`, the photo becomes a full-width backdrop under a
+   * navy scrim (brand-colored, left-weighted so the copy always clears WCAG
+   * contrast on top of it). `mobileSrc` optionally serves a tighter crop below
+   * 640px. Without `fullBleed`, the original split layout renders.
    */
-  image?: { slot: string; alt: string; src?: string; ratio?: string; demoKey?: string };
+  image?: {
+    slot: string;
+    alt: string;
+    src?: string;
+    mobileSrc?: string;
+    ratio?: string;
+    demoKey?: string;
+  };
+  fullBleed?: boolean;
 }
-const { eyebrow, headline, subhead, primaryCta, secondaryCta, image } = Astro.props;
+const {
+  eyebrow,
+  headline,
+  subhead,
+  primaryCta,
+  secondaryCta,
+  image,
+  fullBleed = false,
+} = Astro.props;
+
+const isBackdrop = Boolean(fullBleed && image?.src);
 ---
 
-<section
-  class="relative overflow-hidden border-b border-[color:var(--color-navy-100)] bg-[color:var(--color-surface-ivory)]"
->
-  <div
-    class:list={[
-      "mx-auto max-w-6xl px-4 py-20 md:py-28",
-      image && "md:grid md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-14",
-    ]}
-  >
-    <div>
-      {eyebrow && <p class="eyebrow mb-5">{eyebrow}</p>}
-      <h1 class="max-w-3xl text-[2.5rem] leading-[1.06] md:text-6xl">{headline}</h1>
-      <div class="rule-gold mt-7" aria-hidden="true"></div>
-      <p class="mt-7 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
-        {subhead}
-      </p>
-      <div class="mt-9 flex flex-wrap gap-3">
-        <CTAButton
-          href={primaryCta.href}
-          label={primaryCta.label}
-          ctaId={primaryCta.ctaId ?? "hero-primary"}
+{
+  isBackdrop ? (
+    <section class="relative overflow-hidden bg-[color:var(--color-navy-950)]">
+      {/* Backdrop photo — the LCP; eager + high priority. */}
+      <picture>
+        {image!.mobileSrc && <source media="(max-width: 640px)" srcset={image!.mobileSrc} />}
+        <img
+          src={image!.src}
+          alt={image!.alt}
+          class="absolute inset-0 h-full w-full object-cover object-[72%_center]"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
         />
-        <PhoneCTAButton ctaId="hero-call" />
-        {
-          secondaryCta && (
+      </picture>
+      {/* Brand scrim: near-solid navy behind the copy, falling away fast so the
+          house stays bright. Recipes are per-breakpoint (see <style>) because
+          the text zone covers different shares of the frame at each size. */}
+      <div class="nv-hero-scrim absolute inset-0" aria-hidden="true" />
+      <div
+        class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[color:var(--color-navy-950)]/55 to-transparent"
+        aria-hidden="true"
+      />
+
+      <div class="relative mx-auto max-w-6xl px-4 py-24 md:py-36">
+        {eyebrow && <p class="eyebrow mb-5 text-[color:var(--color-gold-300)]!">{eyebrow}</p>}
+        <h1 class="max-w-3xl text-[2.5rem] leading-[1.06] text-white md:text-6xl">{headline}</h1>
+        <div class="rule-gold mt-7" aria-hidden="true" />
+        <p class="mt-7 max-w-2xl text-lg leading-relaxed text-[color:var(--color-navy-100)]">
+          {subhead}
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <CTAButton
+            href={primaryCta.href}
+            label={primaryCta.label}
+            ctaId={primaryCta.ctaId ?? "hero-primary"}
+          />
+          <PhoneCTAButton ctaId="hero-call" variant="ghost-dark" />
+          {secondaryCta && (
             <CTAButton
               href={secondaryCta.href}
               label={secondaryCta.label}
               ctaId={secondaryCta.ctaId ?? "hero-secondary"}
-              variant="ghost"
+              variant="ghost-dark"
             />
-          )
-        }
-      </div>
-    </div>
-    {
-      image && (
-        <div class="relative mt-12 md:mt-0">
-          <div
-            class="absolute -right-3 -bottom-3 hidden h-full w-full border border-[color:var(--color-gold-400)] md:block"
-            aria-hidden="true"
-          />
-          <ImagePlaceholder
-            slot={image.slot}
-            alt={image.alt}
-            src={image.src}
-            demoKey={image.demoKey}
-            ratio={image.ratio ?? "4/3"}
-            priority={true}
-            tone="mixed"
-            class="relative shadow-[var(--shadow-card)]"
-          />
+          )}
         </div>
-      )
+      </div>
+    </section>
+  ) : (
+    <section class="relative overflow-hidden border-b border-[color:var(--color-navy-100)] bg-[color:var(--color-surface-ivory)]">
+      <div
+        class:list={[
+          "mx-auto max-w-6xl px-4 py-20 md:py-28",
+          image && "md:grid md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-14",
+        ]}
+      >
+        <div>
+          {eyebrow && <p class="eyebrow mb-5">{eyebrow}</p>}
+          <h1 class="max-w-3xl text-[2.5rem] leading-[1.06] md:text-6xl">{headline}</h1>
+          <div class="rule-gold mt-7" aria-hidden="true" />
+          <p class="mt-7 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
+            {subhead}
+          </p>
+          <div class="mt-9 flex flex-wrap gap-3">
+            <CTAButton
+              href={primaryCta.href}
+              label={primaryCta.label}
+              ctaId={primaryCta.ctaId ?? "hero-primary"}
+            />
+            <PhoneCTAButton ctaId="hero-call" />
+            {secondaryCta && (
+              <CTAButton
+                href={secondaryCta.href}
+                label={secondaryCta.label}
+                ctaId={secondaryCta.ctaId ?? "hero-secondary"}
+                variant="ghost"
+              />
+            )}
+          </div>
+        </div>
+        {image && (
+          <div class="relative mt-12 md:mt-0">
+            <div
+              class="absolute -right-3 -bottom-3 hidden h-full w-full border border-[color:var(--color-gold-400)] md:block"
+              aria-hidden="true"
+            />
+            <ImagePlaceholder
+              slot={image.slot}
+              alt={image.alt}
+              src={image.src}
+              demoKey={image.demoKey}
+              ratio={image.ratio ?? "4/3"}
+              priority={true}
+              tone="mixed"
+              class="relative shadow-[var(--shadow-card)]"
+            />
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  /* Phones: the copy spans the full width, so the shade is an even wash. */
+  .nv-hero-scrim {
+    background: linear-gradient(
+      to bottom,
+      rgb(6 14 33 / 0.92) 0%,
+      rgb(6 14 33 / 0.82) 55%,
+      rgb(6 14 33 / 0.62) 100%
+    );
+  }
+  /* Tablets: copy owns ~2/3 of the frame. */
+  @media (min-width: 640px) {
+    .nv-hero-scrim {
+      background: linear-gradient(
+        to right,
+        rgb(6 14 33 / 0.97) 0%,
+        rgb(6 14 33 / 0.94) 42%,
+        rgb(6 14 33 / 0.72) 62%,
+        rgb(6 14 33 / 0.28) 82%,
+        rgb(6 14 33 / 0.08) 100%
+      );
     }
-  </div>
-</section>
+  }
+  /* Desktops: solid reading zone on the left 40%, house nearly clear on the right. */
+  @media (min-width: 1024px) {
+    .nv-hero-scrim {
+      background: linear-gradient(
+        to right,
+        rgb(6 14 33 / 0.97) 0%,
+        rgb(6 14 33 / 0.94) 34%,
+        rgb(6 14 33 / 0.8) 50%,
+        rgb(6 14 33 / 0.35) 70%,
+        rgb(6 14 33 / 0.05) 100%
+      );
+    }
+  }
+</style>
