@@ -85,15 +85,34 @@ const THREATS: Threat[] = [
   },
 ];
 
-// Hotspot positions as percentages of the diagram (viewBox 860x400).
-const HOTSPOTS: { id: string; n: string; x: number; y: number; name: string }[] = [
-  { id: "threat-heat", n: "1", x: 47, y: 24, name: "Attic heat" },
-  { id: "threat-hail", n: "2", x: 33, y: 42, name: "Hail impact zone" },
-  { id: "threat-wind", n: "3", x: 66.5, y: 51, name: "Wind-exposed edge" },
-  { id: "threat-algae", n: "4", x: 54, y: 38, name: "Shaded algae slope" },
-  { id: "threat-pine", n: "5", x: 76, y: 58, name: "Debris valley" },
-  { id: "threat-rain", n: "6", x: 59, y: 47, name: "Flashing & pipe boot" },
+// Hotspot markers sit ON the drawn phenomenon (viewBox 860x420) and carry a
+// matching icon; the same glyph repeats on each threat card so the pairing
+// is instant. Positions are percentages of the diagram box.
+const HOTSPOTS: { id: string; x: number; y: number; name: string }[] = [
+  { id: "threat-heat", x: 47.7, y: 32.9, name: "Heat shimmer at the ridge" },
+  { id: "threat-hail", x: 38.4, y: 39.5, name: "Hail striking the shingles" },
+  { id: "threat-wind", x: 30, y: 50, name: "Wind lifting the roof edge" },
+  { id: "threat-algae", x: 57.2, y: 41, name: "Algae streaks on the shaded slope" },
+  { id: "threat-rain", x: 61.7, y: 46.7, name: "Rain at the chimney flashing" },
+  { id: "threat-pine", x: 76.2, y: 59.5, name: "Pine needles falling into the valley" },
 ];
+
+/** Inline icon glyphs (24x24, stroke = currentColor) shared by markers + cards. */
+const GLYPHS: Record<string, string> = {
+  "threat-heat":
+    '<path d="M10 4a2 2 0 0 1 4 0v9.5a4.5 4.5 0 1 1-4 0z"/><line x1="12" y1="8" x2="12" y2="15"/>',
+  "threat-hail":
+    '<circle cx="12" cy="15" r="4"/><line x1="8" y1="3.5" x2="9.5" y2="7.5"/><line x1="15" y1="3.5" x2="14" y2="7.5"/>',
+  "threat-wind":
+    '<path d="M3 8h9a2.5 2.5 0 1 0-2.5-2.5"/><path d="M3 13h13a2.5 2.5 0 1 1-2.5 2.5"/><path d="M3 18h7"/>',
+  "threat-algae":
+    '<path d="M7 4q3 4 0 8t0 8"/><path d="M12 4q3 4 0 8t0 8"/><path d="M17 4q3 4 0 8t0 8"/>',
+  "threat-pine": '<path d="M12 3L7 10h3l-4 6h4l-3 5h10l-3-5h4l-4-6h3z"/>',
+  "threat-rain": '<path d="M12 4c3.2 4.3 5.5 7 5.5 10a5.5 5.5 0 1 1-11 0c0-3 2.3-5.7 5.5-10z"/>',
+};
+
+const glyphSvg = (id: string, cls: string) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${cls}" aria-hidden="true">${GLYPHS[id]}</svg>`;
 ---
 
 <div class="pt-2">
@@ -132,10 +151,10 @@ const HOTSPOTS: { id: string; n: string; x: number; y: number; name: string }[] 
   {/* Interactive diagram — navigation & delight only; all content lives in the cards below */}
   <div class="nv-anim-item nv-diagram relative mx-auto mt-10 hidden max-w-3xl sm:block">
     <svg
-      viewBox="0 0 860 400"
+      viewBox="0 0 860 420"
       class="w-full"
       role="img"
-      aria-label="Line drawing of a Woodlands-style home showing where the six climate threats attack a roof"
+      aria-label="Line drawing of a Woodlands-style home with each climate threat drawn where it attacks: hail falling on the shingles, wind at the roof edge, algae streaks on the shaded slope, rain at the chimney flashing, pine needles dropping into the valley, and heat shimmer at the ridge"
     >
       <g
         fill="none"
@@ -145,44 +164,95 @@ const HOTSPOTS: { id: string; n: string; x: number; y: number; name: string }[] 
         stroke-linejoin="round"
       >
         <!-- ground -->
-        <line x1="40" y1="360" x2="820" y2="360" stroke="var(--color-navy-200)"></line>
-        <!-- pine tree -->
-        <polygon points="140,120 100,200 180,200"></polygon>
-        <polygon points="140,160 90,250 190,250"></polygon>
-        <polygon points="140,205 80,305 200,305"></polygon>
-        <line x1="140" y1="305" x2="140" y2="360"></line>
+        <line x1="40" y1="380" x2="820" y2="380" stroke="var(--color-navy-200)"></line>
+
         <!-- main house -->
-        <rect x="250" y="190" width="310" height="170"></rect>
-        <polyline points="230,192 405,92 580,192" stroke="var(--color-navy-900)" stroke-width="3"
+        <rect x="280" y="212" width="310" height="168"></rect>
+        <polyline points="255,214 435,105 615,214" stroke="var(--color-navy-900)" stroke-width="3"
         ></polyline>
-        <!-- chimney + pipe -->
-        <rect x="492" y="118" width="30" height="52" stroke="var(--color-navy-900)"></rect>
-        <line x1="340" y1="152" x2="340" y2="132" stroke="var(--color-navy-900)"></line>
-        <!-- windows + door -->
-        <rect x="285" y="225" width="46" height="46"></rect>
-        <rect x="380" y="225" width="46" height="46"></rect>
-        <rect x="475" y="225" width="46" height="46"></rect>
-        <rect x="380" y="300" width="46" height="60"></rect>
-        <!-- garage -->
-        <rect x="560" y="252" width="140" height="108"></rect>
-        <polyline points="560,252 632,204 700,252" stroke="var(--color-navy-900)" stroke-width="3"
+        <rect x="315" y="252" width="44" height="44"></rect>
+        <rect x="408" y="252" width="44" height="44"></rect>
+        <rect x="501" y="252" width="44" height="44"></rect>
+        <rect x="408" y="320" width="44" height="60"></rect>
+
+        <!-- garage + the valley where it meets the house -->
+        <rect x="590" y="272" width="140" height="108"></rect>
+        <polyline points="590,272 660,220 730,272" stroke="var(--color-navy-900)" stroke-width="3"
         ></polyline>
-        <rect x="585" y="290" width="90" height="70"></rect>
-        <!-- sun -->
-        <circle cx="780" cy="64" r="22" stroke="var(--color-gold-500)"></circle>
+        <rect x="612" y="308" width="96" height="72"></rect>
+
+        <!-- chimney (rain / flashing joint) -->
+        <rect x="516" y="134" width="30" height="54" stroke="var(--color-navy-900)"></rect>
+
+        <!-- 01 · heat: sun + shimmer rising off the ridge -->
         <g stroke="var(--color-gold-500)">
-          <line x1="780" y1="24" x2="780" y2="34"></line>
-          <line x1="780" y1="94" x2="780" y2="104"></line>
-          <line x1="740" y1="64" x2="750" y2="64"></line>
-          <line x1="810" y1="64" x2="820" y2="64"></line>
-          <line x1="752" y1="36" x2="759" y2="43"></line>
-          <line x1="801" y1="85" x2="808" y2="92"></line>
+          <circle cx="95" cy="64" r="22"></circle>
+          <line x1="95" y1="22" x2="95" y2="32"></line>
+          <line x1="95" y1="96" x2="95" y2="106"></line>
+          <line x1="53" y1="64" x2="63" y2="64"></line>
+          <line x1="127" y1="64" x2="137" y2="64"></line>
+          <line x1="65" y1="34" x2="72" y2="41"></line>
+          <line x1="118" y1="87" x2="125" y2="94"></line>
+          <path d="M392 160 q5 -9 0 -18 q-5 -9 0 -18"></path>
+          <path d="M412 152 q5 -9 0 -18 q-5 -9 0 -18"></path>
+          <path d="M432 146 q5 -9 0 -18 q-5 -9 0 -18"></path>
         </g>
-        <!-- rain -->
-        <g stroke="var(--color-navy-300)">
-          <line x1="690" y1="110" x2="678" y2="134"></line>
-          <line x1="714" y1="110" x2="702" y2="134"></line>
-          <line x1="738" y1="110" x2="726" y2="134"></line>
+
+        <!-- 02 · hail: cloud, falling stones, impact burst on the slope -->
+        <circle cx="278" cy="56" r="14"></circle>
+        <circle cx="298" cy="46" r="18"></circle>
+        <circle cx="320" cy="56" r="14"></circle>
+        <line x1="264" y1="70" x2="334" y2="70"></line>
+        <g stroke="var(--color-navy-400)">
+          <circle cx="302" cy="95" r="4"></circle>
+          <circle cx="312" cy="115" r="3.5"></circle>
+          <circle cx="320" cy="135" r="4"></circle>
+          <circle cx="327" cy="152" r="3"></circle>
+          <line x1="322" y1="160" x2="316" y2="152"></line>
+          <line x1="331" y1="158" x2="331" y2="149"></line>
+          <line x1="340" y1="162" x2="346" y2="155"></line>
+        </g>
+
+        <!-- 03 · wind: gusts driving at the eave, one lifted shingle tab -->
+        <g stroke="var(--color-navy-400)" stroke-width="2.5">
+          <path d="M70 186 q55 -12 118 -2"></path>
+          <path d="M56 208 q70 -14 152 -4"></path>
+          <path d="M74 230 q60 -10 130 -4"></path>
+        </g>
+        <polyline points="248,210 260,200 268,206" stroke="var(--color-navy-900)" stroke-width="3"
+        ></polyline>
+
+        <!-- 04 · algae: dark streaks running down the shaded slope -->
+        <g stroke="var(--color-navy-400)" stroke-width="2.5" opacity="0.55">
+          <path d="M455 130 q9 11 5 22 q-3 9 7 20"></path>
+          <path d="M477 143 q9 11 5 22 q-3 9 7 20"></path>
+          <path d="M499 156 q9 11 5 22 q-3 9 7 18"></path>
+          <path d="M521 169 q8 10 5 20 q-2 8 6 16"></path>
+        </g>
+
+        <!-- 05 · rain: cloud over the chimney, drops, drip at the flashing -->
+        <circle cx="560" cy="44" r="13"></circle>
+        <circle cx="578" cy="36" r="16"></circle>
+        <circle cx="597" cy="44" r="13"></circle>
+        <line x1="547" y1="57" x2="610" y2="57"></line>
+        <g stroke="var(--color-navy-400)">
+          <line x1="556" y1="72" x2="550" y2="88"></line>
+          <line x1="578" y1="70" x2="572" y2="88"></line>
+          <line x1="600" y1="74" x2="594" y2="90"></line>
+          <path d="M522 194 q5 7 10 0"></path>
+        </g>
+
+        <!-- 06 · pine: canopy overhanging the garage, needles into the valley -->
+        <polygon points="792,148 746,222 838,222"></polygon>
+        <polygon points="792,190 736,272 848,272"></polygon>
+        <polygon points="792,235 726,318 858,318"></polygon>
+        <line x1="792" y1="318" x2="792" y2="380"></line>
+        <g stroke="var(--color-navy-400)">
+          <line x1="738" y1="256" x2="744" y2="264"></line>
+          <line x1="718" y1="268" x2="726" y2="272"></line>
+          <line x1="700" y1="256" x2="704" y2="265"></line>
+          <line x1="684" y1="268" x2="692" y2="272"></line>
+          <line x1="668" y1="258" x2="672" y2="267"></line>
         </g>
       </g>
     </svg>
@@ -191,16 +261,15 @@ const HOTSPOTS: { id: string; n: string; x: number; y: number; name: string }[] 
         <button
           type="button"
           data-hotspot={h.id}
-          aria-label={`${h.name} — jump to threat ${h.n}`}
-          class="nv-hotspot absolute grid h-8 w-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white bg-[color:var(--color-gold-400)] text-[13px] font-bold text-[color:var(--color-navy-950)] shadow-[var(--shadow-card)] transition hover:scale-110"
+          aria-label={`${h.name} — jump to the matching threat`}
+          class="nv-hotspot absolute grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white bg-[color:var(--color-gold-400)] text-[color:var(--color-navy-950)] shadow-[var(--shadow-card)] transition hover:scale-110"
           style={`left:${h.x}%; top:${h.y}%`}
-        >
-          {h.n}
-        </button>
+          set:html={glyphSvg(h.id, "h-4.5 w-4.5")}
+        />
       ))
     }
     <p class="mt-1 text-center text-xs tracking-wide text-[color:var(--color-ink-500)]">
-      Tap a number to see what's attacking that part of your roof.
+      Every marker sits on the threat it describes — tap one to read what it does to your roof.
     </p>
   </div>
 
@@ -215,7 +284,8 @@ const HOTSPOTS: { id: string; n: string; x: number; y: number; name: string }[] 
           class="nv-anim-item nv-threat min-w-[85%] snap-center rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6 transition duration-300 md:min-w-0"
         >
           <div class="flex items-baseline justify-between gap-3">
-            <span class="text-[11px] font-bold tracking-[0.2em] text-[color:var(--color-gold-600)]">
+            <span class="flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] text-[color:var(--color-gold-600)]">
+              <Fragment set:html={glyphSvg(t.id, "h-4 w-4")} />
               {t.n}
             </span>
             {t.stat ? (
