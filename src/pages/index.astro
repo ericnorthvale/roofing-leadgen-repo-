@@ -10,6 +10,7 @@ import ImagePlaceholder from "@components/ImagePlaceholder.astro";
 import Faq from "@components/Faq.astro";
 import TableOfContents from "@components/TableOfContents.astro";
 import VillageShowcase from "@components/VillageShowcase.astro";
+import ClimateThreats from "@components/ClimateThreats.astro";
 import { BRAND } from "~/lib/brand";
 import { SERVICE_AREAS } from "~/lib/service-areas";
 import { aggregateRatingJsonLd, faqPageJsonLd } from "~/lib/seo";
@@ -203,54 +204,9 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
     class="border-y border-[color:var(--color-navy-100)] bg-[color:var(--color-surface-ivory)]"
   >
     <div class="mx-auto max-w-6xl px-4 py-16 md:py-20">
-      <article class="prose-northvale max-w-3xl">
-        <h2 id="why-roofs-fail">Why roofs fail in The Woodlands</h2>
-        <p>
-          Roofs don't fail randomly here — they fail on a schedule written by this climate. Knowing
-          the failure modes is how you catch them at repair price instead of replacement price.
-        </p>
-        <p>
-          <strong>Heat and UV.</strong> NOAA's climate normals put July and August highs around 94–95°F
-          at the nearest first-order station, and the Asphalt Roofing Manufacturers Association notes
-          a poorly-ventilated attic can reach 140°F on a 90°F day. That heat dries the asphalt binder
-          in shingles; once protective granules displace, IBHS research shows the exposed asphalt embrittles
-          and ages faster. Heat is the quiet failure mode — no storm required.
-        </p>
-        <p>
-          <strong>Hail.</strong> NOAA's Storm Events Database records damaging hail (¾-inch or larger)
-          somewhere in Montgomery County nearly every year — one-inch hail fell near Shenandoah as recently
-          as June 2025. IBHS impact research adds a subtler point: repeated <em>small</em> hail plus normal
-          weathering can make shingles perform like decade-older material, so a roof can be storm-weakened
-          without a single dramatic event.
-        </p>
-        <p>
-          <strong>Wind.</strong> The National Weather Service counts 50–60 thunderstorm days a year in
-          southeast Texas, a third of them severe, with downbursts driving 60 to 100+ mph winds — and
-          tropical systems reach us too: Hurricane Beryl (2024) produced a measured 69-mph gust at Conroe,
-          well inland. What actually fails in wind, per IBHS, is the sealant bond between shingles, and
-          that bond weakens with age.
-        </p>
-        <p>
-          <strong>Humidity and algae.</strong> The black streaks on so many local roofs are
-          <em>Gloeocapsa magma</em>, the algae ARMA identifies as most widespread in the Gulf
-          States. The stains themselves don't destroy shingles — but the shade and moisture patterns
-          that feed them also slow drying, and pressure-washing them off does real damage.
-        </p>
-        <p>
-          <strong>Pine needles and tree debris.</strong> The forest is the whole point of The Woodlands
-          — and a working load on its roofs. Needles and leaves pack into valleys and gutters, hold moisture
-          against shingles, and back water up under the roof edge. The Township's own covenants require
-          owners to keep roofs clear of leaves, needles, and branches; extension-service guidance adds
-          trimming limbs that overhang the roof.
-        </p>
-        <p>
-          <strong>Heavy rain and flashing failures.</strong> Annual rainfall runs near 50 inches here
-          — and in 2017, Harvey dropped 25.66 inches on The Woodlands in days. Water finds the weak detail,
-          and the weak detail is usually flashing: the code's entire purpose for it is keeping moisture
-          out of roof and wall joints (IRC R903.2). Aged step flashing, cracked pipe boots (the rubber
-          commonly fails within 10–15 years), and nail pops are the leaks we chase most.
-        </p>
+      <ClimateThreats />
 
+      <article class="prose-northvale mt-14 max-w-3xl">
         <h2 id="materials">Roofing materials we install</h2>
         <p>
           Every material below complies with the Township's Standards — muted colors, no glossy
