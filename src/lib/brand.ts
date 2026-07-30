@@ -35,11 +35,14 @@ export const BRAND = {
   socialProfiles: (businessInfo as { socialProfiles?: string[] }).socialProfiles ?? [],
 } as const;
 
+// Owner-picked 2026-07-30 ("Option 4 — local and lasting"): value statements,
+// deliberately intangible, all grounded in the owner's published About-page
+// commitments (permanent local company, honest guidance, standing behind work).
 export const SIGNATURE_PHRASES = [
-  "Same day. In writing.",
+  "Local, and staying local.",
+  "Honest guidance.",
   "A named project manager.",
-  "Forty-photo packet.",
-  "Under 60 seconds.",
+  "Roofs we stand behind.",
   "Built for the next storm, not the last one.",
 ] as const;
 
