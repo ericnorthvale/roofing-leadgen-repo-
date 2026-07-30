@@ -54,11 +54,10 @@ const isBackdrop = Boolean(fullBleed && image?.src);
           decoding="async"
         />
       </picture>
-      {/* Brand scrim: navy sweeps in from the left so the copy always reads. */}
-      <div
-        class="absolute inset-0 bg-gradient-to-r from-[color:var(--color-navy-950)]/95 via-[color:var(--color-navy-950)]/60 to-[color:var(--color-navy-950)]/15"
-        aria-hidden="true"
-      />
+      {/* Brand scrim: near-solid navy behind the copy, falling away fast so the
+          house stays bright. Recipes are per-breakpoint (see <style>) because
+          the text zone covers different shares of the frame at each size. */}
+      <div class="nv-hero-scrim absolute inset-0" aria-hidden="true" />
       <div
         class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[color:var(--color-navy-950)]/55 to-transparent"
         aria-hidden="true"
@@ -143,3 +142,41 @@ const isBackdrop = Boolean(fullBleed && image?.src);
     </section>
   )
 }
+
+<style>
+  /* Phones: the copy spans the full width, so the shade is an even wash. */
+  .nv-hero-scrim {
+    background: linear-gradient(
+      to bottom,
+      rgb(6 14 33 / 0.92) 0%,
+      rgb(6 14 33 / 0.82) 55%,
+      rgb(6 14 33 / 0.62) 100%
+    );
+  }
+  /* Tablets: copy owns ~2/3 of the frame. */
+  @media (min-width: 640px) {
+    .nv-hero-scrim {
+      background: linear-gradient(
+        to right,
+        rgb(6 14 33 / 0.97) 0%,
+        rgb(6 14 33 / 0.94) 42%,
+        rgb(6 14 33 / 0.72) 62%,
+        rgb(6 14 33 / 0.28) 82%,
+        rgb(6 14 33 / 0.08) 100%
+      );
+    }
+  }
+  /* Desktops: solid reading zone on the left 40%, house nearly clear on the right. */
+  @media (min-width: 1024px) {
+    .nv-hero-scrim {
+      background: linear-gradient(
+        to right,
+        rgb(6 14 33 / 0.97) 0%,
+        rgb(6 14 33 / 0.94) 34%,
+        rgb(6 14 33 / 0.8) 50%,
+        rgb(6 14 33 / 0.35) 70%,
+        rgb(6 14 33 / 0.05) 100%
+      );
+    }
+  }
+</style>
