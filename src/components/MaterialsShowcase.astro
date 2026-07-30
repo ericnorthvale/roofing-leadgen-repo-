@@ -304,7 +304,7 @@ const BARS = [
               </div>
               <div class="mt-2 h-2.5 overflow-hidden rounded-full bg-[color:var(--color-navy-100)]/60">
                 <div
-                  class="nv-bar h-full rounded-full bg-gradient-to-r from-[color:var(--color-navy-800)] to-[color:var(--color-gold-500)]"
+                  class="nv-lifebar h-full rounded-full bg-gradient-to-r from-[color:var(--color-navy-800)] to-[color:var(--color-gold-500)]"
                   style={`--w:${b.w}%`}
                 />
               </div>
@@ -356,16 +356,16 @@ const BARS = [
 
 <style is:global>
   /* Bars grow when their card reveals; full width for crawlers/no-JS. */
-  html.nv-anim .nv-bar {
+  html.nv-anim .nv-lifebar {
     width: 0;
     transition: width 1.1s cubic-bezier(0.25, 0.7, 0.3, 1) 0.25s;
   }
-  html.nv-anim .nv-anim-item.is-in .nv-bar,
-  .nv-bar {
+  html.nv-anim .nv-anim-item.is-in .nv-lifebar,
+  .nv-lifebar {
     width: var(--w);
   }
   @media (prefers-reduced-motion: reduce) {
-    html.nv-anim .nv-bar {
+    html.nv-anim .nv-lifebar {
       width: var(--w);
       transition: none;
     }

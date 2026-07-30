@@ -129,22 +129,22 @@ const navLinks = [
      container cap, link text and gaps scale with the viewport so the full row
      (logo + 7 links + phone + CTA) always fits on a single line. */
   .nv-nav {
-    gap: clamp(8px, 1.4vw, 16px);
+    gap: clamp(7px, 1.4vw, 16px);
   }
   .nv-nav a {
-    font-size: clamp(11.5px, 1.1vw, 14px);
+    font-size: clamp(11px, 1.1vw, 14px);
   }
   .nv-phone {
-    font-size: clamp(12px, 1.05vw, 14px);
+    font-size: clamp(11.5px, 1.05vw, 14px);
   }
   /* When the full nav row is visible, the logo and the gaps between the three
      groups scale down too, so the row clears the narrowest one-line width. */
   @media (min-width: 1024px) {
     .nv-logo {
-      height: clamp(37px, 3.5vw, 44px);
+      height: clamp(34px, 3.5vw, 44px);
     }
     .nv-bar {
-      gap: clamp(12px, 1.8vw, 24px);
+      gap: clamp(8px, 1.8vw, 24px);
     }
   }
 
