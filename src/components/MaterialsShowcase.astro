@@ -1,0 +1,373 @@
+---
+/**
+ * "Roofing materials we install" — homepage guide section, redesigned as a
+ * visual product showcase: real IKO product photography (owner-supplied,
+ * same assets as the Roof Design Center), an ArmourZone diagram, a UL 2218
+ * hail-test comparison graphic, and a service-life bar chart.
+ *
+ * COPY CONTRACT: wording simplified for readability at the owner's request
+ * (2026-07-30) — but every fact, figure, and caveat from the previously
+ * published prose is preserved, and nothing new is claimed. Sources:
+ * research-facts Sheet 1 (InterNACHI lifespans, MRA metal), Sheet 1B (IKO
+ * Dynasty/Nordic specs, UL 2218, warranty caveat), Sheet 2 (Township
+ * Standards), Sheet 4 (TDI premium credit).
+ *
+ * SEO CONTRACT: all content server-rendered; reveals + bar growth are
+ * progressive enhancement on the sitewide `nv-anim` classes (homepage
+ * observer in ClimateThreats picks these up). The #materials anchor is kept
+ * for the table of contents.
+ */
+
+interface Line {
+  badge: string;
+  name: string;
+  photo: string;
+  alt: string;
+  body: string[];
+  chips: string[];
+}
+
+const LINES: Line[] = [
+  {
+    badge: "Our standard",
+    name: "IKO Dynasty",
+    photo: "/design-center/dynasty/summit-grey-home.webp",
+    alt: "IKO Dynasty architectural shingles in Summit Grey on a home — IKO product photography",
+    body: [
+      "We standardize on IKO, and Dynasty is our everyday architectural shingle. It's built around the ArmourZone — a 1¼-inch reinforced, woven nailing band that gives every nail a wider, tougher target, so wind can't peel the shingle the way it peels ordinary ones.",
+      "It also comes in more colors than any other IKO line.",
+    ],
+    chips: [
+      "130-mph limited high-wind warranty",
+      "Limited Lifetime product warranty",
+      "15-year non-prorated Iron Clad Protection",
+      "10-year algae-resistance warranty",
+      "Class A fire rating",
+    ],
+  },
+  {
+    badge: "The Class 4 upgrade",
+    name: "IKO Nordic",
+    photo: "/design-center/nordic/driftshake-home.webp",
+    alt: "IKO Nordic Class 4 impact-resistant shingles in Driftshake on a home — IKO product photography",
+    body: [
+      "Nordic is IKO's highest-performing line. Its mat is polymer-modified (SBS) asphalt — it flexes like a shock absorber instead of cracking — which earns the highest hail rating there is: UL 2218 Class 4.",
+      "Everything else matches Dynasty: same ArmourZone, same wind, lifetime, Iron Clad, and algae coverage. For hail-exposed Montgomery County roofs — and homeowners after an insurance discount — it's the upgrade we quote right beside Dynasty.",
+    ],
+    chips: [
+      "UL 2218 Class 4 — highest impact rating",
+      "130-mph limited high-wind warranty",
+      "Limited Lifetime product warranty",
+      "15-year non-prorated Iron Clad Protection",
+      "10-year algae-resistance warranty",
+    ],
+  },
+];
+
+/** Service life, by system (sources on each bar). Widths scale to 50 yrs. */
+const BARS = [
+  { label: "3-tab shingles", years: "~20 yrs", w: 40, src: "InterNACHI", note: undefined },
+  {
+    label: "Architectural shingles",
+    years: "~30 yrs",
+    w: 60,
+    src: "InterNACHI",
+    note: "our standard",
+  },
+  {
+    label: "Metal (standing seam)",
+    years: "30–50+ yrs",
+    w: 100,
+    src: "Metal Roofing Alliance",
+    note: undefined,
+  },
+];
+---
+
+<div class="mt-16">
+  <h2 id="materials" class="scroll-mt-24 text-3xl md:text-4xl">Roofing materials we install</h2>
+  <div class="rule-gold mt-5" aria-hidden="true"></div>
+  <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
+    Every material below complies with the Township's Standards — muted colors, no glossy metal —
+    and every spec comes straight from the manufacturer's own documentation.
+  </p>
+
+  {/* ——— The two IKO lines, side by side, real product photography ——— */}
+  <div class="mt-8 grid gap-6 md:grid-cols-2">
+    {
+      LINES.map((l) => (
+        <div class="nv-anim-item flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white">
+          <div class="relative overflow-hidden" style="aspect-ratio:16/9;">
+            <img
+              src={l.photo}
+              alt={l.alt}
+              loading="lazy"
+              decoding="async"
+              class="block h-full w-full object-cover"
+            />
+            <span class="absolute top-3 left-3 border border-[color:var(--color-gold-400)]/60 bg-[color:var(--color-navy-950)]/85 px-2.5 py-1 text-[10px] font-semibold tracking-[0.16em] text-[color:var(--color-gold-300)] uppercase">
+              {l.badge}
+            </span>
+          </div>
+          <div class="flex grow flex-col p-6">
+            <h3 class="text-2xl">{l.name}</h3>
+            {l.body.map((p) => (
+              <p class="mt-3 text-[15px] leading-relaxed text-[color:var(--color-ink-800)]">{p}</p>
+            ))}
+            <ul class="mt-5 grid gap-1.5 border-t border-[color:var(--color-navy-100)] pt-4">
+              {l.chips.map((c) => (
+                <li class="flex items-start gap-2 text-[13px] leading-snug font-medium text-[color:var(--color-navy-900)]">
+                  <svg
+                    class="mt-0.5 h-3.5 w-3.5 shrink-0 text-[color:var(--color-gold-600)]"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M16.7 5.8l-7.5 7.5-3.4-3.4" />
+                  </svg>
+                  {c}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+  <p
+    class="mt-4 flex flex-wrap items-baseline justify-between gap-3 text-sm text-[color:var(--color-ink-500)]"
+  >
+    <span>Every spec above is IKO's own published data.</span>
+    <a
+      href="/roof-design-center"
+      class="font-semibold text-[color:var(--color-navy-800)] underline decoration-[color:var(--color-gold-400)] decoration-2 underline-offset-4 hover:text-[color:var(--color-gold-600)]"
+      >See every color in the Roof Design Center →</a
+    >
+  </p>
+
+  {/* ——— The hail lab test, drawn to scale ——— */}
+  <div
+    class="nv-anim-item mt-10 overflow-hidden rounded-[var(--radius-card)] bg-[color:var(--color-navy-950)] p-6 md:p-8"
+  >
+    <div class="grid items-center gap-8 md:grid-cols-[1fr_1.3fr]">
+      {/* Diagram: UL 2218 steel-ball drop test, Class 3 vs Class 4 to scale. */}
+      <svg
+        viewBox="0 0 340 210"
+        class="mx-auto w-full max-w-sm"
+        role="img"
+        aria-label="Diagram of the UL 2218 drop test: Class 3 shingles survive a 1.75-inch steel ball, Class 4 a 2-inch steel ball"
+      >
+        <g fill="none" stroke="currentColor" class="text-white/25">
+          <line x1="170" y1="16" x2="170" y2="188" stroke-dasharray="3 5"></line>
+        </g>
+        {/* Class 3 side */}
+        <g>
+          <circle cx="85" cy="62" r="26.5" fill="#233355" stroke="#8fa3c8" stroke-width="1.5"
+          ></circle>
+          <path
+            d="M73 52 a17 17 0 0 1 17 -6"
+            fill="none"
+            stroke="#c9d4e8"
+            stroke-width="2"
+            stroke-linecap="round"
+            opacity="0.7"></path>
+          <line
+            x1="85"
+            y1="98"
+            x2="85"
+            y2="126"
+            stroke="#C9A26C"
+            stroke-width="1.5"
+            stroke-dasharray="4 4"></line>
+          <path
+            d="M81 120 L85 128 L89 120"
+            fill="none"
+            stroke="#C9A26C"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <rect x="25" y="138" width="120" height="12" fill="#1a2745" stroke="#3d4f78"></rect>
+          <rect x="25" y="150" width="120" height="8" fill="#131e38" stroke="#3d4f78"></rect>
+          <text x="85" y="34" text-anchor="middle" fill="#c9d4e8" font-size="12" font-weight="600"
+            >1.75″ steel ball</text
+          >
+          <text
+            x="85"
+            y="180"
+            text-anchor="middle"
+            fill="#8fa3c8"
+            font-size="12"
+            font-weight="700"
+            letter-spacing="2">CLASS 3</text
+          >
+        </g>
+        {/* Class 4 side */}
+        <g>
+          <circle cx="255" cy="60" r="30.5" fill="#2a3a60" stroke="#C9A26C" stroke-width="2"
+          ></circle>
+          <path
+            d="M241 49 a20 20 0 0 1 20 -7"
+            fill="none"
+            stroke="#e8d9c0"
+            stroke-width="2"
+            stroke-linecap="round"
+            opacity="0.8"></path>
+          <line
+            x1="255"
+            y1="100"
+            x2="255"
+            y2="126"
+            stroke="#C9A26C"
+            stroke-width="1.5"
+            stroke-dasharray="4 4"></line>
+          <path
+            d="M251 120 L255 128 L259 120"
+            fill="none"
+            stroke="#C9A26C"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <rect x="195" y="138" width="120" height="12" fill="#1a2745" stroke="#C9A26C"></rect>
+          <rect
+            x="195"
+            y="150"
+            width="120"
+            height="8"
+            fill="#131e38"
+            stroke="#C9A26C"
+            stroke-opacity="0.5"></rect>
+          <text x="255" y="30" text-anchor="middle" fill="#f0e6d4" font-size="12" font-weight="600"
+            >2″ steel ball</text
+          >
+          <text
+            x="255"
+            y="180"
+            text-anchor="middle"
+            fill="#C9A26C"
+            font-size="12"
+            font-weight="700"
+            letter-spacing="2">CLASS 4</text
+          >
+          <text x="255" y="196" text-anchor="middle" fill="#C9A26C" font-size="10" opacity="0.8"
+            >the top rating — Nordic's class</text
+          >
+        </g>
+      </svg>
+
+      <div>
+        <p class="eyebrow text-[color:var(--color-gold-300)]!">Class 3 vs. Class 4</p>
+        <h3 class="mt-3 text-2xl text-white md:text-3xl">What the hail rating really means</h3>
+        <p class="mt-4 text-[15px] leading-relaxed text-[color:var(--color-navy-100)]">
+          UL 2218 is a lab drop test with steel balls. Class 3 shingles survive a 1.75-inch ball;
+          Class 4 — the top rating — survives a 2-inch ball.
+        </p>
+        <p class="mt-3 text-[15px] leading-relaxed text-[color:var(--color-navy-100)]">
+          Some straight talk, straight from IKO's fine print: the rating is a lab classification,
+          <em>not</em> a guarantee against hail — and hail damage isn't covered by the shingle warranty.
+          Its real value is different: it can help you qualify for an insurance premium discount where
+          your carrier offers one. TDI notes Class 4 coverings receive the highest available credit, but
+          each company sets its own amount — so ask yours.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {/* ——— Service life by system + the two remaining comparisons ——— */}
+  <div class="mt-10 grid gap-6 md:grid-cols-2">
+    <div
+      class="nv-anim-item rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6 md:p-7"
+    >
+      <h3 class="text-2xl">Service life, by system</h3>
+      <p class="mt-2 text-sm text-[color:var(--color-ink-500)]">
+        Published expectancies — before this climate's heat penalty shortens asphalt.
+      </p>
+      <div class="mt-6 space-y-5">
+        {
+          BARS.map((b) => (
+            <div>
+              <div class="flex items-baseline justify-between gap-3">
+                <p class="text-sm font-semibold text-[color:var(--color-navy-900)]">
+                  {b.label}
+                  {b.note && (
+                    <span class="ml-2 border border-[color:var(--color-gold-600)]/40 bg-[color:var(--color-gold-50)] px-1.5 py-0.5 text-[10px] font-semibold tracking-[0.12em] text-[color:var(--color-gold-900)] uppercase">
+                      {b.note}
+                    </span>
+                  )}
+                </p>
+                <p class="font-serif text-[28px] leading-none text-[color:var(--color-navy-900)]">
+                  {b.years}
+                </p>
+              </div>
+              <div class="mt-2 h-2.5 overflow-hidden rounded-full bg-[color:var(--color-navy-100)]/60">
+                <div
+                  class="nv-bar h-full rounded-full bg-gradient-to-r from-[color:var(--color-navy-800)] to-[color:var(--color-gold-500)]"
+                  style={`--w:${b.w}%`}
+                />
+              </div>
+              <p class="mt-1 text-[11px] tracking-wide text-[color:var(--color-ink-500)] uppercase">
+                Source: {b.src}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="grid gap-6">
+      <div
+        class="nv-anim-item rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6 md:p-7"
+      >
+        <h3 class="text-xl">Architectural vs. 3-tab</h3>
+        <p class="mt-3 text-[15px] leading-relaxed text-[color:var(--color-ink-800)]">
+          We install architectural (dimensional) shingles as standard. InterNACHI's life-expectancy
+          chart gives 3-tab about 20 years and architectural about 30 — and a 130-mph wind warranty
+          is coverage a 3-tab roof simply can't match.
+        </p>
+      </div>
+      <div
+        class="nv-anim-item rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6 md:p-7"
+      >
+        <h3 class="text-xl">Standing-seam &amp; stone-coated metal</h3>
+        <p class="mt-3 text-[15px] leading-relaxed text-[color:var(--color-ink-800)]">
+          The Township Standards accept metal in non-glossy finishes, and the Metal Roofing Alliance
+          rates metal at 30–50+ years of service life — two to three times asphalt — with 140-mph
+          wind ratings. Standing seam hides its fasteners, so there's no gasketed-screw maintenance
+          cycle like exposed-fastener panels have. Expect roughly two to three times the cost of
+          asphalt (MRA's number), quoted in writing next to your shingle options.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {/* ——— Closing pointer ——— */}
+  <p class="mt-8 max-w-3xl text-[15px] leading-relaxed text-[color:var(--color-ink-700)]">
+    Weighing Dynasty against the Class 4 Nordic upgrade? Our
+    <a
+      href="/services/roof-replacement"
+      class="font-semibold text-[color:var(--color-navy-800)] underline decoration-[color:var(--color-gold-400)] decoration-2 underline-offset-4 hover:text-[color:var(--color-gold-600)]"
+      >roof replacement guide</a
+    > walks through the full system, warranty, and what drives the quote.
+  </p>
+</div>
+
+<style is:global>
+  /* Bars grow when their card reveals; full width for crawlers/no-JS. */
+  html.nv-anim .nv-bar {
+    width: 0;
+    transition: width 1.1s cubic-bezier(0.25, 0.7, 0.3, 1) 0.25s;
+  }
+  html.nv-anim .nv-anim-item.is-in .nv-bar,
+  .nv-bar {
+    width: var(--w);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html.nv-anim .nv-bar {
+      width: var(--w);
+      transition: none;
+    }
+  }
+</style>
