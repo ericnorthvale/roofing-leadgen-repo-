@@ -281,11 +281,11 @@ const glyphSvg = (id: string, cls: string) =>
     class="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 md:grid md:grid-cols-2 md:overflow-visible md:pb-0 xl:grid-cols-3"
   >
     {
-      THREATS.map((t, i) => (
+      THREATS.map((t) => (
         <li
           id={t.id}
           tabindex="-1"
-          class="nv-anim-item nv-threat min-w-[85%] snap-center rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6 transition duration-300 outline-none md:min-w-0"
+          class="nv-anim-item nv-threat min-w-[85%] cursor-pointer snap-center rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6 transition duration-300 outline-none md:min-w-0"
         >
           <div class="flex items-baseline justify-between gap-3">
             <span class="flex items-center gap-2 text-[11px] font-bold tracking-[0.2em] text-[color:var(--color-gold-600)]">
@@ -321,31 +321,6 @@ const glyphSvg = (id: string, cls: string) =>
             </summary>
             <p class="mt-2 text-sm leading-relaxed text-[color:var(--color-ink-700)]">{t.tell}</p>
           </details>
-          <div class="mt-4 flex items-center justify-between gap-3 border-t border-[color:var(--color-navy-100)] pt-3 text-xs font-semibold tracking-[0.12em] uppercase">
-            <button
-              type="button"
-              data-goto={THREATS[(i + THREATS.length - 1) % THREATS.length].id}
-              aria-label={`Previous threat: ${THREATS[(i + THREATS.length - 1) % THREATS.length].title}`}
-              class="cursor-pointer text-[color:var(--color-ink-500)] transition-colors hover:text-[color:var(--color-navy-900)]"
-            >
-              ← Prev
-            </button>
-            <a
-              href="#roof-diagram"
-              data-to-diagram
-              class="hidden text-[color:var(--color-gold-600)] no-underline hover:text-[color:var(--color-gold-700)] sm:inline"
-            >
-              ↑ House diagram
-            </a>
-            <button
-              type="button"
-              data-goto={THREATS[(i + 1) % THREATS.length].id}
-              aria-label={`Next threat: ${THREATS[(i + 1) % THREATS.length].title}`}
-              class="cursor-pointer text-[color:var(--color-navy-900)] transition-colors hover:text-[color:var(--color-gold-600)]"
-            >
-              Next →
-            </button>
-          </div>
         </li>
       ))
     }
@@ -496,15 +471,17 @@ const glyphSvg = (id: string, cls: string) =>
     document.querySelectorAll(".nv-hotspot.is-live").forEach((h) => h.classList.remove("is-live"));
   };
 
-  const spotlight = (card: HTMLElement) => {
+  const spotlight = (card: HTMLElement, scroll = true) => {
     clearSpot();
     cards.forEach((c) => c.classList.add(c === card ? "is-spot" : "is-dim"));
     document.querySelector(`[data-hotspot="${card.id}"]`)?.classList.add("is-live");
-    card.scrollIntoView({
-      behavior: reduced ? "auto" : "smooth",
-      block: "center",
-      inline: "center",
-    });
+    if (scroll) {
+      card.scrollIntoView({
+        behavior: reduced ? "auto" : "smooth",
+        block: "center",
+        inline: "center",
+      });
+    }
     card.focus({ preventScroll: true });
     spotTimer = setTimeout(clearSpot, 3200);
   };
@@ -524,23 +501,13 @@ const glyphSvg = (id: string, cls: string) =>
     });
   }
 
-  // Prev/Next on each card moves the spotlight to its neighbor.
-  for (const b of document.querySelectorAll<HTMLElement>("[data-goto]")) {
-    b.addEventListener("click", () => {
-      const card = document.getElementById(b.dataset.goto ?? "");
-      if (card) spotlight(card);
-    });
-  }
-
-  // "House diagram" hops back up (and clears the stage) so another marker
-  // can be picked.
-  for (const a of document.querySelectorAll<HTMLElement>("[data-to-diagram]")) {
-    a.addEventListener("click", (e) => {
-      e.preventDefault();
-      clearSpot();
-      document
-        .getElementById("roof-diagram")
-        ?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+  // Clicking a card spotlights it in place (no scroll jump). Clicks on the
+  // "what it looks like" disclosure keep their normal expand/collapse behavior.
+  for (const card of cards) {
+    card.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest("details")) return;
+      if (card.classList.contains("is-spot")) return;
+      spotlight(card, false);
     });
   }
 </script>
