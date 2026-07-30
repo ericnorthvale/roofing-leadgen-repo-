@@ -1,0 +1,373 @@
+---
+/**
+ * "Why roofs fail in The Woodlands" — the interactive climate-threat index.
+ *
+ * SEO CONTRACT: every word is server-rendered in the initial HTML. The
+ * interactivity (hotspot highlighting, count-up numbers, scroll reveals,
+ * mobile snap-scroll) is progressive enhancement layered on top — with JS
+ * disabled the section is a fully readable, fully crawlable set of headed
+ * cards. The reveal styles only engage when JS adds `nv-anim` to <html>, so
+ * nothing is ever hidden from crawlers or no-JS users. `prefers-reduced-motion`
+ * disables all movement.
+ *
+ * FACTS: every figure/claim is carried over from the previously published,
+ * sourced homepage copy (docs/research-facts.md Sheet 3 — NOAA, ARMA, IBHS,
+ * NWS, IRC, Township covenants). The "what it looks like" lines are standard
+ * field diagnostics (editorial, allowed). Local terms (Montgomery County,
+ * Shenandoah, Conroe, Spring, Harris County, Southeast Texas, Gulf Coast) are
+ * used only where factually earned — no other page's primary query is targeted
+ * (docs/keyword-map.md: one primary query per page).
+ */
+
+interface Threat {
+  id: string;
+  n: string;
+  title: string;
+  /** Big display value. Either a count-up number + suffix, or display text. */
+  stat?: { value: string; suffix: string; label: string };
+  statText?: { value: string; label: string };
+  body: string;
+  tell: string;
+}
+
+const THREATS: Threat[] = [
+  {
+    id: "threat-heat",
+    n: "01",
+    title: "Heat & UV — the Texas attic oven",
+    stat: { value: "140", suffix: "°F", label: "a poorly-vented attic on a 90° day (ARMA)" },
+    body: "NOAA's climate normals put July and August highs near 94–95°F here, and the Asphalt Roofing Manufacturers Association warns a poorly-ventilated attic can reach 140°F on a 90-degree day — cooking the asphalt binder in your shingles from below. Once protective granules displace, IBHS research shows the exposed asphalt embrittles and ages faster. Heat is the quiet failure mode — no storm required.",
+    tell: "Curling shingle edges, granules collecting in gutters, shingles that crack instead of flex.",
+  },
+  {
+    id: "threat-hail",
+    n: "02",
+    title: "Hail across Montgomery County",
+    stat: { value: "1", suffix: "″", label: "hail near Shenandoah, June 2025 (NOAA)" },
+    body: "NOAA's Storm Events Database records damaging hail — ¾-inch or larger — somewhere in Montgomery County nearly every year; one-inch hail fell near Shenandoah as recently as June 2025. IBHS impact research adds a subtler point: repeated small hail plus normal weathering can make shingles perform like decade-older material, so a roof can be storm-weakened without one dramatic event.",
+    tell: "Soft dark bruises in the shingle mat, dented vents and gutters — often invisible from the driveway.",
+  },
+  {
+    id: "threat-wind",
+    n: "03",
+    title: "Wind — Gulf storms to I-45 downbursts",
+    stat: {
+      value: "69",
+      suffix: " mph",
+      label: "Hurricane Beryl's gust measured at Conroe (2024)",
+    },
+    body: "The National Weather Service counts 50–60 thunderstorm days a year across Southeast Texas — a third of them severe — with downbursts driving 60 to 100+ mph winds. Tropical systems reach far inland too: Hurricane Beryl (2024) produced a measured 69-mph gust at Conroe. What actually fails in wind, per IBHS, is the sealant bond between shingles, and that bond weakens with age.",
+    tell: "Creased, lifted, or missing shingle tabs along ridges and roof edges after a storm.",
+  },
+  {
+    id: "threat-algae",
+    n: "04",
+    title: "Humidity & algae streaking on Gulf Coast roofs",
+    statText: { value: "No. 1", label: "roof-discoloration species in the Gulf States (ARMA)" },
+    body: "The black streaks on roofs from The Woodlands to Spring are Gloeocapsa magma — the algae ARMA identifies as the most prevalent roof-discoloration species, most widespread in the Gulf States. The stains don't destroy shingles by themselves, but the shade and moisture patterns that feed them also slow drying — and never pressure-wash them off; ARMA warns pressure washing damages asphalt roofing.",
+    tell: "Black streaks running down shaded, north-facing slopes.",
+  },
+  {
+    id: "threat-pine",
+    n: "05",
+    title: "Pine needles & The Woodlands' canopy",
+    statText: { value: "The Forest", label: "the working load on every Woodlands roof" },
+    body: "The forest is the whole point of The Woodlands — and a working load on its roofs. Needles and leaves pack into valleys and gutters, hold moisture against shingles, and back water up under the roof edge. The Township's own covenants require owners to keep roofs clear of leaves, needles, and branches; extension-service guidance adds trimming limbs that overhang the roof.",
+    tell: "Needle mats in the valleys, overflowing gutters, damp shade lines across the slope.",
+  },
+  {
+    id: "threat-rain",
+    n: "06",
+    title: "Heavy rain & flashing failures",
+    stat: { value: "25.66", suffix: "″", label: "of rain Harvey dropped on The Woodlands (2017)" },
+    body: "Annual rainfall runs near 50 inches here — and in 2017, Harvey dropped 25.66 inches on The Woodlands in days. Water finds the weak detail, and the weak detail is usually flashing: the code's entire purpose for it is keeping moisture out of roof and wall joints (IRC R903.2). Aged step flashing, cracked pipe boots (the rubber commonly fails within 10–15 years), and nail pops are the leaks we chase most.",
+    tell: "Ceiling stains after hard rain, cracked rubber at pipe boots, rust lines where roof meets wall.",
+  },
+];
+
+// Hotspot positions as percentages of the diagram (viewBox 860x400).
+const HOTSPOTS: { id: string; n: string; x: number; y: number; name: string }[] = [
+  { id: "threat-heat", n: "1", x: 47, y: 24, name: "Attic heat" },
+  { id: "threat-hail", n: "2", x: 33, y: 42, name: "Hail impact zone" },
+  { id: "threat-wind", n: "3", x: 66.5, y: 51, name: "Wind-exposed edge" },
+  { id: "threat-algae", n: "4", x: 54, y: 38, name: "Shaded algae slope" },
+  { id: "threat-pine", n: "5", x: 76, y: 58, name: "Debris valley" },
+  { id: "threat-rain", n: "6", x: 59, y: 47, name: "Flashing & pipe boot" },
+];
+---
+
+<div class="pt-2">
+  <h2 id="why-roofs-fail" class="text-3xl md:text-4xl">Why roofs fail in The Woodlands</h2>
+  <div class="rule-gold mt-5" aria-hidden="true"></div>
+  <p class="mt-6 max-w-3xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
+    Roofs don't fail randomly here — they fail on a schedule written by this climate. Knowing the
+    failure modes is how you catch them at repair price instead of replacement price.
+  </p>
+
+  {/* Sourced climate stat strip */}
+  <dl
+    class="mt-8 grid gap-px overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-[color:var(--color-navy-100)] sm:grid-cols-3"
+  >
+    {
+      [
+        ["50–60", "thunderstorm days a year in Southeast Texas (NWS)"],
+        ["~50 in", "of rain on Montgomery County roofs annually"],
+        ["94–95°F", "average July–August highs (NOAA)"],
+      ].map(([v, l]) => (
+        <div class="bg-white px-5 py-4 text-center">
+          <dt class="sr-only">{l}</dt>
+          <dd>
+            <span class="font-serif text-[30px] leading-none text-[color:var(--color-navy-900)]">
+              {v}
+            </span>
+            <span class="mt-1.5 block text-xs leading-snug text-[color:var(--color-ink-500)]">
+              {l}
+            </span>
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  {/* Interactive diagram — navigation & delight only; all content lives in the cards below */}
+  <div class="nv-anim-item nv-diagram relative mx-auto mt-10 hidden max-w-3xl sm:block">
+    <svg
+      viewBox="0 0 860 400"
+      class="w-full"
+      role="img"
+      aria-label="Line drawing of a Woodlands-style home showing where the six climate threats attack a roof"
+    >
+      <g
+        fill="none"
+        stroke="var(--color-navy-300)"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <!-- ground -->
+        <line x1="40" y1="360" x2="820" y2="360" stroke="var(--color-navy-200)"></line>
+        <!-- pine tree -->
+        <polygon points="140,120 100,200 180,200"></polygon>
+        <polygon points="140,160 90,250 190,250"></polygon>
+        <polygon points="140,205 80,305 200,305"></polygon>
+        <line x1="140" y1="305" x2="140" y2="360"></line>
+        <!-- main house -->
+        <rect x="250" y="190" width="310" height="170"></rect>
+        <polyline points="230,192 405,92 580,192" stroke="var(--color-navy-900)" stroke-width="3"
+        ></polyline>
+        <!-- chimney + pipe -->
+        <rect x="492" y="118" width="30" height="52" stroke="var(--color-navy-900)"></rect>
+        <line x1="340" y1="152" x2="340" y2="132" stroke="var(--color-navy-900)"></line>
+        <!-- windows + door -->
+        <rect x="285" y="225" width="46" height="46"></rect>
+        <rect x="380" y="225" width="46" height="46"></rect>
+        <rect x="475" y="225" width="46" height="46"></rect>
+        <rect x="380" y="300" width="46" height="60"></rect>
+        <!-- garage -->
+        <rect x="560" y="252" width="140" height="108"></rect>
+        <polyline points="560,252 632,204 700,252" stroke="var(--color-navy-900)" stroke-width="3"
+        ></polyline>
+        <rect x="585" y="290" width="90" height="70"></rect>
+        <!-- sun -->
+        <circle cx="780" cy="64" r="22" stroke="var(--color-gold-500)"></circle>
+        <g stroke="var(--color-gold-500)">
+          <line x1="780" y1="24" x2="780" y2="34"></line>
+          <line x1="780" y1="94" x2="780" y2="104"></line>
+          <line x1="740" y1="64" x2="750" y2="64"></line>
+          <line x1="810" y1="64" x2="820" y2="64"></line>
+          <line x1="752" y1="36" x2="759" y2="43"></line>
+          <line x1="801" y1="85" x2="808" y2="92"></line>
+        </g>
+        <!-- rain -->
+        <g stroke="var(--color-navy-300)">
+          <line x1="690" y1="110" x2="678" y2="134"></line>
+          <line x1="714" y1="110" x2="702" y2="134"></line>
+          <line x1="738" y1="110" x2="726" y2="134"></line>
+        </g>
+      </g>
+    </svg>
+    {
+      HOTSPOTS.map((h) => (
+        <button
+          type="button"
+          data-hotspot={h.id}
+          aria-label={`${h.name} — jump to threat ${h.n}`}
+          class="nv-hotspot absolute grid h-8 w-8 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white bg-[color:var(--color-gold-400)] text-[13px] font-bold text-[color:var(--color-navy-950)] shadow-[var(--shadow-card)] transition hover:scale-110"
+          style={`left:${h.x}%; top:${h.y}%`}
+        >
+          {h.n}
+        </button>
+      ))
+    }
+    <p class="mt-1 text-center text-xs tracking-wide text-[color:var(--color-ink-500)]">
+      Tap a number to see what's attacking that part of your roof.
+    </p>
+  </div>
+
+  {/* The six threats — swipeable deck on phones, grid from md up */}
+  <ol
+    class="mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 md:grid md:grid-cols-2 md:overflow-visible md:pb-0 xl:grid-cols-3"
+  >
+    {
+      THREATS.map((t) => (
+        <li
+          id={t.id}
+          class="nv-anim-item nv-threat min-w-[85%] snap-center rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6 transition duration-300 md:min-w-0"
+        >
+          <div class="flex items-baseline justify-between gap-3">
+            <span class="text-[11px] font-bold tracking-[0.2em] text-[color:var(--color-gold-600)]">
+              {t.n}
+            </span>
+            {t.stat ? (
+              <p class="text-right">
+                <span class="font-serif text-[38px] leading-none text-[color:var(--color-navy-900)]">
+                  <span data-countup={t.stat.value}>{t.stat.value}</span>
+                  <span class="text-[color:var(--color-gold-600)]">{t.stat.suffix}</span>
+                </span>
+                <span class="mt-1 block max-w-[220px] text-[11px] leading-snug text-[color:var(--color-ink-500)]">
+                  {t.stat.label}
+                </span>
+              </p>
+            ) : (
+              <p class="text-right">
+                <span class="font-serif text-[30px] leading-none text-[color:var(--color-navy-900)] italic">
+                  {t.statText!.value}
+                </span>
+                <span class="mt-1 block max-w-[220px] text-[11px] leading-snug text-[color:var(--color-ink-500)]">
+                  {t.statText!.label}
+                </span>
+              </p>
+            )}
+          </div>
+          <h3 class="mt-4 text-lg leading-snug">{t.title}</h3>
+          <p class="mt-2.5 text-sm leading-relaxed text-[color:var(--color-ink-700)]">{t.body}</p>
+          <details class="mt-4 border-t border-[color:var(--color-navy-100)] pt-3">
+            <summary class="cursor-pointer text-sm font-semibold text-[color:var(--color-gold-600)]">
+              What it looks like on your roof
+            </summary>
+            <p class="mt-2 text-sm leading-relaxed text-[color:var(--color-ink-700)]">{t.tell}</p>
+          </details>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style is:global>
+  /* Reveal styles engage ONLY when JS has added .nv-anim to <html> — crawlers
+     and no-JS users always get fully visible content. */
+  html.nv-anim .nv-anim-item {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.55s ease,
+      transform 0.55s ease;
+  }
+  html.nv-anim .nv-anim-item.is-in {
+    opacity: 1;
+    transform: none;
+  }
+  /* Stagger the cards slightly by grid position. */
+  html.nv-anim .nv-threat:nth-child(2) {
+    transition-delay: 80ms;
+  }
+  html.nv-anim .nv-threat:nth-child(3) {
+    transition-delay: 160ms;
+  }
+  html.nv-anim .nv-threat:nth-child(5) {
+    transition-delay: 80ms;
+  }
+  html.nv-anim .nv-threat:nth-child(6) {
+    transition-delay: 160ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html.nv-anim .nv-anim-item {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+  /* Hotspot → card highlight */
+  .nv-threat.is-hot {
+    border-color: var(--color-gold-400);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
+  }
+  .nv-hotspot::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 9999px;
+    border: 1px solid var(--color-gold-400);
+    opacity: 0.6;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .nv-hotspot::after {
+      animation: nv-pulse 2.4s ease-out infinite;
+    }
+  }
+  @keyframes nv-pulse {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.7;
+    }
+    70% {
+      transform: scale(1.35);
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+</style>
+
+<script>
+  // Progressive enhancement only — see the SEO contract in the frontmatter.
+  document.documentElement.classList.add("nv-anim");
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const startCount = (el: HTMLElement) => {
+    const raw = el.dataset.countup ?? "";
+    const target = parseFloat(raw);
+    if (!Number.isFinite(target) || reduced) return;
+    const decimals = (raw.split(".")[1] || "").length;
+    const t0 = performance.now();
+    const dur = 1300;
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - t0) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = (target * eased).toFixed(decimals);
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        e.target.classList.add("is-in");
+        e.target.querySelectorAll<HTMLElement>("[data-countup]").forEach(startCount);
+        io.unobserve(e.target);
+      }
+    },
+    { threshold: 0.25 },
+  );
+  document.querySelectorAll(".nv-anim-item").forEach((el) => io.observe(el));
+
+  for (const b of document.querySelectorAll<HTMLElement>("[data-hotspot]")) {
+    const card = document.getElementById(b.dataset.hotspot ?? "");
+    if (!card) continue;
+    const on = () => card.classList.add("is-hot");
+    const off = () => card.classList.remove("is-hot");
+    b.addEventListener("mouseenter", on);
+    b.addEventListener("mouseleave", off);
+    b.addEventListener("focus", on);
+    b.addEventListener("blur", off);
+    b.addEventListener("click", () => {
+      card.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+      on();
+      setTimeout(off, 1800);
+    });
+  }
+</script>
