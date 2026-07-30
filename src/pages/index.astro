@@ -9,9 +9,9 @@ import BeforeAfter from "@components/BeforeAfter.astro";
 import ImagePlaceholder from "@components/ImagePlaceholder.astro";
 import Faq from "@components/Faq.astro";
 import TableOfContents from "@components/TableOfContents.astro";
+import VillageShowcase from "@components/VillageShowcase.astro";
 import { BRAND } from "~/lib/brand";
 import { SERVICE_AREAS } from "~/lib/service-areas";
-import { NEIGHBORHOODS } from "~/lib/neighborhoods";
 import { aggregateRatingJsonLd, faqPageJsonLd } from "~/lib/seo";
 import { getSiteReviews } from "~/lib/reviews";
 
@@ -19,31 +19,6 @@ import { getSiteReviews } from "~/lib/reviews";
 const areasLine = Object.values(SERVICE_AREAS)
   .map((a) => a.name)
   .join(" · ");
-
-const villages = Object.values(NEIGHBORHOODS).filter((n) => n.citySlug === "the-woodlands");
-
-// Short homepage blurb per village — depth lives on the village pages.
-// Facts sourced in docs/research-facts.md (Sheet 2).
-const villageBlurbs: Record<string, string> = {
-  "grogans-mill":
-    "The original 1974 village — the community's oldest roofs, deepest tree cover, and the most second- and third-generation replacement decisions.",
-  "panther-creek":
-    "The mid-1970s lakeside village on Lake Woodlands' western shore, where prior re-roof quality decides what happens next.",
-  "cochrans-crossing":
-    "Opened 1983 around the Palmer course and The Woodlands High School — its '80s-90s roofs sit squarely in the replacement window.",
-  "indian-springs":
-    "The 1984 village against the George Mitchell Nature Preserve: heavy shade, heavy debris, and roofs that age faster than the calendar.",
-  "alden-bridge":
-    "The big 1994 village in the northwest corner — thousands of '90s builder roofs aging out together, the busiest replacement territory in town.",
-  "college-park":
-    "The only village east of I-45 (designated 1995), anchored by Harper's Landing and Windsor Hills — '90s-2000s roofs coming due.",
-  "sterling-ridge":
-    "The 1999 western village around the Gary Player course — premium homes at the front edge of their first replacement wave.",
-  "carlton-woods":
-    "The gated golf enclave (2000): estate roofs in tile, slate, metal, and designer shingle behind 24-hour gates.",
-  "creekside-park":
-    "The newest village (2007) and the only one in Harris County — original builder roofs now old enough for pipe boots and flashing to fail.",
-};
 
 const faqs = [
   {
@@ -341,18 +316,11 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
           and re-roof questions differ street to street. Each village page below covers its
           development era, its housing stock, and how covenant approval works there.
         </p>
-        <ul>
-          {
-            villages.map((v) => (
-              <li>
-                <strong>
-                  <a href={`/${v.citySlug}/${v.slug}`}>{v.name}</a>
-                </strong>{" "}
-                — {villageBlurbs[v.slug]}
-              </li>
-            ))
-          }
-        </ul>
+      </article>
+
+      <VillageShowcase />
+
+      <article class="prose-northvale mt-10 max-w-3xl">
         <p>
           Beyond The Woodlands we serve {areasLine.replace("The Woodlands · ", "")} — see the
           <a href="/sitemap"> full service area</a>.
