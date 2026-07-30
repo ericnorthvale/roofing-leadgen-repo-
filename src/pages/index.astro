@@ -11,6 +11,7 @@ import TableOfContents from "@components/TableOfContents.astro";
 import VillageShowcase from "@components/VillageShowcase.astro";
 import ClimateThreats from "@components/ClimateThreats.astro";
 import PermitsCodes from "@components/PermitsCodes.astro";
+import HoaApprovals from "@components/HoaApprovals.astro";
 import MaterialsShowcase from "@components/MaterialsShowcase.astro";
 import { BRAND } from "~/lib/brand";
 import { SERVICE_AREAS } from "~/lib/service-areas";
@@ -227,47 +228,9 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
           Beyond The Woodlands we serve {areasLine.replace("The Woodlands · ", "")} — see the
           <a href="/sitemap"> full service area</a>.
         </p>
-
-        <h2 id="hoa-roofing">HOA roofing: Township approvals, handled</h2>
-        <p>
-          Nothing separates roofing in The Woodlands from roofing anywhere else like the covenant
-          layer. The Township's 2024 Residential Development Standards require prior written
-          approval from your village's Residential Design Review Committee — nine elected village
-          committees, staffed by the Township's Covenant Administration Department — for <em>all</em
-          > roof replacement, and even roofing repairs require a permit at the time of repair.
-        </p>
-        <p>What the Standards actually say about your roof:</p>
-        <ul>
-          <li>
-            Colors must be <strong>muted, without color pattern</strong>, harmonizing with the
-            natural landscape and community.
-          </li>
-          <li>
-            Acceptable materials: tile, slate, composition shingles, stone-coated or standing-seam
-            metal, and cement-fiberboard — with all metal free of glossy finish.
-          </li>
-          <li>
-            Exposed roof accessories — vents, flashing, attic ventilators, chimney caps — must match
-            or be compatible with the roof color; vents and stacks go on rear slopes where possible.
-          </li>
-          <li>
-            Committees have up to <strong>45 days</strong> to act on a complete application; no property
-            survey is required for a re-roof; gutters, downspouts, and color-compatible roof vents are
-            pre-approved without any application.
-          </li>
-          <li>
-            Decisions can be appealed in writing within 10 days to the Development Standards
-            Committee — the only body with variance power.
-          </li>
-        </ul>
-        <p>
-          We treat the approval as part of the roofing job: compliant material samples at your
-          driveway, the application filed through the Township's Civic Access Portal, and material
-          ordered only after approval. Deed-restriction enforcement is real here — doing it right
-          the first time is cheaper than doing it twice. (One quirk we track: homes in Grogan's
-          Forest Sections 5, 6 &amp; 7 submit roof applications to the City of Shenandoah instead.)
-        </p>
       </article>
+
+      <HoaApprovals />
 
       <PermitsCodes />
     </div>
