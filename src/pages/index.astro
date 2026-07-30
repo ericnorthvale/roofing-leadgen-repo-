@@ -104,15 +104,17 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
   }}
 >
   <Hero
+    fullBleed={true}
     eyebrow={areasLine}
     headline="Same-day roof inspections in The Woodlands — estimate in writing before we leave."
     subhead={`Roof replacement, roof repair, and storm damage across The Woodlands, Spring, and North Houston. A named project manager on every job, and the Township's roofing Standards handled for you.`}
     primaryCta={{ href: "/contact", label: "Book my inspection", ctaId: "home-book" }}
     secondaryCta={{ href: "/storm-response", label: "Storm today?", ctaId: "home-storm" }}
     image={{
-      slot: "HERO: crew on a finished roof, golden hour",
-      alt: "Northvale Roofing crew on a completed roof in The Woodlands at golden hour",
-      demoKey: "hero",
+      slot: "HERO: completed roof replacement, aerial",
+      alt: "Aerial view of a completed architectural-shingle roof replacement on a white stone home",
+      src: "/hero/roof-replacement-woodlands.webp",
+      mobileSrc: "/hero/roof-replacement-woodlands-mobile.webp",
     }}
   />
 
