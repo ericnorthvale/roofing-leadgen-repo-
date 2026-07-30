@@ -19,24 +19,23 @@ interface Props {
 const { eyebrow, headline, subhead, primaryCta, secondaryCta, image } = Astro.props;
 ---
 
-<section class="relative overflow-hidden bg-[color:var(--color-navy-50)]">
+<section
+  class="relative overflow-hidden border-b border-[color:var(--color-navy-100)] bg-[color:var(--color-surface-ivory)]"
+>
   <div
     class:list={[
-      "mx-auto max-w-6xl px-4 py-16 md:py-24",
-      image && "md:grid md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-12",
+      "mx-auto max-w-6xl px-4 py-20 md:py-28",
+      image && "md:grid md:grid-cols-[1.05fr_0.95fr] md:items-center md:gap-14",
     ]}
   >
     <div>
-      {
-        eyebrow && (
-          <p class="mb-3 text-sm font-semibold tracking-widest text-[color:var(--color-gold-600)] uppercase">
-            {eyebrow}
-          </p>
-        )
-      }
-      <h1 class="max-w-3xl text-4xl leading-[1.05] font-semibold md:text-6xl">{headline}</h1>
-      <p class="mt-5 max-w-2xl text-lg text-[color:var(--color-ink-800)]">{subhead}</p>
-      <div class="mt-8 flex flex-wrap gap-3">
+      {eyebrow && <p class="eyebrow mb-5">{eyebrow}</p>}
+      <h1 class="max-w-3xl text-[2.5rem] leading-[1.06] md:text-6xl">{headline}</h1>
+      <div class="rule-gold mt-7" aria-hidden="true"></div>
+      <p class="mt-7 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
+        {subhead}
+      </p>
+      <div class="mt-9 flex flex-wrap gap-3">
         <CTAButton
           href={primaryCta.href}
           label={primaryCta.label}
@@ -57,7 +56,11 @@ const { eyebrow, headline, subhead, primaryCta, secondaryCta, image } = Astro.pr
     </div>
     {
       image && (
-        <div class="mt-10 md:mt-0">
+        <div class="relative mt-12 md:mt-0">
+          <div
+            class="absolute -right-3 -bottom-3 hidden h-full w-full border border-[color:var(--color-gold-400)] md:block"
+            aria-hidden="true"
+          />
           <ImagePlaceholder
             slot={image.slot}
             alt={image.alt}
@@ -66,7 +69,7 @@ const { eyebrow, headline, subhead, primaryCta, secondaryCta, image } = Astro.pr
             ratio={image.ratio ?? "4/3"}
             priority={true}
             tone="mixed"
-            class="shadow-[var(--shadow-card)]"
+            class="relative shadow-[var(--shadow-card)]"
           />
         </div>
       )

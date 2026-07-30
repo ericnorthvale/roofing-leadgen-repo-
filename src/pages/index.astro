@@ -9,9 +9,9 @@ import BeforeAfter from "@components/BeforeAfter.astro";
 import ImagePlaceholder from "@components/ImagePlaceholder.astro";
 import Faq from "@components/Faq.astro";
 import TableOfContents from "@components/TableOfContents.astro";
+import VillageShowcase from "@components/VillageShowcase.astro";
 import { BRAND } from "~/lib/brand";
 import { SERVICE_AREAS } from "~/lib/service-areas";
-import { NEIGHBORHOODS } from "~/lib/neighborhoods";
 import { aggregateRatingJsonLd, faqPageJsonLd } from "~/lib/seo";
 import { getSiteReviews } from "~/lib/reviews";
 
@@ -19,31 +19,6 @@ import { getSiteReviews } from "~/lib/reviews";
 const areasLine = Object.values(SERVICE_AREAS)
   .map((a) => a.name)
   .join(" · ");
-
-const villages = Object.values(NEIGHBORHOODS).filter((n) => n.citySlug === "the-woodlands");
-
-// Short homepage blurb per village — depth lives on the village pages.
-// Facts sourced in docs/research-facts.md (Sheet 2).
-const villageBlurbs: Record<string, string> = {
-  "grogans-mill":
-    "The original 1974 village — the community's oldest roofs, deepest tree cover, and the most second- and third-generation replacement decisions.",
-  "panther-creek":
-    "The mid-1970s lakeside village on Lake Woodlands' western shore, where prior re-roof quality decides what happens next.",
-  "cochrans-crossing":
-    "Opened 1983 around the Palmer course and The Woodlands High School — its '80s-90s roofs sit squarely in the replacement window.",
-  "indian-springs":
-    "The 1984 village against the George Mitchell Nature Preserve: heavy shade, heavy debris, and roofs that age faster than the calendar.",
-  "alden-bridge":
-    "The big 1994 village in the northwest corner — thousands of '90s builder roofs aging out together, the busiest replacement territory in town.",
-  "college-park":
-    "The only village east of I-45 (designated 1995), anchored by Harper's Landing and Windsor Hills — '90s-2000s roofs coming due.",
-  "sterling-ridge":
-    "The 1999 western village around the Gary Player course — premium homes at the front edge of their first replacement wave.",
-  "carlton-woods":
-    "The gated golf enclave (2000): estate roofs in tile, slate, metal, and designer shingle behind 24-hour gates.",
-  "creekside-park":
-    "The newest village (2007) and the only one in Harris County — original builder roofs now old enough for pipe boots and flashing to fail.",
-};
 
 const faqs = [
   {
@@ -142,9 +117,10 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
 
   <TrustBar />
 
-  <section class="mx-auto max-w-6xl px-4 py-16">
-    <h2 class="text-3xl">What we do</h2>
-    <div class="mt-8 grid gap-6 md:grid-cols-3">
+  <section class="mx-auto max-w-6xl px-4 py-20 md:py-24">
+    <h2 class="text-3xl md:text-4xl">What we do</h2>
+    <div class="rule-gold mt-5" aria-hidden="true"></div>
+    <div class="mt-10 grid gap-6 md:grid-cols-3">
       <ServiceCard
         href="/the-woodlands/roof-replacement"
         title="Roof replacement"
@@ -223,219 +199,217 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
     />
   </section>
 
-  <section class="mx-auto max-w-6xl px-4 py-12">
-    <article class="prose-northvale max-w-3xl">
-      <h2 id="why-roofs-fail">Why roofs fail in The Woodlands</h2>
-      <p>
-        Roofs don't fail randomly here — they fail on a schedule written by this climate. Knowing
-        the failure modes is how you catch them at repair price instead of replacement price.
-      </p>
-      <p>
-        <strong>Heat and UV.</strong> NOAA's climate normals put July and August highs around 94–95°F
-        at the nearest first-order station, and the Asphalt Roofing Manufacturers Association notes a
-        poorly-ventilated attic can reach 140°F on a 90°F day. That heat dries the asphalt binder in shingles;
-        once protective granules displace, IBHS research shows the exposed asphalt embrittles and ages
-        faster. Heat is the quiet failure mode — no storm required.
-      </p>
-      <p>
-        <strong>Hail.</strong> NOAA's Storm Events Database records damaging hail (¾-inch or larger) somewhere
-        in Montgomery County nearly every year — one-inch hail fell near Shenandoah as recently as June
-        2025. IBHS impact research adds a subtler point: repeated <em>small</em> hail plus normal weathering
-        can make shingles perform like decade-older material, so a roof can be storm-weakened without
-        a single dramatic event.
-      </p>
-      <p>
-        <strong>Wind.</strong> The National Weather Service counts 50–60 thunderstorm days a year in southeast
-        Texas, a third of them severe, with downbursts driving 60 to 100+ mph winds — and tropical systems
-        reach us too: Hurricane Beryl (2024) produced a measured 69-mph gust at Conroe, well inland. What
-        actually fails in wind, per IBHS, is the sealant bond between shingles, and that bond weakens
-        with age.
-      </p>
-      <p>
-        <strong>Humidity and algae.</strong> The black streaks on so many local roofs are
-        <em>Gloeocapsa magma</em>, the algae ARMA identifies as most widespread in the Gulf States.
-        The stains themselves don't destroy shingles — but the shade and moisture patterns that feed
-        them also slow drying, and pressure-washing them off does real damage.
-      </p>
-      <p>
-        <strong>Pine needles and tree debris.</strong> The forest is the whole point of The Woodlands
-        — and a working load on its roofs. Needles and leaves pack into valleys and gutters, hold moisture
-        against shingles, and back water up under the roof edge. The Township's own covenants require
-        owners to keep roofs clear of leaves, needles, and branches; extension-service guidance adds trimming
-        limbs that overhang the roof.
-      </p>
-      <p>
-        <strong>Heavy rain and flashing failures.</strong> Annual rainfall runs near 50 inches here —
-        and in 2017, Harvey dropped 25.66 inches on The Woodlands in days. Water finds the weak detail,
-        and the weak detail is usually flashing: the code's entire purpose for it is keeping moisture
-        out of roof and wall joints (IRC R903.2). Aged step flashing, cracked pipe boots (the rubber commonly
-        fails within 10–15 years), and nail pops are the leaks we chase most.
-      </p>
+  <section
+    class="border-y border-[color:var(--color-navy-100)] bg-[color:var(--color-surface-ivory)]"
+  >
+    <div class="mx-auto max-w-6xl px-4 py-16 md:py-20">
+      <article class="prose-northvale max-w-3xl">
+        <h2 id="why-roofs-fail">Why roofs fail in The Woodlands</h2>
+        <p>
+          Roofs don't fail randomly here — they fail on a schedule written by this climate. Knowing
+          the failure modes is how you catch them at repair price instead of replacement price.
+        </p>
+        <p>
+          <strong>Heat and UV.</strong> NOAA's climate normals put July and August highs around 94–95°F
+          at the nearest first-order station, and the Asphalt Roofing Manufacturers Association notes
+          a poorly-ventilated attic can reach 140°F on a 90°F day. That heat dries the asphalt binder
+          in shingles; once protective granules displace, IBHS research shows the exposed asphalt embrittles
+          and ages faster. Heat is the quiet failure mode — no storm required.
+        </p>
+        <p>
+          <strong>Hail.</strong> NOAA's Storm Events Database records damaging hail (¾-inch or larger)
+          somewhere in Montgomery County nearly every year — one-inch hail fell near Shenandoah as recently
+          as June 2025. IBHS impact research adds a subtler point: repeated <em>small</em> hail plus normal
+          weathering can make shingles perform like decade-older material, so a roof can be storm-weakened
+          without a single dramatic event.
+        </p>
+        <p>
+          <strong>Wind.</strong> The National Weather Service counts 50–60 thunderstorm days a year in
+          southeast Texas, a third of them severe, with downbursts driving 60 to 100+ mph winds — and
+          tropical systems reach us too: Hurricane Beryl (2024) produced a measured 69-mph gust at Conroe,
+          well inland. What actually fails in wind, per IBHS, is the sealant bond between shingles, and
+          that bond weakens with age.
+        </p>
+        <p>
+          <strong>Humidity and algae.</strong> The black streaks on so many local roofs are
+          <em>Gloeocapsa magma</em>, the algae ARMA identifies as most widespread in the Gulf
+          States. The stains themselves don't destroy shingles — but the shade and moisture patterns
+          that feed them also slow drying, and pressure-washing them off does real damage.
+        </p>
+        <p>
+          <strong>Pine needles and tree debris.</strong> The forest is the whole point of The Woodlands
+          — and a working load on its roofs. Needles and leaves pack into valleys and gutters, hold moisture
+          against shingles, and back water up under the roof edge. The Township's own covenants require
+          owners to keep roofs clear of leaves, needles, and branches; extension-service guidance adds
+          trimming limbs that overhang the roof.
+        </p>
+        <p>
+          <strong>Heavy rain and flashing failures.</strong> Annual rainfall runs near 50 inches here
+          — and in 2017, Harvey dropped 25.66 inches on The Woodlands in days. Water finds the weak detail,
+          and the weak detail is usually flashing: the code's entire purpose for it is keeping moisture
+          out of roof and wall joints (IRC R903.2). Aged step flashing, cracked pipe boots (the rubber
+          commonly fails within 10–15 years), and nail pops are the leaks we chase most.
+        </p>
 
-      <h2 id="materials">Roofing materials we install</h2>
-      <p>
-        Every material below complies with the Township's Standards — muted colors, no glossy metal
-        — and every spec here comes from the manufacturer's own documentation.
-      </p>
-      <h3>IKO Dynasty — our standard architectural shingle</h3>
-      <p>
-        We standardize on IKO. Dynasty is a laminated architectural shingle built around the
-        <strong>ArmourZone</strong> — a 1¼-inch reinforced, woven nailing band that gives the fasteners
-        a wider, tougher target and resists the wind uplift that peels ordinary shingles. It carries a
-        <strong>130-mph limited high-wind warranty</strong>, a <strong>Limited Lifetime</strong> product
-        warranty, IKO's <strong>15-year non-prorated Iron Clad Protection</strong>, a <strong
-          >10-year algae-resistance warranty</strong
-        > for Gulf-Coast streaking, and a Class A fire rating — in more colors than any other IKO line.
-        Every spec here is IKO's own published data.
-      </p>
-      <h3>IKO Nordic — the Class 4 impact-resistant upgrade</h3>
-      <p>
-        Nordic is IKO's highest-performing line: the mat is <strong
-          >polymer-modified (SBS) asphalt</strong
-        >
-        that flexes like a shock absorber, earning the highest hail rating, <strong
-          >UL 2218 Class 4</strong
-        >. It shares Dynasty's ArmourZone, 130-mph wind warranty, Limited Lifetime coverage, 15-year
-        Iron Clad Protection, and 10-year algae warranty. For hail-exposed Montgomery County roofs —
-        and homeowners chasing an insurance discount — it's the upgrade we quote right beside
-        Dynasty.
-      </p>
-      <h3>Class 3 vs. Class 4 — and what it means for insurance</h3>
-      <p>
-        UL 2218 Class 4 is the top impact rating (surviving a 2-inch steel ball in drop testing);
-        Class 3 withstands a 1.75-inch ball. Important honesty from IKO: the rating is a lab
-        classification, <em>not</em>
-        a guarantee against hail, and hail damage isn't covered by the shingle warranty. Its real value
-        is that it can help you qualify for an insurance premium discount where your carrier offers one
-        — TDI notes Class 4 coverings receive the highest available credit, but each company sets its
-        own amount, so ask yours.
-      </p>
-      <h3>Standing-seam & stone-coated metal</h3>
-      <p>
-        The Township Standards accept metal in non-glossy finishes, and the Metal Roofing Alliance
-        rates metal roofs at 30–50+ years of service life — two to three times asphalt — with
-        140-mph wind ratings. Standing seam's concealed fasteners eliminate the gasketed-screw
-        maintenance cycle of exposed-fastener panels. Expect roughly two to three times the cost of
-        asphalt (MRA), quoted in writing next to your shingle options.
-      </p>
-      <h3>Architectural vs. 3-tab</h3>
-      <p>
-        We install architectural (dimensional) shingles as standard. InterNACHI's life-expectancy
-        chart gives 3-tab about 20 years vs. about 30 for architectural — before the hot-climate
-        penalty — and a 130-mph wind warranty is coverage a 3-tab roof simply can't match.
-      </p>
-      <p class="mt-4">
-        Weighing Dynasty against the Class 4 Nordic upgrade? Our <a
-          href="/services/roof-replacement">roof replacement guide</a
-        > walks through the full system, warranty, and what drives the quote.
-      </p>
+        <h2 id="materials">Roofing materials we install</h2>
+        <p>
+          Every material below complies with the Township's Standards — muted colors, no glossy
+          metal — and every spec here comes from the manufacturer's own documentation.
+        </p>
+        <h3>IKO Dynasty — our standard architectural shingle</h3>
+        <p>
+          We standardize on IKO. Dynasty is a laminated architectural shingle built around the
+          <strong>ArmourZone</strong> — a 1¼-inch reinforced, woven nailing band that gives the fasteners
+          a wider, tougher target and resists the wind uplift that peels ordinary shingles. It carries
+          a
+          <strong>130-mph limited high-wind warranty</strong>, a <strong>Limited Lifetime</strong> product
+          warranty, IKO's <strong>15-year non-prorated Iron Clad Protection</strong>, a <strong
+            >10-year algae-resistance warranty</strong
+          > for Gulf-Coast streaking, and a Class A fire rating — in more colors than any other IKO line.
+          Every spec here is IKO's own published data.
+        </p>
+        <h3>IKO Nordic — the Class 4 impact-resistant upgrade</h3>
+        <p>
+          Nordic is IKO's highest-performing line: the mat is <strong
+            >polymer-modified (SBS) asphalt</strong
+          >
+          that flexes like a shock absorber, earning the highest hail rating, <strong
+            >UL 2218 Class 4</strong
+          >. It shares Dynasty's ArmourZone, 130-mph wind warranty, Limited Lifetime coverage,
+          15-year Iron Clad Protection, and 10-year algae warranty. For hail-exposed Montgomery
+          County roofs — and homeowners chasing an insurance discount — it's the upgrade we quote
+          right beside Dynasty.
+        </p>
+        <h3>Class 3 vs. Class 4 — and what it means for insurance</h3>
+        <p>
+          UL 2218 Class 4 is the top impact rating (surviving a 2-inch steel ball in drop testing);
+          Class 3 withstands a 1.75-inch ball. Important honesty from IKO: the rating is a lab
+          classification, <em>not</em>
+          a guarantee against hail, and hail damage isn't covered by the shingle warranty. Its real value
+          is that it can help you qualify for an insurance premium discount where your carrier offers
+          one — TDI notes Class 4 coverings receive the highest available credit, but each company sets
+          its own amount, so ask yours.
+        </p>
+        <h3>Standing-seam & stone-coated metal</h3>
+        <p>
+          The Township Standards accept metal in non-glossy finishes, and the Metal Roofing Alliance
+          rates metal roofs at 30–50+ years of service life — two to three times asphalt — with
+          140-mph wind ratings. Standing seam's concealed fasteners eliminate the gasketed-screw
+          maintenance cycle of exposed-fastener panels. Expect roughly two to three times the cost
+          of asphalt (MRA), quoted in writing next to your shingle options.
+        </p>
+        <h3>Architectural vs. 3-tab</h3>
+        <p>
+          We install architectural (dimensional) shingles as standard. InterNACHI's life-expectancy
+          chart gives 3-tab about 20 years vs. about 30 for architectural — before the hot-climate
+          penalty — and a 130-mph wind warranty is coverage a 3-tab roof simply can't match.
+        </p>
+        <p class="mt-4">
+          Weighing Dynasty against the Class 4 Nordic upgrade? Our <a
+            href="/services/roof-replacement">roof replacement guide</a
+          > walks through the full system, warranty, and what drives the quote.
+        </p>
 
-      <h2 id="neighborhoods">Neighborhoods we serve in The Woodlands</h2>
-      <p>
-        The Woodlands built out village by village over five decades, so roof age, housing stock,
-        and re-roof questions differ street to street. Each village page below covers its
-        development era, its housing stock, and how covenant approval works there.
-      </p>
-      <ul>
-        {
-          villages.map((v) => (
-            <li>
-              <strong>
-                <a href={`/${v.citySlug}/${v.slug}`}>{v.name}</a>
-              </strong>{" "}
-              — {villageBlurbs[v.slug]}
-            </li>
-          ))
-        }
-      </ul>
-      <p>
-        Beyond The Woodlands we serve {areasLine.replace("The Woodlands · ", "")} — see the
-        <a href="/sitemap"> full service area</a>.
-      </p>
+        <h2 id="neighborhoods">Neighborhoods we serve in The Woodlands</h2>
+        <p>
+          The Woodlands built out village by village over five decades, so roof age, housing stock,
+          and re-roof questions differ street to street. Each village page below covers its
+          development era, its housing stock, and how covenant approval works there.
+        </p>
+      </article>
 
-      <h2 id="hoa-roofing">HOA roofing: Township approvals, handled</h2>
-      <p>
-        Nothing separates roofing in The Woodlands from roofing anywhere else like the covenant
-        layer. The Township's 2024 Residential Development Standards require prior written approval
-        from your village's Residential Design Review Committee — nine elected village committees,
-        staffed by the Township's Covenant Administration Department — for <em>all</em> roof replacement,
-        and even roofing repairs require a permit at the time of repair.
-      </p>
-      <p>What the Standards actually say about your roof:</p>
-      <ul>
-        <li>
-          Colors must be <strong>muted, without color pattern</strong>, harmonizing with the natural
-          landscape and community.
-        </li>
-        <li>
-          Acceptable materials: tile, slate, composition shingles, stone-coated or standing-seam
-          metal, and cement-fiberboard — with all metal free of glossy finish.
-        </li>
-        <li>
-          Exposed roof accessories — vents, flashing, attic ventilators, chimney caps — must match
-          or be compatible with the roof color; vents and stacks go on rear slopes where possible.
-        </li>
-        <li>
-          Committees have up to <strong>45 days</strong> to act on a complete application; no property
-          survey is required for a re-roof; gutters, downspouts, and color-compatible roof vents are pre-approved
-          without any application.
-        </li>
-        <li>
-          Decisions can be appealed in writing within 10 days to the Development Standards Committee
-          — the only body with variance power.
-        </li>
-      </ul>
-      <p>
-        We treat the approval as part of the roofing job: compliant material samples at your
-        driveway, the application filed through the Township's Civic Access Portal, and material
-        ordered only after approval. Deed-restriction enforcement is real here — doing it right the
-        first time is cheaper than doing it twice. (One quirk we track: homes in Grogan's Forest
-        Sections 5, 6 &amp; 7 submit roof applications to the City of Shenandoah instead.)
-      </p>
+      <VillageShowcase />
 
-      <h2 id="permits-codes">Permits & codes in Montgomery County</h2>
-      <p>
-        The permit picture surprises most homeowners: <strong
-          >unincorporated Montgomery County — which includes most of The Woodlands — does not
-          require a building permit for a residential re-roof.</strong
-        > That's the county's own permitting FAQ, not roofer folklore. The Harris County side (Creekside
-        Park) runs on a floodplain-oriented development-permit system that doesn't list re-roofs either;
-        incorporated neighbors differ (Shenandoah runs a full roofing permit program with wind-load and
-        color rules, and the City of Houston requires re-roof permits).
-      </p>
-      <p>
-        No permit doesn't mean no standards. The residential code still defines what a correct roof
-        is, and we build to it:
-      </p>
-      <ul>
-        <li>
-          <strong>Tear-off, not roof-over</strong> — IRC R908.3 requires removing existing coverings down
-          to the deck (and prohibits covering water-soaked decks or stacking a third layer).
-        </li>
-        <li>
-          <strong>Drip edge at eaves and rakes</strong> — R905.2.8.5, with proper overlaps and fastening.
-        </li>
-        <li>
-          <strong>Flashing that keeps water out of every joint</strong> — R903.2, the section your leak
-          was probably violating.
-        </li>
-        <li>
-          <strong>Balanced attic ventilation</strong> — R806's 1-in-150 baseline (1-in-300 with proper
-          high/low balance), which in this climate is the difference between a roof that lasts and an
-          attic oven.
-        </li>
-        <li>
-          <strong>Wind-rated products and fastening</strong> — the ASTM D3161/D7158 classes the code maps
-          to local design wind speeds; inland Montgomery County sits outside TDI's coastal windstorm (TWIA)
-          zone, but we spec and nail for the storms this county actually gets.
-        </li>
-      </ul>
-      <p>
-        The details — underlayment, ice-and-water membrane at valleys and penetrations, decking
-        replacement when rot appears — are covered in
-        <a href="/the-woodlands/roof-replacement"> our Woodlands roof replacement guide</a>.
-      </p>
-    </article>
+      <article class="prose-northvale mt-10 max-w-3xl">
+        <p>
+          Beyond The Woodlands we serve {areasLine.replace("The Woodlands · ", "")} — see the
+          <a href="/sitemap"> full service area</a>.
+        </p>
+
+        <h2 id="hoa-roofing">HOA roofing: Township approvals, handled</h2>
+        <p>
+          Nothing separates roofing in The Woodlands from roofing anywhere else like the covenant
+          layer. The Township's 2024 Residential Development Standards require prior written
+          approval from your village's Residential Design Review Committee — nine elected village
+          committees, staffed by the Township's Covenant Administration Department — for <em>all</em
+          > roof replacement, and even roofing repairs require a permit at the time of repair.
+        </p>
+        <p>What the Standards actually say about your roof:</p>
+        <ul>
+          <li>
+            Colors must be <strong>muted, without color pattern</strong>, harmonizing with the
+            natural landscape and community.
+          </li>
+          <li>
+            Acceptable materials: tile, slate, composition shingles, stone-coated or standing-seam
+            metal, and cement-fiberboard — with all metal free of glossy finish.
+          </li>
+          <li>
+            Exposed roof accessories — vents, flashing, attic ventilators, chimney caps — must match
+            or be compatible with the roof color; vents and stacks go on rear slopes where possible.
+          </li>
+          <li>
+            Committees have up to <strong>45 days</strong> to act on a complete application; no property
+            survey is required for a re-roof; gutters, downspouts, and color-compatible roof vents are
+            pre-approved without any application.
+          </li>
+          <li>
+            Decisions can be appealed in writing within 10 days to the Development Standards
+            Committee — the only body with variance power.
+          </li>
+        </ul>
+        <p>
+          We treat the approval as part of the roofing job: compliant material samples at your
+          driveway, the application filed through the Township's Civic Access Portal, and material
+          ordered only after approval. Deed-restriction enforcement is real here — doing it right
+          the first time is cheaper than doing it twice. (One quirk we track: homes in Grogan's
+          Forest Sections 5, 6 &amp; 7 submit roof applications to the City of Shenandoah instead.)
+        </p>
+
+        <h2 id="permits-codes">Permits & codes in Montgomery County</h2>
+        <p>
+          The permit picture surprises most homeowners: <strong
+            >unincorporated Montgomery County — which includes most of The Woodlands — does not
+            require a building permit for a residential re-roof.</strong
+          > That's the county's own permitting FAQ, not roofer folklore. The Harris County side (Creekside
+          Park) runs on a floodplain-oriented development-permit system that doesn't list re-roofs either;
+          incorporated neighbors differ (Shenandoah runs a full roofing permit program with wind-load
+          and color rules, and the City of Houston requires re-roof permits).
+        </p>
+        <p>
+          No permit doesn't mean no standards. The residential code still defines what a correct
+          roof is, and we build to it:
+        </p>
+        <ul>
+          <li>
+            <strong>Tear-off, not roof-over</strong> — IRC R908.3 requires removing existing coverings
+            down to the deck (and prohibits covering water-soaked decks or stacking a third layer).
+          </li>
+          <li>
+            <strong>Drip edge at eaves and rakes</strong> — R905.2.8.5, with proper overlaps and fastening.
+          </li>
+          <li>
+            <strong>Flashing that keeps water out of every joint</strong> — R903.2, the section your leak
+            was probably violating.
+          </li>
+          <li>
+            <strong>Balanced attic ventilation</strong> — R806's 1-in-150 baseline (1-in-300 with proper
+            high/low balance), which in this climate is the difference between a roof that lasts and an
+            attic oven.
+          </li>
+          <li>
+            <strong>Wind-rated products and fastening</strong> — the ASTM D3161/D7158 classes the code
+            maps to local design wind speeds; inland Montgomery County sits outside TDI's coastal windstorm
+            (TWIA) zone, but we spec and nail for the storms this county actually gets.
+          </li>
+        </ul>
+        <p>
+          The details — underlayment, ice-and-water membrane at valleys and penetrations, decking
+          replacement when rot appears — are covered in
+          <a href="/the-woodlands/roof-replacement"> our Woodlands roof replacement guide</a>.
+        </p>
+      </article>
+    </div>
   </section>
 
   <BeforeAfter
@@ -500,19 +474,17 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
     <Faq items={faqs} heading="The Woodlands roofing questions, answered" />
   </div>
 
-  <section class="bg-[color:var(--color-navy-900)] text-white">
-    <div class="mx-auto max-w-6xl px-4 py-16 text-center">
-      <h2 class="text-3xl text-white">Ready when you are.</h2>
-      <p class="mx-auto mt-3 max-w-xl">{BRAND.promise}</p>
-      <div class="mt-6 flex justify-center gap-3">
+  <section class="bg-[color:var(--color-navy-950)] text-white">
+    <div class="mx-auto max-w-6xl px-4 py-20 text-center md:py-24">
+      <h2 class="text-4xl text-white md:text-5xl">Ready when you are.</h2>
+      <div class="rule-gold mx-auto mt-6" aria-hidden="true"></div>
+      <p class="mx-auto mt-6 max-w-xl text-[color:var(--color-navy-100)]">{BRAND.promise}</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
         <a class="btn btn-primary" href="/contact" data-cta-id="footer-band-book"
           >Book my inspection</a
         >
-        <a
-          class="btn btn-ghost"
-          style="border-color:rgba(255,255,255,0.3);color:white;"
-          href="/storm-response"
-          data-cta-id="footer-band-storm">Storm today?</a
+        <a class="btn btn-ghost-dark" href="/storm-response" data-cta-id="footer-band-storm"
+          >Storm today?</a
         >
       </div>
     </div>

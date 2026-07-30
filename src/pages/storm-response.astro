@@ -13,12 +13,13 @@ import { telHref, smsHref, formatPhoneDisplay } from "~/lib/phone";
     pathname: "/storm-response",
   }}
 >
-  <section class="bg-[color:var(--color-navy-900)] text-white">
+  <section class="bg-[color:var(--color-navy-950)] text-white">
     <div class="mx-auto max-w-4xl px-4 py-16">
       <p class="text-sm font-semibold tracking-widest text-[color:var(--color-gold-300)] uppercase">
         Storm response
       </p>
       <h1 class="mt-3 text-4xl text-white md:text-6xl">We move when the storm moves.</h1>
+      <div class="rule-gold mt-6" aria-hidden="true"></div>
       <p class="mt-4 text-lg">
         Same-day inspection. Forty-photo documentation packet for your insurance claim. No pressure,
         no door-knocking, no deductible games.
@@ -28,8 +29,7 @@ import { telHref, smsHref, formatPhoneDisplay } from "~/lib/phone";
           >Call {formatPhoneDisplay(BRAND.phoneE164)}</a
         >
         <a
-          class="btn btn-ghost"
-          style="border-color:rgba(255,255,255,0.3);color:white;"
+          class="btn btn-ghost-dark"
           href={smsHref(BRAND.phoneE164, "Storm hit — need inspection.")}
           data-cta-id="storm-sms">Text us</a
         >

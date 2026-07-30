@@ -16,11 +16,11 @@ const navLinks = [
 ];
 ---
 
-<header class="relative border-b border-[color:var(--color-navy-100)] bg-white">
+<header class="relative border-b border-white/10 bg-[color:var(--color-navy-950)]">
   <div class="nv-bar mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:gap-6">
     <a href="/" class="flex shrink-0 items-center" aria-label={`${BRAND.name} — home`}>
       <img
-        src="/brand/logo.svg"
+        src="/brand/logo-light.svg"
         alt=""
         class="nv-logo h-10 w-auto sm:h-11"
         loading="eager"
@@ -36,7 +36,10 @@ const navLinks = [
     <nav class="nv-nav hidden items-center whitespace-nowrap lg:flex" aria-label="Main">
       {
         navLinks.map((link) => (
-          <a href={link.href} class="font-medium">
+          <a
+            href={link.href}
+            class="font-medium text-[color:var(--color-navy-100)] no-underline transition-colors hover:text-[color:var(--color-gold-300)]"
+          >
             {link.label}
           </a>
         ))
@@ -52,7 +55,7 @@ const navLinks = [
         <a
           href={telHref(BRAND.phoneE164)}
           data-cta-phone
-          class="nv-phone font-semibold whitespace-nowrap text-[color:var(--color-navy-900)]"
+          class="nv-phone font-semibold whitespace-nowrap text-white no-underline hover:text-[color:var(--color-gold-300)]"
         >
           {phone}
         </a>
@@ -62,7 +65,7 @@ const navLinks = [
       {/* Mobile/tablet menu — native <details> disclosure, no JS, keyboard + SR accessible. */}
       <details class="nv-menu lg:hidden">
         <summary
-          class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] text-[color:var(--color-navy-900)]"
+          class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-[var(--radius-btn)] border border-white/25 text-white"
           aria-label="Open menu"
         >
           <svg
@@ -89,7 +92,7 @@ const navLinks = [
           </svg>
         </summary>
         <nav
-          class="absolute top-full right-0 left-0 z-50 border-b border-[color:var(--color-navy-100)] bg-white shadow-[var(--shadow-card)]"
+          class="absolute top-full right-0 left-0 z-50 border-b border-white/10 bg-[color:var(--color-navy-950)] shadow-[var(--shadow-card)]"
           aria-label="Mobile"
         >
           <ul class="mx-auto flex max-w-6xl flex-col px-4 py-2">
@@ -98,7 +101,7 @@ const navLinks = [
                 <li>
                   <a
                     href={link.href}
-                    class="flex min-h-12 items-center text-base font-medium text-[color:var(--color-navy-900)]"
+                    class="flex min-h-12 items-center border-b border-white/5 text-base font-medium text-[color:var(--color-navy-100)] no-underline hover:text-white"
                   >
                     {link.label}
                   </a>
@@ -109,7 +112,7 @@ const navLinks = [
               <a
                 href={telHref(BRAND.phoneE164)}
                 data-cta-phone
-                class="flex min-h-12 items-center font-semibold text-[color:var(--color-gold-600)]"
+                class="flex min-h-12 items-center font-semibold text-[color:var(--color-gold-300)] no-underline"
               >
                 Call {phone}
               </a>

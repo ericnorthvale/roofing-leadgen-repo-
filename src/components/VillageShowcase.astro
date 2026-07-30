@@ -1,0 +1,146 @@
+---
+/**
+ * Homepage villages showcase — the nine Woodlands villages as an editorial,
+ * chronologically-ordered grid ("five decades of roofs"). Each card links to
+ * its village page exactly as the old list did.
+ *
+ * FACTS: every year/era/detail below traces to the sourced village records
+ * (src/lib/neighborhoods.ts + docs/research-facts.md Sheet 2). Blurbs are
+ * editorial retellings of those verified facts — no invented numbers.
+ *
+ * PHOTOS: each card is an ImagePlaceholder slot awaiting a REAL street photo
+ * from the owner (never stock labeled as a village — Hard Rule #2). Drop the
+ * files into /public/villages/<slug>.webp and set `photo` below; zero layout
+ * shift on swap.
+ */
+import ImagePlaceholder from "@components/ImagePlaceholder.astro";
+import { NEIGHBORHOODS } from "~/lib/neighborhoods";
+
+interface VillageCard {
+  slug: string;
+  /** Era label, verified (research-facts Sheet 2). */
+  est: string;
+  /** Editorial roofing story grounded in the village's sourced record. */
+  story: string;
+  /** Real owner-supplied photo, once it exists. */
+  photo?: string;
+}
+
+// Chronological order — the section reads as the community's roof timeline.
+const CARDS: VillageCard[] = [
+  {
+    slug: "grogans-mill",
+    photo: "/villages/grogans-mill.webp",
+    est: "Est. 1974",
+    story:
+      "Where The Woodlands began. Five decades of canopy hang over the community's oldest rooflines, and most homes are on their second or third roof — a decision that starts at the decking, flashing, and ventilation, not the shingle color.",
+  },
+  {
+    slug: "panther-creek",
+    photo: "/villages/panther-creek.webp",
+    est: "Est. mid-1970s",
+    story:
+      "The lakeside village, from Lake Woodlands' western shore through thirteen parks. Carefully kept originals sit next to full remodels, so the roofing question here is usually how well the last re-roof was done.",
+  },
+  {
+    slug: "cochrans-crossing",
+    photo: "/villages/cochrans-crossing.webp",
+    est: "Est. 1983",
+    story:
+      "Built out around the Palmer course and The Woodlands High School through the '80s and '90s — roofs cluster in the 25–40-year band, where the honest repair-versus-replace conversation matters most.",
+  },
+  {
+    slug: "indian-springs",
+    photo: "/villages/indian-springs.webp",
+    est: "Est. 1984",
+    story:
+      "Pressed against the George Mitchell Nature Preserve, these roofs live under real forest: heavy shade, constant debris in the valleys, algae-friendly humidity. Streets where a roof ages faster than the calendar says.",
+  },
+  {
+    slug: "alden-bridge",
+    photo: "/villages/alden-bridge.webp",
+    est: "Est. 1994",
+    story:
+      "On the order of seven thousand homes, most built mid-'90s through early 2000s — an enormous cohort of builder-grade roofs crossing the 20–30-year threshold together. The busiest replacement territory in town.",
+  },
+  {
+    slug: "college-park",
+    photo: "/villages/college-park.webp",
+    est: "Est. 1995",
+    story:
+      "The only village east of I-45, anchored by Harper's Landing and Windsor Hills — Alden Bridge's younger sibling, its '90s-to-2000s production roofs now aging out on the same schedule.",
+  },
+  {
+    slug: "sterling-ridge",
+    photo: "/villages/sterling-ridge.webp",
+    est: "Est. 1999",
+    story:
+      "The western village around the Gary Player course. Premium homes at the front edge of their first replacement wave — where the step up from builder shingle to designer lines gets decided.",
+  },
+  {
+    slug: "carlton-woods",
+    photo: "/villages/carlton-woods.webp",
+    est: "Est. 2000",
+    story:
+      "The gated golf enclave: estate roofs in tile, slate, metal, and designer shingle behind 24-hour gates — systems whose weak points are underlayment, flashing, and fasteners, exactly what our inspections target.",
+  },
+  {
+    slug: "creekside-park",
+    photo: "/villages/creekside-park.webp",
+    est: "Est. 2007",
+    story:
+      "The newest village and the only one in Harris County. Original builder roofs are now old enough for the small things to fail first — pipe boots and flashing — which a documented inspection catches early.",
+  },
+];
+
+const villages = CARDS.map((c) => ({ ...c, data: NEIGHBORHOODS[c.slug] })).filter((v) => v.data);
+---
+
+<div class="mt-10">
+  {/* Timeline spine: the villages span five decades — so do their roofs. */}
+  <div class="flex items-center gap-4" aria-hidden="true">
+    <span class="font-serif text-[28px] leading-none text-[color:var(--color-navy-900)]">1974</span>
+    <span class="h-px flex-1 bg-[color:var(--color-gold-400)]"></span>
+    <span
+      class="text-[11px] font-semibold tracking-[0.18em] text-[color:var(--color-ink-500)] uppercase"
+      >Nine villages · five decades of roofs</span
+    >
+    <span class="h-px flex-1 bg-[color:var(--color-gold-400)]"></span>
+    <span class="font-serif text-[28px] leading-none text-[color:var(--color-navy-900)]">2007</span>
+  </div>
+
+  <ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      villages.map((v) => (
+        <li>
+          <a
+            href={`/${v.data.citySlug}/${v.slug}`}
+            class="group grid h-full content-start overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white no-underline transition duration-200 hover:-translate-y-0.5 hover:border-[color:var(--color-navy-300)] hover:shadow-[var(--shadow-card-hover)]"
+          >
+            <ImagePlaceholder
+              slot={`STREET: ${v.data.name} — tree-lined street or home with roofline`}
+              alt={
+                v.photo
+                  ? `Village of ${v.data.name} entrance monument in The Woodlands`
+                  : `Residential street in ${v.data.name}, The Woodlands`
+              }
+              src={v.photo}
+              ratio="3/2"
+              tone="mixed"
+            />
+            <div class="grid gap-2 p-5">
+              <p class="text-[11px] font-semibold tracking-[0.18em] text-[color:var(--color-gold-600)] uppercase">
+                {v.est}
+              </p>
+              <h3 class="text-xl">{v.data.name}</h3>
+              <p class="text-sm leading-relaxed text-[color:var(--color-ink-700)]">{v.story}</p>
+              <span class="mt-1 text-sm font-semibold text-[color:var(--color-navy-700)] transition-colors group-hover:text-[color:var(--color-gold-600)]">
+                Explore {v.data.name} →
+              </span>
+            </div>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>

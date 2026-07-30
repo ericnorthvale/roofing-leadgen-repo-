@@ -2,12 +2,32 @@
 import { SIGNATURE_PHRASES } from "~/lib/brand";
 ---
 
-<section class="border-y border-[color:var(--color-navy-100)] bg-white">
-  <div class="mx-auto max-w-6xl px-4 py-6">
+<section
+  class="border-y border-[color:var(--color-navy-100)] bg-[color:var(--color-surface-cream)]"
+>
+  <div class="mx-auto max-w-6xl px-4 py-5">
     <ul
-      class="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 text-sm font-medium text-[color:var(--color-navy-900)]"
+      class="nv-trust flex flex-wrap items-center justify-center gap-x-10 gap-y-2 text-center text-[11px] font-semibold tracking-[0.18em] text-[color:var(--color-navy-800)] uppercase"
     >
       {SIGNATURE_PHRASES.slice(0, 4).map((phrase) => <li>{phrase}</li>)}
     </ul>
   </div>
 </section>
+
+<style>
+  /* Small gold dot between items — pure decoration, kept out of the a11y tree. */
+  .nv-trust li {
+    position: relative;
+  }
+  .nv-trust li + li::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -1.45rem;
+    width: 4px;
+    height: 4px;
+    transform: translateY(-50%);
+    border-radius: 9999px;
+    background: var(--color-gold-400);
+  }
+</style>
