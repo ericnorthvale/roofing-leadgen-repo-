@@ -49,7 +49,7 @@ const ZIP_PATTERN = "\\d{5}(-\\d{4})?";
         type="text"
         maxlength="100"
         autocomplete="given-name"
-        class="rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
+        class="min-w-0 rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
       />
     </label>
     <label class="grid gap-1 text-sm">
@@ -59,7 +59,7 @@ const ZIP_PATTERN = "\\d{5}(-\\d{4})?";
         type="text"
         maxlength="100"
         autocomplete="family-name"
-        class="rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
+        class="min-w-0 rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
       />
     </label>
   </div>
@@ -74,7 +74,7 @@ const ZIP_PATTERN = "\\d{5}(-\\d{4})?";
       autocomplete="tel"
       inputmode="tel"
       pattern={PHONE_PATTERN}
-      class="rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
+      class="min-w-0 rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
     />
   </label>
 
@@ -87,7 +87,7 @@ const ZIP_PATTERN = "\\d{5}(-\\d{4})?";
       type="email"
       maxlength="200"
       autocomplete="email"
-      class="rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
+      class="min-w-0 rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
     />
   </label>
 
@@ -99,7 +99,7 @@ const ZIP_PATTERN = "\\d{5}(-\\d{4})?";
       type="text"
       maxlength="200"
       autocomplete="street-address"
-      class="rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
+      class="min-w-0 rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
     />
   </label>
 
@@ -113,7 +113,7 @@ const ZIP_PATTERN = "\\d{5}(-\\d{4})?";
         type="text"
         maxlength="100"
         autocomplete="address-level2"
-        class="rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
+        class="min-w-0 rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
       />
     </label>
     <label class="grid gap-1 text-sm">
@@ -126,7 +126,7 @@ const ZIP_PATTERN = "\\d{5}(-\\d{4})?";
         autocomplete="postal-code"
         inputmode="numeric"
         pattern={ZIP_PATTERN}
-        class="rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
+        class="min-w-0 rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
       />
     </label>
   </div>
@@ -135,7 +135,7 @@ const ZIP_PATTERN = "\\d{5}(-\\d{4})?";
     <span class="font-medium">What do you need?</span>
     <select
       name="service"
-      class="rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
+      class="min-w-0 rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
     >
       <option value="inspection" selected={defaultService === "inspection"}>Free inspection</option>
       <option value="repair" selected={defaultService === "repair"}>Roof repair</option>
@@ -159,7 +159,7 @@ const ZIP_PATTERN = "\\d{5}(-\\d{4})?";
       name="notes"
       rows="3"
       maxlength="2000"
-      class="rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
+      class="min-w-0 rounded-[2px] border border-[color:var(--color-navy-200)] bg-white px-3 py-2.5"
     ></textarea>
   </label>
 

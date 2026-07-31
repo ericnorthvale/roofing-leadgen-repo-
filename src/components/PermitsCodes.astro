@@ -1,0 +1,168 @@
+---
+/**
+ * "Permits & codes in Montgomery County" — homepage guide section, redesigned
+ * as (1) a jurisdiction verdict strip and (2) a navy code-standards spec sheet.
+ *
+ * COPY CONTRACT: every word of the previously published prose is preserved
+ * verbatim (owner instruction 2026-07-30 — "keep all of these words"); only
+ * presentation chrome (verdict chips, code tags, numbering) was added, and the
+ * chips/tags restate what the sentences already say — no new facts. Sources:
+ * research-facts Sheet 4 (county FAQ, Shenandoah program, Houston permits,
+ * IRC sections, TWIA zone).
+ *
+ * SEO CONTRACT: all content server-rendered; reveals are progressive
+ * enhancement via the sitewide `nv-anim` classes (the homepage observer in
+ * ClimateThreats picks these items up). The #permits-codes anchor is kept for
+ * the table of contents.
+ */
+
+const JURISDICTIONS = [
+  {
+    verdict: "No permit required",
+    tone: "clear" as const,
+    body: "Unincorporated Montgomery County — which includes most of The Woodlands — does not require a building permit for a residential re-roof. That's the county's own permitting FAQ, not roofer folklore.",
+  },
+  {
+    verdict: "Re-roofs not listed",
+    tone: "clear" as const,
+    body: "The Harris County side (Creekside Park) runs on a floodplain-oriented development-permit system that doesn't list re-roofs either.",
+  },
+  {
+    verdict: "Permit programs",
+    tone: "varies" as const,
+    body: "Incorporated neighbors differ: Shenandoah runs a full roofing permit program with wind-load and color rules, and the City of Houston requires re-roof permits.",
+  },
+];
+
+const CODES = [
+  {
+    n: "01",
+    tag: "IRC R908.3",
+    title: "Tear-off, not roof-over",
+    body: "IRC R908.3 requires removing existing coverings down to the deck (and prohibits covering water-soaked decks or stacking a third layer).",
+  },
+  {
+    n: "02",
+    tag: "IRC R905.2.8.5",
+    title: "Drip edge at eaves and rakes",
+    body: "R905.2.8.5, with proper overlaps and fastening.",
+  },
+  {
+    n: "03",
+    tag: "IRC R903.2",
+    title: "Flashing that keeps water out of every joint",
+    body: "R903.2, the section your leak was probably violating.",
+  },
+  {
+    n: "04",
+    tag: "IRC R806",
+    title: "Balanced attic ventilation",
+    body: "R806's 1-in-150 baseline (1-in-300 with proper high/low balance), which in this climate is the difference between a roof that lasts and an attic oven.",
+  },
+  {
+    n: "05",
+    tag: "ASTM D3161 / D7158",
+    title: "Wind-rated products and fastening",
+    body: "The ASTM D3161/D7158 classes the code maps to local design wind speeds; inland Montgomery County sits outside TDI's coastal windstorm (TWIA) zone, but we spec and nail for the storms this county actually gets.",
+  },
+];
+---
+
+<div class="mt-16">
+  <h2 id="permits-codes" class="scroll-mt-24 text-3xl md:text-4xl">
+    Permits &amp; codes in Montgomery County
+  </h2>
+  <div class="rule-gold mt-5" aria-hidden="true"></div>
+  <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
+    The permit picture surprises most homeowners:
+  </p>
+
+  {/* Jurisdiction verdicts — one card per authority, chips restate the text. */}
+  <div class="mt-8 grid gap-4 md:grid-cols-3">
+    {
+      JURISDICTIONS.map((j) => (
+        <div class="nv-anim-item flex flex-col rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6">
+          <span
+            class:list={[
+              "inline-flex items-center gap-1.5 self-start border px-2.5 py-1 text-[10px] font-semibold tracking-[0.16em] uppercase",
+              j.tone === "clear"
+                ? "border-[color:var(--color-gold-600)]/40 bg-[color:var(--color-gold-50)] text-[color:var(--color-gold-900)]"
+                : "border-[color:var(--color-navy-300)] bg-[color:var(--color-surface-ivory)] text-[color:var(--color-navy-800)]",
+            ]}
+          >
+            <svg
+              class="h-3 w-3"
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              {j.tone === "clear" ? (
+                <path d="M16.7 5.8l-7.5 7.5-3.4-3.4" />
+              ) : (
+                <path d="M10 4v7.5M10 15.5v.5" />
+              )}
+            </svg>
+            {j.verdict}
+          </span>
+          <p class="mt-4 text-[15px] leading-relaxed text-[color:var(--color-ink-800)]">{j.body}</p>
+        </div>
+      ))
+    }
+  </div>
+
+  {/* The bridge — the section's thesis, given room to breathe. */}
+  <p
+    class="nv-anim-item mx-auto mt-12 max-w-2xl text-center font-serif text-[30px] leading-snug text-[color:var(--color-navy-900)] md:text-[36px]"
+  >
+    No permit doesn't mean no standards.
+  </p>
+  <p
+    class="nv-anim-item mx-auto mt-3 max-w-2xl text-center text-lg text-[color:var(--color-ink-700)]"
+  >
+    The residential code still defines what a correct roof is, and we build to it:
+  </p>
+
+  {/* The spec sheet — five code requirements as stamped plates. */}
+  <div
+    class="mt-8 overflow-hidden rounded-[var(--radius-card)] bg-[color:var(--color-navy-950)] px-5 py-2 md:px-8"
+  >
+    <ol class="divide-y divide-white/10">
+      {
+        CODES.map((c) => (
+          <li class="nv-anim-item grid gap-x-6 gap-y-2 py-6 md:grid-cols-[3.2rem_13rem_1fr] md:items-baseline">
+            <span
+              class="font-serif text-[28px] leading-none text-[color:var(--color-gold-400)]"
+              aria-hidden="true"
+            >
+              {c.n}
+            </span>
+            <span class="inline-flex self-start justify-self-start border border-[color:var(--color-gold-400)]/50 px-2.5 py-1 font-mono text-[11px] font-semibold tracking-[0.14em] whitespace-nowrap text-[color:var(--color-gold-300)] uppercase">
+              {c.tag}
+            </span>
+            <div>
+              <h3 class="font-sans text-base font-semibold text-white">{c.title}</h3>
+              <p class="mt-1.5 text-[15px] leading-relaxed text-[color:var(--color-navy-100)]">
+                {c.body}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+
+  {/* Deep-dive pointer — kept verbatim, styled as the section's footnote. */}
+  <p class="mt-6 max-w-3xl text-[15px] leading-relaxed text-[color:var(--color-ink-700)]">
+    The details — underlayment, ice-and-water membrane at valleys and penetrations, decking
+    replacement when rot appears — are covered in
+    <a
+      href="/the-woodlands/roof-replacement"
+      class="font-semibold text-[color:var(--color-navy-800)] underline decoration-[color:var(--color-gold-400)] decoration-2 underline-offset-4 hover:text-[color:var(--color-gold-600)]"
+    >
+      our Woodlands roof replacement guide</a
+    >.
+  </p>
+</div>

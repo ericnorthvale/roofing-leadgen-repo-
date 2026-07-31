@@ -7,7 +7,6 @@ import LeadForm from "@components/LeadForm.astro";
 import TrustBar from "@components/TrustBar.astro";
 import Faq from "@components/Faq.astro";
 import RelatedLinks from "@components/RelatedLinks.astro";
-import ImagePlaceholder from "@components/ImagePlaceholder.astro";
 import { buildSeo, faqPageJsonLd } from "~/lib/seo";
 import { evaluateNeighborhood } from "~/lib/quality-gate";
 import { SERVICE_AREAS } from "~/lib/service-areas";
@@ -163,44 +162,10 @@ const services = spokes.length > 0 ? [] : serviceLinks();
   </section>
 
   {
-    verdict.indexable && (
-      <section class="mx-auto max-w-6xl px-4 pb-4">
-        <h2 class="text-3xl">Our work near {n.name}</h2>
-        <p class="mt-2 max-w-2xl text-sm text-[color:var(--color-ink-500)]">
-          These slots fill with real photos from our own local jobs — never stock imagery.
-        </p>
-        <div class="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
-          <ImagePlaceholder
-            slot={`NEIGHBORHOOD ${n.name}: completed roof`}
-            alt={`Completed roof replacement in ${n.name}, The Woodlands`}
-            demoKey="work-1"
-            ratio="1/1"
-            tone="mixed"
-          />
-          <ImagePlaceholder
-            slot={`NEIGHBORHOOD ${n.name}: crew at work`}
-            alt={`Northvale Roofing crew working in ${n.name}`}
-            demoKey="work-2"
-            ratio="1/1"
-            tone="navy"
-          />
-          <ImagePlaceholder
-            slot={`NEIGHBORHOOD ${n.name}: roof detail`}
-            alt={`Roofing detail from a ${n.name} project`}
-            demoKey="work-3"
-            ratio="1/1"
-            tone="gold"
-          />
-          <ImagePlaceholder
-            slot={`NEIGHBORHOOD ${n.name}: finished roofline`}
-            alt={`Finished roofline on a home in ${n.name}`}
-            demoKey="work-4"
-            ratio="1/1"
-            tone="navy"
-          />
-        </div>
-      </section>
-    )
+    /* "Our work near {village}" photo grid removed until real local job photos
+      exist (owner request 2026-07-30) — restore from git history when ready.
+      Stock imagery here would contradict the section's own promise and
+      Hard Rule #2. */
   }
 
   {n.faqs && n.faqs.length > 0 && <Faq items={n.faqs} heading={`${n.name} roofing questions`} />}

@@ -900,3 +900,52 @@ are the city-DISTINCT facts that keep each page from being a doorway page.
    attribute or re-verify before publishing the number.
 4. Kingwood's ~14,000-acre figure + exact current City of Houston re-roof permit
    process — attribute/confirm before quoting specifics.
+
+---
+
+## Sheet 6 — Owner-attested business facts (Greg Labbe)
+
+Facts supplied directly by the owner in working sessions. These are the ONLY
+permitted source for experience/company claims (CLAUDE.md: experience claims
+allowed "once owner supplies numbers"). Each entry notes the date supplied.
+
+### Ownership & roles (supplied 2026-07-30)
+
+- **Greg Labbe is the owner of Northvale Roofing.** He oversees day-to-day
+  operations: customer experience, sales, project coordination, team
+  development, and quality control. — SOURCE: owner, session 2026-07-30
+  (About-page copy written by Greg).
+- Calls are answered or returned by a Northvale Roofing project manager — not
+  routed to a national call center. — SOURCE: owner, same session.
+- Positioning statement the owner stands behind: Northvale is being built as a
+  **permanent local company**, "not a temporary storm company." — SOURCE:
+  owner, same session.
+
+### Crew experience (supplied 2026-07-30)
+
+- **Lead crews bring more than 15 years of roofing experience.** ("Northvale
+  Roofing works with experienced lead crews who bring more than 15 years of
+  roofing experience to the jobsite.") — SOURCE: owner, session 2026-07-30.
+  Supersedes the earlier unconfirmed "10+ year foreman" placeholder wording
+  that lived only on /about.
+- Crew model: the owner's wording is "works with experienced lead crews" +
+  professional project management — consistent with vetted crews led by a
+  Northvale project manager. (Tier 2.6 crew-model question: partially
+  answered; W-2 vs. sub detail still unconfirmed — don't publish that detail.)
+
+### Service-area emphasis (supplied 2026-07-30)
+
+- Owner frames the audience as "The Woodlands, Spring, and the greater
+  Houston area" — all three are existing service areas in
+  src/lib/service-areas.ts.
+
+### Sheet 6 — UNVERIFIED / still needed (do not publish)
+
+1. Greg's own years in roofing (distinct from the lead crews' 15+).
+2. W-2 crew vs. subcontractor specifics.
+3. Second owner: TASKS_FOR_ERIC.md refers to "two part-time owners"; the
+   About page presents Greg as the owner per his own copy. Don't name or
+   imply a second owner anywhere until the owner clarifies.
+4. ~~Owner portrait provenance~~ RESOLVED 2026-07-31: the owner confirmed in
+   session that the headshot is a real photo of him (possibly AI-retouched /
+   background-edited). Cleared to publish captioned "Greg Labbe, owner".

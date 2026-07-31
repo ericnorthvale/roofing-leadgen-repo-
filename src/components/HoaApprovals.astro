@@ -1,0 +1,157 @@
+---
+/**
+ * "HOA roofing: Township approvals, handled" — homepage guide section,
+ * redesigned as (1) a plain-English lede, (2) a five-card "what the rules
+ * say" grid, and (3) a three-step "how we handle it" strip, ending in a link
+ * to the full RDRC blog guide.
+ *
+ * COPY CONTRACT: wording simplified for readability at the owner's request
+ * (2026-07-30) — every fact, number, and caveat from the previously
+ * published prose is preserved and nothing new is claimed. Source for all
+ * rules: the Township's 2024 Residential Development Standards + Covenant
+ * Administration pages (research-facts Sheet 2).
+ *
+ * SEO CONTRACT: all content server-rendered; reveals ride the sitewide
+ * `nv-anim` classes (homepage observer in ClimateThreats). The #hoa-roofing
+ * anchor is kept for the table of contents.
+ */
+
+const RULES = [
+  {
+    title: "Muted colors only",
+    body: "No color patterns — the roof has to harmonize with the natural landscape and the community.",
+    icon: "palette",
+  },
+  {
+    title: "Approved materials",
+    body: "Tile, slate, composition shingles, stone-coated or standing-seam metal, and cement-fiberboard. All metal must be free of glossy finish.",
+    icon: "layers",
+  },
+  {
+    title: "Accessories must blend in",
+    body: "Vents, flashing, attic ventilators, and chimney caps must match or be compatible with the roof color — and go on rear slopes where possible.",
+    icon: "vent",
+  },
+  {
+    title: "The 45-day clock",
+    body: "Committees have up to 45 days to act on a complete application. No property survey is needed for a re-roof — and gutters, downspouts, and color-compatible roof vents are pre-approved with no application at all.",
+    icon: "clock",
+  },
+  {
+    title: "Appeals",
+    body: "Disagree with a decision? You have 10 days to appeal in writing to the Development Standards Committee — the only body that can grant a variance.",
+    icon: "scale",
+  },
+];
+
+const STEPS = [
+  {
+    n: "1",
+    title: "Samples at your driveway",
+    body: "We bring compliant material samples to you, so what you pick is already approvable.",
+  },
+  {
+    n: "2",
+    title: "We file the application",
+    body: "Through the Township's Civic Access Portal — you never touch the paperwork.",
+  },
+  {
+    n: "3",
+    title: "Material ordered only after approval",
+    body: "Deed-restriction enforcement is real here. Doing it right the first time is cheaper than doing it twice.",
+  },
+];
+
+const ICONS: Record<string, string> = {
+  palette:
+    '<path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.4-2.2-.7-1.3.2-2.8 1.7-2.8H17a4 4 0 0 0 4-4c0-5-4-9-9-9z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7.5" r="1"/><circle cx="14.5" cy="7" r="1"/>',
+  layers: '<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/><path d="M3 17l9 5 9-5"/>',
+  vent: '<path d="M3 12L12 4l9 8"/><path d="M6 10.5V20h12v-9.5"/><path d="M9.5 14h5M9.5 17h5"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2.5"/>',
+  scale:
+    '<path d="M12 4v16"/><path d="M5 8h14"/><path d="M5 8l-2.5 5a3 3 0 0 0 5 0z"/><path d="M19 8l-2.5 5a3 3 0 0 0 5 0z"/>',
+};
+const iconSvg = (id: string, cls: string) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="${cls}" aria-hidden="true">${ICONS[id]}</svg>`;
+---
+
+<div class="mt-16">
+  <h2 id="hoa-roofing" class="scroll-mt-24 text-3xl md:text-4xl">
+    HOA roofing: Township approvals, handled
+  </h2>
+  <div class="rule-gold mt-5" aria-hidden="true"></div>
+  <p class="mt-6 max-w-3xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
+    The Woodlands adds one step most towns don't have: <strong
+      class="text-[color:var(--color-navy-900)]"
+      >before any roof replacement, your village's Residential Design Review Committee (RDRC) must
+      approve it in writing</strong
+    > — and even roofing repairs require a permit at the time of repair. The rule comes from the Township's
+    2024 Residential Development Standards; there are nine elected village committees, run by the Township's
+    Covenant Administration Department.
+  </p>
+
+  {/* ——— What the Standards say, one rule per card ——— */}
+  <p
+    class="mt-10 text-[11px] font-semibold tracking-[0.18em] text-[color:var(--color-ink-500)] uppercase"
+  >
+    What the Standards say about your roof
+  </p>
+  <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      RULES.map((r) => (
+        <div class="nv-anim-item rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-6">
+          <span class="flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--color-navy-100)] bg-[color:var(--color-surface-ivory)] text-[color:var(--color-gold-600)]">
+            <Fragment set:html={iconSvg(r.icon, "h-5 w-5")} />
+          </span>
+          <h3 class="mt-4 text-lg font-semibold">{r.title}</h3>
+          <p class="mt-2 text-[15px] leading-relaxed text-[color:var(--color-ink-800)]">{r.body}</p>
+        </div>
+      ))
+    }
+    {/* The sixth cell: the pointer to the full guide. */}
+    <a
+      href="/blog/woodlands-hoa-roof-approval-guide"
+      class="nv-anim-item group flex flex-col justify-between rounded-[var(--radius-card)] border border-[color:var(--color-gold-400)]/60 bg-[color:var(--color-gold-50)] p-6 no-underline transition duration-200 hover:-translate-y-0.5 hover:shadow-[var(--shadow-card-hover)]"
+    >
+      <p class="text-[15px] leading-relaxed text-[color:var(--color-ink-800)]">
+        Want the whole process, step by step — application to approval, with the exact rules cited?
+      </p>
+      <span
+        class="mt-4 font-semibold text-[color:var(--color-navy-800)] group-hover:text-[color:var(--color-gold-600)]"
+      >
+        Read our RDRC approval guide →
+      </span>
+    </a>
+  </div>
+
+  {/* ——— How we handle it ——— */}
+  <div
+    class="nv-anim-item mt-10 rounded-[var(--radius-card)] bg-[color:var(--color-navy-950)] p-6 md:p-8"
+  >
+    <p class="eyebrow text-[color:var(--color-gold-300)]!">How we handle it for you</p>
+    <div class="mt-6 grid gap-8 md:grid-cols-3">
+      {
+        STEPS.map((s) => (
+          <div class="relative">
+            <p
+              class="font-serif text-[44px] leading-none text-[color:var(--color-gold-400)]"
+              aria-hidden="true"
+            >
+              {s.n}
+            </p>
+            <h3 class="mt-3 text-base font-semibold text-white">{s.title}</h3>
+            <p class="mt-2 text-[15px] leading-relaxed text-[color:var(--color-navy-100)]">
+              {s.body}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  {/* The quirk — kept, as a footnote where it belongs. */}
+  <p class="mt-5 max-w-3xl text-sm leading-relaxed text-[color:var(--color-ink-500)]">
+    One quirk we track: homes in Grogan's Forest Sections 5, 6 &amp; 7 submit roof applications to
+    the City of Shenandoah instead.
+  </p>
+</div>

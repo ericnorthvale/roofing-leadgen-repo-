@@ -14,7 +14,11 @@
  * Flipping the one flag below reverts the entire site to the branded placeholder
  * boxes — a single, reversible kill-switch.
  */
-export const USE_DEMO_IMAGES = true;
+// 2026-07-30: switched OFF at the owner's request — no placeholder/stock
+// imagery anywhere on the site until real Northvale photos exist. Components
+// now hide their image slots entirely (no branded boxes) when no real `src`
+// is provided, so flipping this back on is only for internal design previews.
+export const USE_DEMO_IMAGES = false;
 
 /** Stable slot key → image path under /public. */
 export const DEMO_IMAGES: Record<string, string> = {

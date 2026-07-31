@@ -9,7 +9,7 @@
  * Never add a chip or badge for something not yet true (no "BBB A+", no "fully
  * insured", no financing partner) until the owner confirms and supplies proof.
  */
-import { BRAND } from "~/lib/brand";
+import { SIGNATURE_PHRASES } from "~/lib/brand";
 import ImagePlaceholder from "@components/ImagePlaceholder.astro";
 
 interface Props {
@@ -21,13 +21,9 @@ interface Props {
 }
 const { showLogos = false, variant = "light", class: className } = Astro.props;
 
-// True, defensible commitments only — pulled from the brand single source.
-const claims = [
-  BRAND.promise, // "Written estimate before we leave the driveway."
-  "Named project manager on every job",
-  "Forty-photo documentation packet",
-  BRAND.certStatus || "IKO ROOFPRO applicant",
-];
+// Same value statements as the hero trust bar (owner-picked 2026-07-30) —
+// one voice everywhere, single source in brand.ts.
+const claims = SIGNATURE_PHRASES.slice(0, 4);
 
 const isDark = variant === "dark";
 ---
