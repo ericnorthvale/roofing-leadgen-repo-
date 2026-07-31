@@ -946,7 +946,6 @@ allowed "once owner supplies numbers"). Each entry notes the date supplied.
 3. Second owner: TASKS_FOR_ERIC.md refers to "two part-time owners"; the
    About page presents Greg as the owner per his own copy. Don't name or
    imply a second owner anywhere until the owner clarifies.
-4. Owner portrait provenance: the supplied headshot file is named "ChatGPT
-   Image Jul 30, 2026" — owner must confirm it is a real photo of him
-   (possibly AI-retouched) before it ships with the caption "Greg Labbe,
-   owner". A wholly AI-generated person would violate Hard Rule #2.
+4. ~~Owner portrait provenance~~ RESOLVED 2026-07-31: the owner confirmed in
+   session that the headshot is a real photo of him (possibly AI-retouched /
+   background-edited). Cleared to publish captioned "Greg Labbe, owner".
