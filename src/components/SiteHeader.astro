@@ -1,23 +1,92 @@
 ---
+/**
+ * Site header — logo left, centered five-group nav with dropdowns, phone +
+ * CTA right (owner-approved template 2026-07-31).
+ *
+ * GATE-AWARE "OUR WORK": Projects and Gallery enter the menu automatically
+ * once real published jobs/photos exist — the same single source the pages
+ * themselves render from (~/lib/projects). Until then the group shows
+ * Reviews only. Never hand-add those links; publish a project instead.
+ *
+ * Interaction: dropdowns open on hover and keyboard focus via pure CSS
+ * (:hover / :focus-within), with a small JS layer that adds click-to-toggle
+ * (touch + mouse), aria-expanded state, Escape-to-close, and outside-click
+ * close. With JS disabled the menus still open on hover/focus and every
+ * destination stays a real crawlable <a> in the initial HTML.
+ *
+ * Mobile (<lg): the <details> drawer becomes accordion groups (nested
+ * native <details> — no JS required) with Book/Call CTAs at the bottom.
+ */
 import { BRAND } from "~/lib/brand";
 import { telHref, formatPhoneDisplay } from "~/lib/phone";
 import CTAButton from "@components/CTAButton.astro";
+import { getPublishedProjects } from "~/lib/projects";
 
 const phone = formatPhoneDisplay(BRAND.phoneE164);
 
-const navLinks = [
-  { href: "/services", label: "Services" },
-  { href: "/roof-design-center", label: "Design Center" },
-  { href: "/the-woodlands", label: "The Woodlands" },
-  { href: "/storm-response", label: "Storm Response" },
-  { href: "/reviews", label: "Reviews" },
-  { href: "/about", label: "About" },
-  { href: "/blog", label: "Blog" },
+const projects = await getPublishedProjects();
+const hasProjects = projects.length > 0;
+const hasGalleryPhotos = projects.some((p) => p.data.photo);
+
+interface NavItem {
+  href: string;
+  label: string;
+  hint?: string;
+  urgent?: boolean;
+}
+interface NavGroup {
+  label: string;
+  /** Single top-level link when there are no items. */
+  href?: string;
+  items?: NavItem[];
+}
+
+const GROUPS: NavGroup[] = [
+  {
+    label: "Services",
+    items: [
+      { href: "/services/roof-replacement", label: "Roof replacement" },
+      { href: "/services/roof-repair", label: "Roof repair" },
+      { href: "/services/roof-inspection", label: "Roof inspection", hint: "Free" },
+      { href: "/services/storm-damage", label: "Storm damage" },
+      { href: "/services/insurance-claims", label: "Insurance claims" },
+      { href: "/storm-response", label: "Storm Response", hint: "Storm today?", urgent: true },
+    ],
+  },
+  {
+    label: "Our Work",
+    items: [
+      { href: "/reviews", label: "Reviews" },
+      ...(hasProjects ? [{ href: "/projects", label: "Projects" }] : []),
+      ...(hasGalleryPhotos ? [{ href: "/gallery", label: "Gallery" }] : []),
+    ],
+  },
+  {
+    label: "Service Areas",
+    items: [
+      { href: "/the-woodlands", label: "The Woodlands" },
+      { href: "/spring", label: "Spring" },
+      { href: "/houston", label: "Houston" },
+      { href: "/sitemap", label: "View all areas" },
+    ],
+  },
+  { label: "Design Center", href: "/roof-design-center" },
+  {
+    label: "About",
+    items: [
+      { href: "/about", label: "Meet the owner" },
+      { href: "/process", label: "Our process" },
+      { href: "/warranty", label: "Warranty" },
+      { href: "/certifications", label: "Certifications" },
+      { href: "/blog", label: "Blog" },
+      { href: "/contact", label: "Contact" },
+    ],
+  },
 ];
 ---
 
-<header class="relative border-b border-white/10 bg-[color:var(--color-navy-950)]">
-  <div class="nv-bar mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:gap-6">
+<header class="relative z-40 border-b border-white/10 bg-[color:var(--color-navy-950)]">
+  <div class="nv-bar mx-auto flex max-w-6xl items-center gap-3 px-4 py-4 sm:gap-6">
     <a href="/" class="flex shrink-0 items-center" aria-label={`${BRAND.name} — home`}>
       <img
         src="/brand/logo-light.svg"
@@ -28,25 +97,79 @@ const navLinks = [
       />
     </a>
 
-    {
-      /* Full nav from lg up, on a single line at every width: link size and
-        spacing scale fluidly with the viewport (see .nv-nav below) so the row
-        never wraps, and the hamburger takes over below lg. */
-    }
-    <nav class="nv-nav hidden items-center whitespace-nowrap lg:flex" aria-label="Main">
+    {/* Centered group nav from lg up; the hamburger takes over below. */}
+    <nav
+      class="nv-nav hidden flex-1 items-center justify-center whitespace-nowrap lg:flex"
+      aria-label="Main"
+    >
       {
-        navLinks.map((link) => (
-          <a
-            href={link.href}
-            class="font-medium text-[color:var(--color-navy-100)] no-underline transition-colors hover:text-[color:var(--color-gold-300)]"
-          >
-            {link.label}
-          </a>
-        ))
+        GROUPS.map((g, gi) =>
+          g.items ? (
+            <div class="nv-drop relative">
+              <button
+                type="button"
+                class="nv-head inline-flex cursor-pointer items-center gap-1.5 border-0 bg-transparent p-0 font-medium text-[color:var(--color-navy-100)] transition-colors hover:text-[color:var(--color-gold-300)]"
+                aria-expanded="false"
+                aria-controls={`nv-panel-${gi}`}
+              >
+                {g.label}
+                <svg
+                  class="nv-caret h-2.5 w-2.5 transition-transform duration-200"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M2.5 4.5L6 8l3.5-3.5" />
+                </svg>
+              </button>
+              <div
+                id={`nv-panel-${gi}`}
+                class="nv-panel absolute top-full left-1/2 z-50 min-w-[250px] -translate-x-1/2 border border-t-2 border-white/10 border-t-[color:var(--color-gold-400)] bg-[color:var(--color-navy-900)] py-2 shadow-[0_22px_48px_rgb(6_14_33/0.5)]"
+              >
+                {g.items.map((it) => (
+                  <a
+                    href={it.href}
+                    class:list={[
+                      "flex items-center justify-between gap-5 px-5 py-2.5 text-sm no-underline transition-colors hover:bg-white/5",
+                      it.urgent
+                        ? "mt-1.5 border-t border-white/10 pt-3 font-semibold text-[color:var(--color-gold-300)] hover:text-[color:var(--color-gold-200)]"
+                        : "text-[color:var(--color-navy-100)] hover:text-[color:var(--color-gold-300)]",
+                    ]}
+                  >
+                    <span>
+                      {it.urgent && (
+                        <span class="mr-1" aria-hidden="true">
+                          ⚡
+                        </span>
+                      )}
+                      {it.label}
+                    </span>
+                    {it.hint && (
+                      <span class="text-[10px] font-semibold tracking-[0.14em] text-[color:var(--color-navy-100)]/45 uppercase">
+                        {it.hint}
+                      </span>
+                    )}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <a
+              href={g.href}
+              class="font-medium text-[color:var(--color-navy-100)] no-underline transition-colors hover:text-[color:var(--color-gold-300)]"
+            >
+              {g.label}
+            </a>
+          ),
+        )
       }
     </nav>
 
-    <div class="flex shrink-0 items-center gap-3">
+    <div class="ml-auto flex shrink-0 items-center gap-3 lg:ml-0">
       {
         /* Phone + CTA stay visible from md up — on tablets they sit next to the
           hamburger. Below md the sticky Call/Text bar carries conversion. */
@@ -62,7 +185,7 @@ const navLinks = [
         <CTAButton href="/contact" label="Book inspection" ctaId="header-book" />
       </div>
 
-      {/* Mobile/tablet menu — native <details> disclosure, no JS, keyboard + SR accessible. */}
+      {/* Mobile/tablet menu — native <details>, accordion groups inside. */}
       <details class="nv-menu lg:hidden">
         <summary
           class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-[var(--radius-btn)] border border-white/25 text-white"
@@ -92,27 +215,62 @@ const navLinks = [
           </svg>
         </summary>
         <nav
-          class="absolute top-full right-0 left-0 z-50 border-b border-white/10 bg-[color:var(--color-navy-950)] shadow-[var(--shadow-card)]"
+          class="absolute top-full right-0 left-0 z-50 max-h-[calc(100dvh-76px)] overflow-y-auto border-b border-white/10 bg-[color:var(--color-navy-950)] shadow-[var(--shadow-card)]"
           aria-label="Mobile"
         >
           <ul class="mx-auto flex max-w-6xl flex-col px-4 py-2">
             {
-              navLinks.map((link) => (
+              GROUPS.map((g) => (
                 <li>
-                  <a
-                    href={link.href}
-                    class="flex min-h-12 items-center border-b border-white/5 text-base font-medium text-[color:var(--color-navy-100)] no-underline hover:text-white"
-                  >
-                    {link.label}
-                  </a>
+                  {g.items ? (
+                    <details class="nv-mgroup border-b border-white/5">
+                      <summary class="flex min-h-13 cursor-pointer items-center justify-between text-base font-semibold text-white">
+                        {g.label}
+                        <span class="text-lg text-[color:var(--color-gold-400)]" aria-hidden="true">
+                          <span class="nv-plus">+</span>
+                          <span class="nv-minus">−</span>
+                        </span>
+                      </summary>
+                      <ul class="pb-3 pl-4">
+                        {g.items.map((it) => (
+                          <li>
+                            <a
+                              href={it.href}
+                              class:list={[
+                                "flex min-h-11 items-center text-[15px] no-underline",
+                                it.urgent
+                                  ? "font-semibold text-[color:var(--color-gold-300)]"
+                                  : "font-medium text-[color:var(--color-navy-100)] hover:text-white",
+                              ]}
+                            >
+                              {it.urgent && (
+                                <span class="mr-1.5" aria-hidden="true">
+                                  ⚡
+                                </span>
+                              )}
+                              {it.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  ) : (
+                    <a
+                      href={g.href}
+                      class="flex min-h-13 items-center border-b border-white/5 text-base font-semibold text-white no-underline hover:text-[color:var(--color-gold-300)]"
+                    >
+                      {g.label}
+                    </a>
+                  )}
                 </li>
               ))
             }
-            <li>
+            <li class="grid gap-2.5 py-4">
+              <CTAButton href="/contact" label="Book inspection" ctaId="header-book-mobile" />
               <a
                 href={telHref(BRAND.phoneE164)}
                 data-cta-phone
-                class="flex min-h-12 items-center font-semibold text-[color:var(--color-gold-300)] no-underline"
+                class="btn btn-ghost-dark justify-center text-center"
               >
                 Call {phone}
               </a>
@@ -125,20 +283,17 @@ const navLinks = [
 </header>
 
 <style>
-  /* Fluid one-line nav: between the lg breakpoint (1024px) and the max-w-6xl
-     container cap, link text and gaps scale with the viewport so the full row
-     (logo + 7 links + phone + CTA) always fits on a single line. */
+  /* Fluid one-line nav between the lg breakpoint and the container cap. */
   .nv-nav {
-    gap: clamp(7px, 1.4vw, 16px);
+    gap: clamp(10px, 2.2vw, 30px);
   }
-  .nv-nav a {
-    font-size: clamp(11px, 1.1vw, 14px);
+  .nv-nav a,
+  .nv-nav .nv-head {
+    font-size: clamp(12px, 1.15vw, 14px);
   }
   .nv-phone {
     font-size: clamp(11.5px, 1.05vw, 14px);
   }
-  /* When the full nav row is visible, the logo and the gaps between the three
-     groups scale down too, so the row clears the narrowest one-line width. */
   @media (min-width: 1024px) {
     .nv-logo {
       height: clamp(34px, 3.5vw, 44px);
@@ -148,11 +303,44 @@ const navLinks = [
     }
   }
 
+  /* Dropdown visibility: hover + keyboard focus (pure CSS) + JS .is-open. */
+  .nv-panel {
+    display: none;
+  }
+  .nv-drop:hover .nv-panel,
+  .nv-drop:focus-within .nv-panel,
+  .nv-drop.is-open .nv-panel {
+    display: block;
+  }
+  .nv-drop:hover .nv-caret,
+  .nv-drop:focus-within .nv-caret,
+  .nv-drop.is-open .nv-caret {
+    transform: rotate(180deg);
+  }
+  .nv-drop:hover .nv-head,
+  .nv-drop:focus-within .nv-head,
+  .nv-drop.is-open .nv-head {
+    color: var(--color-gold-300);
+  }
+  /* Hover-bridge so the pointer can travel from head to panel without a gap. */
+  .nv-drop::after {
+    content: "";
+    position: absolute;
+    inset: 100% 0 auto 0;
+    height: 18px;
+    display: none;
+  }
+  .nv-drop:hover::after {
+    display: block;
+  }
+
   /* Hide the default disclosure triangle and swap the open/close icons. */
-  .nv-menu > summary {
+  .nv-menu > summary,
+  .nv-mgroup > summary {
     list-style: none;
   }
-  .nv-menu > summary::-webkit-details-marker {
+  .nv-menu > summary::-webkit-details-marker,
+  .nv-mgroup > summary::-webkit-details-marker {
     display: none;
   }
   .nv-menu > summary .nv-menu-close {
@@ -164,4 +352,47 @@ const navLinks = [
   .nv-menu[open] > summary .nv-menu-close {
     display: block;
   }
+  .nv-mgroup summary .nv-minus {
+    display: none;
+  }
+  .nv-mgroup[open] summary .nv-plus {
+    display: none;
+  }
+  .nv-mgroup[open] summary .nv-minus {
+    display: inline;
+  }
 </style>
+
+<script>
+  // Progressive enhancement for the desktop dropdowns: click-to-toggle (touch
+  // and mouse), aria-expanded sync, Escape and outside-click to close. The
+  // menus already work on hover/focus with no JS at all.
+  const drops = [...document.querySelectorAll<HTMLElement>(".nv-drop")];
+  const closeAll = (except?: HTMLElement) => {
+    for (const d of drops) {
+      if (d !== except) {
+        d.classList.remove("is-open");
+        d.querySelector(".nv-head")?.setAttribute("aria-expanded", "false");
+      }
+    }
+  };
+  for (const drop of drops) {
+    const head = drop.querySelector<HTMLElement>(".nv-head");
+    if (!head) continue;
+    head.addEventListener("click", () => {
+      const open = drop.classList.toggle("is-open");
+      head.setAttribute("aria-expanded", String(open));
+      closeAll(drop);
+    });
+    drop.addEventListener("mouseleave", () => {
+      drop.classList.remove("is-open");
+      head.setAttribute("aria-expanded", "false");
+    });
+  }
+  document.addEventListener("click", (e) => {
+    if (!(e.target instanceof Node) || !drops.some((d) => d.contains(e.target as Node))) closeAll();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeAll();
+  });
+</script>
