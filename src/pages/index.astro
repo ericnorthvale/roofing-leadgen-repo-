@@ -126,14 +126,15 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
     <h2 class="text-3xl md:text-4xl">What we do</h2>
     <div class="rule-gold mt-5" aria-hidden="true"></div>
     <div class="mt-10 grid gap-6 md:grid-cols-3">
+      {/* Card photos are REAL Northvale work (public/work + project photos). */}
       <ServiceCard
         href="/the-woodlands/roof-replacement"
         title="Roof replacement"
         blurb="Tear-off to deck, Standards-compliant materials, RDRC paperwork handled. Exact price in writing first."
         image={{
           slot: "SERVICE: new architectural-shingle roof",
-          alt: "Finished architectural-shingle roof replacement",
-          demoKey: "svc-replacement",
+          alt: "Completed Northvale Roofing shingle roof replacement on a red-brick home",
+          src: "/work/work-04.webp",
         }}
       />
       <ServiceCard
@@ -142,8 +143,8 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
         blurb="Leaks, pipe boots, flashing, wind damage — usually same-day or next-day."
         image={{
           slot: "SERVICE: roofer repairing flashing / shingles",
-          alt: "Roofer repairing lifted shingles and flashing",
-          demoKey: "svc-repair",
+          alt: "Northvale roofer hand-nailing shingles — close-up of repair work",
+          src: "/work/work-07.webp",
         }}
       />
       <ServiceCard
@@ -153,8 +154,8 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
         blurb="Forty-photo packet. Written findings within 24 hours. No obligation, no pressure."
         image={{
           slot: "SERVICE: inspector photographing a roof",
-          alt: "Inspector documenting a roof for the forty-photo packet",
-          demoKey: "svc-inspection",
+          alt: "Northvale Roofing team member walking a steep two-story roof",
+          src: "/work/work-01.webp",
         }}
       />
       <ServiceCard
@@ -163,8 +164,8 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
         blurb="Hail, wind, fallen-limb impact. We document everything your adjuster will ask for."
         image={{
           slot: "SERVICE: hail/wind-damaged roof close-up",
-          alt: "Close-up of hail and wind damage on a roof",
-          demoKey: "svc-storm",
+          alt: "Home and landscaping protected with tarps during a Northvale re-roof",
+          src: "/work/work-03.webp",
         }}
       />
       <ServiceCard
@@ -173,8 +174,8 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
         blurb="Texas claim rules, deadlines, and documentation — from the contractor, not a public adjuster."
         image={{
           slot: "SERVICE: adjuster meeting on a roof",
-          alt: "Project manager meeting an insurance adjuster on site",
-          demoKey: "svc-insurance",
+          alt: "Aerial view of a completed IKO roof replaced by Northvale Roofing on a Woodlands, TX home — an approved insurance claim",
+          src: "/projects/iko-roof-replacement-the-woodlands-tx.jpg",
         }}
       />
       <ServiceCard
@@ -183,8 +184,8 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
         blurb="Village-by-village pages for Grogan's Mill through Creekside Park — roof ages, covenants, and what we see on your streets."
         image={{
           slot: "NEIGHBORHOOD: tree-lined Woodlands street",
-          alt: "Tree-lined residential street in The Woodlands",
-          demoKey: "neighborhood",
+          alt: "Village of Grogan's Mill entrance monument in The Woodlands",
+          src: "/villages/grogans-mill.webp",
         }}
       />
     </div>
