@@ -15,6 +15,9 @@ interface Props {
   afterAlt?: string;
   beforeSrc?: string;
   afterSrc?: string;
+  /** Figcaption under each photo — override for e.g. "During" / "Completed". */
+  beforeCaption?: string;
+  afterCaption?: string;
   class?: string;
 }
 const {
@@ -26,6 +29,8 @@ const {
   afterAlt = "Completed IKO roof after Northvale Roofing replacement",
   beforeSrc,
   afterSrc,
+  beforeCaption = "Before",
+  afterCaption = "After",
   class: className,
 } = Astro.props;
 ---
@@ -50,7 +55,7 @@ const {
             tone="navy"
           />
           <figcaption class="mt-2.5 text-xs font-semibold tracking-[0.15em] text-[color:var(--color-ink-500)] uppercase">
-            Before
+            {beforeCaption}
           </figcaption>
         </figure>
         <figure>
@@ -62,7 +67,7 @@ const {
             tone="gold"
           />
           <figcaption class="mt-2.5 text-xs font-semibold tracking-[0.15em] text-[color:var(--color-ink-500)] uppercase">
-            After
+            {afterCaption}
           </figcaption>
         </figure>
       </div>
