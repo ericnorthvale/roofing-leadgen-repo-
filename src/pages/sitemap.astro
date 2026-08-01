@@ -4,12 +4,17 @@ import { SERVICE_AREAS, SERVICE_AREA_SLUGS } from "~/lib/service-areas";
 import { SERVICE_LIST } from "~/lib/services";
 import { PERSONAS, PERSONA_SLUGS } from "~/lib/personas";
 import { evaluateArea } from "~/lib/quality-gate";
+import { getSiteReviews } from "~/lib/reviews";
+
+// /reviews stays unlisted until the first real review exists (it's noindex
+// until then anyway) — the link returns automatically.
+const hasReviews = (await getSiteReviews()).length > 0;
 
 const corePages = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
-  { href: "/reviews", label: "Reviews" },
+  ...(hasReviews ? [{ href: "/reviews", label: "Reviews" }] : []),
   { href: "/contact", label: "Contact" },
   { href: "/storm-response", label: "Storm response" },
 ];

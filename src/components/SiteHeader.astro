@@ -21,12 +21,16 @@ import { BRAND } from "~/lib/brand";
 import { telHref, formatPhoneDisplay } from "~/lib/phone";
 import CTAButton from "@components/CTAButton.astro";
 import { getPublishedProjects } from "~/lib/projects";
+import { getSiteReviews } from "~/lib/reviews";
 
 const phone = formatPhoneDisplay(BRAND.phoneE164);
 
 const projects = await getPublishedProjects();
 const hasProjects = projects.length > 0;
 const hasGalleryPhotos = projects.some((p) => p.data.photo);
+// Reviews stays out of the menu until the first real review exists
+// (owner request 2026-08-01) — same gate the page's own indexability uses.
+const hasReviews = (await getSiteReviews()).length > 0;
 
 interface NavItem {
   href: string;
@@ -56,9 +60,9 @@ const GROUPS: NavGroup[] = [
   {
     label: "Our Work",
     items: [
-      { href: "/reviews", label: "Reviews" },
       ...(hasProjects ? [{ href: "/projects", label: "Projects" }] : []),
       ...(hasGalleryPhotos ? [{ href: "/gallery", label: "Gallery" }] : []),
+      ...(hasReviews ? [{ href: "/reviews", label: "Reviews" }] : []),
     ],
   },
   {
@@ -77,7 +81,8 @@ const GROUPS: NavGroup[] = [
       { href: "/about", label: "Meet the owner" },
       { href: "/process", label: "Our process" },
       { href: "/warranty", label: "Warranty" },
-      { href: "/certifications", label: "Certifications" },
+      // Certifications parked until ROOFPRO status upgrades (owner, 2026-08-01);
+      // restore the link + page + redirect removal together.
       { href: "/blog", label: "Blog" },
       { href: "/contact", label: "Contact" },
     ],

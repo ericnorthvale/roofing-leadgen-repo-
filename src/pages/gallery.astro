@@ -4,13 +4,15 @@ import Breadcrumbs from "@components/Breadcrumbs.astro";
 import PhotoGallery from "@components/PhotoGallery.astro";
 import LeadForm from "@components/LeadForm.astro";
 import { getPublishedProjects } from "~/lib/projects";
+import { WORK_PHOTOS } from "~/lib/work-photos";
 
-// Real Northvale project photos, sourced from the published project stories
-// (single source of truth). Presenting stock imagery as our work would violate
-// FTC rules (Hard Rule #2), so this only ever shows real jobs.
-const photos = (await getPublishedProjects())
+// Real Northvale photos only: owner-supplied job photos (~/lib/work-photos)
+// plus the published project-story photos. Presenting stock imagery as our
+// work would violate FTC rules (Hard Rule #2), so this only ever shows real jobs.
+const projectPhotos = (await getPublishedProjects())
   .filter((p) => p.data.photo)
   .map((p) => ({ url: p.data.photo!.src, alt: p.data.photo!.alt }));
+const photos = [...WORK_PHOTOS.map((w) => ({ url: w.src, alt: w.alt })), ...projectPhotos];
 const hasRealPhotos = photos.length > 0;
 ---
 
