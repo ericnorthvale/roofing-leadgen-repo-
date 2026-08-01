@@ -1,0 +1,139 @@
+---
+/**
+ * Shared section renderer for service pages (ServiceLayout +
+ * CityServiceLayout) — the owner-approved visual system, 2026-08-01.
+ *
+ * Every word of a section renders no matter which visual `kind` it carries
+ * (including `html` bullets, which keep their inline links in all modes) —
+ * the kinds are presentation only. Photo insets are REAL work photos
+ * (Hard Rule #2). Styles for .nv-steplist/.nv-cardlist/.nv-svc-scrim live
+ * in globals.css.
+ */
+import { headingId } from "~/lib/headings";
+import type { ServiceSection } from "~/lib/services";
+
+interface Props {
+  sections: ServiceSection[];
+}
+const { sections } = Astro.props;
+---
+
+{
+  sections.map((section) => (
+    <Fragment>
+      <h2 id={headingId(section.heading)}>{section.heading}</h2>
+      {section.body && <p>{section.body}</p>}
+      {section.bullets && section.kind === "steps" ? (
+        <ol class="nv-steplist">
+          {section.bullets.map((b, i) => (
+            <li class="relative flex gap-4 pb-6 pl-1 last:pb-2">
+              <span
+                class="z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[color:var(--color-gold-400)] bg-white font-serif text-[28px] leading-none text-[color:var(--color-gold-600)]"
+                aria-hidden="true"
+              >
+                {i + 1}
+              </span>
+              {b.html ? (
+                <span class="pt-1.5 text-[15px] leading-relaxed text-[color:var(--color-ink-800)]">
+                  {b.lead && <strong>{b.lead}</strong>}
+                  {b.lead ? " — " : ""}
+                  <span class="nv-richtext" set:html={b.html} />
+                </span>
+              ) : (
+                <span class="pt-1.5 text-[15px] leading-relaxed text-[color:var(--color-ink-800)]">
+                  {b.lead && <strong>{b.lead}</strong>}
+                  {b.lead && b.text ? " — " : ""}
+                  {b.text}
+                </span>
+              )}
+            </li>
+          ))}
+        </ol>
+      ) : section.bullets && section.kind === "cards" ? (
+        <ul class="nv-cardlist grid gap-4 sm:grid-cols-2">
+          {section.bullets.map((b) => (
+            <li class="rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-5">
+              <Fragment>
+                {b.lead && (
+                  <strong class="block text-base text-[color:var(--color-navy-900)]">
+                    {b.lead}
+                  </strong>
+                )}
+                {b.html ? (
+                  <span
+                    class:list={[
+                      "nv-richtext block text-sm leading-relaxed text-[color:var(--color-ink-700)]",
+                      b.lead && "mt-1.5",
+                    ]}
+                    set:html={b.html}
+                  />
+                ) : (
+                  <span class="mt-1.5 block text-sm leading-relaxed text-[color:var(--color-ink-700)]">
+                    {b.text}
+                  </span>
+                )}
+              </Fragment>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        section.bullets &&
+        (section.ordered ? (
+          <ol>
+            {section.bullets.map((b) =>
+              b.html ? (
+                <li>
+                  {b.lead && <strong>{b.lead}</strong>}
+                  {b.lead ? " — " : ""}
+                  <span set:html={b.html} />
+                </li>
+              ) : (
+                <li>
+                  {b.lead && <strong>{b.lead}</strong>}
+                  {b.lead && b.text ? " — " : ""}
+                  {b.text}
+                </li>
+              ),
+            )}
+          </ol>
+        ) : (
+          <ul>
+            {section.bullets.map((b) =>
+              b.html ? (
+                <li>
+                  {b.lead && <strong>{b.lead}</strong>}
+                  {b.lead ? " — " : ""}
+                  <span set:html={b.html} />
+                </li>
+              ) : (
+                <li>
+                  {b.lead && <strong>{b.lead}</strong>}
+                  {b.lead && b.text ? " — " : ""}
+                  {b.text}
+                </li>
+              ),
+            )}
+          </ul>
+        ))
+      )}
+      {section.photo && (
+        <figure class="my-8">
+          <div class="overflow-hidden rounded-[var(--radius-card)]" style="aspect-ratio:16/9;">
+            <img
+              src={section.photo.src}
+              alt={section.photo.alt}
+              loading="lazy"
+              decoding="async"
+              class="block h-full w-full object-cover"
+            />
+          </div>
+          {section.photo.caption && (
+            <figcaption class="mt-2.5 text-xs font-semibold tracking-[0.12em] text-[color:var(--color-ink-500)] uppercase">
+              {section.photo.caption}
+            </figcaption>
+          )}
+        </figure>
+      )}
+    </Fragment>
+  ))
+}

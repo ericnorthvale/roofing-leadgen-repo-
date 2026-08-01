@@ -8,6 +8,7 @@ import TrustBar from "@components/TrustBar.astro";
 import Faq from "@components/Faq.astro";
 import RelatedLinks from "@components/RelatedLinks.astro";
 import BeforeAfter from "@components/BeforeAfter.astro";
+import ServiceSections from "@components/ServiceSections.astro";
 import Resources from "@components/Resources.astro";
 import TableOfContents from "@components/TableOfContents.astro";
 import { getCollection } from "astro:content";
@@ -20,12 +21,10 @@ import type { ResourceLink } from "~/lib/resources";
 
 interface Props {
   service: Service;
-  /** Show a before/after band (best for replacement / storm pages). */
-  beforeAfter?: boolean;
   /** Optional educational external resources for this service. */
   resources?: ResourceLink[];
 }
-const { service, beforeAfter = false, resources = [] } = Astro.props;
+const { service, resources = [] } = Astro.props;
 
 const siteUrl = Astro.site?.toString() ?? "https://northvaleroofing.com";
 const verdict = evaluateService(service);
@@ -63,96 +62,129 @@ const toc = [
 ---
 
 <BaseLayout seo={seo}>
-  <section
-    class="border-b border-[color:var(--color-navy-100)] bg-[color:var(--color-surface-ivory)]"
-  >
-    <div class="mx-auto max-w-6xl px-4 py-12 md:py-16">
-      <Breadcrumbs
-        items={[
-          { label: "Home", href: "/" },
-          { label: "Services", href: "/services" },
-          { label: service.title },
-        ]}
-      />
-      <h1 class="mt-6 text-4xl md:text-5xl">{service.title}</h1>
-      <div class="rule-gold mt-6" aria-hidden="true"></div>
-      <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
-        {service.summary}
-      </p>
-      <div class="mt-6 flex flex-wrap gap-3">
-        <CTAButton
-          href="/contact"
-          label="Book inspection"
-          ctaId={`service-${service.serviceTag}-book`}
+  {
+    service.heroPhoto ? (
+      /* Photo header: real work photo under the brand scrim (owner-approved
+         service-page visual system). Same words as the classic band. */
+      <section class="relative overflow-hidden bg-[color:var(--color-navy-950)]">
+        <img
+          src={service.heroPhoto.src}
+          alt={service.heroPhoto.alt}
+          class="absolute inset-0 h-full w-full object-cover object-[70%_center]"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
         />
-        <PhoneCTAButton ctaId={`service-${service.serviceTag}-call`} />
-        <CTAButton
-          href="/storm-response"
-          variant="ghost"
-          label="Storm today?"
-          ctaId={`service-${service.serviceTag}-storm`}
-        />
-      </div>
-    </div>
-  </section>
+        <div class="nv-svc-scrim absolute inset-0" aria-hidden="true" />
+        <div class="relative mx-auto max-w-6xl px-4 py-14 md:py-20">
+          <Breadcrumbs
+            variant="dark"
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Services", href: "/services" },
+              { label: service.title },
+            ]}
+          />
+          <h1 class="mt-6 max-w-3xl text-4xl text-white md:text-5xl">{service.title}</h1>
+          <div class="rule-gold mt-6" aria-hidden="true" />
+          <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-navy-100)]">
+            {service.summary}
+          </p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <CTAButton
+              href="/contact"
+              label="Book inspection"
+              ctaId={`service-${service.serviceTag}-book`}
+            />
+            <PhoneCTAButton ctaId={`service-${service.serviceTag}-call`} variant="ghost-dark" />
+            <CTAButton
+              href="/storm-response"
+              variant="ghost-dark"
+              label="Storm today?"
+              ctaId={`service-${service.serviceTag}-storm`}
+            />
+          </div>
+          {service.glance && service.glance.length > 0 && (
+            <ul class="mt-9 flex flex-wrap gap-x-10 gap-y-4 border-t border-white/15 pt-6">
+              {service.glance.map((g) => (
+                <li class="flex items-baseline gap-2.5">
+                  <span class="font-serif text-[28px] leading-none text-[color:var(--color-gold-300)]">
+                    {g.value}
+                  </span>
+                  <span class="max-w-52 text-[13px] leading-snug text-[color:var(--color-navy-100)]/90">
+                    {g.label}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
+    ) : (
+      <section class="border-b border-[color:var(--color-navy-100)] bg-[color:var(--color-surface-ivory)]">
+        <div class="mx-auto max-w-6xl px-4 py-12 md:py-16">
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Services", href: "/services" },
+              { label: service.title },
+            ]}
+          />
+          <h1 class="mt-6 text-4xl md:text-5xl">{service.title}</h1>
+          <div class="rule-gold mt-6" aria-hidden="true" />
+          <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
+            {service.summary}
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <CTAButton
+              href="/contact"
+              label="Book inspection"
+              ctaId={`service-${service.serviceTag}-book`}
+            />
+            <PhoneCTAButton ctaId={`service-${service.serviceTag}-call`} />
+            <CTAButton
+              href="/storm-response"
+              variant="ghost"
+              label="Storm today?"
+              ctaId={`service-${service.serviceTag}-storm`}
+            />
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   <TrustBar />
 
   <section class="mx-auto grid max-w-6xl gap-10 px-4 py-10 md:grid-cols-[1fr_400px]">
     <article class="prose-northvale">
       <TableOfContents items={toc} />
-      {
-        service.sections.map((section) => (
-          <Fragment>
-            <h2 id={headingId(section.heading)}>{section.heading}</h2>
-            {section.body && <p>{section.body}</p>}
-            {section.bullets &&
-              (section.ordered ? (
-                <ol>
-                  {section.bullets.map((b) =>
-                    b.html ? (
-                      <li set:html={b.html} />
-                    ) : (
-                      <li>
-                        {b.lead && <strong>{b.lead}</strong>}
-                        {b.lead && b.text ? " — " : ""}
-                        {b.text}
-                      </li>
-                    ),
-                  )}
-                </ol>
-              ) : (
-                <ul>
-                  {section.bullets.map((b) =>
-                    b.html ? (
-                      <li set:html={b.html} />
-                    ) : (
-                      <li>
-                        {b.lead && <strong>{b.lead}</strong>}
-                        {b.lead && b.text ? " — " : ""}
-                        {b.text}
-                      </li>
-                    ),
-                  )}
-                </ul>
-              ))}
-          </Fragment>
-        ))
-      }
+      <ServiceSections sections={service.sections} />
     </article>
     <aside class="md:sticky md:top-10 md:self-start">
       <LeadForm source={`service:${service.serviceTag}`} defaultService={service.serviceTag} />
     </aside>
   </section>
 
-  {/* FTC hard-block: never render "Recent work" over demo/stock imagery. */}
-  {/* BeforeAfter renders itself only once real matched photos are passed. */}
-  {beforeAfter && <BeforeAfter heading="Recent work" />}
+  {
+    service.beforeAfter && (
+      <BeforeAfter
+        heading="See the difference"
+        intro={service.beforeAfter.intro}
+        beforeSrc={service.beforeAfter.beforeSrc}
+        beforeAlt={service.beforeAfter.beforeAlt}
+        beforeCaption={service.beforeAfter.beforeCaption}
+        afterSrc={service.beforeAfter.afterSrc}
+        afterAlt={service.beforeAfter.afterAlt}
+        afterCaption={service.beforeAfter.afterCaption}
+      />
+    )
+  }
 
   {
     service.faqs && (
       <div id="faq">
-        <Faq items={service.faqs} />
+        <Faq items={service.faqs} accordion={true} />
       </div>
     )
   }
