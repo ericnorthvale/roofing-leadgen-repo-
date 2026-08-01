@@ -4,17 +4,16 @@ import { getSiteReviews } from "~/lib/reviews";
 const published = (await getSiteReviews()).slice(0, 3);
 ---
 
-<section class="bg-[color:var(--color-surface-ivory)]">
-  <div class="mx-auto max-w-6xl px-4 py-20 md:py-24">
-    <h2 class="text-3xl md:text-4xl">What our Woodlands + Spring neighbors say</h2>
-    <div class="rule-gold mt-5" aria-hidden="true"></div>
-    {
-      published.length === 0 ? (
-        <p class="mt-4 text-[color:var(--color-ink-800)]">
-          Reviews will surface here once the Google Business Profile pull is wired (see
-          TASKS_FOR_ERIC.md).
-        </p>
-      ) : (
+{
+  /* Renders nothing until real reviews exist (owner request 2026-08-01) —
+    the whole section returns automatically with the first review. */
+}
+{
+  published.length > 0 && (
+    <section class="bg-[color:var(--color-surface-ivory)]">
+      <div class="mx-auto max-w-6xl px-4 py-20 md:py-24">
+        <h2 class="text-3xl md:text-4xl">What our Woodlands + Spring neighbors say</h2>
+        <div class="rule-gold mt-5" aria-hidden="true" />
         <div class="mt-10 grid gap-6 md:grid-cols-3">
           {published.map((r) => (
             <article class="rounded-[var(--radius-card)] border border-t-2 border-[color:var(--color-navy-100)] border-t-[color:var(--color-gold-400)] bg-white p-7">
@@ -28,7 +27,7 @@ const published = (await getSiteReviews()).slice(0, 3);
             </article>
           ))}
         </div>
-      )
-    }
-  </div>
-</section>
+      </div>
+    </section>
+  )
+}

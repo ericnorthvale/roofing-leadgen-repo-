@@ -5,8 +5,11 @@ import { SERVICE_AREAS } from "~/lib/service-areas";
 import { telHref, formatPhoneDisplay } from "~/lib/phone";
 import CTAButton from "@components/CTAButton.astro";
 import TrustBadges from "@components/TrustBadges.astro";
+import { getSiteReviews } from "~/lib/reviews";
 
 const year = new Date().getFullYear();
+// The Reviews link returns automatically with the first real review.
+const hasReviews = (await getSiteReviews()).length > 0;
 ---
 
 <footer
@@ -91,7 +94,13 @@ const year = new Date().getFullYear();
         <li><a href="/projects">Projects</a></li>
         <li><a href="/roof-design-center">Roof Design Center</a></li>
         <li><a href="/certifications">Certifications</a></li>
-        <li><a href="/reviews">Reviews</a></li>
+        {
+          hasReviews && (
+            <li>
+              <a href="/reviews">Reviews</a>
+            </li>
+          )
+        }
         <li><a href="/contact">Contact</a></li>
         <li><a href="/for-agents">For agents</a></li>
         <li><a href="/for-insurance-partners">For insurance partners</a></li>

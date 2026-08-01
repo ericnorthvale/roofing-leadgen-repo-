@@ -53,6 +53,11 @@ export default defineConfig({
       status: 301,
       destination: "/blog/iko-dynasty-vs-nordic",
     },
+    // TEMPORARY (302, owner request 2026-08-01): the reviews page is parked
+    // until the first real reviews exist. Restore src/pages/reviews.astro from
+    // git history and delete this redirect when they land. The page was
+    // noindex + sitemap-excluded, so this costs no SEO.
+    "/reviews": { status: 302, destination: "/" },
   },
   adapter: vercel({
     webAnalytics: { enabled: false }, // we use GA4 + server-side GTM, not Vercel Analytics
