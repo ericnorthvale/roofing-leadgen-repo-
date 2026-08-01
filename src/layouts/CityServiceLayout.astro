@@ -8,6 +8,7 @@ import TrustBar from "@components/TrustBar.astro";
 import Faq from "@components/Faq.astro";
 import RelatedLinks from "@components/RelatedLinks.astro";
 import TableOfContents from "@components/TableOfContents.astro";
+import BeforeAfter from "@components/BeforeAfter.astro";
 import { buildSeo, faqPageJsonLd } from "~/lib/seo";
 import { evaluateCityService } from "~/lib/quality-gate";
 import { SERVICE_AREAS } from "~/lib/service-areas";
@@ -77,29 +78,88 @@ const villages = neighborhoodLinks(cs.citySlug);
     )
   }
 
-  <section class="page-header-band mx-auto max-w-6xl px-4 py-12 md:py-16">
-    <Breadcrumbs
-      items={[
-        { label: "Home", href: "/" },
-        { label: city.name, href: `/${city.slug}` },
-        { label: genericService.title },
-      ]}
-    />
-    <h1 class="mt-6 text-4xl md:text-5xl">{cs.title}</h1>
-    <div class="rule-gold mt-6" aria-hidden="true"></div>
-    <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
-      {cs.summary}
-    </p>
-    <div class="mt-6 flex flex-wrap gap-3">
-      <CTAButton
-        href="/contact"
-        label="Book inspection"
-        ctaId={`cs-${cs.citySlug}-${cs.serviceTag}-book`}
-      />
-      <PhoneCTAButton ctaId={`cs-${cs.citySlug}-${cs.serviceTag}-call`} />
-      <CTAButton href="/storm-response" variant="ghost" label="Storm today?" />
-    </div>
-  </section>
+  {
+    cs.heroPhoto ? (
+      /* Photo header: real work photo under the brand scrim (owner-approved
+         service-page visual system). Same words as the classic band. */
+      <section class="relative overflow-hidden bg-[color:var(--color-navy-950)]">
+        <img
+          src={cs.heroPhoto.src}
+          alt={cs.heroPhoto.alt}
+          class="absolute inset-0 h-full w-full object-cover object-[70%_center]"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <div class="nv-svc-scrim absolute inset-0" aria-hidden="true" />
+        <div class="relative mx-auto max-w-6xl px-4 py-14 md:py-20">
+          <Breadcrumbs
+            variant="dark"
+            items={[
+              { label: "Home", href: "/" },
+              { label: city.name, href: `/${city.slug}` },
+              { label: genericService.title },
+            ]}
+          />
+          <h1 class="mt-6 max-w-3xl text-4xl text-white md:text-5xl">{cs.title}</h1>
+          <div class="rule-gold mt-6" aria-hidden="true" />
+          <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-navy-100)]">
+            {cs.summary}
+          </p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <CTAButton
+              href="/contact"
+              label="Book inspection"
+              ctaId={`cs-${cs.citySlug}-${cs.serviceTag}-book`}
+            />
+            <PhoneCTAButton
+              ctaId={`cs-${cs.citySlug}-${cs.serviceTag}-call`}
+              variant="ghost-dark"
+            />
+            <CTAButton href="/storm-response" variant="ghost-dark" label="Storm today?" />
+          </div>
+          {cs.glance && cs.glance.length > 0 && (
+            <ul class="mt-9 flex flex-wrap gap-x-10 gap-y-4 border-t border-white/15 pt-6">
+              {cs.glance.map((g) => (
+                <li class="flex items-baseline gap-2.5">
+                  <span class="font-serif text-[28px] leading-none text-[color:var(--color-gold-300)]">
+                    {g.value}
+                  </span>
+                  <span class="max-w-52 text-[13px] leading-snug text-[color:var(--color-navy-100)]/90">
+                    {g.label}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
+    ) : (
+      <section class="page-header-band mx-auto max-w-6xl px-4 py-12 md:py-16">
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: city.name, href: `/${city.slug}` },
+            { label: genericService.title },
+          ]}
+        />
+        <h1 class="mt-6 text-4xl md:text-5xl">{cs.title}</h1>
+        <div class="rule-gold mt-6" aria-hidden="true" />
+        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
+          {cs.summary}
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <CTAButton
+            href="/contact"
+            label="Book inspection"
+            ctaId={`cs-${cs.citySlug}-${cs.serviceTag}-book`}
+          />
+          <PhoneCTAButton ctaId={`cs-${cs.citySlug}-${cs.serviceTag}-call`} />
+          <CTAButton href="/storm-response" variant="ghost" label="Storm today?" />
+        </div>
+      </section>
+    )
+  }
 
   <TrustBar />
 
@@ -111,7 +171,43 @@ const villages = neighborhoodLinks(cs.citySlug);
           <Fragment>
             <h2 id={headingId(section.heading)}>{section.heading}</h2>
             {section.body && <p>{section.body}</p>}
-            {section.bullets &&
+            {section.bullets && section.kind === "steps" ? (
+              /* Numbered gold timeline — same <ol> text, styled. */
+              <ol class="nv-steplist">
+                {section.bullets.map((b, i) => (
+                  <li class="relative flex gap-4 pb-6 pl-1 last:pb-2">
+                    <span
+                      class="z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[color:var(--color-gold-400)] bg-white font-serif text-[28px] leading-none text-[color:var(--color-gold-600)]"
+                      aria-hidden="true"
+                    >
+                      {i + 1}
+                    </span>
+                    <span class="pt-1.5 text-[15px] leading-relaxed text-[color:var(--color-ink-800)]">
+                      {b.lead && <strong>{b.lead}</strong>}
+                      {b.lead && b.text ? " — " : ""}
+                      {b.text}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            ) : section.bullets && section.kind === "cards" ? (
+              /* Card grid — bullet lead becomes the card title. */
+              <ul class="nv-cardlist grid gap-4 sm:grid-cols-2">
+                {section.bullets.map((b) => (
+                  <li class="rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white p-5">
+                    {b.lead && (
+                      <strong class="block text-base text-[color:var(--color-navy-900)]">
+                        {b.lead}
+                      </strong>
+                    )}
+                    <span class="mt-1.5 block text-sm leading-relaxed text-[color:var(--color-ink-700)]">
+                      {b.text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              section.bullets &&
               (section.ordered ? (
                 <ol>
                   {section.bullets.map((b) =>
@@ -140,7 +236,30 @@ const villages = neighborhoodLinks(cs.citySlug);
                     ),
                   )}
                 </ul>
-              ))}
+              ))
+            )}
+            {section.photo && (
+              /* Real work photo inset (never stock — Hard Rule #2). */
+              <figure class="my-8">
+                <div
+                  class="overflow-hidden rounded-[var(--radius-card)]"
+                  style="aspect-ratio:16/9;"
+                >
+                  <img
+                    src={section.photo.src}
+                    alt={section.photo.alt}
+                    loading="lazy"
+                    decoding="async"
+                    class="block h-full w-full object-cover"
+                  />
+                </div>
+                {section.photo.caption && (
+                  <figcaption class="mt-2.5 text-xs font-semibold tracking-[0.12em] text-[color:var(--color-ink-500)] uppercase">
+                    {section.photo.caption}
+                  </figcaption>
+                )}
+              </figure>
+            )}
           </Fragment>
         ))
       }
@@ -159,9 +278,24 @@ const villages = neighborhoodLinks(cs.citySlug);
   </section>
 
   {
+    cs.beforeAfter && (
+      <BeforeAfter
+        heading="See the difference"
+        intro={cs.beforeAfter.intro}
+        beforeSrc={cs.beforeAfter.beforeSrc}
+        beforeAlt={cs.beforeAfter.beforeAlt}
+        beforeCaption={cs.beforeAfter.beforeCaption}
+        afterSrc={cs.beforeAfter.afterSrc}
+        afterAlt={cs.beforeAfter.afterAlt}
+        afterCaption={cs.beforeAfter.afterCaption}
+      />
+    )
+  }
+
+  {
     cs.faqs && cs.faqs.length > 0 && (
       <div id="faq">
-        <Faq items={cs.faqs} heading={`${city.name} questions, answered`} />
+        <Faq items={cs.faqs} heading={`${city.name} questions, answered`} accordion={true} />
       </div>
     )
   }
@@ -176,3 +310,49 @@ const villages = neighborhoodLinks(cs.citySlug);
   }
   {villages.length > 0 && <RelatedLinks heading="Villages we serve" links={villages} />}
 </BaseLayout>
+
+<style is:global>
+  /* Scrim for the photo header: readable copy left, photo visible right. */
+  .nv-svc-scrim {
+    background: linear-gradient(
+      to bottom,
+      rgb(6 14 33 / 0.94) 0%,
+      rgb(6 14 33 / 0.86) 60%,
+      rgb(6 14 33 / 0.72) 100%
+    );
+  }
+  @media (min-width: 768px) {
+    .nv-svc-scrim {
+      background: linear-gradient(
+        to right,
+        rgb(6 14 33 / 0.96) 0%,
+        rgb(6 14 33 / 0.9) 45%,
+        rgb(6 14 33 / 0.55) 75%,
+        rgb(6 14 33 / 0.25) 100%
+      );
+    }
+  }
+  /* The steps timeline + card grid opt out of prose list styling (the
+     .prose-northvale ol/ul rules would otherwise re-add markers/padding). */
+  .prose-northvale ol.nv-steplist {
+    list-style: none;
+    padding-left: 0;
+    margin: 1.25rem 0 1.5rem;
+  }
+  .prose-northvale ul.nv-cardlist {
+    list-style: none;
+    padding-left: 0;
+    margin: 1.25rem 0 1.5rem;
+  }
+  /* Vertical connector between step numbers. */
+  .nv-steplist li:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 2.4rem;
+    left: 1.35rem;
+    bottom: 0.2rem;
+    width: 1px;
+    background: var(--color-gold-400);
+    opacity: 0.45;
+  }
+</style>

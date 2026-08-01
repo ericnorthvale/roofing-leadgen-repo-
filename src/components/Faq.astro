@@ -11,8 +11,14 @@ interface FaqItem {
 interface Props {
   items: FaqItem[];
   heading?: string;
+  /**
+   * Accordion mode (native <details>, no JS): friendlier on phones, first
+   * item open. Answers remain in the initial HTML either way — <details>
+   * content is fully crawlable.
+   */
+  accordion?: boolean;
 }
-const { items, heading = "Common questions" } = Astro.props;
+const { items, heading = "Common questions", accordion = false } = Astro.props;
 ---
 
 {
@@ -20,14 +26,39 @@ const { items, heading = "Common questions" } = Astro.props;
     <section class="mx-auto max-w-6xl px-4 py-16 md:py-20">
       <h2 class="text-3xl md:text-4xl">{heading}</h2>
       <div class="rule-gold mt-5" aria-hidden="true" />
-      <dl class="mt-8 max-w-3xl divide-y divide-[color:var(--color-navy-100)]">
-        {items.map((item) => (
-          <div class="py-6">
-            <dt class="text-lg font-semibold text-[color:var(--color-navy-900)]">{item.q}</dt>
-            <dd class="mt-2.5 leading-relaxed text-[color:var(--color-ink-800)]">{item.a}</dd>
-          </div>
-        ))}
-      </dl>
+      {accordion ? (
+        <div class="mt-8 max-w-3xl divide-y divide-[color:var(--color-navy-100)]">
+          {items.map((item, i) => (
+            <details class="nv-faq group py-1.5" open={i === 0}>
+              <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-2.5 text-lg font-semibold text-[color:var(--color-navy-900)] hover:text-[color:var(--color-gold-600)] [&::-webkit-details-marker]:hidden">
+                {item.q}
+                <svg
+                  class="h-4 w-4 shrink-0 text-[color:var(--color-gold-600)] transition-transform duration-200 group-open:rotate-180"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M3.5 6l4.5 4.5L12.5 6" />
+                </svg>
+              </summary>
+              <p class="pb-5 leading-relaxed text-[color:var(--color-ink-800)]">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      ) : (
+        <dl class="mt-8 max-w-3xl divide-y divide-[color:var(--color-navy-100)]">
+          {items.map((item) => (
+            <div class="py-6">
+              <dt class="text-lg font-semibold text-[color:var(--color-navy-900)]">{item.q}</dt>
+              <dd class="mt-2.5 leading-relaxed text-[color:var(--color-ink-800)]">{item.a}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </section>
   )
 }

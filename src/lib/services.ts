@@ -17,6 +17,17 @@ export interface ServiceSection {
   bullets?: ServiceBullet[];
   /** Render bullets as an ordered list (process steps). */
   ordered?: boolean;
+  /**
+   * Visual treatment for the section (owner-approved service-page system,
+   * 2026-08-01). Purely presentational — the same text renders either way,
+   * so tagging a section never changes what crawlers read.
+   * - "steps": ordered bullets as a numbered gold timeline
+   * - "cards": lead/text bullets as a card grid
+   * - undefined: classic prose (default)
+   */
+  kind?: "steps" | "cards";
+  /** Optional REAL photo inset rendered after the section (never stock). */
+  photo?: { src: string; alt: string; caption?: string };
 }
 
 /** Real, generally-true Q&A. Feeds FAQPage JSON-LD. Never fabricate specifics. */

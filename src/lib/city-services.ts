@@ -28,6 +28,28 @@ export interface CityService {
   summary: string;
   sections: ServiceSection[];
   faqs?: ServiceFaq[];
+  /**
+   * Optional REAL photo for the page-header backdrop (owner-approved
+   * service-page visual system, 2026-08-01). Never stock (Hard Rule #2);
+   * alt must not claim a location that isn't confirmed.
+   */
+  heroPhoto?: { src: string; alt: string };
+  /**
+   * "At a glance" chips under the header CTAs. Each must restate a TRUE fact
+   * already made on this page (or sourced in docs/research-facts.md) — the
+   * chips are a summary surface, never a place for new claims.
+   */
+  glance?: { value: string; label: string }[];
+  /** Optional real before/during/after pair for the page's proof band. */
+  beforeAfter?: {
+    intro?: string;
+    beforeSrc: string;
+    beforeAlt: string;
+    beforeCaption: string;
+    afterSrc: string;
+    afterAlt: string;
+    afterCaption: string;
+  };
   /** Quality gate — stays "draft" (noindex, out of sitemap) until real. */
   dataCompleteness: DataCompleteness;
 }
@@ -49,11 +71,35 @@ export const CITY_SERVICES: Record<string, CityService> = {
     title: "Roof replacement in The Woodlands",
     summary:
       "A Woodlands re-roof is two jobs: the roof itself, and the Township covenant approval that must come first. We do both — tear-off to deck, Standards-compliant materials, and the RDRC paperwork filed before a single shingle is ordered.",
+    // Visual system (presentation only — every word above/below unchanged).
+    heroPhoto: {
+      src: "/work/work-09-after.webp",
+      alt: "Drone view of a completed shingle roof replacement by Northvale Roofing",
+    },
+    // Each chip restates a fact already on this page (install time: FAQ;
+    // 45-day clock: Standards/FAQ; written price: summary + costs section).
+    glance: [
+      { value: "1 day", label: "most installations finish in one" },
+      { value: "45 days", label: "the RDRC's maximum clock — we file early" },
+      { value: "In writing", label: "your exact price before we leave the driveway" },
+    ],
+    beforeAfter: {
+      intro:
+        "A real Northvale replacement — the same roof mid-installation and completed, by drone.",
+      beforeSrc: "/work/work-08-during.webp",
+      beforeAlt:
+        "Northvale Roofing crew installing synthetic underlayment during this roof replacement — drone view",
+      beforeCaption: "During installation",
+      afterSrc: "/work/work-09-after.webp",
+      afterAlt: "The same roof completed — drone view of the finished shingle roof replacement",
+      afterCaption: "Completed",
+    },
     sections: [
       {
         heading: "Why replacing a roof works differently in The Woodlands",
         body: "Most of The Woodlands is unincorporated Montgomery County, and the county's own permitting FAQ is explicit: residential properties do not require a county permit for a roof. What governs your re-roof instead is the covenant layer — The Woodlands Township's 2024 Residential Development Standards require prior written approval from your village's Residential Design Review Committee (or designated Township staff) for all roof replacement. Skip that approval and you're exposed to covenant enforcement even though no county inspector will ever knock. The practical order of operations:",
         ordered: true,
+        kind: "steps",
         bullets: [
           { text: "Free inspection and written estimate — same day you call." },
           {
@@ -73,6 +119,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
       },
       {
         heading: "What the Township Standards allow on your roof",
+        kind: "cards",
         body: "The 2024 Residential Development Standards are specific about roofing: colors must be muted, without color pattern, and harmonize with the natural landscape. Acceptable materials include composition shingles, tile, slate, stone-coated or standing-seam metal, and cement-fiberboard — with all metal roofing required to be free of glossy finish. Within those rules there's more room than most homeowners expect:",
         bullets: [
           {
@@ -96,6 +143,12 @@ export const CITY_SERVICES: Record<string, CityService> = {
       {
         heading: "Tear-off to the deck — because code and climate both say so",
         body: "We replace roofs by removing everything down to the decking. The residential code (IRC R908.3) requires removing existing layers before new covering goes on, with narrow exceptions — and prohibits a roof-over where the deck is water-soaked or two layers already exist. In this climate the code is just common sense: Gulf Coast heat bakes a second layer from below, and you can't inspect or repair decking you never see. Tear-off is also when we replace what actually fails on Woodlands roofs — flashing, pipe boots, and ventilation sized to the ARMA 1-in-300 guideline, because a poorly-vented attic here can run decades of extra heat stress through your shingles.",
+        photo: {
+          src: "/work/work-02.webp",
+          alt: "Northvale Roofing crew mid tear-off on a single-story home",
+          caption:
+            "Tear-off on a Northvale re-roof — decking exposed, inspected, and repaired before anything new goes on.",
+        },
       },
       {
         heading: "When roofs come due, village by village",
