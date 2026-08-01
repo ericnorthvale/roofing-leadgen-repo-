@@ -303,3 +303,45 @@
     margin-bottom: 1rem;
   }
 }
+
+/* ——— Service-page visual system (owner-approved 2026-08-01) ——— */
+/* Photo-header scrim: readable copy left, photo visible right. */
+.nv-svc-scrim {
+  background: linear-gradient(
+    to bottom,
+    rgb(6 14 33 / 0.94) 0%,
+    rgb(6 14 33 / 0.86) 60%,
+    rgb(6 14 33 / 0.72) 100%
+  );
+}
+@media (min-width: 768px) {
+  .nv-svc-scrim {
+    background: linear-gradient(
+      to right,
+      rgb(6 14 33 / 0.96) 0%,
+      rgb(6 14 33 / 0.9) 45%,
+      rgb(6 14 33 / 0.55) 75%,
+      rgb(6 14 33 / 0.25) 100%
+    );
+  }
+}
+/* Steps timeline + card grid opt out of prose list styling. */
+.prose-northvale ol.nv-steplist,
+.prose-northvale ul.nv-cardlist {
+  list-style: none;
+  padding-left: 0;
+  margin: 1.25rem 0 1.5rem;
+}
+.nv-steplist li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 2.4rem;
+  left: 1.35rem;
+  bottom: 0.2rem;
+  width: 1px;
+  background: var(--color-gold-400);
+  opacity: 0.45;
+}
+.nv-richtext a {
+  text-decoration: underline;
+}

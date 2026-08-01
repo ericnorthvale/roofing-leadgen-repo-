@@ -5,8 +5,10 @@ interface Crumb {
 }
 interface Props {
   items: Crumb[];
+  /** "dark" renders light text for photo/navy header bands. */
+  variant?: "light" | "dark";
 }
-const { items } = Astro.props;
+const { items, variant = "light" } = Astro.props;
 
 const base = (Astro.site?.toString() ?? "https://northvaleroofing.com").replace(/\/+$/, "");
 
@@ -25,7 +27,15 @@ const jsonLd = {
 };
 ---
 
-<nav aria-label="Breadcrumbs" class="text-sm text-[color:var(--color-ink-500)]">
+<nav
+  aria-label="Breadcrumbs"
+  class:list={[
+    "text-sm",
+    variant === "dark"
+      ? "text-[color:var(--color-navy-100)]/80 [&_a]:text-[color:var(--color-navy-100)] [&_a:hover]:text-[color:var(--color-gold-300)]"
+      : "text-[color:var(--color-ink-500)]",
+  ]}
+>
   <ol class="flex flex-wrap items-center gap-2">
     {
       items.map((c, i) => (

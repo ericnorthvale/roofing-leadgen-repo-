@@ -28,6 +28,28 @@ export interface CityService {
   summary: string;
   sections: ServiceSection[];
   faqs?: ServiceFaq[];
+  /**
+   * Optional REAL photo for the page-header backdrop (owner-approved
+   * service-page visual system, 2026-08-01). Never stock (Hard Rule #2);
+   * alt must not claim a location that isn't confirmed.
+   */
+  heroPhoto?: { src: string; alt: string };
+  /**
+   * "At a glance" chips under the header CTAs. Each must restate a TRUE fact
+   * already made on this page (or sourced in docs/research-facts.md) — the
+   * chips are a summary surface, never a place for new claims.
+   */
+  glance?: { value: string; label: string }[];
+  /** Optional real before/during/after pair for the page's proof band. */
+  beforeAfter?: {
+    intro?: string;
+    beforeSrc: string;
+    beforeAlt: string;
+    beforeCaption: string;
+    afterSrc: string;
+    afterAlt: string;
+    afterCaption: string;
+  };
   /** Quality gate — stays "draft" (noindex, out of sitemap) until real. */
   dataCompleteness: DataCompleteness;
 }
@@ -49,11 +71,35 @@ export const CITY_SERVICES: Record<string, CityService> = {
     title: "Roof replacement in The Woodlands",
     summary:
       "A Woodlands re-roof is two jobs: the roof itself, and the Township covenant approval that must come first. We do both — tear-off to deck, Standards-compliant materials, and the RDRC paperwork filed before a single shingle is ordered.",
+    // Visual system (presentation only — every word above/below unchanged).
+    heroPhoto: {
+      src: "/work/work-09-after.webp",
+      alt: "Drone view of a completed shingle roof replacement by Northvale Roofing",
+    },
+    // Each chip restates a fact already on this page (install time: FAQ;
+    // 45-day clock: Standards/FAQ; written price: summary + costs section).
+    glance: [
+      { value: "1 day", label: "most installations finish in one" },
+      { value: "45 days", label: "the RDRC's maximum clock — we file early" },
+      { value: "In writing", label: "your exact price before we leave the driveway" },
+    ],
+    beforeAfter: {
+      intro:
+        "A real Northvale replacement — the same roof mid-installation and completed, by drone.",
+      beforeSrc: "/work/work-08-during.webp",
+      beforeAlt:
+        "Northvale Roofing crew installing synthetic underlayment during this roof replacement — drone view",
+      beforeCaption: "During installation",
+      afterSrc: "/work/work-09-after.webp",
+      afterAlt: "The same roof completed — drone view of the finished shingle roof replacement",
+      afterCaption: "Completed",
+    },
     sections: [
       {
         heading: "Why replacing a roof works differently in The Woodlands",
         body: "Most of The Woodlands is unincorporated Montgomery County, and the county's own permitting FAQ is explicit: residential properties do not require a county permit for a roof. What governs your re-roof instead is the covenant layer — The Woodlands Township's 2024 Residential Development Standards require prior written approval from your village's Residential Design Review Committee (or designated Township staff) for all roof replacement. Skip that approval and you're exposed to covenant enforcement even though no county inspector will ever knock. The practical order of operations:",
         ordered: true,
+        kind: "steps",
         bullets: [
           { text: "Free inspection and written estimate — same day you call." },
           {
@@ -73,6 +119,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
       },
       {
         heading: "What the Township Standards allow on your roof",
+        kind: "cards",
         body: "The 2024 Residential Development Standards are specific about roofing: colors must be muted, without color pattern, and harmonize with the natural landscape. Acceptable materials include composition shingles, tile, slate, stone-coated or standing-seam metal, and cement-fiberboard — with all metal roofing required to be free of glossy finish. Within those rules there's more room than most homeowners expect:",
         bullets: [
           {
@@ -96,6 +143,12 @@ export const CITY_SERVICES: Record<string, CityService> = {
       {
         heading: "Tear-off to the deck — because code and climate both say so",
         body: "We replace roofs by removing everything down to the decking. The residential code (IRC R908.3) requires removing existing layers before new covering goes on, with narrow exceptions — and prohibits a roof-over where the deck is water-soaked or two layers already exist. In this climate the code is just common sense: Gulf Coast heat bakes a second layer from below, and you can't inspect or repair decking you never see. Tear-off is also when we replace what actually fails on Woodlands roofs — flashing, pipe boots, and ventilation sized to the ARMA 1-in-300 guideline, because a poorly-vented attic here can run decades of extra heat stress through your shingles.",
+        photo: {
+          src: "/work/work-02.webp",
+          alt: "Northvale Roofing crew mid tear-off on a single-story home",
+          caption:
+            "Tear-off on a Northvale re-roof — decking exposed, inspected, and repaired before anything new goes on.",
+        },
       },
       {
         heading: "When roofs come due, village by village",
@@ -153,9 +206,25 @@ export const CITY_SERVICES: Record<string, CityService> = {
     title: "Roof repair in The Woodlands",
     summary:
       "Leaks, cracked pipe boots, lifted ridge caps, tired flashing — most Woodlands repairs are same-day or next-day, documented with photos, and handled with the Township's repair-permit rule covered.",
+    // Visual system (presentation only — every word above/below unchanged).
+    heroPhoto: {
+      src: "/work/work-07.webp",
+      alt: "Roofer hand-nailing shingles during installation — close-up detail",
+    },
+    // Each chip restates a fact already on this page (scheduling: summary +
+    // FAQ; permit rule: covenant section; written advice + photos: FAQ).
+    glance: [
+      { value: "Same-day", label: "or next-day across all nine villages" },
+      {
+        value: "Permit filed",
+        label: "the Township's roofing-repair rule, handled as part of the job",
+      },
+      { value: "In writing", label: "repair-or-replace advice, with the photos to prove it" },
+    ],
     sections: [
       {
         heading: "The repairs Woodlands roofs actually need",
+        kind: "cards",
         body: "Fifty years of village-by-village construction means the community's repair calls follow its roof ages. What we see most, street by street:",
         bullets: [
           {
@@ -224,6 +293,18 @@ export const CITY_SERVICES: Record<string, CityService> = {
     title: "Roof inspection in The Woodlands",
     summary:
       "A free, documented look at exactly where your roof stands — forty photos, written findings within 24 hours, no pressure. The starting point for storm checks, home sales, and Township-compliant re-roof planning.",
+    // Visual system (presentation only — every word above/below unchanged).
+    heroPhoto: {
+      src: "/work/work-01.webp",
+      alt: "Northvale Roofing inspector walking a steep two-story roof",
+    },
+    // Each chip restates a fact already on this page (free vs. paid average:
+    // "Why free" section; forty photos + 24 hours: summary + coverage list).
+    glance: [
+      { value: "Free", label: "vs. a $250 national average for paid inspections (Angi, 2026)" },
+      { value: "40 photos", label: "built around canopy, heat, and storm history" },
+      { value: "24 hours", label: "to plain-English written findings" },
+    ],
     sections: [
       {
         heading: "What a Woodlands inspection covers",
@@ -306,6 +387,18 @@ export const CITY_SERVICES: Record<string, CityService> = {
     title: "Storm damage roofing in The Woodlands",
     summary:
       "Hail, wind, and falling limbs are a matter of record here, not a maybe. We document storm damage to claim-ready standard, tarp what's urgent, and tell you honestly whether filing is worth it.",
+    // Visual system (presentation only — every word above/below unchanged).
+    heroPhoto: {
+      src: "/work/work-03.webp",
+      alt: "Home and landscaping protected with tarps during a Northvale Roofing re-roof",
+    },
+    // Each chip restates a fact already on this page (NOAA hail record:
+    // storms section; tarp-first: after-a-storm step 1; packet: documentation).
+    glance: [
+      { value: "¾-inch+", label: "hail logged in Montgomery County nearly every year (NOAA)" },
+      { value: "Tarp first", label: "active water stopped before anything else" },
+      { value: "40+", label: "photos in every claim-ready packet" },
+    ],
     sections: [
       {
         heading: "The storms this area actually sees",
@@ -331,6 +424,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
       {
         heading: "What to do — and what NOT to do — after a storm",
         ordered: true,
+        kind: "steps",
         bullets: [
           { text: "Stop active water with emergency tarping (we do this first, questions later)." },
           {
@@ -387,6 +481,28 @@ export const CITY_SERVICES: Record<string, CityService> = {
     title: "Roof insurance claims in The Woodlands",
     summary:
       "Texas claim rules are specific — deadlines, deductible law, two-part payments. We're the contractor who documents to claim standard and knows the rules cold, so your claim runs on evidence instead of hope.",
+    // Visual system (presentation only — every word above/below unchanged).
+    // Photo is the real reopened-claim job from Projects (published record).
+    heroPhoto: {
+      src: "/projects/iko-roof-replacement-the-woodlands-tx.jpg",
+      alt: "Aerial view of a completed IKO shingle roof replaced by Northvale Roofing on a Woodlands, TX home",
+    },
+    // Each chip restates a fact already on this page (15-day acknowledgment +
+    // 60-day penalty line: deadlines section; two-part payment: first section).
+    glance: [
+      {
+        value: "15 days",
+        label: "for your insurer to acknowledge your claim (Tex. Ins. Code Ch. 542)",
+      },
+      {
+        value: "60 days",
+        label: "the delay line that triggers statutory interest plus attorney's fees",
+      },
+      {
+        value: "2 checks",
+        label: "how replacement-cost claims typically pay — depreciation follows proof",
+      },
+    ],
     sections: [
       {
         heading: "How a Texas roof claim actually pays",
@@ -396,6 +512,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
         heading: "The deadlines your insurer must hit",
         body: "Texas prompt-payment law (Insurance Code Chapter 542) puts your claim on a clock:",
         ordered: true,
+        kind: "steps",
         bullets: [
           {
             text: "Within 15 days of your notice: acknowledge the claim, start investigating, and request what they need (§542.055).",
@@ -414,6 +531,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
       },
       {
         heading: "What we do — and the legal line we don't cross",
+        kind: "cards",
         bullets: [
           {
             lead: "Pre-claim honesty",

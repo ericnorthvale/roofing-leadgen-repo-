@@ -17,6 +17,17 @@ export interface ServiceSection {
   bullets?: ServiceBullet[];
   /** Render bullets as an ordered list (process steps). */
   ordered?: boolean;
+  /**
+   * Visual treatment for the section (owner-approved service-page system,
+   * 2026-08-01). Purely presentational — the same text renders either way,
+   * so tagging a section never changes what crawlers read.
+   * - "steps": ordered bullets as a numbered gold timeline
+   * - "cards": lead/text bullets as a card grid
+   * - undefined: classic prose (default)
+   */
+  kind?: "steps" | "cards";
+  /** Optional REAL photo inset rendered after the section (never stock). */
+  photo?: { src: string; alt: string; caption?: string };
 }
 
 /** Real, generally-true Q&A. Feeds FAQPage JSON-LD. Never fabricate specifics. */
@@ -38,6 +49,28 @@ export interface Service {
   summary: string;
   sections: ServiceSection[];
   faqs?: ServiceFaq[];
+  /**
+   * Optional REAL photo for the page-header backdrop (owner-approved
+   * service-page visual system, 2026-08-01). Never stock (Hard Rule #2);
+   * alt must not claim a location that isn't confirmed.
+   */
+  heroPhoto?: { src: string; alt: string };
+  /**
+   * "At a glance" chips under the header CTAs. Each must restate a TRUE fact
+   * already made on this page (or sourced in docs/research-facts.md) — the
+   * chips are a summary surface, never a place for new claims.
+   */
+  glance?: { value: string; label: string }[];
+  /** Optional real before/during/after pair for the page's proof band. */
+  beforeAfter?: {
+    intro?: string;
+    beforeSrc: string;
+    beforeAlt: string;
+    beforeCaption: string;
+    afterSrc: string;
+    afterAlt: string;
+    afterCaption: string;
+  };
   dataCompleteness: DataCompleteness;
 }
 
@@ -63,6 +96,29 @@ export const SERVICES: Record<ServiceTag, Service> = {
       "Full roof replacement across NW Houston: tear-off to deck, synthetic underlayment, wind-rated architectural shingles, and a written price before we leave.",
     summary:
       "Tear-off to deck, a rebuilt roof system — decking to ridge vent — and the exact price in writing before we leave the driveway. Architectural shingle standard; Class-4 impact and metal options quoted side by side.",
+    // Visual system (presentation only — every word above/below unchanged).
+    heroPhoto: {
+      src: "/work/work-04.webp",
+      alt: "Completed roof replacement in dark architectural shingle on a red-brick Houston-area home",
+    },
+    // Each chip restates a fact already on this page (install time: process
+    // step + FAQ; forty-photo packet: includes list; written price: summary).
+    glance: [
+      { value: "1 day", label: "most installations finish in one — larger homes take two" },
+      { value: "40 photos", label: "the documentation packet you keep at close" },
+      { value: "In writing", label: "your exact price before we leave the driveway" },
+    ],
+    beforeAfter: {
+      intro:
+        "A real Northvale replacement — the same roof mid-installation and completed, by drone.",
+      beforeSrc: "/work/work-08-during.webp",
+      beforeAlt:
+        "Northvale Roofing crew installing synthetic underlayment during this roof replacement — drone view",
+      beforeCaption: "During installation",
+      afterSrc: "/work/work-09-after.webp",
+      afterAlt: "The same roof completed — drone view of the finished shingle roof replacement",
+      afterCaption: "Completed",
+    },
     sections: [
       {
         heading: "What a full replacement includes",
@@ -93,6 +149,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       {
         heading: "Materials we install",
         body: "We standardize on IKO and put your options side by side in writing:",
+        kind: "cards",
         bullets: [
           {
             lead: "IKO Dynasty (standard)",
@@ -114,6 +171,12 @@ export const SERVICES: Record<ServiceTag, Service> = {
       {
         heading: "The system under the shingles",
         body: "Shingles are the visible 20% of a roof. Replacements fail or last on the other 80%:",
+        kind: "cards",
+        photo: {
+          src: "/work/work-05.webp",
+          alt: "Synthetic underlayment and starter course installed at a roof edge — install detail",
+          caption: "The system under the shingles — a real Northvale install",
+        },
         bullets: [
           {
             lead: "Ventilation",
@@ -136,6 +199,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       {
         heading: "What the process looks like",
         ordered: true,
+        kind: "steps",
         bullets: [
           { text: "Free inspection plus written estimate — the same day you call." },
           { text: "Material selection and color sample drop-off." },
@@ -203,9 +267,22 @@ export const SERVICES: Record<ServiceTag, Service> = {
       "Leaks, lifted shingles, failed flashing, bad pipe boots. Same-day or next-day roof repair across The Woodlands, Spring, Tomball, Magnolia, Conroe, and Cypress.",
     summary:
       "Leaks, lifted shingles, failed flashing, bad pipe boots. Usually same-day or next-day. Written diagnosis before any cash changes hands.",
+    // Visual system (presentation only — every word above/below unchanged).
+    heroPhoto: {
+      src: "/work/work-07.webp",
+      alt: "Roofer hand-nailing shingles during installation — close-up detail",
+    },
+    // Each chip restates a fact already on this page (scheduling: summary +
+    // FAQ; repair range: Angi 2026 in body + FAQ; written diagnosis: summary).
+    glance: [
+      { value: "Same-day", label: "or next-day for most repairs" },
+      { value: "$400–$2,000", label: "typical repair range nationally (Angi, 2026)" },
+      { value: "In writing", label: "diagnosis and price before any work starts" },
+    ],
     sections: [
       {
         heading: "The repairs we see most",
+        kind: "cards",
         bullets: [
           {
             lead: "Pipe boot failures",
@@ -280,6 +357,18 @@ export const SERVICES: Record<ServiceTag, Service> = {
       "Free roof inspection with a forty-photo documentation packet and written findings within 24 hours. No obligation, no pressure, no door-knocking.",
     summary:
       "Forty-photo packet. Written findings within 24 hours. No obligation, no pressure, no door-knocking.",
+    // Visual system (presentation only — every word above/below unchanged).
+    heroPhoto: {
+      src: "/work/work-01.webp",
+      alt: "Northvale Roofing inspector walking a steep two-story roof",
+    },
+    // Each chip restates a fact already on this page (free + no obligation:
+    // summary + "Why free?"; forty photos: packet section; 24 hours: summary).
+    glance: [
+      { value: "Free", label: "the inspection and written findings — no obligation" },
+      { value: "40 photos", label: "the documentation packet you keep either way" },
+      { value: "24 hours", label: "written findings after the inspection" },
+    ],
     sections: [
       {
         heading: "What's in the forty-photo packet",
@@ -300,6 +389,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       {
         heading: "What the findings actually mean",
         body: "An inspection is only useful if it turns photos into decisions:",
+        kind: "cards",
         bullets: [
           {
             lead: "Granule loss",
@@ -321,6 +411,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       },
       {
         heading: "Who this is for",
+        kind: "cards",
         bullets: [
           {
             lead: "Homeowners",
@@ -391,6 +482,18 @@ export const SERVICES: Record<ServiceTag, Service> = {
       "Hail, wind, and tree-impact roof damage documented with a forty-photo packet built for your insurance claim. Houston-area same-day response.",
     summary:
       "Hail, wind, fallen-limb impact. We document everything your adjuster will ask for, and then some.",
+    // Visual system (presentation only — every word above/below unchanged).
+    heroPhoto: {
+      src: "/work/work-03.webp",
+      alt: "Home and landscaping protected with tarps during a Northvale Roofing re-roof",
+    },
+    // Each chip restates a fact already on this page (NWS storm-day count:
+    // first section; same-day tarping: FAQ; forty-photo packet: claim section).
+    glance: [
+      { value: "50–60", label: "thunderstorm days a year in southeast Texas (NWS)" },
+      { value: "Same-day", label: "tarping priority for active leaks, conditions allowing" },
+      { value: "40+", label: "photos in the claim-ready packet" },
+    ],
     sections: [
       {
         heading: "The storms this region actually gets",
@@ -473,6 +576,21 @@ export const SERVICES: Record<ServiceTag, Service> = {
       "Process-literate roof insurance claim support: Xactimate-ready scopes, adjuster meet, named project manager. We're the contractor, not your public adjuster.",
     summary:
       "Process-literate claim support. Xactimate-ready scopes of loss. A named project manager who knows the process cold.",
+    // Visual system (presentation only — every word above/below unchanged).
+    // Photo is the real reopened-claim job from Projects (published record).
+    heroPhoto: {
+      src: "/projects/iko-roof-replacement-the-woodlands-tx.jpg",
+      alt: "Aerial view of a completed IKO shingle roof replaced by Northvale Roofing on a Woodlands, TX home",
+    },
+    // Each chip restates the Ch. 542 deadlines already detailed on this page.
+    glance: [
+      {
+        value: "15 days",
+        label: "for your insurer to acknowledge the claim (Tex. Ins. Code Ch. 542)",
+      },
+      { value: "15 biz days", label: "to accept or reject once it has what it requested" },
+      { value: "5 biz days", label: "to pay after accepting" },
+    ],
     sections: [
       {
         heading: "How roof claims actually pay in Texas",
@@ -481,6 +599,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       {
         heading: "What our claim support looks like",
         ordered: true,
+        kind: "steps",
         bullets: [
           {
             lead: "Pre-claim inspection",
