@@ -58,6 +58,10 @@ export default defineConfig({
     // git history and delete this redirect when they land. The page was
     // noindex + sitemap-excluded, so this costs no SEO.
     "/reviews": { status: 302, destination: "/" },
+    // TEMPORARY (302, owner request 2026-08-01): certifications page parked —
+    // restore src/pages/certifications.astro + its header/footer links and
+    // drop this redirect when ROOFPRO status is worth showing.
+    "/certifications": { status: 302, destination: "/about" },
   },
   adapter: vercel({
     webAnalytics: { enabled: false }, // we use GA4 + server-side GTM, not Vercel Analytics
