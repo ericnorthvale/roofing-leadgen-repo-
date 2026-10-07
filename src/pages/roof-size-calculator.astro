@@ -118,8 +118,8 @@ const seo = {
                 id="rt-verify"
                 class="mt-3 hidden rounded-lg bg-[color:var(--color-gold-50)] px-3 py-2 text-sm text-[color:var(--color-ink-800)]"
               >
-                <strong>Is the gold outline on your roof?</strong> If it's on a garage, a shed or
-                next door, just tap your own house on the map and we'll measure that instead.
+                <strong>Is the gold box around your house?</strong> If it's around a garage, a shed
+                or next door, just tap your own house on the map and we'll measure that instead.
               </p>
 
               <div class="mt-4 flex flex-wrap items-center gap-2.5">
@@ -645,28 +645,41 @@ const seo = {
         function drawMeasuredShapes(data: any) {
           clearMeasuredShapes();
           const segs: any[] = data?.solarPotential?.roofSegmentStats ?? [];
+
+          // ONE outline around the whole measured building, not one box per
+          // roof plane. Google gives us axis-aligned bounding boxes, not real
+          // facet shapes, so drawing all 17 of them was both a visual mess and
+          // a false claim of precision (owner, 2026-10). All this marker needs
+          // to answer is "did we measure YOUR building?".
+          let south = 90,
+            north = -90,
+            west = 180,
+            east = -180;
+          let found = false;
           for (const seg of segs) {
             const bb = seg?.boundingBox;
             if (!bb?.sw || !bb?.ne) continue;
-            measuredShapes.push(
-              new google.maps.Rectangle({
-                map,
-                bounds: {
-                  south: bb.sw.latitude,
-                  west: bb.sw.longitude,
-                  north: bb.ne.latitude,
-                  east: bb.ne.longitude,
-                },
-                fillColor: "#C9A26C",
-                fillOpacity: 0.18,
-                strokeColor: "#C9A26C",
-                strokeWeight: 1.5,
-                clickable: false,
-                zIndex: 1,
-              }),
-            );
+            south = Math.min(south, bb.sw.latitude, bb.ne.latitude);
+            north = Math.max(north, bb.sw.latitude, bb.ne.latitude);
+            west = Math.min(west, bb.sw.longitude, bb.ne.longitude);
+            east = Math.max(east, bb.sw.longitude, bb.ne.longitude);
+            found = true;
           }
-          if (measuredShapes.length > 0) el("rt-verify").classList.remove("hidden");
+          if (!found) return;
+
+          measuredShapes.push(
+            new google.maps.Rectangle({
+              map,
+              bounds: { south, north, west, east },
+              fillColor: "#C9A26C",
+              fillOpacity: 0.12,
+              strokeColor: "#C9A26C",
+              strokeWeight: 2.5,
+              clickable: false,
+              zIndex: 1,
+            }),
+          );
+          el("rt-verify").classList.remove("hidden");
         }
 
         async function fetchSolar(lat: number, lng: number): Promise<any | null> {
