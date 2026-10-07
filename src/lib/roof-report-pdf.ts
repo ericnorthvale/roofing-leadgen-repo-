@@ -482,7 +482,7 @@ async function drawCover(
     font: fonts.bodyBold,
     color: ink.rule,
   });
-  const orderValue = `${summary.squaresToOrder.toFixed(1)} squares`;
+  const orderValue = `${summary.squaresWithWaste.toFixed(1)} squares`;
   page.drawText(orderValue, {
     x: MARGIN + 120,
     y: bandTop - cellH - 23,
@@ -490,7 +490,7 @@ async function drawCover(
     font: fonts.bodyBold,
     color: ink.white,
   });
-  const orderNote = `measured area + ${summary.waste.percent}% waste + ${summary.orderMargin}-square ordering margin`;
+  const orderNote = `measured area plus the ${summary.waste.percent}% waste allowance`;
   page.drawText(orderNote, {
     x: PAGE_W - MARGIN - 10 - fonts.body.widthOfTextAtSize(orderNote, 8),
     y: bandTop - cellH - 21,
@@ -839,20 +839,10 @@ function drawCalculation(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
     ],
     [
       `Waste allowance (${summary.waste.complexity} roof${summary.waste.steepAdder > 0 ? ", steep pitch" : ""})`,
-      `+ ${summary.waste.percent}%  ·  ${summary.squaresWithWaste.toFixed(1)} squares`,
+      `+ ${summary.waste.percent}%`,
       false,
     ],
-    [
-      "Rounded up to a whole square",
-      `${Math.ceil(summary.squaresWithWaste).toFixed(0)} squares`,
-      false,
-    ],
-    [
-      "Ordering margin",
-      `+ ${summary.orderMargin} square${summary.orderMargin === 1 ? "" : "s"}`,
-      false,
-    ],
-    ["Quantity to order", `${summary.squaresToOrder.toFixed(1)} squares`, true],
+    ["Quantity to order", `${summary.squaresWithWaste.toFixed(1)} squares`, true],
   ];
 
   for (const [label, value, strong] of rows) {
@@ -1006,7 +996,10 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
   const breakdown =
     `${unit} · ` +
     `base allowance ${Math.round(w.base * 100)}%` +
-    (w.steepAdder > 0 ? ` + ${Math.round(w.steepAdder * 100)}% steep-pitch (9/12 or greater)` : "");
+    (w.steepAdder > 0
+      ? ` + ${Math.round(w.steepAdder * 100)}% steep-pitch (9/12 or greater)` +
+        (Math.round((w.base + w.steepAdder) * 100) > w.percent ? `, capped at ${w.percent}%` : "")
+      : "");
   by = drawParagraph(page, breakdown, {
     x: MARGIN + 18,
     y: by,
@@ -1033,11 +1026,10 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
     color: ink.slate500,
   });
   const quantities: [string, string][] = [
-    ["MEASURED", `${summary.squares.toFixed(1)} sq`],
-    ["WITH ALLOWANCE", `${summary.squaresWithWaste.toFixed(1)} sq`],
-    ["TO ORDER", `${summary.squaresToOrder.toFixed(1)} sq`],
+    ["MEASURED ROOF AREA", `${summary.squares.toFixed(1)} squares`],
+    ["QUANTITY TO ORDER", `${summary.squaresWithWaste.toFixed(1)} squares`],
   ];
-  let qx = MARGIN + 200;
+  let qx = MARGIN + 230;
   for (const [label, value] of quantities) {
     page.drawText(label, {
       x: qx,
@@ -1053,7 +1045,7 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
       font: fonts.bodySemi,
       color: ink.slate900,
     });
-    qx += 112;
+    qx += 130;
   }
 
   y = y - boxH - 20;
@@ -1112,14 +1104,14 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
   const ruleRows: [Complexity, string, string][] =
     input.method === "manual"
       ? [
-          ["simple", "Gable — few cuts", "10%"],
-          ["moderate", "Hip, and/or dormers", "13%"],
-          ["complex", "Cut-up hip and valley", "15%"],
+          ["simple", "Gable — few cuts", "12%"],
+          ["moderate", "Hip, and/or dormers", "15%"],
+          ["complex", "Cut-up hip and valley", "20%"],
         ]
       : [
-          ["simple", "4 planes or fewer", "10%"],
-          ["moderate", "5 to 8 planes", "13%"],
-          ["complex", "9 planes or more", "15%"],
+          ["simple", "4 planes or fewer", "12%"],
+          ["moderate", "5 to 8 planes", "15%"],
+          ["complex", "9 planes or more", "20%"],
         ];
   for (const [key, basis, pct] of ruleRows) {
     const applied = key === w.complexity;
@@ -1149,7 +1141,13 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
   y -= 6;
   y = drawParagraph(
     page,
-    `A roof with any section at 9/12 or steeper adds a further 2%, because steep slopes are cut and staged with less margin for error. The total is capped at 20%. This roof: ${Math.round(w.base * 100)}% base${w.steepAdder > 0 ? ` + ${Math.round(w.steepAdder * 100)}% steep-pitch` : ", no steep-pitch adder"} = ${w.percent}%.`,
+    `A roof with any section at 9/12 or steeper adds a further 2%, because steep slopes are cut and staged with less margin for error. The total is capped at 20%. This roof: ${Math.round(w.base * 100)}% base${
+      w.steepAdder > 0
+        ? ` + ${Math.round(w.steepAdder * 100)}% steep-pitch${
+            Math.round((w.base + w.steepAdder) * 100) > w.percent ? ", held at the cap" : ""
+          }`
+        : ", no steep-pitch adder"
+    } = ${w.percent}%.`,
     {
       x: MARGIN,
       y,
@@ -1163,7 +1161,7 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
   y -= 20;
   y = drawParagraph(
     page,
-    `The quantity to order goes one step further: the figure above is rounded up to a whole square and a ${summary.orderMargin}-square ordering margin is added. That margin is a purchasing decision, not part of the allowance — a traced outline tends to read slightly under an on-roof measurement, and running short mid-tear-off costs far more than a spare bundle. Material is sold in whole bundles in any case, so the supplier converts the square count at the point of order. This figure covers FIELD SHINGLES ONLY: starter, and hip-and-ridge cap, are separate products ordered in linear feet and are listed on the last page.`,
+    "These allowances sit at the upper end of published industry guidance rather than the middle, so an order is not short: a measurement taken from above reads slightly under one taken on the roof, and a second delivery costs far more than a spare bundle. Material is sold in whole bundles, so the supplier rounds the square count up at the point of order. This figure covers FIELD SHINGLES ONLY: starter, and hip-and-ridge cap, are separate products ordered in linear feet and are listed on the last page.",
     { x: MARGIN, y, font: fonts.body, size: 8, color: ink.slate500, width: CONTENT_W, leading: 11 },
   );
   y -= 34;
@@ -1421,7 +1419,7 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
   });
   y -= 16;
   const usage = [
-    `Comparing estimates: ask which figure each one was priced on. A bid built on ${summary.squares.toFixed(1)} squares and a bid built on ${summary.squaresToOrder.toFixed(1)} are not the same bid, even at the same rate per square.`,
+    `Comparing estimates: ask which figure each one was priced on. A bid built on ${summary.squares.toFixed(1)} squares and a bid built on ${summary.squaresWithWaste.toFixed(1)} are not the same bid, even at the same rate per square.`,
     "Checking an insurance scope: carrier scopes normally list the roof area, the waste allowance and the accessory lines separately. Compare each against its counterpart here rather than comparing totals.",
     "Against another measurement: differences usually trace to pitch or to where the roof edge was drawn, not to arithmetic. Check those two first.",
   ];

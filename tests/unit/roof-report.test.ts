@@ -11,7 +11,6 @@ import {
   pitchRangeLabel,
   slopeFactor,
   COMMON_SLOPE_FACTORS,
-  orderingMargin,
   type RoofPlane,
 } from "~/lib/roof-report";
 import { reportReference } from "~/lib/roof-report-pdf";
@@ -56,30 +55,35 @@ describe("complexity + waste allowance", () => {
     expect(complexityFromPlanes(9)).toBe("complex");
   });
 
-  it("applies the sourced industry base allowances", () => {
-    expect(wasteAllowance(3, 20).percent).toBe(10); // simple gable
-    expect(wasteAllowance(6, 20).percent).toBe(13); // hip / dormers
-    expect(wasteAllowance(12, 20).percent).toBe(15); // cut-up hip & valley
+  it("applies the base allowances, set at the top of the published ranges", () => {
+    expect(wasteAllowance(3, 20).percent).toBe(12); // simple gable
+    expect(wasteAllowance(6, 20).percent).toBe(15); // hip / dormers
+    expect(wasteAllowance(12, 20).percent).toBe(20); // cut-up hip & valley
   });
 
-  it("matches the EagleView ground truth for 5806 Sugar Bush Dr", () => {
-    // Owner-supplied report: 17 planes, predominantly 9/12 -> EagleView 17%.
+  it("runs deliberately above the EagleView figure for 5806 Sugar Bush Dr", () => {
+    // Owner-supplied report: 17 planes, predominantly 9/12 → EagleView 17%.
+    // The model prints 20%. That gap is intended (owner, 2026-10): the extra
+    // replaced a separate ordering margin, so an order is never short.
     const w = wasteAllowance(17, 40.0);
     expect(w.complexity).toBe("complex");
-    expect(w.percent).toBe(17);
+    expect(w.percent).toBe(20);
+    expect(w.percent).toBeGreaterThan(17);
   });
 
   it("adds the steep-pitch adder at 9/12 and above only", () => {
     expect(wasteAllowance(6, 26.57).steepAdder).toBe(0); // 6/12 → none
     expect(wasteAllowance(6, 36.87).steepAdder).toBe(0.02); // 9/12 → adder
-    expect(wasteAllowance(6, 36.87).percent).toBe(15);
+    expect(wasteAllowance(6, 36.87).percent).toBe(17);
   });
 
   it("never prints more than the 20% industry ceiling", () => {
-    // The ceiling is a guard rail: with the calibrated bases the worst case
-    // (complex + steep) is 17%, so it should never actually bind.
+    // Complex roofs now sit ON the ceiling, so it binds rather than being a
+    // theoretical guard rail — the steep adder must not push past it.
     const worst = wasteAllowance(40, 60);
-    expect(worst.percent).toBe(17);
+    expect(worst.base).toBe(0.2);
+    expect(worst.steepAdder).toBe(0.02);
+    expect(worst.percent).toBe(20);
     expect(worst.factor).toBeLessThanOrEqual(0.2);
   });
 
@@ -151,8 +155,8 @@ describe("buildRoofSummary", () => {
     });
     expect(s.squares).toBe(16);
     expect(s.confidence.level).toBe("good");
-    expect(s.waste.percent).toBe(10); // 3 planes → simple
-    expect(s.squaresWithWaste).toBe(17.6);
+    expect(s.waste.percent).toBe(12); // 3 planes → simple
+    expect(s.squaresWithWaste).toBe(17.9);
     expect(s.avgPitchDeg).toBe(27);
   });
 
@@ -328,48 +332,35 @@ describe("reportReference", () => {
   });
 });
 
-describe("ordering margin", () => {
-  const roof = (squares: number, pitchDeg = 26.57) => {
-    const surface = squares * 100;
-    return buildRoofSummary({
-      planes: [plane(surface / 2, pitchDeg), plane(surface / 2, pitchDeg)],
-      surfaceFt2: surface,
-      footprintFt2: surface / 1.118,
-      wholeRoofFt2: surface,
+describe("waste allowance sits at the upper end of published guidance", () => {
+  it("uses 12 / 15 / 20 by complexity", () => {
+    expect(wasteAllowance(3, null).percent).toBe(12);
+    expect(wasteAllowance(6, null).percent).toBe(15);
+    expect(wasteAllowance(12, null).percent).toBe(20);
+  });
+
+  it("never prints more than the 20% ceiling, even with the steep adder", () => {
+    // Complex roofs already sit on the cap, so the adder has nowhere to go.
+    const steep = wasteAllowance(12, 36.87); // 9/12
+    expect(steep.steepAdder).toBe(0.02);
+    expect(steep.percent).toBe(20);
+  });
+
+  it("still lets the steep adder bite where there is headroom", () => {
+    expect(wasteAllowance(3, 36.87).percent).toBe(14);
+    expect(wasteAllowance(6, 36.87).percent).toBe(17);
+  });
+
+  it("applies the allowance to squares without touching the measured area", () => {
+    const s = buildRoofSummary({
+      planes: [plane(2000, 26.57), plane(2000, 26.57)],
+      surfaceFt2: 4000,
+      footprintFt2: 3578,
+      wholeRoofFt2: 4000,
       imageryQuality: "HIGH",
     });
-  };
-
-  it("rounds up to a whole square and adds two on a normal roof", () => {
-    const s = roof(52.2);
-    // 52.2 measured, +10% simple = 57.4 → ceil 58 → +2
-    expect(s.squaresWithWaste).toBe(57.4);
-    expect(s.orderMargin).toBe(2);
-    expect(s.squaresToOrder).toBe(60);
-  });
-
-  it("adds only one square on a small roof, where two would be a tenth", () => {
-    const s = roof(12);
-    expect(s.orderMargin).toBe(1);
-    expect(s.squaresToOrder).toBe(Math.ceil(s.squaresWithWaste) + 1);
-  });
-
-  it("never orders less than the measured area plus its allowance", () => {
-    for (const sq of [4, 9.9, 18, 20, 33.3, 64, 120]) {
-      const s = roof(sq);
-      expect(s.squaresToOrder).toBeGreaterThan(s.squaresWithWaste);
-      expect(s.squaresWithWaste).toBeGreaterThan(s.squares);
-    }
-  });
-
-  it("leaves the measured area untouched — the margin is a purchasing step", () => {
-    const s = roof(40);
     expect(s.squares).toBe(40);
-    expect(s.surfaceFt2).toBe(4000);
-  });
-
-  it("switches margin at the 20-square boundary, measured after waste", () => {
-    expect(orderingMargin(19.9)).toBe(1);
-    expect(orderingMargin(20)).toBe(2);
+    expect(s.waste.percent).toBe(12);
+    expect(s.squaresWithWaste).toBe(44.8);
   });
 });

@@ -131,15 +131,28 @@ export const COMPLEXITY_LABEL: Record<Complexity, string> = {
 /* ----------------------------------------------------------------- waste -- */
 
 /**
- * Base allowances by complexity (Sheet 8). Calibrated 2026-10 against an
- * owner-supplied EagleView report for a 17-plane, 9/12 roof in Magnolia: that
- * roof lands on complex (15%) + the steep adder (2%) = 17%, matching
- * EagleView's figure exactly. All three sit inside the published ranges.
+ * Base allowances by complexity (Sheet 8), set at the UPPER END of the
+ * published ranges rather than the middle (owner, 2026-10).
+ *
+ * The published ranges are simple 10%, hip 12–15%, cut-up 15–20%, so 12/15/20
+ * sits at the top of each without leaving any of them. That is a deliberate
+ * choice: the owner would rather order two squares more than need a second
+ * delivery, and a traced outline reads slightly under an on-roof measurement
+ * anyway (ratios 0.90–1.02 on the calibration set).
+ *
+ * Earlier versions carried a separate "ordering margin" line to do the same
+ * job. The owner asked for it folded in here instead, so there is now one
+ * number to explain rather than two.
+ *
+ * Consequence worth knowing: these run ABOVE what a photogrammetric report
+ * suggests — EagleView called 17% on the Magnolia roof that lands on complex
+ * here. The report no longer claims to match it, and says it is set at the
+ * upper end of industry guidance.
  */
 const BASE_WASTE: Record<Complexity, number> = {
-  simple: 0.1,
-  moderate: 0.13,
-  complex: 0.15,
+  simple: 0.12,
+  moderate: 0.15,
+  complex: 0.2,
 };
 
 /** Steep roofs add handling/cut loss. Applied at 9/12 and above (Sheet 8). */
@@ -148,44 +161,15 @@ const STEEP_ADDER = 0.02;
 /** Industry guidance tops out around 20%; never print more. */
 const WASTE_CAP = 0.2;
 
-/**
- * Ordering margin — a deliberate over-order, kept SEPARATE from the waste
- * allowance (owner, 2026-10: "I want it 1-2 more than needed on squares … so
- * we don't underquote or order").
- *
- * Why it is its own line rather than a bigger waste percentage: the waste
- * figures above are calibrated to EagleView and match it exactly on two
- * ground-truth roofs, which is the report's whole credibility claim. Inflating
- * them to smuggle in a safety margin would break that match and would misstate
- * what a waste allowance is. The margin is a purchasing decision, so it is
- * added, labelled, after the allowance — and the measured area is never
- * touched by either.
- *
- * It also absorbs the one bias the calibration did find: a traced outline
- * reads slightly UNDER a photogrammetric measurement (ratios 0.90–1.02 on
- * correctly-matched roofs), because outlines clip eaves and overhangs.
- *
- * Two squares on anything of normal size, one on a small roof where two would
- * be a tenth of the order.
- */
-const ORDER_MARGIN_SQUARES = 2;
-const ORDER_MARGIN_SMALL_SQUARES = 1;
-const SMALL_ROOF_SQUARES = 20;
-
-/** Squares added on top of the waste allowance, before rounding. */
-export function orderingMargin(squaresWithWaste: number): number {
-  return squaresWithWaste < SMALL_ROOF_SQUARES ? ORDER_MARGIN_SMALL_SQUARES : ORDER_MARGIN_SQUARES;
-}
-
 export interface WasteResult {
   complexity: Complexity;
-  /** Base allowance before the steep-pitch adder, e.g. 0.15. */
+  /** Base allowance before the steep-pitch adder, e.g. 0.20. */
   base: number;
   /** Steep-pitch adder actually applied (0 or 0.02). */
   steepAdder: number;
-  /** Final allowance, capped. e.g. 0.17 */
+  /** Final allowance, capped. e.g. 0.20 */
   factor: number;
-  /** Whole-number percent for display, e.g. 17. */
+  /** Whole-number percent for display, e.g. 20. */
   percent: number;
 }
 
@@ -322,15 +306,8 @@ export interface RoofSummary {
   pitchRangeDeg: { minDeg: number; maxDeg: number } | null;
   planes: RoofPlane[];
   waste: WasteResult;
-  /** Measured squares plus the waste allowance. Not the order figure. */
+  /** Measured squares plus the waste allowance — the quantity to order. */
   squaresWithWaste: number;
-  /** Deliberate over-order added on top of the allowance, in squares. */
-  orderMargin: number;
-  /**
-   * What to actually order: squares + waste, rounded up to a whole square,
-   * plus the ordering margin. Always ≥ `squaresWithWaste`, never below it.
-   */
-  squaresToOrder: number;
   confidence: ConfidenceVerdict;
   /** Total traced edge length in feet — drip edge, starter, gutter runs. */
   perimeterFt: number | null;
@@ -411,10 +388,6 @@ export function buildRoofSummary(input: BuildSummaryInput): RoofSummary {
     input.complexity,
   );
   const squares = surfaceFt2 / SQ_FT_PER_SQUARE;
-  const withWaste = round(squares * (1 + waste.factor), 1);
-  // Round up to a whole square first: material is sold in bundles, so a part
-  // square is always bought as a whole one.
-  const orderMargin = orderingMargin(withWaste);
 
   const confidence: ConfidenceVerdict =
     input.method === "manual"
@@ -445,9 +418,7 @@ export function buildRoofSummary(input: BuildSummaryInput): RoofSummary {
     pitchRangeDeg,
     planes,
     waste,
-    squaresWithWaste: withWaste,
-    orderMargin,
-    squaresToOrder: round(Math.ceil(withWaste) + orderMargin, 1),
+    squaresWithWaste: round(squares * (1 + waste.factor), 1),
     confidence,
     perimeterFt: input.perimeterFt != null ? Math.round(input.perimeterFt) : null,
     // 1 sq ft of net free area per 300 sq ft of attic, split intake/exhaust.

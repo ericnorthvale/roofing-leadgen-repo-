@@ -1541,3 +1541,41 @@ and the report can then print bundles.
 (see addendum 4 on valley footage driving waste). One change fixes both: let the
 rep trace ridge, hip and valley LINES as well as the outline. That is the next
 real build on this tool.
+
+---
+
+### Sheet 8 — addendum 11: margin folded into the waste factor (2026-10-07)
+
+Owner: "don't say we are adding 2 additional squares, just automatically add it
+to the waste factor … so a 12%, 15% and 20% waste factor instead."
+
+This replaces addendum 9. The separate "ordering margin" line, the round-up row
+and the `orderMargin` / `squaresToOrder` fields are all gone; there is one
+number again, and the safety sits inside it.
+
+**New bases: simple 12% · moderate 15% · complex 20%** (was 10 / 13 / 15).
+Steep-pitch adder +2% and the 20% cap are unchanged.
+
+**Where this sits against the sourced ranges** (main Sheet 8 entry: simple 10%,
+hip 12–15%, cut-up 15–20%): 12 / 15 / 20 is the **top of each published range
+without leaving any of them**. The report now says so in those words — "these
+allowances sit at the upper end of published industry guidance rather than the
+middle, so an order is not short" — rather than calling them simply
+industry-standard, which would understate the deliberate conservatism.
+
+**What this costs, stated plainly:** the model no longer matches EagleView. Sugar
+Bush was the calibration anchor at 17% and now prints 20%; Grove Clover the same.
+On a 52-square roof that is 62.6 squares to order against EagleView's 61.1 —
+about 1.5 squares of head room, which is the owner's stated intent. A homeowner
+holding both documents will see a 3-point difference in the waste line. The unit
+test that asserted the EagleView match has been inverted to assert the gap is
+intentional, so nobody "fixes" it back.
+
+**A consequence worth watching:** complex roofs now sit ON the 20% cap, so the
+steep-pitch adder has nowhere to go and is silently swallowed there. Rather than
+print "20% + 2% = 20%" and look like an arithmetic error, the report says
+"capped at 20%" / "held at the cap" whenever the ceiling actually binds. The
+adder still bites where there is headroom: simple steep 12→14, moderate steep
+15→17.
+
+The measured area is still never touched. Only the allowance moved.
