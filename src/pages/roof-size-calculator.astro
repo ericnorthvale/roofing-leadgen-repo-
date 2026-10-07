@@ -64,9 +64,10 @@ const seo = {
     <h1 class="mt-6 text-4xl md:text-5xl">How big is your roof?</h1>
     <div class="rule-gold mt-6" aria-hidden="true"></div>
     <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
-      Type your address and get your roof's size in seconds — measured plane by plane from aerial
-      imagery, or traced by you on the satellite map. Size only, no price games: the exact number
-      comes free, in writing, from a real inspection.
+      Find your address, trace your roof on the satellite view, and get its size in squares. You
+      pick the outline, so it follows your real eaves — not a computer's guess at which building is
+      yours. Size only, no price games: the exact number comes free, in writing, from a real
+      inspection.
     </p>
     <div class="mt-6 flex flex-wrap gap-3">
       <CTAButton href="/contact" label="Get the exact number free" ctaId="rooftool-book" />
@@ -106,32 +107,12 @@ const seo = {
                 class="mt-2.5 min-h-5 text-sm text-[color:var(--color-ink-600)]"
                 aria-live="polite"
               >
-                Start typing and pick your address — we'll find your roof.
+                Start typing and pick your address — then trace your roof on the map.
               </p>
               <div
                 id="rt-map"
                 class="mt-4 h-[380px] w-full overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] md:h-[440px]"
               />
-              {/* Shown once a roof is highlighted: the measured building is
-                  only trustworthy if a human confirms it's the right one. */}
-              <p
-                id="rt-verify"
-                class="mt-3 hidden rounded-lg bg-[color:var(--color-gold-50)] px-3 py-2 text-sm text-[color:var(--color-ink-800)]"
-              >
-                <strong>Is the gold box around your house?</strong> If it's around a garage, a shed
-                or next door, just tap your own house on the map and we'll measure that instead.
-              </p>
-
-              <button
-                id="rt-bigger"
-                type="button"
-                class="mt-2 hidden w-full rounded-lg border-2 border-[color:var(--color-gold-400)] bg-white px-3 py-2.5 text-left text-sm text-[color:var(--color-ink-800)] hover:bg-[color:var(--color-gold-50)]"
-              >
-                <strong class="text-[color:var(--color-navy-900)]">
-                  Bigger building next to this one.
-                </strong>
-                <span id="rt-bigger-msg" />
-              </button>
 
               <div class="mt-4 flex flex-wrap items-center gap-2.5">
                 <button
@@ -139,7 +120,7 @@ const seo = {
                   type="button"
                   class="rounded-full border border-[color:var(--color-navy-100)] bg-white px-4 py-2 text-sm font-semibold text-[color:var(--color-navy-900)] transition-colors hover:border-[color:var(--color-gold-400)] hover:text-[color:var(--color-gold-600)]"
                 >
-                  ✏️ Trace it myself
+                  ✏️ Trace my roof
                 </button>
                 <button
                   id="rt-reset"
@@ -169,6 +150,31 @@ const seo = {
                 >
                   Clear outline
                 </button>
+                <div id="rt-complexity" class="hidden w-full flex-wrap items-center gap-2">
+                  <span class="text-xs text-[color:var(--color-ink-600)]">Roof shape:</span>
+                  <button
+                    type="button"
+                    data-complexity="simple"
+                    class="rt-cx-btn rounded-full border border-[color:var(--color-navy-100)] bg-white px-3 py-1.5 text-xs font-semibold text-[color:var(--color-navy-900)]"
+                  >
+                    Simple gable
+                  </button>
+                  <button
+                    type="button"
+                    data-complexity="moderate"
+                    class="rt-cx-btn rt-cx-active rounded-full border border-[color:var(--color-navy-100)] bg-white px-3 py-1.5 text-xs font-semibold text-[color:var(--color-navy-900)]"
+                  >
+                    Hips / a dormer or two
+                  </button>
+                  <button
+                    type="button"
+                    data-complexity="complex"
+                    class="rt-cx-btn rounded-full border border-[color:var(--color-navy-100)] bg-white px-3 py-1.5 text-xs font-semibold text-[color:var(--color-navy-900)]"
+                  >
+                    Cut up — lots of valleys
+                  </button>
+                </div>
+
                 <div id="rt-pitch" class="hidden flex-wrap items-center gap-2" data-mult="1.118">
                   <span class="text-xs text-[color:var(--color-ink-600)]">Roof steepness:</span>
                   <button
@@ -319,9 +325,8 @@ const seo = {
       <p>
         Roofers measure in <strong>squares</strong> — one square is 100 square feet of roof surface. Your
         roof's surface is larger than your home's floor plan, because slope adds area: the steeper the
-        pitch, the more roof sits over the same footprint. When aerial data is available we measure every
-        roof plane and its own slope; when it isn't, you trace the building outline and pick a steepness,
-        and we do the honest math from there.
+        pitch, the more roof sits over the same footprint. You trace the outline and pick the steepness,
+        and we do the geometry from there — the same slope math a roofer uses.
       </p>
       <h2>Why we stop at size</h2>
       <p>
@@ -343,6 +348,7 @@ const seo = {
 </BaseLayout>
 
 <style is:global>
+  .rt-cx-active,
   .rt-pitch-active {
     background: var(--color-gold-400);
     border-color: var(--color-gold-400) !important;
@@ -403,6 +409,7 @@ const seo = {
       address: "",
       polygons: [] as any[],
       pitchMult: 1.118,
+      complexity: "moderate" as "simple" | "moderate" | "complex",
       /** Last publishable measurement — drives the panel, form and PDF alike. */
       summary: null as RoofSummary | null,
       method: "aerial" as "aerial" | "manual",
@@ -567,7 +574,15 @@ const seo = {
 
               map.setCenter({ lat, lng });
               map.setZoom(20);
-              await measureAuto(lat, lng);
+              state.center = { lat, lng };
+              showPropertyPhoto();
+              // Trace-first (owner, 2026-10). Automatic aerial measurement was
+              // wrong on 1 in 3 of the EagleView-checked roofs because it
+              // picked the wrong building; tracing puts that choice in the
+              // hands of someone who can see the house, and follows the eave
+              // edge that Google's model clips.
+              enableManual();
+              computeManual();
             } catch {
               setStatus("Couldn't read that address — try picking it from the list again.");
             }
@@ -583,292 +598,20 @@ const seo = {
         }
 
         // --- Auto measurement ---
-        // Primary: the site's one public key calls the Solar API straight
-        // from the browser (the key is domain-locked + quota-capped, so this
-        // is the whole configuration — "Wix-style" per the owner). If the
-        // optional server proxy (/api/roof-measure) is ever configured in
-        // Vercel, it is tried first and simply wins.
         const M2_TO_FT2 = 10.7639;
 
-        /** Google's building insights → the shared summary shape. */
-        function solarToSummary(data: any): RoofSummary | null {
-          const sp = data?.solarPotential;
-          const segs: any[] = Array.isArray(sp?.roofSegmentStats) ? sp.roofSegmentStats : [];
-          const planes: RoofPlane[] = [];
-          let roofM2 = 0;
-          let planM2 = 0;
-          for (const seg of segs) {
-            const pitchDeg = Number(seg?.pitchDegrees ?? 0);
-            const area = Number(seg?.stats?.areaMeters2 ?? 0);
-            const ground = Number(seg?.stats?.groundAreaMeters2 ?? 0);
-            const cos = Math.cos((pitchDeg * Math.PI) / 180) || 1;
-            const segRoof = area || ground / cos;
-            if (segRoof <= 0) continue;
-            roofM2 += segRoof;
-            planM2 += ground || area * cos;
-            planes.push({
-              areaFt2: segRoof * M2_TO_FT2,
-              pitchDeg,
-              azimuthDeg: Number(seg?.azimuthDegrees ?? 0),
-            });
-          }
-
-          const wholeM2 = Number(sp?.wholeRoofStats?.areaMeters2 ?? 0);
-          const wholeGroundM2 = Number(sp?.wholeRoofStats?.groundAreaMeters2 ?? 0);
-          const surfaceM2 = roofM2 > 0 ? roofM2 : wholeM2;
-          if (surfaceM2 <= 0) return null;
-
-          // How far is the building Google matched from the address we asked
-          // about? 20 m away can be a different house entirely.
-          let buildingOffsetM: number | null = null;
-          if (state.center && data?.center?.latitude != null) {
-            buildingOffsetM = metresBetween(
-              state.center.lat,
-              state.center.lng,
-              Number(data.center.latitude),
-              Number(data.center.longitude),
-            );
-          }
-
-          return buildRoofSummary({
-            planes,
-            surfaceFt2: surfaceM2 * M2_TO_FT2,
-            footprintFt2: (planM2 || wholeGroundM2 || surfaceM2) * M2_TO_FT2,
-            wholeRoofFt2: wholeM2 > 0 ? wholeM2 * M2_TO_FT2 : undefined,
-            imageryQuality: (data?.imageryQuality ?? null) as any,
-            imageryDate: data?.imageryDate ?? null,
-            buildingFound: true,
-            buildingOffsetM,
-            method: "aerial",
-          });
-        }
-
-        /** Great-circle distance in metres. */
-        function metresBetween(a: number, b: number, c: number, d: number) {
-          const R = 6371000;
-          const toR = (x: number) => (x * Math.PI) / 180;
-          const dLat = toR(c - a);
-          const dLng = toR(d - b);
-          const h =
-            Math.sin(dLat / 2) ** 2 + Math.cos(toR(a)) * Math.cos(toR(c)) * Math.sin(dLng / 2) ** 2;
-          return Math.round(2 * R * Math.asin(Math.sqrt(h)));
-        }
-
         /**
-         * Outline every plane Google measured, so the homeowner can SEE which
-         * building was measured. A wrong match (garage, neighbour) is obvious
-         * on sight and invisible in the numbers alone.
+         * ROOFTOP geocode via our server, or null. Used only to centre the map
+         * tightly on the house — nothing is measured from it.
          */
-        let measuredShapes: any[] = [];
-        function clearMeasuredShapes() {
-          measuredShapes.forEach((s) => s.setMap(null));
-          measuredShapes = [];
-          el("rt-verify").classList.add("hidden");
-          hideBigger();
-        }
-        /**
-         * Outline the measured building so a wrong match is obvious on sight.
-         *
-         * Google gives axis-aligned bounding boxes per roof plane, not real
-         * facet shapes. Drawing all of them was a visual mess; drawing one box
-         * around the lot was worse — houses are rarely square to north, so an
-         * axis-aligned rectangle wraps a slab of the neighbour's yard and looks
-         * arbitrary (owner, 2026-10).
-         *
-         * So: take every plane's corners and wrap them in a convex hull. It is
-         * a single clean shape that follows the building's real orientation.
-         * It is still an APPROXIMATION of extent — it bridges the notch in an
-         * L-shaped roof — and is only ever used to answer "is this my house?",
-         * never presented as the measured geometry.
-         */
-        function convexHull(pts: { lat: number; lng: number }[]) {
-          if (pts.length < 3) return pts;
-          const p = [...pts].sort((a, b) => a.lng - b.lng || a.lat - b.lat);
-          const cross = (o: any, a: any, b: any) =>
-            (a.lng - o.lng) * (b.lat - o.lat) - (a.lat - o.lat) * (b.lng - o.lng);
-          const half = (src: typeof p) => {
-            const out: typeof p = [];
-            for (const pt of src) {
-              while (out.length >= 2 && cross(out[out.length - 2], out[out.length - 1], pt) <= 0)
-                out.pop();
-              out.push(pt);
-            }
-            out.pop();
-            return out;
-          };
-          return [...half(p), ...half([...p].reverse())];
-        }
-
-        function drawMeasuredShapes(data: any) {
-          clearMeasuredShapes();
-          const segs: any[] = data?.solarPotential?.roofSegmentStats ?? [];
-
-          // Each plane's bounding box is axis-aligned, so on a house that
-          // isn't square to north the box is far bigger than the plane inside
-          // it. Shrink every box about its own centre until its area matches
-          // the plane's real ground area before hulling — measured, this pulls
-          // the outline from ~1.4x the true footprint down to ~1.07x.
-          const mPerDegLat = 111320;
-          const mPerDegLng = 111320 * Math.cos((segs[0]?.center?.latitude ?? 30) * (Math.PI / 180));
-          const corners: { lat: number; lng: number }[] = [];
-          for (const seg of segs) {
-            const bb = seg?.boundingBox;
-            if (!bb?.sw || !bb?.ne) continue;
-            const s2 = Math.min(bb.sw.latitude, bb.ne.latitude);
-            const n2 = Math.max(bb.sw.latitude, bb.ne.latitude);
-            const w2 = Math.min(bb.sw.longitude, bb.ne.longitude);
-            const e2 = Math.max(bb.sw.longitude, bb.ne.longitude);
-
-            const boxM2 = (n2 - s2) * mPerDegLat * ((e2 - w2) * mPerDegLng);
-            const trueM2 = Number(seg?.stats?.groundAreaMeters2 ?? 0);
-            const k = boxM2 > 0 && trueM2 > 0 ? Math.min(1, Math.sqrt(trueM2 / boxM2)) : 1;
-
-            const cLat = (s2 + n2) / 2;
-            const cLng = (w2 + e2) / 2;
-            const hLat = ((n2 - s2) / 2) * k;
-            const hLng = ((e2 - w2) / 2) * k;
-            corners.push(
-              { lat: cLat - hLat, lng: cLng - hLng },
-              { lat: cLat - hLat, lng: cLng + hLng },
-              { lat: cLat + hLat, lng: cLng - hLng },
-              { lat: cLat + hLat, lng: cLng + hLng },
-            );
-          }
-          if (corners.length < 3) return;
-
-          const hull = convexHull(corners);
-          if (hull.length < 3) return;
-
-          measuredShapes.push(
-            new google.maps.Polygon({
-              map,
-              paths: hull,
-              fillColor: "#C9A26C",
-              fillOpacity: 0.16,
-              strokeColor: "#C9A26C",
-              strokeWeight: 3,
-              clickable: false,
-              zIndex: 1,
-            }),
-          );
-          el("rt-verify").classList.remove("hidden");
-        }
-
-        /**
-         * findClosest returns the nearest building CENTRE, so a shed 2 m away
-         * beats the actual house whose centre sits 21 m off. Measured against
-         * six EagleView reports, that mis-pick was the single biggest source
-         * of error (two roofs came back at 55% and 68% of true).
-         *
-         * No automatic rule fixed it safely — "biggest within 30 m" repaired
-         * those two but overshot another by 30% (Sheet 8 addendum 3). So we
-         * OFFER the alternative instead of silently switching: one probe ring,
-         * and if something materially bigger is adjacent, the homeowner gets a
-         * one-tap way to correct it.
-         */
-        const biggerBtn = el("rt-bigger") as HTMLButtonElement;
-        let biggerTarget: { lat: number; lng: number } | null = null;
-
-        function hideBigger() {
-          biggerBtn.classList.add("hidden");
-          biggerTarget = null;
-        }
-
-        async function offerBiggerBuilding(lat: number, lng: number, currentFt2: number) {
-          hideBigger();
-          const STEP = 0.00018; // ~20 m
-          const probes: [number, number][] = [
-            [STEP, 0],
-            [-STEP, 0],
-            [0, STEP],
-            [0, -STEP],
-          ];
-          let best: { ft2: number; lat: number; lng: number } | null = null;
-          for (const [dy, dx] of probes) {
-            const d = await fetchSolar(lat + dy, lng + dx);
-            const segs: any[] = d?.solarPotential?.roofSegmentStats ?? [];
-            if (!segs.length || !d?.center) continue;
-            const ft2 =
-              segs.reduce((a, x) => a + Number(x?.stats?.areaMeters2 ?? 0), 0) * M2_TO_FT2;
-            if (ft2 > (best?.ft2 ?? 0)) {
-              best = { ft2, lat: d.center.latitude, lng: d.center.longitude };
-            }
-          }
-          // Only worth interrupting for a clearly different structure.
-          if (!best || best.ft2 < currentFt2 * 1.25) return;
-          biggerTarget = { lat: best.lat, lng: best.lng };
-          el("rt-bigger-msg").textContent =
-            ` If your house is the larger one, tap here to measure it instead — about ${(best.ft2 / 100).toFixed(1)} squares.`;
-          biggerBtn.classList.remove("hidden");
-        }
-
-        biggerBtn.addEventListener("click", () => {
-          if (biggerTarget) measureAuto(biggerTarget.lat, biggerTarget.lng);
-        });
-
-        /** ROOFTOP geocode via our server, or null when unavailable. */
         async function rooftopPin(address: string): Promise<{ lat: number; lng: number } | null> {
           if (!address) return null;
           try {
             const res = await fetch(`/api/geocode?address=${encodeURIComponent(address)}`);
             const d = await res.json();
-            // Only trust a verified rooftop hit; a vaguer geocode is no better
-            // than the Places point we already have.
             return d?.available && d.rooftop ? { lat: d.lat, lng: d.lng } : null;
           } catch {
             return null;
-          }
-        }
-
-        async function fetchSolar(lat: number, lng: number): Promise<any | null> {
-          try {
-            const res = await fetch(
-              "https://solar.googleapis.com/v1/buildingInsights:findClosest" +
-                `?location.latitude=${lat}&location.longitude=${lng}` +
-                `&requiredQuality=LOW&key=${encodeURIComponent(KEY)}`,
-            );
-            if (!res.ok) return null;
-            return await res.json();
-          } catch {
-            return null;
-          }
-        }
-
-        async function measureAuto(lat: number, lng: number) {
-          setStatus("Measuring your roof from aerial imagery…");
-          state.center = { lat, lng };
-          try {
-            const raw = await fetchSolar(lat, lng);
-            const summary = raw ? solarToSummary(raw) : null;
-            if (!summary) {
-              applySummary(null, "aerial");
-              showBlocked(
-                "We couldn't find usable aerial roof data for this address. Trace it yourself with the ✏️ tool, or let us measure it on site — free either way.",
-              );
-              setStatus("No aerial roof data here — trace it yourself (✏️) or book a free check.");
-              enableManual();
-              return;
-            }
-
-            state.mode = "auto";
-            drawMeasuredShapes(raw);
-            applySummary(summary, "aerial");
-
-            if (summary.confidence.level === "blocked") {
-              // Trees or poor imagery — offer the honest alternatives.
-              setStatus(
-                "Can't measure this one from the air — trace it yourself (✏️) or book a free on-site measurement.",
-              );
-              enableManual();
-              return;
-            }
-
-            disableManual();
-            setStatus("Done — measured plane by plane. Not your roof? Tap your house on the map.");
-            void offerBiggerBuilding(lat, lng, summary.surfaceFt2);
-          } catch {
-            setStatus("Measurement hiccup — trace your roof with the ✏️ tool instead.");
-            enableManual();
           }
         }
 
@@ -885,6 +628,8 @@ const seo = {
           tracing = true;
           el("rt-pitch").classList.remove("hidden");
           el("rt-pitch").classList.add("flex");
+          el("rt-complexity").classList.remove("hidden");
+          el("rt-complexity").classList.add("flex");
           traceBtnEls().forEach((b) => b.classList.remove("hidden"));
           map.setOptions({ draggableCursor: "crosshair" });
         }
@@ -893,6 +638,8 @@ const seo = {
           currentPoly = null;
           el("rt-pitch").classList.add("hidden");
           el("rt-pitch").classList.remove("flex");
+          el("rt-complexity").classList.add("hidden");
+          el("rt-complexity").classList.remove("flex");
           traceBtnEls().forEach((b) => b.classList.add("hidden"));
           map.setOptions({ draggableCursor: undefined });
         }
@@ -904,10 +651,7 @@ const seo = {
           // geocode against Google's own building model, so when those two
           // agree with each other and disagree with reality, nothing catches
           // it but a person looking at the map (owner bug report, 2026-10).
-          if (!tracing) {
-            measureAuto(e.latLng.lat(), e.latLng.lng());
-            return;
-          }
+          if (!tracing) return;
           if (!currentPoly) {
             currentPoly = new google.maps.Polygon({
               map,
@@ -988,6 +732,7 @@ const seo = {
                 footprintFt2: planFt2,
                 imageryQuality: null,
                 method: "manual",
+                complexity: state.complexity,
               }),
               "manual",
             );
@@ -998,10 +743,22 @@ const seo = {
             setStatus(
               n > 0
                 ? `${n} corner${n === 1 ? "" : "s"} placed — a shape needs at least 3.`
-                : "Tap your roof's corners on the map, one by one — the outline builds as you go.",
+                : "Tap each corner of your roof on the map — the outline builds as you go.",
             );
           }
         }
+
+        // --- Roof-shape chips (drives the waste allowance) ---
+        document.querySelectorAll<HTMLButtonElement>(".rt-cx-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            document
+              .querySelectorAll(".rt-cx-btn")
+              .forEach((b) => b.classList.remove("rt-cx-active"));
+            btn.classList.add("rt-cx-active");
+            state.complexity = (btn.dataset.complexity as typeof state.complexity) || "moderate";
+            computeManual();
+          });
+        });
 
         // --- Pitch chips ---
         document.querySelectorAll<HTMLButtonElement>(".rt-pitch-btn").forEach((btn) => {
@@ -1026,7 +783,6 @@ const seo = {
           state.address = "";
           state.mode = "auto";
           state.center = null;
-          clearMeasuredShapes();
           disableManual();
           clearResults("Start typing and pick your address — we'll find your roof.");
         });

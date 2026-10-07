@@ -142,8 +142,12 @@ export interface WasteResult {
  * Waste allowance from measured complexity and pitch. Presentation-only — it
  * never changes the measured area, it's added alongside it.
  */
-export function wasteAllowance(planeCount: number, avgPitchDeg: number | null): WasteResult {
-  const complexity = complexityFromPlanes(planeCount);
+export function wasteAllowance(
+  planeCount: number,
+  avgPitchDeg: number | null,
+  override?: Complexity,
+): WasteResult {
+  const complexity = override ?? complexityFromPlanes(planeCount);
   const base = BASE_WASTE[complexity];
   const rise = avgPitchDeg == null ? 0 : pitchToRise12(avgPitchDeg);
   const steepAdder = rise >= STEEP_RISE_THRESHOLD ? STEEP_ADDER : 0;
@@ -297,6 +301,13 @@ export interface BuildSummaryInput {
    * aerial-confidence checks don't apply and must not block their own work.
    */
   method?: "aerial" | "manual";
+  /**
+   * Trace mode only: the complexity the person picked for their own roof.
+   * Counting traced shapes is a poor proxy — someone can outline a cut-up
+   * hip-and-valley roof with a single rectangle — and they can see their own
+   * roof, so their answer beats our inference (owner, 2026-10).
+   */
+  complexity?: Complexity;
 }
 
 /** Assemble everything the screen and the PDF both render. */
@@ -326,7 +337,11 @@ export function buildRoofSummary(input: BuildSummaryInput): RoofSummary {
 
   // Waste follows the STEEPEST significant plane, not the average: the steep
   // sections are where the cutting loss actually happens.
-  const waste = wasteAllowance(planes.length, pitchRangeDeg?.maxDeg ?? avgPitchDeg);
+  const waste = wasteAllowance(
+    planes.length,
+    pitchRangeDeg?.maxDeg ?? avgPitchDeg,
+    input.complexity,
+  );
   const squares = surfaceFt2 / SQ_FT_PER_SQUARE;
 
   const confidence: ConfidenceVerdict =
