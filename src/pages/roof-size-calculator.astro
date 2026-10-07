@@ -212,7 +212,17 @@ const seo = {
                 >
                   —
                 </span>
-                <span class="text-lg text-[color:var(--color-ink-500)]"> squares</span>
+                <span class="text-lg text-[color:var(--color-ink-500)]"> squares measured</span>
+              </p>
+              {/* The with-waste figure is what other estimators headline, so
+                  show it with equal weight rather than burying it. */}
+              <p class="mt-2.5 flex items-baseline gap-2">
+                <span id="rt-order" class="font-serif text-3xl text-[color:var(--color-navy-900)]">
+                  —
+                </span>
+                <span id="rt-order-note" class="text-sm text-[color:var(--color-ink-500)]">
+                  squares to order
+                </span>
               </p>
               <dl class="mt-6 space-y-3 border-t border-[color:var(--color-navy-100)] pt-5 text-sm">
                 <div class="flex items-baseline justify-between gap-4">
@@ -350,6 +360,7 @@ const seo = {
   import {
     buildRoofSummary,
     pitchLabel as fmtPitch,
+    pitchRangeLabel,
     formatImageryDate,
     type RoofPlane,
     type RoofSummary,
@@ -426,6 +437,8 @@ const seo = {
       if (!summary || summary.confidence.level === "blocked") {
         state.summary = null;
         el("rt-squares").textContent = "—";
+        el("rt-order").textContent = "—";
+        el("rt-order-note").textContent = "squares to order";
         el("rt-surface").textContent = "—";
         el("rt-footprint").textContent = "—";
         el("rt-pitchout").textContent = "—";
@@ -441,9 +454,11 @@ const seo = {
       state.summary = summary;
       showPropertyPhoto();
       el("rt-squares").textContent = summary.squares.toFixed(1);
+      el("rt-order").textContent = summary.squaresWithWaste.toFixed(1);
+      el("rt-order-note").textContent = `squares to order (incl. ${summary.waste.percent}% waste)`;
       el("rt-surface").textContent = `${fmt(summary.surfaceFt2)} ft²`;
       el("rt-footprint").textContent = `${fmt(summary.footprintFt2)} ft²`;
-      el("rt-pitchout").textContent = fmtPitch(summary.avgPitchDeg);
+      el("rt-pitchout").textContent = pitchRangeLabel(summary.pitchRangeDeg);
 
       const imagery = formatImageryDate(summary.imageryDate);
       const parts: string[] = [];
@@ -473,7 +488,7 @@ const seo = {
       const notes = form?.querySelector<HTMLTextAreaElement>('textarea[name="notes"]');
       if (addressInput && state.address && !addressInput.value) addressInput.value = state.address;
       if (notes) {
-        notes.value = `Roof size tool: ≈ ${s.squares.toFixed(1)} squares (~${fmt(s.surfaceFt2)} ft² surface, ${fmtPitch(s.avgPitchDeg)} pitch, ${s.waste.percent}% waste → ${s.squaresWithWaste.toFixed(1)} to order)${state.address ? ` at ${state.address}` : ""} — ${state.method === "aerial" ? "aerial" : "hand-traced"} measurement.`;
+        notes.value = `Roof size tool: ≈ ${s.squares.toFixed(1)} squares (~${fmt(s.surfaceFt2)} ft² surface, ${pitchRangeLabel(s.pitchRangeDeg)} pitch, ${s.waste.percent}% waste → ${s.squaresWithWaste.toFixed(1)} to order)${state.address ? ` at ${state.address}` : ""} — ${state.method === "aerial" ? "aerial" : "hand-traced"} measurement.`;
       }
     }
 
@@ -568,6 +583,18 @@ const seo = {
           const surfaceM2 = roofM2 > 0 ? roofM2 : wholeM2;
           if (surfaceM2 <= 0) return null;
 
+          // How far is the building Google matched from the address we asked
+          // about? 20 m away can be a different house entirely.
+          let buildingOffsetM: number | null = null;
+          if (state.center && data?.center?.latitude != null) {
+            buildingOffsetM = metresBetween(
+              state.center.lat,
+              state.center.lng,
+              Number(data.center.latitude),
+              Number(data.center.longitude),
+            );
+          }
+
           return buildRoofSummary({
             planes,
             surfaceFt2: surfaceM2 * M2_TO_FT2,
@@ -576,8 +603,56 @@ const seo = {
             imageryQuality: (data?.imageryQuality ?? null) as any,
             imageryDate: data?.imageryDate ?? null,
             buildingFound: true,
+            buildingOffsetM,
             method: "aerial",
           });
+        }
+
+        /** Great-circle distance in metres. */
+        function metresBetween(a: number, b: number, c: number, d: number) {
+          const R = 6371000;
+          const toR = (x: number) => (x * Math.PI) / 180;
+          const dLat = toR(c - a);
+          const dLng = toR(d - b);
+          const h =
+            Math.sin(dLat / 2) ** 2 + Math.cos(toR(a)) * Math.cos(toR(c)) * Math.sin(dLng / 2) ** 2;
+          return Math.round(2 * R * Math.asin(Math.sqrt(h)));
+        }
+
+        /**
+         * Outline every plane Google measured, so the homeowner can SEE which
+         * building was measured. A wrong match (garage, neighbour) is obvious
+         * on sight and invisible in the numbers alone.
+         */
+        let measuredShapes: any[] = [];
+        function clearMeasuredShapes() {
+          measuredShapes.forEach((s) => s.setMap(null));
+          measuredShapes = [];
+        }
+        function drawMeasuredShapes(data: any) {
+          clearMeasuredShapes();
+          const segs: any[] = data?.solarPotential?.roofSegmentStats ?? [];
+          for (const seg of segs) {
+            const bb = seg?.boundingBox;
+            if (!bb?.sw || !bb?.ne) continue;
+            measuredShapes.push(
+              new google.maps.Rectangle({
+                map,
+                bounds: {
+                  south: bb.sw.latitude,
+                  west: bb.sw.longitude,
+                  north: bb.ne.latitude,
+                  east: bb.ne.longitude,
+                },
+                fillColor: "#C9A26C",
+                fillOpacity: 0.18,
+                strokeColor: "#C9A26C",
+                strokeWeight: 1.5,
+                clickable: false,
+                zIndex: 1,
+              }),
+            );
+          }
         }
 
         async function fetchSolar(lat: number, lng: number): Promise<any | null> {
@@ -611,6 +686,7 @@ const seo = {
             }
 
             state.mode = "auto";
+            drawMeasuredShapes(raw);
             applySummary(summary, "aerial");
 
             if (summary.confidence.level === "blocked") {
@@ -774,6 +850,7 @@ const seo = {
           state.address = "";
           state.mode = "auto";
           state.center = null;
+          clearMeasuredShapes();
           disableManual();
           clearResults("Start typing and pick your address — we'll find your roof.");
         });

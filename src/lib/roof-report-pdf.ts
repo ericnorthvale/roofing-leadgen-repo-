@@ -21,6 +21,7 @@ import {
   azimuthToCompass,
   formatImageryDate,
   pitchLabel,
+  pitchRangeLabel,
   COMPLEXITY_LABEL,
   type RoofSummary,
 } from "~/lib/roof-report";
@@ -315,18 +316,22 @@ async function drawCover(
     font: fonts.bodyBold,
     color: ink.gold600,
   });
-  page.drawText("squares", {
+  page.drawText("squares measured", {
     x: MARGIN + 28 + fonts.bodyBold.widthOfTextAtSize(squares, 34),
     y: bandTop - 58,
-    size: 12,
+    size: 11,
     font: fonts.body,
     color: ink.ink500,
   });
+  page.drawText(
+    `${summary.squaresWithWaste.toFixed(1)} squares to order, including the ${summary.waste.percent}% waste allowance`,
+    { x: MARGIN + 22, y: bandTop - 82, size: 9, font: fonts.bodySemi, color: ink.navy900 },
+  );
 
   const stats: [string, string][] = [
     ["Roof surface", `${money(summary.surfaceFt2)} ft²`],
     ["Footprint", `${money(summary.footprintFt2)} ft²`],
-    ["Average pitch", pitchLabel(summary.avgPitchDeg)],
+    ["Roof pitch", pitchRangeLabel(summary.pitchRangeDeg)],
   ];
   let sx = MARGIN + 236;
   for (const [label, value] of stats) {

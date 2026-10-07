@@ -34,10 +34,12 @@ export interface ConfidenceVerdict {
     | "ok"
     | "medium-imagery"
     | "partial-coverage"
+    | "distant-building"
     | "low-imagery"
     | "too-few-planes"
     | "heavy-occlusion"
-    | "no-building";
+    | "no-building"
+    | "wrong-building";
   /** Plain-English line shown to the homeowner. */
   message: string;
 }
@@ -58,6 +60,21 @@ export function pitchToRise12(pitchDeg: number): number {
 export function pitchLabel(pitchDeg: number | null): string {
   if (pitchDeg == null || !Number.isFinite(pitchDeg)) return "—";
   return `${pitchToRise12(pitchDeg)}/12`;
+}
+
+/**
+ * "6/12" when the roof is uniform, "6/12–12/12" when it isn't.
+ *
+ * A single area-weighted average is actively misleading on a cut-up roof: the
+ * big shallow hips outweigh the small steep gables, so a roof with 12/12
+ * sections can average out to 7/12 and the homeowner rightly says "that's not
+ * my roof" (owner feedback, 2026-10). Always show the spread.
+ */
+export function pitchRangeLabel(range: { minDeg: number; maxDeg: number } | null): string {
+  if (!range) return "—";
+  const lo = pitchToRise12(range.minDeg);
+  const hi = pitchToRise12(range.maxDeg);
+  return lo === hi ? `${lo}/12` : `${lo}/12–${hi}/12`;
 }
 
 const COMPASS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"] as const;
@@ -153,7 +170,20 @@ export interface ConfidenceInput {
   coverage: number;
   /** False when the lookup found no building at all. */
   buildingFound: boolean;
+  /**
+   * Metres between the address we asked about and the centre of the building
+   * the aerial service actually matched. Google's `findClosest` returns the
+   * nearest structure, which 20 m away can be a neighbour's house, a detached
+   * garage or a shed — verified 2026-10, see Sheet 8. A large offset is the
+   * single most dangerous failure because the number still looks plausible.
+   */
+  buildingOffsetM?: number | null;
 }
+
+/** Past this, we're probably measuring the wrong structure entirely. */
+const OFFSET_BLOCK_M = 45;
+/** Past this, worth flagging — large homes can legitimately sit this far off. */
+const OFFSET_WARN_M = 25;
 
 const BLOCKED_TREES =
   "We can't get a trustworthy measurement here — tree cover or the available aerial imagery is hiding part of this roof. Rather than show you a number we don't trust, we'll measure it properly on site, free.";
@@ -179,6 +209,22 @@ export function assessConfidence(input: ConfidenceInput): ConfidenceVerdict {
   }
   if (input.coverage < COVERAGE_BLOCK) {
     return { level: "blocked", reason: "heavy-occlusion", message: BLOCKED_TREES };
+  }
+  if (input.buildingOffsetM != null && input.buildingOffsetM > OFFSET_BLOCK_M) {
+    return {
+      level: "blocked",
+      reason: "wrong-building",
+      message:
+        "The nearest building in the aerial data sits well away from this address, so we'd likely be measuring a neighbour's roof, a garage or a shed. Check the pin on the map, trace the roof yourself, or let us measure it on site — free.",
+    };
+  }
+  if (input.buildingOffsetM != null && input.buildingOffsetM > OFFSET_WARN_M) {
+    return {
+      level: "reduced",
+      reason: "distant-building",
+      message:
+        "Check the highlighted area on the map is your roof — the matched building sits a little off the address pin.",
+    };
   }
   if (input.coverage < COVERAGE_WARN) {
     return {
@@ -212,6 +258,8 @@ export interface RoofSummary {
   footprintFt2: number;
   squares: number;
   avgPitchDeg: number | null;
+  /** Shallowest and steepest measured plane — the honest headline figure. */
+  pitchRangeDeg: { minDeg: number; maxDeg: number } | null;
   planes: RoofPlane[];
   waste: WasteResult;
   /** Measured squares plus the waste allowance, for ordering. */
@@ -236,6 +284,8 @@ export interface BuildSummaryInput {
   imageryQuality: ImageryQuality;
   imageryDate?: { year?: number; month?: number; day?: number } | null;
   buildingFound?: boolean;
+  /** Metres from the requested address to the matched building's centre. */
+  buildingOffsetM?: number | null;
   /**
    * "aerial" runs the full occlusion gate. "manual" means a person traced the
    * outline themselves on the satellite view — they can see the trees, so the
@@ -257,7 +307,21 @@ export function buildRoofSummary(input: BuildSummaryInput): RoofSummary {
   const avgPitchDeg =
     planeSum > 0 ? planes.reduce((acc, p) => acc + p.pitchDeg * p.areaFt2, 0) / planeSum : null;
 
-  const waste = wasteAllowance(planes.length, avgPitchDeg);
+  // Ignore slivers when quoting the spread — a tiny dormer cheek shouldn't set
+  // the headline pitch for the whole roof.
+  const significant = planes.filter((p) => p.areaFt2 >= Math.max(40, planeSum * 0.03));
+  const forRange = significant.length > 0 ? significant : planes;
+  const pitchRangeDeg =
+    forRange.length > 0
+      ? {
+          minDeg: Math.min(...forRange.map((p) => p.pitchDeg)),
+          maxDeg: Math.max(...forRange.map((p) => p.pitchDeg)),
+        }
+      : null;
+
+  // Waste follows the STEEPEST significant plane, not the average: the steep
+  // sections are where the cutting loss actually happens.
+  const waste = wasteAllowance(planes.length, pitchRangeDeg?.maxDeg ?? avgPitchDeg);
   const squares = surfaceFt2 / SQ_FT_PER_SQUARE;
 
   const confidence: ConfidenceVerdict =
@@ -278,6 +342,7 @@ export function buildRoofSummary(input: BuildSummaryInput): RoofSummary {
           imageryQuality: input.imageryQuality,
           coverage,
           buildingFound: input.buildingFound ?? surfaceFt2 > 0,
+          buildingOffsetM: input.buildingOffsetM ?? null,
         });
 
   return {
@@ -285,6 +350,7 @@ export function buildRoofSummary(input: BuildSummaryInput): RoofSummary {
     footprintFt2: Math.round(Math.max(0, input.footprintFt2)),
     squares: round(squares, 1),
     avgPitchDeg: avgPitchDeg == null ? null : round(avgPitchDeg, 0),
+    pitchRangeDeg,
     planes,
     waste,
     squaresWithWaste: round(squares * (1 + waste.factor), 1),

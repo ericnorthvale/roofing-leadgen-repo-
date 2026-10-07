@@ -8,6 +8,7 @@ import {
   assessConfidence,
   buildRoofSummary,
   formatImageryDate,
+  pitchRangeLabel,
   type RoofPlane,
 } from "~/lib/roof-report";
 
@@ -182,5 +183,84 @@ describe("formatImageryDate", () => {
   it("falls back to year alone, and null when absent", () => {
     expect(formatImageryDate({ year: 2024 })).toBe("2024");
     expect(formatImageryDate(null)).toBeNull();
+  });
+});
+
+describe("wrong-building detection (owner bug report, 2026-10)", () => {
+  const base = {
+    planeCount: 5,
+    imageryQuality: "HIGH" as const,
+    coverage: 1,
+    buildingFound: true,
+  };
+
+  it("blocks when the matched building is far from the address", () => {
+    // Verified against the live API: moving the pin 20 m returns a different
+    // building entirely (11.4 squares vs 2.7), so a large offset is fatal.
+    const v = assessConfidence({ ...base, buildingOffsetM: 60 });
+    expect(v.level).toBe("blocked");
+    expect(v.reason).toBe("wrong-building");
+  });
+
+  it("warns when the offset is plausible but worth eyeballing", () => {
+    const v = assessConfidence({ ...base, buildingOffsetM: 30 });
+    expect(v.level).toBe("reduced");
+    expect(v.reason).toBe("distant-building");
+  });
+
+  it("passes a tight match, and when offset is unknown", () => {
+    expect(assessConfidence({ ...base, buildingOffsetM: 8 }).level).toBe("good");
+    expect(assessConfidence({ ...base, buildingOffsetM: null }).level).toBe("good");
+  });
+});
+
+describe("pitch range (owner: 'the roof is more than a 6 slope')", () => {
+  it("reports the spread, not just the area-weighted average", () => {
+    // Big shallow hips + smaller steep gables: the average alone reads 6/12
+    // and hides the 12/12 sections the homeowner can see from the kerb.
+    const s = buildRoofSummary({
+      planes: [plane(1200, 26.57), plane(1200, 26.57), plane(600, 45), plane(600, 45)],
+      surfaceFt2: 3600,
+      footprintFt2: 3200,
+      wholeRoofFt2: 3600,
+      imageryQuality: "HIGH",
+    });
+    expect(pitchRangeLabel(s.pitchRangeDeg)).toBe("6/12–12/12");
+    expect(pitchToRise12(s.avgPitchDeg!)).toBe(8); // the misleading single number
+  });
+
+  it("collapses to one value when the roof really is uniform", () => {
+    const s = buildRoofSummary({
+      planes: [plane(900, 26.57), plane(900, 26.9)],
+      surfaceFt2: 1800,
+      footprintFt2: 1600,
+      wholeRoofFt2: 1800,
+      imageryQuality: "HIGH",
+    });
+    expect(pitchRangeLabel(s.pitchRangeDeg)).toBe("6/12");
+  });
+
+  it("ignores slivers so a tiny dormer can't set the headline", () => {
+    const s = buildRoofSummary({
+      planes: [plane(1500, 26.57), plane(1400, 26.57), plane(12, 60)],
+      surfaceFt2: 2912,
+      footprintFt2: 2600,
+      wholeRoofFt2: 2912,
+      imageryQuality: "HIGH",
+    });
+    expect(pitchRangeLabel(s.pitchRangeDeg)).toBe("6/12");
+  });
+
+  it("drives the steep-pitch waste adder off the steepest real plane", () => {
+    // Average is 8/12 so the old logic added nothing; the 12/12 sections are
+    // exactly where the cutting loss happens.
+    const s = buildRoofSummary({
+      planes: [plane(1200, 26.57), plane(1200, 26.57), plane(600, 45), plane(600, 45)],
+      surfaceFt2: 3600,
+      footprintFt2: 3200,
+      wholeRoofFt2: 3600,
+      imageryQuality: "HIGH",
+    });
+    expect(s.waste.steepAdder).toBe(0.02);
   });
 });
