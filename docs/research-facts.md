@@ -1031,3 +1031,78 @@ often. NOTHING from the UNVERIFIED list goes on the site.
    any listed company — if it ever does, FTC disclosure is REQUIRED on the
    page. Current page copy states the list is "a convenience, not an
    endorsement" and claims no compensation either way.
+
+## Sheet 8 — Roof measurement report (waste factors + imagery licensing, 2026-10-07)
+
+Backs the downloadable report on /roof-size-calculator. Owner approved the
+model in session 2026-10-07 ("I agree with your waste factor assumptions").
+
+### Waste allowance — industry standard, NOT a Northvale guarantee
+
+Waste is driven primarily by roof COMPLEXITY (hips, valleys, dormers — the
+diagonal cuts), with pitch a secondary factor. Published ranges agree closely:
+
+- Simple gable: **10%** (some estimating guides go as low as 5–8%).
+- Hip / standard with dormers: **12–15%**.
+- Cut-up multi-valley / complex: **15–20%**.
+  — SOURCES (all accessed 2026-10-07):
+  https://www.1esx.com/understanding-roof-waste-factor-calculation-a-guide-for-accurate-bidding/
+  https://calcforhomes.com/guides/waste-factor-guide
+  https://www.oneclickcode.com/blog/the-roofing-contractors-guide-to-shingle-waste-factor-calculation
+  https://open-exam-prep.com/study-guides/la-roofing-contractor/roofing-estimating-plan-reading-math/material-takeoff-wastage-costing
+
+**Implemented model** (src/lib/roof-report.ts, unit-tested):
+
+| Resolved roof planes | Complexity                    | Base allowance |
+| -------------------- | ----------------------------- | -------------- |
+| 2–4                  | simple (gable-style)          | 10%            |
+| 5–8                  | moderate (hip / dormers)      | 15%            |
+| 9+                   | complex (cut-up hip & valley) | 18%            |
+
+Plus **+2%** when average pitch is 9/12 or steeper (handling and cut loss on
+steep work); hard-capped at **20%**, the top of the published range. Plane
+count comes from Google Solar API `roofSegmentStats` — a measured proxy for
+cut-up complexity, not an estimate.
+
+The report prints this as an "allowance", states it is an industry-standard
+estimate, and states it is not a guarantee or a material order.
+
+### What the report must never contain
+
+- **No pricing.** Owner decision 2026-08: the tool shows size only.
+- **No Google imagery.** Google's geo-guidelines state Street View imagery may
+  not be used for print purposes at all, and Maps/satellite imagery is
+  restricted in material used to promote a business — a branded, downloadable,
+  printable report is both. Google imagery therefore stays in the on-screen
+  live map only (permitted display), never in the PDF.
+  — SOURCES: https://about.google/brand-resource-center/products-and-services/geo-guidelines/
+  https://cloud.google.com/maps-platform/terms/maps-service-terms
+  NOTE: Google's own pages were unreachable from the build environment; the
+  above reflects two independent searches quoting those guidelines. Re-confirm
+  before any change that would put Google imagery into a distributed file.
+
+### Report imagery source — USGS, public domain
+
+The cover photo comes from **USGS "The National Map"** imagery
+(basemap.nationalmap.gov), a work of the U.S. federal government and therefore
+in the public domain — safe to print and redistribute. Credited on the report
+page as "Aerial imagery: USGS The National Map (public domain)". No API key is
+required, so there is nothing for the owner to configure or rotate.
+
+### Tree / low-confidence blocking (owner instruction, 2026-10-07)
+
+Owner: "if trees are a problem I need this to be a block if trees make it hard
+to get a true count." Heavy pine canopy is common across this market, so the
+tool BLOCKS rather than softening a number it cannot stand behind. A blocked
+measurement shows no figures and no PDF — only an honest explanation and the
+free on-site measurement. Gate (src/lib/roof-report.ts, unit-tested):
+
+- No building found in the aerial data → blocked.
+- Google `imageryQuality: LOW` → blocked.
+- Fewer than 2 resolved roof planes → blocked.
+- Resolved planes cover < 80% of the whole-roof area → blocked (occlusion).
+- Coverage 80–92%, or `imageryQuality: MEDIUM` → published with a visible
+  reduced-confidence caveat on screen and in the PDF.
+
+Hand-traced measurements bypass the aerial gate: the person tracing can see the
+trees themselves, so their own outline is not second-guessed.

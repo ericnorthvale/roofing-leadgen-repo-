@@ -223,9 +223,34 @@ const seo = {
                 id="rt-meta"
                 class="mt-4 min-h-4 text-xs leading-relaxed text-[color:var(--color-ink-500)]"
               />
+
+              {/* Shown instead of numbers when canopy/imagery makes the
+                  measurement untrustworthy — we block rather than guess. */}
+              <div
+                id="rt-blocked"
+                class="mt-4 hidden rounded-xl border border-[color:var(--color-gold-400)] bg-[color:var(--color-gold-50)] p-4"
+              >
+                <p class="text-sm font-semibold text-[color:var(--color-navy-900)]">
+                  We can't measure this one from the air
+                </p>
+                <p
+                  id="rt-blocked-msg"
+                  class="mt-1.5 text-xs leading-relaxed text-[color:var(--color-ink-700)]"
+                />
+              </div>
+
+              <button
+                id="rt-download"
+                type="button"
+                disabled
+                class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-[color:var(--color-navy-900)] px-5 py-3 text-sm font-bold text-[color:var(--color-navy-900)] transition-colors hover:bg-[color:var(--color-navy-900)] hover:text-white disabled:cursor-not-allowed disabled:border-[color:var(--color-navy-100)] disabled:text-[color:var(--color-ink-500)] disabled:hover:bg-transparent disabled:hover:text-[color:var(--color-ink-500)]"
+              >
+                <span id="rt-download-label">Download measurement report (PDF)</span>
+              </button>
+
               <a
                 href="#roof-lead"
-                class="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[color:var(--color-gold-400)] px-5 py-3 text-sm font-bold text-[color:var(--color-navy-950)] transition-colors hover:bg-[color:var(--color-gold-300)]"
+                class="mt-3 inline-flex w-full items-center justify-center rounded-full bg-[color:var(--color-gold-400)] px-5 py-3 text-sm font-bold text-[color:var(--color-navy-950)] transition-colors hover:bg-[color:var(--color-gold-300)]"
               >
                 Get the exact number, free & in writing
               </a>
@@ -295,11 +320,26 @@ const seo = {
 
 <script>
   /**
-   * Roof measuring tool. Auto mode: address → lat/lng → /api/roof-measure
-   * (server-side Solar API). Manual mode: draw polygons on the satellite map;
-   * area × chosen pitch multiplier (real geometry — sqrt(1 + rise²/144), no
-   * hidden "waste" padding). Nothing typed here is stored server-side.
+   * Roof measuring tool.
+   *
+   * Auto mode: address → lat/lng → Google's Solar API (browser-direct with the
+   * site's domain-locked public key), reduced to the shared RoofSummary so the
+   * screen and the PDF can never disagree. Manual mode: tap the roof's corners;
+   * traced area × the chosen slope multiplier (real geometry, sec(pitch) — no
+   * hidden "waste" padding in the measurement itself).
+   *
+   * A measurement that fails the confidence gate (heavy canopy, poor imagery,
+   * planes that don't add up) shows NO number at all — see lib/roof-report.ts.
+   * Nothing typed here is stored server-side.
    */
+  import {
+    buildRoofSummary,
+    pitchLabel as fmtPitch,
+    formatImageryDate,
+    type RoofPlane,
+    type RoofSummary,
+  } from "~/lib/roof-report";
+
   const root = document.getElementById("nv-rooftool");
   const KEY = root?.dataset.key ?? "";
 
@@ -314,7 +354,10 @@ const seo = {
       address: "",
       polygons: [] as any[],
       pitchMult: 1.118,
-      lastResult: null as null | { squares: number; surface: number; source: string },
+      /** Last publishable measurement — drives the panel, form and PDF alike. */
+      summary: null as RoofSummary | null,
+      method: "aerial" as "aerial" | "manual",
+      center: null as { lat: number; lng: number } | null,
     };
 
     function loadMaps(key: string): Promise<any> {
@@ -330,42 +373,78 @@ const seo = {
       });
     }
 
-    const pitchLabel = (deg: number) => {
-      const rise = Math.round(Math.tan((deg * Math.PI) / 180) * 12);
-      return `≈ ${rise}/12 (${deg}°)`;
-    };
+    const blockedBox = el("rt-blocked");
+    const downloadBtn = el("rt-download") as HTMLButtonElement;
 
-    function render(
-      surfaceFt2: number,
-      footprintFt2: number,
-      pitchText: string,
-      meta: string,
-      source: string,
-    ) {
-      const squares = surfaceFt2 / 100;
-      el("rt-squares").textContent = squares > 0 ? squares.toFixed(1) : "—";
-      el("rt-surface").textContent = surfaceFt2 > 0 ? `${fmt(surfaceFt2)} ft²` : "—";
-      el("rt-footprint").textContent = footprintFt2 > 0 ? `${fmt(footprintFt2)} ft²` : "—";
-      el("rt-pitchout").textContent = pitchText;
-      el("rt-meta").textContent = meta;
-      state.lastResult = squares > 0 ? { squares, surface: surfaceFt2, source } : null;
+    function showBlocked(message: string) {
+      blockedBox.classList.remove("hidden");
+      el("rt-blocked-msg").textContent = message;
+    }
+    function hideBlocked() {
+      blockedBox.classList.add("hidden");
+    }
+
+    /**
+     * Single render path for both modes. A blocked verdict clears the figures
+     * entirely — we show nothing rather than a number we don't trust.
+     */
+    function applySummary(summary: RoofSummary | null, method: "aerial" | "manual") {
+      state.method = method;
+
+      if (!summary || summary.confidence.level === "blocked") {
+        state.summary = null;
+        el("rt-squares").textContent = "—";
+        el("rt-surface").textContent = "—";
+        el("rt-footprint").textContent = "—";
+        el("rt-pitchout").textContent = "—";
+        el("rt-meta").textContent = "";
+        downloadBtn.disabled = true;
+        if (summary) showBlocked(summary.confidence.message);
+        else hideBlocked();
+        return;
+      }
+
+      hideBlocked();
+      state.summary = summary;
+      el("rt-squares").textContent = summary.squares.toFixed(1);
+      el("rt-surface").textContent = `${fmt(summary.surfaceFt2)} ft²`;
+      el("rt-footprint").textContent = `${fmt(summary.footprintFt2)} ft²`;
+      el("rt-pitchout").textContent = fmtPitch(summary.avgPitchDeg);
+
+      const imagery = formatImageryDate(summary.imageryDate);
+      const parts: string[] = [];
+      if (method === "aerial") {
+        parts.push(
+          `Measured across ${summary.planes.length} roof plane${summary.planes.length === 1 ? "" : "s"}.`,
+        );
+        if (imagery) parts.push(`Imagery ${imagery}.`);
+      } else {
+        parts.push("Traced by you — drag the dots to fine-tune.");
+      }
+      parts.push(
+        `Waste allowance ${summary.waste.percent}% → about ${summary.squaresWithWaste.toFixed(1)} squares to order.`,
+      );
+      if (summary.confidence.level === "reduced") parts.push(summary.confidence.message);
+      el("rt-meta").textContent = parts.join(" ");
+
+      downloadBtn.disabled = false;
       prefillLeadForm();
     }
 
     function prefillLeadForm() {
-      if (!state.lastResult) return;
+      const s = state.summary;
+      if (!s) return;
       const form = document.querySelector<HTMLElement>("#roof-lead");
       const addressInput = form?.querySelector<HTMLInputElement>('input[name="address"]');
       const notes = form?.querySelector<HTMLTextAreaElement>('textarea[name="notes"]');
       if (addressInput && state.address && !addressInput.value) addressInput.value = state.address;
       if (notes) {
-        notes.value = `Roof size tool: ≈ ${state.lastResult.squares.toFixed(1)} squares (~${fmt(state.lastResult.surface)} ft² surface)${state.address ? ` at ${state.address}` : ""} — ${state.lastResult.source} measurement.`;
+        notes.value = `Roof size tool: ≈ ${s.squares.toFixed(1)} squares (~${fmt(s.surfaceFt2)} ft² surface, ${fmtPitch(s.avgPitchDeg)} pitch, ${s.waste.percent}% waste → ${s.squaresWithWaste.toFixed(1)} to order)${state.address ? ` at ${state.address}` : ""} — ${state.method === "aerial" ? "aerial" : "hand-traced"} measurement.`;
       }
     }
 
     function clearResults(prompt: string) {
-      render(0, 0, "—", "", "");
-      el("rt-meta").textContent = "";
+      applySummary(null, state.method);
       setStatus(prompt);
     }
 
@@ -425,50 +504,49 @@ const seo = {
         // is the whole configuration — "Wix-style" per the owner). If the
         // optional server proxy (/api/roof-measure) is ever configured in
         // Vercel, it is tried first and simply wins.
-        function solarReduce(data: any) {
+        const M2_TO_FT2 = 10.7639;
+
+        /** Google's building insights → the shared summary shape. */
+        function solarToSummary(data: any): RoofSummary | null {
           const sp = data?.solarPotential;
           const segs: any[] = Array.isArray(sp?.roofSegmentStats) ? sp.roofSegmentStats : [];
+          const planes: RoofPlane[] = [];
           let roofM2 = 0;
           let planM2 = 0;
-          let pitchWeighted = 0;
           for (const seg of segs) {
             const pitchDeg = Number(seg?.pitchDegrees ?? 0);
             const area = Number(seg?.stats?.areaMeters2 ?? 0);
             const ground = Number(seg?.stats?.groundAreaMeters2 ?? 0);
             const cos = Math.cos((pitchDeg * Math.PI) / 180) || 1;
             const segRoof = area || ground / cos;
+            if (segRoof <= 0) continue;
             roofM2 += segRoof;
             planM2 += ground || area * cos;
-            pitchWeighted += pitchDeg * segRoof;
+            planes.push({
+              areaFt2: segRoof * M2_TO_FT2,
+              pitchDeg,
+              azimuthDeg: Number(seg?.azimuthDegrees ?? 0),
+            });
           }
-          if (roofM2 <= 0 && sp?.wholeRoofStats) {
-            roofM2 = Number(sp.wholeRoofStats.areaMeters2 ?? 0);
-            planM2 = Number(sp.wholeRoofStats.groundAreaMeters2 ?? 0) || roofM2;
-          }
-          if (roofM2 <= 0) return null;
-          const M2_TO_FT2 = 10.7639;
-          const roofFt2 = roofM2 * M2_TO_FT2;
-          return {
-            available: true,
-            roofFt2: Math.round(roofFt2),
-            planFt2: Math.round((planM2 || roofM2) * M2_TO_FT2),
-            avgPitchDeg: segs.length > 0 ? Math.round(pitchWeighted / roofM2) : null,
-            segments: segs.length,
+
+          const wholeM2 = Number(sp?.wholeRoofStats?.areaMeters2 ?? 0);
+          const wholeGroundM2 = Number(sp?.wholeRoofStats?.groundAreaMeters2 ?? 0);
+          const surfaceM2 = roofM2 > 0 ? roofM2 : wholeM2;
+          if (surfaceM2 <= 0) return null;
+
+          return buildRoofSummary({
+            planes,
+            surfaceFt2: surfaceM2 * M2_TO_FT2,
+            footprintFt2: (planM2 || wholeGroundM2 || surfaceM2) * M2_TO_FT2,
+            wholeRoofFt2: wholeM2 > 0 ? wholeM2 * M2_TO_FT2 : undefined,
+            imageryQuality: (data?.imageryQuality ?? null) as any,
             imageryDate: data?.imageryDate ?? null,
-          };
+            buildingFound: true,
+            method: "aerial",
+          });
         }
 
-        async function fetchMeasurement(lat: number, lng: number): Promise<any | null> {
-          // Optional server proxy first (present only when Vercel env is set).
-          try {
-            const res = await fetch(`/api/roof-measure?lat=${lat}&lng=${lng}`);
-            const data = await res.json();
-            if (data.available) return data;
-            if (data.reason && data.reason !== "unconfigured") return null; // real "no coverage"
-          } catch {
-            /* fall through to direct */
-          }
-          // Direct from the browser with the site's public, domain-locked key.
+        async function fetchSolar(lat: number, lng: number): Promise<any | null> {
           try {
             const res = await fetch(
               "https://solar.googleapis.com/v1/buildingInsights:findClosest" +
@@ -476,7 +554,7 @@ const seo = {
                 `&requiredQuality=LOW&key=${encodeURIComponent(KEY)}`,
             );
             if (!res.ok) return null;
-            return solarReduce(await res.json());
+            return await res.json();
           } catch {
             return null;
           }
@@ -484,30 +562,33 @@ const seo = {
 
         async function measureAuto(lat: number, lng: number) {
           setStatus("Measuring your roof from aerial imagery…");
+          state.center = { lat, lng };
           try {
-            const data = await fetchMeasurement(lat, lng);
-            if (!data) {
+            const raw = await fetchSolar(lat, lng);
+            const summary = raw ? solarToSummary(raw) : null;
+            if (!summary) {
+              applySummary(null, "aerial");
+              showBlocked(
+                "We couldn't find usable aerial roof data for this address. Trace it yourself with the ✏️ tool, or let us measure it on site — free either way.",
+              );
+              setStatus("No aerial roof data here — trace it yourself (✏️) or book a free check.");
+              enableManual();
+              return;
+            }
+
+            state.mode = "auto";
+            applySummary(summary, "aerial");
+
+            if (summary.confidence.level === "blocked") {
+              // Trees or poor imagery — offer the honest alternatives.
               setStatus(
-                "No aerial roof data for this address — trace your roof with the ✏️ tool instead.",
+                "Can't measure this one from the air — trace it yourself (✏️) or book a free on-site measurement.",
               );
               enableManual();
               return;
             }
-            state.mode = "auto";
+
             disableManual();
-            const when = data.imageryDate?.year
-              ? ` Imagery from ${data.imageryDate.month ?? ""}/${data.imageryDate.year}.`.replace(
-                  " /",
-                  " ",
-                )
-              : "";
-            render(
-              data.roofFt2,
-              data.planFt2,
-              data.avgPitchDeg != null ? pitchLabel(data.avgPitchDeg) : "—",
-              `Measured across ${data.segments} roof plane${data.segments === 1 ? "" : "s"}.${when}`,
-              "aerial",
-            );
             setStatus("Done — measured plane by plane. Not looking right? Trace it yourself (✏️).");
           } catch {
             setStatus("Measurement hiccup — trace your roof with the ✏️ tool instead.");
@@ -584,24 +665,49 @@ const seo = {
           computeManual();
         });
         function computeManual() {
-          const M2_TO_FT2 = 10.7639;
+          // The slope multiplier is sec(pitch), so pitch = acos(1/mult).
+          const pitchDeg = (Math.acos(1 / state.pitchMult) * 180) / Math.PI;
+          const planes: RoofPlane[] = [];
           let planM2 = 0;
           state.polygons.forEach((poly) => {
             const path = poly.getPath().getArray();
-            if (path.length >= 3) planM2 += google.maps.geometry.spherical.computeArea(path);
+            if (path.length < 3) return;
+            const areaM2 = google.maps.geometry.spherical.computeArea(path);
+            if (areaM2 <= 0) return;
+            planM2 += areaM2;
+            // One traced section = one plane, so complexity still drives waste.
+            planes.push({
+              areaFt2: areaM2 * M2_TO_FT2 * state.pitchMult,
+              pitchDeg,
+              azimuthDeg: 0, // not measurable from a traced outline
+            });
           });
           const planFt2 = planM2 * M2_TO_FT2;
-          const surface = planFt2 * state.pitchMult;
           if (planFt2 > 0) {
-            render(
-              surface,
-              planFt2,
-              `your pick (×${state.pitchMult})`,
-              "Traced by you — tap to add corners, drag the dots to adjust, then pick the steepness.",
-              "hand-traced",
+            // Centre the report's aerial photo on what they actually traced.
+            const bounds = new google.maps.LatLngBounds();
+            state.polygons.forEach((poly) =>
+              poly
+                .getPath()
+                .getArray()
+                .forEach((pt: any) => bounds.extend(pt)),
+            );
+            const c = bounds.getCenter();
+            state.center = { lat: c.lat(), lng: c.lng() };
+
+            applySummary(
+              buildRoofSummary({
+                planes,
+                surfaceFt2: planFt2 * state.pitchMult,
+                footprintFt2: planFt2,
+                imageryQuality: null,
+                method: "manual",
+              }),
+              "manual",
             );
             setStatus("Keep tapping corners or drag the dots to fine-tune — numbers update live.");
           } else {
+            applySummary(null, "manual");
             const n = currentPoly ? currentPoly.getPath().getLength() : 0;
             setStatus(
               n > 0
@@ -633,9 +739,67 @@ const seo = {
           state.polygons = [];
           state.address = "";
           state.mode = "auto";
+          state.center = null;
           disableManual();
           clearResults("Start typing and pick your address — we'll find your roof.");
         });
+
+        // --- Download the branded PDF report ---
+        // pdf-lib and the brand fonts are pulled in only on click, so the page
+        // itself stays light. Everything runs in the browser: no key, no
+        // server round trip, nothing stored.
+        const dlLabel = el("rt-download-label");
+        downloadBtn.addEventListener("click", async () => {
+          const summary = state.summary;
+          if (!summary || downloadBtn.disabled) return;
+          const original = dlLabel.textContent;
+          downloadBtn.disabled = true;
+          dlLabel.textContent = "Building your report…";
+          try {
+            const [{ buildRoofReportPdf, reportFilename }, propertyImage] = await Promise.all([
+              import("~/lib/roof-report-pdf"),
+              fetchPropertyImage(),
+            ]);
+            const bytes = await buildRoofReportPdf({
+              summary,
+              address: state.address,
+              propertyImage,
+              method: state.method,
+            });
+            const blob = new Blob([bytes as BlobPart], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = reportFilename(state.address);
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            // Give the browser a beat to start the download before revoking.
+            setTimeout(() => URL.revokeObjectURL(url), 10_000);
+            dlLabel.textContent = "Report downloaded ✓";
+            setTimeout(() => (dlLabel.textContent = original), 4000);
+          } catch {
+            dlLabel.textContent = "Couldn't build the report — try again";
+            setTimeout(() => (dlLabel.textContent = original), 4000);
+          } finally {
+            downloadBtn.disabled = false;
+          }
+        });
+
+        /** Public-domain USGS aerial for the cover. Optional by design. */
+        async function fetchPropertyImage(): Promise<Uint8Array | null> {
+          if (!state.center) return null;
+          try {
+            const res = await fetch(
+              `/api/property-image?lat=${state.center.lat}&lng=${state.center.lng}`,
+            );
+            if (res.status !== 200) return null;
+            const buf = await res.arrayBuffer();
+            return buf.byteLength > 0 ? new Uint8Array(buf) : null;
+          } catch {
+            return null;
+          }
+        }
       })
       .catch(() => {
         setStatus(
