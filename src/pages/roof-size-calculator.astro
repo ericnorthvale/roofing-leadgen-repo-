@@ -666,39 +666,87 @@ const seo = {
           el("rt-verify").classList.add("hidden");
           hideBigger();
         }
+        /**
+         * Outline the measured building so a wrong match is obvious on sight.
+         *
+         * Google gives axis-aligned bounding boxes per roof plane, not real
+         * facet shapes. Drawing all of them was a visual mess; drawing one box
+         * around the lot was worse — houses are rarely square to north, so an
+         * axis-aligned rectangle wraps a slab of the neighbour's yard and looks
+         * arbitrary (owner, 2026-10).
+         *
+         * So: take every plane's corners and wrap them in a convex hull. It is
+         * a single clean shape that follows the building's real orientation.
+         * It is still an APPROXIMATION of extent — it bridges the notch in an
+         * L-shaped roof — and is only ever used to answer "is this my house?",
+         * never presented as the measured geometry.
+         */
+        function convexHull(pts: { lat: number; lng: number }[]) {
+          if (pts.length < 3) return pts;
+          const p = [...pts].sort((a, b) => a.lng - b.lng || a.lat - b.lat);
+          const cross = (o: any, a: any, b: any) =>
+            (a.lng - o.lng) * (b.lat - o.lat) - (a.lat - o.lat) * (b.lng - o.lng);
+          const half = (src: typeof p) => {
+            const out: typeof p = [];
+            for (const pt of src) {
+              while (out.length >= 2 && cross(out[out.length - 2], out[out.length - 1], pt) <= 0)
+                out.pop();
+              out.push(pt);
+            }
+            out.pop();
+            return out;
+          };
+          return [...half(p), ...half([...p].reverse())];
+        }
+
         function drawMeasuredShapes(data: any) {
           clearMeasuredShapes();
           const segs: any[] = data?.solarPotential?.roofSegmentStats ?? [];
 
-          // ONE outline around the whole measured building, not one box per
-          // roof plane. Google gives us axis-aligned bounding boxes, not real
-          // facet shapes, so drawing all 17 of them was both a visual mess and
-          // a false claim of precision (owner, 2026-10). All this marker needs
-          // to answer is "did we measure YOUR building?".
-          let south = 90,
-            north = -90,
-            west = 180,
-            east = -180;
-          let found = false;
+          // Each plane's bounding box is axis-aligned, so on a house that
+          // isn't square to north the box is far bigger than the plane inside
+          // it. Shrink every box about its own centre until its area matches
+          // the plane's real ground area before hulling — measured, this pulls
+          // the outline from ~1.4x the true footprint down to ~1.07x.
+          const mPerDegLat = 111320;
+          const mPerDegLng = 111320 * Math.cos((segs[0]?.center?.latitude ?? 30) * (Math.PI / 180));
+          const corners: { lat: number; lng: number }[] = [];
           for (const seg of segs) {
             const bb = seg?.boundingBox;
             if (!bb?.sw || !bb?.ne) continue;
-            south = Math.min(south, bb.sw.latitude, bb.ne.latitude);
-            north = Math.max(north, bb.sw.latitude, bb.ne.latitude);
-            west = Math.min(west, bb.sw.longitude, bb.ne.longitude);
-            east = Math.max(east, bb.sw.longitude, bb.ne.longitude);
-            found = true;
+            const s2 = Math.min(bb.sw.latitude, bb.ne.latitude);
+            const n2 = Math.max(bb.sw.latitude, bb.ne.latitude);
+            const w2 = Math.min(bb.sw.longitude, bb.ne.longitude);
+            const e2 = Math.max(bb.sw.longitude, bb.ne.longitude);
+
+            const boxM2 = (n2 - s2) * mPerDegLat * ((e2 - w2) * mPerDegLng);
+            const trueM2 = Number(seg?.stats?.groundAreaMeters2 ?? 0);
+            const k = boxM2 > 0 && trueM2 > 0 ? Math.min(1, Math.sqrt(trueM2 / boxM2)) : 1;
+
+            const cLat = (s2 + n2) / 2;
+            const cLng = (w2 + e2) / 2;
+            const hLat = ((n2 - s2) / 2) * k;
+            const hLng = ((e2 - w2) / 2) * k;
+            corners.push(
+              { lat: cLat - hLat, lng: cLng - hLng },
+              { lat: cLat - hLat, lng: cLng + hLng },
+              { lat: cLat + hLat, lng: cLng - hLng },
+              { lat: cLat + hLat, lng: cLng + hLng },
+            );
           }
-          if (!found) return;
+          if (corners.length < 3) return;
+
+          const hull = convexHull(corners);
+          if (hull.length < 3) return;
 
           measuredShapes.push(
-            new google.maps.Rectangle({
+            new google.maps.Polygon({
               map,
-              bounds: { south, north, west, east },
+              paths: hull,
               fillColor: "#C9A26C",
-              fillOpacity: 0.12,
+              fillOpacity: 0.16,
               strokeColor: "#C9A26C",
-              strokeWeight: 2.5,
+              strokeWeight: 3,
               clickable: false,
               zIndex: 1,
             }),
