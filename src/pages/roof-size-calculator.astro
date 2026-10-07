@@ -187,6 +187,21 @@ const seo = {
               class="self-start rounded-2xl border border-[color:var(--color-navy-100)] bg-white p-6 shadow-sm md:p-7"
               aria-live="polite"
             >
+              {/* Cover photo for the PDF, shown here first so what you
+                  download is never a surprise. Hidden unless it loads. */}
+              <figure id="rt-photo-wrap" class="mb-5 hidden">
+                <img
+                  id="rt-photo"
+                  alt="Aerial view of the measured property"
+                  class="block w-full rounded-xl border border-[color:var(--color-navy-100)]"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption class="mt-1.5 text-[11px] text-[color:var(--color-ink-500)]">
+                  Aerial imagery: USGS The National Map (public domain)
+                </figcaption>
+              </figure>
+
               <p class="text-xs font-semibold tracking-[0.14em] text-[color:var(--color-ink-500)] uppercase">
                 Your roof measures
               </p>
@@ -384,6 +399,23 @@ const seo = {
       blockedBox.classList.add("hidden");
     }
 
+    const photoWrap = el("rt-photo-wrap");
+    const photoImg = el("rt-photo") as HTMLImageElement;
+    /** Load the report's cover photo; stay hidden if there's no coverage. */
+    function showPropertyPhoto() {
+      if (!state.center) return;
+      const src = `/api/property-image?lat=${state.center.lat}&lng=${state.center.lng}`;
+      if (photoImg.getAttribute("src") === src) return;
+      photoImg.onload = () => photoWrap.classList.remove("hidden");
+      photoImg.onerror = () => photoWrap.classList.add("hidden");
+      photoWrap.classList.add("hidden");
+      photoImg.src = src;
+    }
+    function hidePropertyPhoto() {
+      photoWrap.classList.add("hidden");
+      photoImg.removeAttribute("src");
+    }
+
     /**
      * Single render path for both modes. A blocked verdict clears the figures
      * entirely — we show nothing rather than a number we don't trust.
@@ -399,6 +431,7 @@ const seo = {
         el("rt-pitchout").textContent = "—";
         el("rt-meta").textContent = "";
         downloadBtn.disabled = true;
+        hidePropertyPhoto();
         if (summary) showBlocked(summary.confidence.message);
         else hideBlocked();
         return;
@@ -406,6 +439,7 @@ const seo = {
 
       hideBlocked();
       state.summary = summary;
+      showPropertyPhoto();
       el("rt-squares").textContent = summary.squares.toFixed(1);
       el("rt-surface").textContent = `${fmt(summary.surfaceFt2)} ft²`;
       el("rt-footprint").textContent = `${fmt(summary.footprintFt2)} ft²`;
