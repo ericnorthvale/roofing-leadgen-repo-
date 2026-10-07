@@ -11,6 +11,7 @@ import {
   pitchRangeLabel,
   slopeFactor,
   COMMON_SLOPE_FACTORS,
+  orderingMargin,
   type RoofPlane,
 } from "~/lib/roof-report";
 import { reportReference } from "~/lib/roof-report-pdf";
@@ -324,5 +325,51 @@ describe("reportReference", () => {
   it("avoids glyphs that get misread aloud or over the phone", () => {
     const tail = reportReference("3019 Rushing Brook Dr, Kingwood, TX", day).split("-")[2];
     expect(tail).not.toMatch(/[IO01]/);
+  });
+});
+
+describe("ordering margin", () => {
+  const roof = (squares: number, pitchDeg = 26.57) => {
+    const surface = squares * 100;
+    return buildRoofSummary({
+      planes: [plane(surface / 2, pitchDeg), plane(surface / 2, pitchDeg)],
+      surfaceFt2: surface,
+      footprintFt2: surface / 1.118,
+      wholeRoofFt2: surface,
+      imageryQuality: "HIGH",
+    });
+  };
+
+  it("rounds up to a whole square and adds two on a normal roof", () => {
+    const s = roof(52.2);
+    // 52.2 measured, +10% simple = 57.4 → ceil 58 → +2
+    expect(s.squaresWithWaste).toBe(57.4);
+    expect(s.orderMargin).toBe(2);
+    expect(s.squaresToOrder).toBe(60);
+  });
+
+  it("adds only one square on a small roof, where two would be a tenth", () => {
+    const s = roof(12);
+    expect(s.orderMargin).toBe(1);
+    expect(s.squaresToOrder).toBe(Math.ceil(s.squaresWithWaste) + 1);
+  });
+
+  it("never orders less than the measured area plus its allowance", () => {
+    for (const sq of [4, 9.9, 18, 20, 33.3, 64, 120]) {
+      const s = roof(sq);
+      expect(s.squaresToOrder).toBeGreaterThan(s.squaresWithWaste);
+      expect(s.squaresWithWaste).toBeGreaterThan(s.squares);
+    }
+  });
+
+  it("leaves the measured area untouched — the margin is a purchasing step", () => {
+    const s = roof(40);
+    expect(s.squares).toBe(40);
+    expect(s.surfaceFt2).toBe(4000);
+  });
+
+  it("switches margin at the 20-square boundary, measured after waste", () => {
+    expect(orderingMargin(19.9)).toBe(1);
+    expect(orderingMargin(20)).toBe(2);
   });
 });

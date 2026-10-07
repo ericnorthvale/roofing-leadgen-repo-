@@ -482,7 +482,7 @@ async function drawCover(
     font: fonts.bodyBold,
     color: ink.rule,
   });
-  const orderValue = `${summary.squaresWithWaste.toFixed(1)} squares`;
+  const orderValue = `${summary.squaresToOrder.toFixed(1)} squares`;
   page.drawText(orderValue, {
     x: MARGIN + 120,
     y: bandTop - cellH - 23,
@@ -490,7 +490,7 @@ async function drawCover(
     font: fonts.bodyBold,
     color: ink.white,
   });
-  const orderNote = `measured area plus the ${summary.waste.percent}% waste allowance`;
+  const orderNote = `measured area + ${summary.waste.percent}% waste + ${summary.orderMargin}-square ordering margin`;
   page.drawText(orderNote, {
     x: PAGE_W - MARGIN - 10 - fonts.body.widthOfTextAtSize(orderNote, 8),
     y: bandTop - cellH - 21,
@@ -628,7 +628,7 @@ function drawRoofDiagram(
 
   const left = opts?.left ?? MARGIN;
   const boxW = opts?.width ?? CONTENT_W;
-  const boxH = opts?.height ?? 232;
+  const boxH = opts?.height ?? 208;
   const labels = opts?.labels ?? true;
   const pad = 26;
   const footer = 26; // clear lane at the bottom for the scale bar
@@ -839,10 +839,20 @@ function drawCalculation(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
     ],
     [
       `Waste allowance (${summary.waste.complexity} roof${summary.waste.steepAdder > 0 ? ", steep pitch" : ""})`,
-      `+ ${summary.waste.percent}%`,
+      `+ ${summary.waste.percent}%  ·  ${summary.squaresWithWaste.toFixed(1)} squares`,
       false,
     ],
-    ["Squares to order", `${summary.squaresWithWaste.toFixed(1)} squares`, true],
+    [
+      "Rounded up to a whole square",
+      `${Math.ceil(summary.squaresWithWaste).toFixed(0)} squares`,
+      false,
+    ],
+    [
+      "Ordering margin",
+      `+ ${summary.orderMargin} square${summary.orderMargin === 1 ? "" : "s"}`,
+      false,
+    ],
+    ["Quantity to order", `${summary.squaresToOrder.toFixed(1)} squares`, true],
   ];
 
   for (const [label, value, strong] of rows) {
@@ -954,7 +964,7 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
   y -= 26;
   y = drawParagraph(
     page,
-    "The waste allowance is the industry's way of accounting for that. It is added to the measured area to give the quantity a supplier should be asked for — so the crew does not run short mid-tear-off — and it is an allowance, not a charge and not a prediction: the material actually consumed depends on how the roof cuts up on the day.",
+    "The waste allowance is the industry's way of accounting for that. It is added to the measured area so a crew does not run short mid-tear-off, and it is an allowance rather than a charge: what a roof actually consumes depends on how it cuts up on the day.",
     { x: MARGIN, y, font: fonts.body, size: 9, color: ink.slate700, width: CONTENT_W, leading: 13 },
   );
   y -= 30;
@@ -1023,10 +1033,11 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
     color: ink.slate500,
   });
   const quantities: [string, string][] = [
-    ["MEASURED ROOF AREA", `${summary.squares.toFixed(1)} squares`],
-    ["QUANTITY TO ORDER", `${summary.squaresWithWaste.toFixed(1)} squares`],
+    ["MEASURED", `${summary.squares.toFixed(1)} sq`],
+    ["WITH ALLOWANCE", `${summary.squaresWithWaste.toFixed(1)} sq`],
+    ["TO ORDER", `${summary.squaresToOrder.toFixed(1)} sq`],
   ];
-  let qx = MARGIN + 230;
+  let qx = MARGIN + 200;
   for (const [label, value] of quantities) {
     page.drawText(label, {
       x: qx,
@@ -1042,7 +1053,7 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
       font: fonts.bodySemi,
       color: ink.slate900,
     });
-    qx += 130;
+    qx += 112;
   }
 
   y = y - boxH - 20;
@@ -1152,10 +1163,10 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
   y -= 20;
   y = drawParagraph(
     page,
-    "Material is sold in whole bundles, so a supplier order rounds up from the figure above. Bundles per square vary by product — the supplier converts the square count at the point of order.",
+    `The quantity to order goes one step further: the figure above is rounded up to a whole square and a ${summary.orderMargin}-square ordering margin is added. That margin is a purchasing decision, not part of the allowance — a traced outline tends to read slightly under an on-roof measurement, and running short mid-tear-off costs far more than a spare bundle. Material is sold in whole bundles in any case, so the supplier converts the square count at the point of order.`,
     { x: MARGIN, y, font: fonts.body, size: 8, color: ink.slate500, width: CONTENT_W, leading: 11 },
   );
-  y -= 28;
+  y -= 34;
 
   // How to read the two figures against someone else's. This is the single
   // most useful thing a measurement document can tell a homeowner, and it is
@@ -1169,7 +1180,7 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
   });
   y -= 16;
   const usage = [
-    `Comparing estimates: ask which figure each one was priced on. A bid built on ${summary.squares.toFixed(1)} squares and a bid built on ${summary.squaresWithWaste.toFixed(1)} are not the same bid, even at the same rate per square.`,
+    `Comparing estimates: ask which figure each one was priced on. A bid built on ${summary.squares.toFixed(1)} squares and a bid built on ${summary.squaresToOrder.toFixed(1)} are not the same bid, even at the same rate per square.`,
     "Checking an insurance scope: carrier scopes normally list the roof area and the waste allowance as separate lines. Compare each against its counterpart here rather than comparing totals.",
     "Against another measurement: differences usually trace to pitch or to where the roof edge was drawn, not to arithmetic. Check those two first.",
   ];

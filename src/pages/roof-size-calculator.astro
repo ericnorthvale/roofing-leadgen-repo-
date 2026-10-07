@@ -577,8 +577,9 @@ const seo = {
       hideBlocked();
       state.summary = summary;
       el("rt-squares").textContent = summary.squares.toFixed(1);
-      el("rt-order").textContent = summary.squaresWithWaste.toFixed(1);
-      el("rt-order-note").textContent = `squares to order (incl. ${summary.waste.percent}% waste)`;
+      el("rt-order").textContent = summary.squaresToOrder.toFixed(1);
+      el("rt-order-note").textContent =
+        `squares to order (incl. ${summary.waste.percent}% waste + ${summary.orderMargin} sq margin)`;
       el("rt-surface").textContent = `${fmt(summary.surfaceFt2)} ft²`;
       el("rt-footprint").textContent = `${fmt(summary.footprintFt2)} ft²`;
       el("rt-pitchout").textContent = pitchRangeLabel(summary.pitchRangeDeg);
@@ -594,7 +595,7 @@ const seo = {
         parts.push("Traced by you — drag the dots to fine-tune.");
       }
       parts.push(
-        `Waste allowance ${summary.waste.percent}% → about ${summary.squaresWithWaste.toFixed(1)} squares to order.`,
+        `Waste allowance ${summary.waste.percent}% → ${summary.squaresWithWaste.toFixed(1)} squares, rounded up plus a ${summary.orderMargin}-square ordering margin → ${summary.squaresToOrder.toFixed(1)} to order.`,
       );
       if (summary.confidence.level === "reduced") parts.push(summary.confidence.message);
       el("rt-meta").textContent = parts.join(" ");
@@ -611,7 +612,7 @@ const seo = {
       const notes = form?.querySelector<HTMLTextAreaElement>('textarea[name="notes"]');
       if (addressInput && state.address && !addressInput.value) addressInput.value = state.address;
       if (notes) {
-        notes.value = `Roof size tool: ≈ ${s.squares.toFixed(1)} squares (~${fmt(s.surfaceFt2)} ft² surface, ${pitchRangeLabel(s.pitchRangeDeg)} pitch, ${s.waste.percent}% waste → ${s.squaresWithWaste.toFixed(1)} to order)${state.address ? ` at ${state.address}` : ""} — ${state.method === "aerial" ? "aerial" : "hand-traced"} measurement.`;
+        notes.value = `Roof size tool: ≈ ${s.squares.toFixed(1)} squares (~${fmt(s.surfaceFt2)} ft² surface, ${pitchRangeLabel(s.pitchRangeDeg)} pitch, ${s.waste.percent}% waste → ${s.squaresWithWaste.toFixed(1)}, +${s.orderMargin} sq margin → ${s.squaresToOrder.toFixed(1)} to order)${state.address ? ` at ${state.address}` : ""} — ${state.method === "aerial" ? "aerial" : "hand-traced"} measurement.`;
       }
     }
 

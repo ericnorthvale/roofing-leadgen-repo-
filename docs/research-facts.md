@@ -1440,3 +1440,56 @@ removal of the photo picker in addendum 6.
 `/api/property-image` (Mapillary → USGS) is now unreferenced. Left in place
 rather than deleted — it is env-gated and harmless, and removing a route is a
 cleanup for a human to confirm (Hard Rule #7).
+
+---
+
+### Sheet 8 — addendum 9: ordering margin (2026-10-07)
+
+Owner: "does this follow industry guidelines or is it undervalued? I want it 1-2
+more than needed on squares if ever possible, not fully accurate … so we don't
+underquote or order."
+
+**Answer to the first part: the percentages are not undervalued.** 10 / 13 / 15
+sit inside the published ranges in the main Sheet 8 entry (simple 10%, hip
+12–15%, cut-up 15–20%), and the model reproduced EagleView's 17% exactly on both
+Sugar Bush and Grove Clover. The under-call risk is real but it is **not in the
+waste percentage** — it is in two other places:
+
+1. **The measured area reads light.** On the four correctly-matched roofs of the
+   calibration set the tool/truth ratios were 1.024, 0.971, 0.926 and 0.902 —
+   mean ≈ 0.96. Traced and aerial outlines clip eaves and overhangs.
+2. **Part squares.** Material is sold in whole bundles, so anything not rounded
+   up is short on arrival.
+
+**What was added: an explicit ordering margin, separate from the allowance.**
+
+```
+measured squares
+  × (1 + waste factor)      → squaresWithWaste   (unchanged, EagleView-matched)
+  rounded UP to whole square
+  + margin                  → squaresToOrder
+```
+
+Margin is **2 squares**, or **1** below 20 squares after waste, where 2 would be
+a tenth of the order.
+
+**Why a separate line rather than fatter waste percentages.** Raising the bases
+to smuggle in a safety margin would (a) break the EagleView match that is the
+report's entire credibility claim, and (b) misstate what a waste allowance is,
+in a document that prints the rule in full. The margin is a purchasing decision,
+so it is added after the allowance, labelled, and shown on its own row in the
+arithmetic chain. **The measured area is never touched by either** — inflating a
+measurement would breach Hard Rule #2, and is a different thing entirely from
+choosing to buy more than the measurement implies.
+
+This also supersedes the "no area correction factor" note above in practice: the
+bias that note identified is now absorbed by a visible, labelled margin instead
+of an invisible multiplier.
+
+Constants live in `src/lib/roof-report.ts` (`ORDER_MARGIN_SQUARES`,
+`ORDER_MARGIN_SMALL_SQUARES`, `SMALL_ROOF_SQUARES`) and are unit-tested,
+including that `squaresToOrder` can never fall below `squaresWithWaste`.
+
+**Still open:** valley linear footage remains the real driver of waste and is
+still unavailable (addendum 4). The margin reduces the consequence of that gap;
+it does not close it.
