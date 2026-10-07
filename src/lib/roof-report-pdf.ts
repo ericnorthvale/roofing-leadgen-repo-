@@ -6,13 +6,18 @@
  * constraint. pdf-lib is imported dynamically by the caller so none of this
  * weight loads until someone clicks Download.
  *
- * DELIBERATELY NOT BRAND-STYLED (owner, 2026-10). This document is a
- * measurement record, read alongside EagleView and carrier scopes, so it uses
- * the visual language those documents use: one neutral grotesque, greyscale
- * with a single functional accent, and rules instead of ornament. Using the
- * Northvale typeface and gold here made a measurement look like an
- * advertisement for the company that took it. See docs/brand-guidelines.md —
- * this file is the stated exception to it, not an oversight.
+ * DELIBERATELY UNBRANDED (owner, 2026-10). This document is a measurement
+ * record, read alongside EagleView and carrier scopes, so it uses the visual
+ * language those documents use: one neutral grotesque, greyscale with a single
+ * functional accent, and rules instead of ornament. The company typeface and
+ * gold made a measurement look like an advertisement for whoever took it. See
+ * docs/brand-guidelines.md — this file is the stated exception to it, not an
+ * oversight, and it imports nothing from brand.ts on purpose.
+ *
+ * No company name appears anywhere: not on the page, not in the footer, not in
+ * the PDF metadata. The report is UNATTRIBUTED. That is a legitimate choice —
+ * but it stops exactly there. Nothing in here may assert, in words or in
+ * styling, that an independent surveyor or third-party firm produced it.
  *
  * Typography is pdf-lib's built-in Helvetica. That is the point, not a
  * shortcut: it carries no brand, it is what technical documents are set in,
@@ -30,7 +35,6 @@
  */
 
 import type { PDFDocument, PDFFont, PDFPage, RGB } from "pdf-lib";
-import { BRAND } from "~/lib/brand";
 import {
   azimuthToCompass,
   formatImageryDate,
@@ -1452,10 +1456,12 @@ export async function buildRoofReportPdf(
   const { PDFDocument, rgb } = await import("pdf-lib");
 
   const doc = await PDFDocument.create();
+  // Metadata carries no company either (owner, 2026-10: "take out all things
+  // Northvale and don't replace it with anything"). Author and Producer are
+  // left UNSET rather than filled with some other name — an absent field
+  // claims nothing, whereas inventing one would be a fabricated fact.
   doc.setTitle(`Roof Measurement Report — ${input.address || "Property"}`);
-  doc.setAuthor(BRAND.legalName);
   doc.setSubject("Roof area, pitch and material quantity. A measurement record, not a quote.");
-  doc.setProducer(BRAND.legalName);
   doc.setCreationDate(input.now ?? new Date());
 
   const hexToRgb = (hex: string) =>

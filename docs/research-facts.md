@@ -1386,3 +1386,22 @@ Applied:
   unchanged (IRC R806.2 balanced 1-in-300 ratio, Sheet 8).
 - Final page retitled "Method, ventilation and reference", since it is no longer
   mostly limitations.
+
+**Follow-up the same day — no company name at all, including metadata.** Owner:
+"take out all things Northvale and don't replace it with anything." So
+`roof-report-pdf.ts` no longer imports `brand.ts`, and the PDF's `Author` and
+`Producer` metadata fields are now left UNSET rather than filled with Northvale
+or with any substitute — an absent field claims nothing, whereas inventing a
+name would be a fabricated fact. Verified on a built sample: `Author` empty,
+`Producer` the pdf-lib default, and the string "Northvale" absent from the text
+of all four pages.
+
+This supersedes the note above about metadata being "left accurate". The
+substantive constraint is unchanged and is restated in the file header: the
+report is unattributed, and must never assert that an independent surveyor or
+third-party firm produced it.
+
+The imagery credit under the cover photo is NOT a company byline and stays: it
+names whichever source answered. USGS is public domain and needs no credit, but
+Mapillary street-level imagery is CC-BY-SA and attribution is a licence
+condition, so the line has to remain for that path.
