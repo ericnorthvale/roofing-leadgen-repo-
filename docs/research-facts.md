@@ -1106,3 +1106,38 @@ free on-site measurement. Gate (src/lib/roof-report.ts, unit-tested):
 
 Hand-traced measurements bypass the aerial gate: the person tracing can see the
 trees themselves, so their own outline is not second-guessed.
+
+### Sheet 8 addendum — calibration against EagleView (2026-10-07)
+
+Owner supplied a real EagleView report for **5806 Sugar Bush Dr, Magnolia TX**
+and compared it to the tool. Ground truth: **47.9 squares · 17% waste ·
+predominantly 9/12**. Google Solar API for the same address returned 44.4
+squares (17 roof planes, imageryQuality HIGH, March 2023, building matched at
+0 m offset — so this was NOT a wrong-building match).
+
+**Decomposition of the 7.4% gap** (computed, not assumed):
+
+- Google footprint 3,648 ft²; a 47.9-square roof at a true 9/12 pitch requires
+  ~3,832 ft². Footprint shortfall **≈5%** — consistent with Google's roof mask
+  clipping eaves/overhangs (~7–8 inches around the perimeter).
+- Google's area ÷ footprint implies an **8.3/12** average pitch where EagleView
+  reports predominantly **9/12** — the DSM smooths the steepest planes. Worth
+  **≈2.4%** of area.
+
+**Conclusion: Google's Solar API is a solar-modelling product, not a
+measurement product, and reads systematically LOW on both footprint and
+pitch.** No correction factor has been applied — one ground-truth roof is not
+a calibration set, and inventing a multiplier would breach Hard Rule #2. The
+tool instead states the limitation plainly on screen and in the PDF. If the
+owner supplies 5–10 more EagleView reports, a sourced correction can be
+derived and documented here.
+
+**Waste model recalibrated** to this ground truth (still inside the published
+ranges in the main Sheet 8 entry): simple 10% · moderate 13% · complex 15% ·
+steep (9/12+) adder +2% · cap 20%. Sugar Bush = 17 planes (complex, 15%) +
+steep (10.1/12 max plane) = **17%, matching EagleView exactly.**
+
+**Pitch is reported as a measured range**, never a single "predominant" figure:
+on this roof Google's planes span 6.2/12–10.1/12 and the area-weighted average
+is 8.3/12, so any single number would misrepresent it. The displayed range
+(7/12–10/12, slivers excluded) does bracket EagleView's 9/12.

@@ -550,6 +550,7 @@ function drawDetail(ctx: Ctx, input: ReportInput) {
   y -= 16;
   const disclaimers = [
     "A measurement estimate produced from aerial data — not a quote, and not a material order.",
+    "Aerial roof models read slightly under a full photogrammetric or on-site measurement: they tend to clip eaves and overhangs and to smooth out the steepest slopes. Treat this as a close estimate, not an ordering figure.",
     "Waste allowance is an industry-standard estimate based on roof complexity and pitch; it is not a guarantee of the quantity your roof will require.",
     "Tree cover, recent construction, and complex rooflines all affect aerial accuracy. Every measurement is verified on site before any contract price is given.",
     "This report contains no pricing. Your written price comes from a free on-site inspection.",

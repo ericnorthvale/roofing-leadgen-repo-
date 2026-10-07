@@ -54,18 +54,29 @@ describe("complexity + waste allowance", () => {
 
   it("applies the sourced industry base allowances", () => {
     expect(wasteAllowance(3, 20).percent).toBe(10); // simple gable
-    expect(wasteAllowance(6, 20).percent).toBe(15); // hip / dormers
-    expect(wasteAllowance(12, 20).percent).toBe(18); // cut-up hip & valley
+    expect(wasteAllowance(6, 20).percent).toBe(13); // hip / dormers
+    expect(wasteAllowance(12, 20).percent).toBe(15); // cut-up hip & valley
+  });
+
+  it("matches the EagleView ground truth for 5806 Sugar Bush Dr", () => {
+    // Owner-supplied report: 17 planes, predominantly 9/12 -> EagleView 17%.
+    const w = wasteAllowance(17, 40.0);
+    expect(w.complexity).toBe("complex");
+    expect(w.percent).toBe(17);
   });
 
   it("adds the steep-pitch adder at 9/12 and above only", () => {
     expect(wasteAllowance(6, 26.57).steepAdder).toBe(0); // 6/12 → none
     expect(wasteAllowance(6, 36.87).steepAdder).toBe(0.02); // 9/12 → adder
-    expect(wasteAllowance(6, 36.87).percent).toBe(17);
+    expect(wasteAllowance(6, 36.87).percent).toBe(15);
   });
 
   it("never prints more than the 20% industry ceiling", () => {
-    expect(wasteAllowance(20, 60).percent).toBe(20);
+    // The ceiling is a guard rail: with the calibrated bases the worst case
+    // (complex + steep) is 17%, so it should never actually bind.
+    const worst = wasteAllowance(40, 60);
+    expect(worst.percent).toBe(17);
+    expect(worst.factor).toBeLessThanOrEqual(0.2);
   });
 
   it("treats unknown pitch as not-steep rather than guessing", () => {

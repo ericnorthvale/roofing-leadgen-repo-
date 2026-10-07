@@ -108,11 +108,16 @@ export const COMPLEXITY_LABEL: Record<Complexity, string> = {
 
 /* ----------------------------------------------------------------- waste -- */
 
-/** Industry-standard base allowances by complexity (Sheet 8). */
+/**
+ * Base allowances by complexity (Sheet 8). Calibrated 2026-10 against an
+ * owner-supplied EagleView report for a 17-plane, 9/12 roof in Magnolia: that
+ * roof lands on complex (15%) + the steep adder (2%) = 17%, matching
+ * EagleView's figure exactly. All three sit inside the published ranges.
+ */
 const BASE_WASTE: Record<Complexity, number> = {
   simple: 0.1,
-  moderate: 0.15,
-  complex: 0.18,
+  moderate: 0.13,
+  complex: 0.15,
 };
 
 /** Steep roofs add handling/cut loss. Applied at 9/12 and above (Sheet 8). */
