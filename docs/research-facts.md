@@ -1141,3 +1141,47 @@ steep (10.1/12 max plane) = **17%, matching EagleView exactly.**
 on this roof Google's planes span 6.2/12–10.1/12 and the area-weighted average
 is 8.3/12, so any single number would misrepresent it. The displayed range
 (7/12–10/12, slivers excluded) does bracket EagleView's 9/12.
+
+### Sheet 8 addendum 2 — the blind spot (3019 Rushing Brook Dr, Kingwood, 2026-10-07)
+
+Owner's second ground-truth check: **EagleView 44 squares, tool 23.9 (−46%).**
+Unlike Sugar Bush this is NOT eave clipping — the gap is far too large.
+
+What the API returned at the geocoded address: building `ZqxuCM_qVg`, 9 roof
+planes, 23.9 squares, 2,057 ft² footprint, imageryQuality HIGH, **matched 2 m
+from the address pin**, coverage 1.000. Every automated check passed.
+
+Probing the surrounding ~50 m found nine distinct building records, including
+**`pUi7R4DR7A` at 42.7 squares just 21 m east** (bounding extents overlap the
+matched one) and `N6zv-5ivAY` at 42.8 squares. 42.7 vs EagleView's 44 is −3%,
+right in line with the eave-clipping bias measured at Sugar Bush.
+
+Two explanations fit the data and **the API alone cannot distinguish them**:
+
+1. The geocode resolved to a secondary structure and the real house is the
+   42.7-square record 21 m away; or
+2. Kingwood's heavy canopy ("the Livable Forest") left Google modelling only
+   part of the roof — supported by the implausible pitch spread on the matched
+   building (0.7/12 flat alongside 12.9/12 and 15.1/12).
+
+(Google Static Maps is not enabled on the key, so the property could not be
+inspected visually from the build environment.)
+
+**THE STRUCTURAL LESSON — this is the important part.** Every automated gate in
+roof-report.ts compares _Google against Google_: coverage compares segments to
+Google's own whole-roof figure; the offset check compares Google's geocode to
+Google's own building model. When those two agree with each other and both
+disagree with reality, **no automated check can catch it** — and the wrong
+number looks completely plausible.
+
+The only reliable defence is a human eye. Hence:
+
+- Every measured roof plane is outlined in gold on the satellite map.
+- A visible prompt asks the homeowner to confirm the outline is on their roof.
+- **Tapping any building on the map re-measures that building** — one click to
+  correct a bad match, at the cost of one extra API call only when needed.
+
+This also hard-caps what the free tool can honestly claim. It is a lead magnet
+and an orientation estimate, not an ordering figure. Order-grade numbers come
+from an on-site measurement or a paid photogrammetric report (Roofr ~$13,
+EagleView ~$15–87) — see the main Sheet 8 entry.

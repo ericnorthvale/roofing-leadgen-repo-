@@ -112,6 +112,16 @@ const seo = {
                 id="rt-map"
                 class="mt-4 h-[380px] w-full overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] md:h-[440px]"
               />
+              {/* Shown once a roof is highlighted: the measured building is
+                  only trustworthy if a human confirms it's the right one. */}
+              <p
+                id="rt-verify"
+                class="mt-3 hidden rounded-lg bg-[color:var(--color-gold-50)] px-3 py-2 text-sm text-[color:var(--color-ink-800)]"
+              >
+                <strong>Is the gold outline on your roof?</strong> If it's on a garage, a shed or
+                next door, just tap your own house on the map and we'll measure that instead.
+              </p>
+
               <div class="mt-4 flex flex-wrap items-center gap-2.5">
                 <button
                   id="rt-draw"
@@ -630,6 +640,7 @@ const seo = {
         function clearMeasuredShapes() {
           measuredShapes.forEach((s) => s.setMap(null));
           measuredShapes = [];
+          el("rt-verify").classList.add("hidden");
         }
         function drawMeasuredShapes(data: any) {
           clearMeasuredShapes();
@@ -655,6 +666,7 @@ const seo = {
               }),
             );
           }
+          if (measuredShapes.length > 0) el("rt-verify").classList.remove("hidden");
         }
 
         async function fetchSolar(lat: number, lng: number): Promise<any | null> {
@@ -733,7 +745,17 @@ const seo = {
           map.setOptions({ draggableCursor: undefined });
         }
         map.addListener("click", (e: any) => {
-          if (!tracing || !e.latLng) return;
+          if (!e.latLng) return;
+          // Not tracing? A click re-runs the measurement on whatever building
+          // you tapped. This is the only real defence against a confidently
+          // wrong match: every automated check we have compares Google's
+          // geocode against Google's own building model, so when those two
+          // agree with each other and disagree with reality, nothing catches
+          // it but a person looking at the map (owner bug report, 2026-10).
+          if (!tracing) {
+            measureAuto(e.latLng.lat(), e.latLng.lng());
+            return;
+          }
           if (!currentPoly) {
             currentPoly = new google.maps.Polygon({
               map,
