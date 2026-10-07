@@ -1069,7 +1069,7 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
   y -= 16;
   const covers = [
     "Cuts at hips, valleys, rakes and around penetrations, where the offcut is scrap.",
-    "Starter course along the eaves and rakes, and cap shingles along the hips and ridges.",
+    "Starter and cap WHERE THEY ARE CUT FROM FIELD SHINGLES. Dedicated starter and hip-and-ridge products are ordered separately, in linear feet — see the accessory material on the last page.",
     "Alignment and pattern offsets, which on a laminated shingle consume part of each course.",
     "A small margin for damaged, short or colour-mismatched bundles on delivery.",
   ];
@@ -1163,40 +1163,10 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
   y -= 20;
   y = drawParagraph(
     page,
-    `The quantity to order goes one step further: the figure above is rounded up to a whole square and a ${summary.orderMargin}-square ordering margin is added. That margin is a purchasing decision, not part of the allowance — a traced outline tends to read slightly under an on-roof measurement, and running short mid-tear-off costs far more than a spare bundle. Material is sold in whole bundles in any case, so the supplier converts the square count at the point of order.`,
+    `The quantity to order goes one step further: the figure above is rounded up to a whole square and a ${summary.orderMargin}-square ordering margin is added. That margin is a purchasing decision, not part of the allowance — a traced outline tends to read slightly under an on-roof measurement, and running short mid-tear-off costs far more than a spare bundle. Material is sold in whole bundles in any case, so the supplier converts the square count at the point of order. This figure covers FIELD SHINGLES ONLY: starter, and hip-and-ridge cap, are separate products ordered in linear feet and are listed on the last page.`,
     { x: MARGIN, y, font: fonts.body, size: 8, color: ink.slate500, width: CONTENT_W, leading: 11 },
   );
   y -= 34;
-
-  // How to read the two figures against someone else's. This is the single
-  // most useful thing a measurement document can tell a homeowner, and it is
-  // advice about comparing numbers rather than advice about who to hire.
-  page.drawText("HOW TO USE THESE FIGURES", {
-    x: MARGIN,
-    y,
-    size: 8,
-    font: fonts.bodySemi,
-    color: ink.slate500,
-  });
-  y -= 16;
-  const usage = [
-    `Comparing estimates: ask which figure each one was priced on. A bid built on ${summary.squares.toFixed(1)} squares and a bid built on ${summary.squaresToOrder.toFixed(1)} are not the same bid, even at the same rate per square.`,
-    "Checking an insurance scope: carrier scopes normally list the roof area and the waste allowance as separate lines. Compare each against its counterpart here rather than comparing totals.",
-    "Against another measurement: differences usually trace to pitch or to where the roof edge was drawn, not to arithmetic. Check those two first.",
-  ];
-  for (const u of usage) {
-    page.drawRectangle({ x: MARGIN + 1, y: y + 3, width: 3, height: 3, color: ink.accent });
-    y = drawParagraph(page, u, {
-      x: MARGIN + 12,
-      y,
-      font: fonts.body,
-      size: 8.5,
-      color: ink.slate700,
-      width: CONTENT_W - 12,
-      leading: 12,
-    });
-    y -= 14;
-  }
 
   return page;
 }
@@ -1281,6 +1251,12 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
   }
 
   // Other measured figures worth having — all derived from the same trace.
+  // Accessory material. These are ordered in linear feet as their own products
+  // and are NOT inside the square count, which is a standing way to under-order
+  // (owner, 2026-10). The roof edge is measured; hip and ridge length is not —
+  // an outline trace gives the perimeter and nothing about the lines inside it,
+  // and a plausible-looking guess is exactly the kind of invented figure this
+  // report must never print.
   const extras: [string, string, string][] = [];
   if (summary.perimeterFt) {
     extras.push([
@@ -1289,8 +1265,13 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
       "traced perimeter — the run for drip edge, starter and gutters",
     ]);
   }
+  extras.push([
+    "HIP & RIDGE",
+    "not measured",
+    "cap runs along the hips and ridges, which an outline trace does not capture — measure on the roof and add before ordering",
+  ]);
   if (extras.length) {
-    page.drawText("ALSO MEASURED", {
+    page.drawText("ACCESSORY MATERIAL — ORDERED SEPARATELY, NOT IN THE SQUARE COUNT", {
       x: MARGIN,
       y,
       size: 8,
@@ -1300,12 +1281,16 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
     y -= 18;
     for (const [label, value, note] of extras) {
       page.drawText(label, { x: MARGIN, y, size: 7.5, font: fonts.bodySemi, color: ink.slate500 });
+      // A measured figure gets figure treatment; a stated absence like "not
+      // measured" is set small and grey so it never reads as a quantity, and
+      // so it cannot run into the note beside it.
+      const measured = /\d/.test(value);
       page.drawText(value, {
         x: MARGIN + 118,
-        y: y + 1,
-        size: 12,
+        y: y + (measured ? 1 : 0),
+        size: measured ? 12 : 9,
         font: fonts.bodySemi,
-        color: ink.slate900,
+        color: measured ? ink.slate900 : ink.slate500,
       });
       y = drawParagraph(page, note, {
         x: MARGIN + 196,
@@ -1420,6 +1405,38 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
       leading: 12,
     });
     y -= 15;
+  }
+
+  y -= 8;
+
+  // How to read these figures against someone else's. This is the single most
+  // useful thing a measurement document can tell a reader, and it is advice
+  // about comparing numbers rather than advice about who to hire.
+  page.drawText("HOW TO USE THESE FIGURES", {
+    x: MARGIN,
+    y,
+    size: 8,
+    font: fonts.bodySemi,
+    color: ink.slate500,
+  });
+  y -= 16;
+  const usage = [
+    `Comparing estimates: ask which figure each one was priced on. A bid built on ${summary.squares.toFixed(1)} squares and a bid built on ${summary.squaresToOrder.toFixed(1)} are not the same bid, even at the same rate per square.`,
+    "Checking an insurance scope: carrier scopes normally list the roof area, the waste allowance and the accessory lines separately. Compare each against its counterpart here rather than comparing totals.",
+    "Against another measurement: differences usually trace to pitch or to where the roof edge was drawn, not to arithmetic. Check those two first.",
+  ];
+  for (const u of usage) {
+    page.drawRectangle({ x: MARGIN + 1, y: y + 3, width: 3, height: 3, color: ink.accent });
+    y = drawParagraph(page, u, {
+      x: MARGIN + 12,
+      y,
+      font: fonts.body,
+      size: 8.5,
+      color: ink.slate700,
+      width: CONTENT_W - 12,
+      leading: 12,
+    });
+    y -= 14;
   }
 
   y -= 8;

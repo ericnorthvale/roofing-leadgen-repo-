@@ -1493,3 +1493,51 @@ including that `squaresToOrder` can never fall below `squaresWithWaste`.
 **Still open:** valley linear footage remains the real driver of waste and is
 still unavailable (addendum 4). The margin reduces the consequence of that gap;
 it does not close it.
+
+---
+
+### Sheet 8 — addendum 10: starter and hip-and-ridge are separate orders (2026-10-07)
+
+Owner: "don't forget also that starter, hip and ridge shingles count also as
+squares for ordering."
+
+He is right that they were being under-accounted, and the report had an outright
+error: "WHAT THE ALLOWANCE COVERS" claimed the waste allowance covered "starter
+course along the eaves and rakes, and cap shingles along the hips and ridges."
+
+That is only true when starter and cap are **cut from field shingles**, which is
+3-tab practice. With laminated/architectural shingles — what IKO Cambridge and
+Dynasty are — starter and hip-and-ridge are **dedicated products, ordered in
+linear feet, outside the field square count entirely**. Claiming the allowance
+covered them meant a reader could order the square figure and arrive short of
+two whole product lines.
+
+Corrected, and the honest limit stated with it:
+
+- The allowance bullet now says starter and cap are covered only where they are
+  cut from field shingles, and points to the accessory list.
+- The ordering paragraph states the quantity covers **FIELD SHINGLES ONLY**.
+- A new block on the reference page, "ACCESSORY MATERIAL — ORDERED SEPARATELY,
+  NOT IN THE SQUARE COUNT":
+  - **ROOF EDGE — 268 ft** (measured: the traced perimeter; drip edge, starter
+    and gutter runs).
+  - **HIP & RIDGE — not measured.** An outline trace captures the perimeter and
+    nothing about the lines inside it. There is no sourced relationship between
+    footprint and ridge-plus-hip footage, so a plausible-looking figure here
+    would be invented (Hard Rule #2). It is printed as a stated absence, small
+    and grey so it cannot read as a quantity, with the instruction to measure it
+    on the roof and add it before ordering.
+
+**Deliberately NOT converted to squares**, despite the owner asking for squares:
+starter coverage runs roughly 100–120 lf per bundle and hip-and-ridge roughly
+20–33 lf per bundle, both varying by product. Picking one rate would state a
+bundle count the product may not deliver. Linear feet is what these are ordered
+in and what a supplier converts from — the same reasoning already applied to
+bundles per square. If the owner names the IKO starter and hip-and-ridge
+products the company stocks, their published coverage rates can be sourced here
+and the report can then print bundles.
+
+**This is the second time hip/ridge/valley line length has been the blocker**
+(see addendum 4 on valley footage driving waste). One change fixes both: let the
+rep trace ridge, hip and valley LINES as well as the outline. That is the next
+real build on this tool.
