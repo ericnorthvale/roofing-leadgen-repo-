@@ -9,8 +9,11 @@ import {
   buildRoofSummary,
   formatImageryDate,
   pitchRangeLabel,
+  slopeFactor,
+  COMMON_SLOPE_FACTORS,
   type RoofPlane,
 } from "~/lib/roof-report";
+import { reportReference } from "~/lib/roof-report-pdf";
 
 const plane = (areaFt2: number, pitchDeg = 27, azimuthDeg = 180): RoofPlane => ({
   areaFt2,
@@ -273,5 +276,53 @@ describe("pitch range (owner: 'the roof is more than a 6 slope')", () => {
       imageryQuality: "HIGH",
     });
     expect(s.waste.steepAdder).toBe(0.02);
+  });
+});
+
+describe("slopeFactor", () => {
+  it("is pure sec(pitch) geometry, not a waste factor", () => {
+    expect(slopeFactor(0)).toBe(1);
+    expect(slopeFactor(4)).toBeCloseTo(1.054, 3);
+    expect(slopeFactor(6)).toBeCloseTo(1.118, 3);
+    expect(slopeFactor(9)).toBeCloseTo(1.25, 3);
+    expect(slopeFactor(12)).toBeCloseTo(1.414, 3);
+  });
+
+  it("agrees with the surface-over-footprint ratio a summary reports", () => {
+    const s = buildRoofSummary({
+      planes: [plane(1250, 36.87), plane(1250, 36.87)],
+      surfaceFt2: 2500,
+      footprintFt2: 2000,
+      wholeRoofFt2: 2500,
+      imageryQuality: "HIGH",
+    });
+    // 9/12 roof: 2000 ft² of ground carries 2500 ft² of roof.
+    expect(s.surfaceFt2 / s.footprintFt2).toBeCloseTo(slopeFactor(9), 2);
+  });
+
+  it("offers reference factors the report can print", () => {
+    expect(COMMON_SLOPE_FACTORS).toContain(9);
+    expect(COMMON_SLOPE_FACTORS.every((r) => slopeFactor(r) > 1)).toBe(true);
+  });
+});
+
+describe("reportReference", () => {
+  const day = new Date("2026-10-07T12:00:00Z");
+
+  it("encodes the date and stays stable for the same address", () => {
+    const a = reportReference("5806 Sugar Bush Dr, Magnolia, TX 77354", day);
+    expect(a).toMatch(/^RM-261007-[A-Z2-9]{4}$/);
+    expect(reportReference("5806 Sugar Bush Dr, Magnolia, TX 77354", day)).toBe(a);
+  });
+
+  it("separates two addresses measured on the same day", () => {
+    expect(reportReference("1 Main St, Spring, TX", day)).not.toBe(
+      reportReference("2 Main St, Spring, TX", day),
+    );
+  });
+
+  it("avoids glyphs that get misread aloud or over the phone", () => {
+    const tail = reportReference("3019 Rushing Brook Dr, Kingwood, TX", day).split("-")[2];
+    expect(tail).not.toMatch(/[IO01]/);
   });
 });

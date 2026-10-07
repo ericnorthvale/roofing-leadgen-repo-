@@ -402,7 +402,6 @@ const seo = {
    */
   import {
     buildRoofSummary,
-    pitchLabel as fmtPitch,
     pitchRangeLabel,
     formatImageryDate,
     type RoofPlane,
@@ -770,17 +769,20 @@ const seo = {
           const pitchDeg = (Math.acos(1 / state.pitchMult) * 180) / Math.PI;
           const planes: RoofPlane[] = [];
           let planM2 = 0;
+          let perimeterM = 0;
           state.polygons.forEach((poly) => {
             const path = poly.getPath().getArray();
             if (path.length < 3) return;
             const areaM2 = google.maps.geometry.spherical.computeArea(path);
             if (areaM2 <= 0) return;
             planM2 += areaM2;
+            perimeterM += google.maps.geometry.spherical.computeLength([...path, path[0]]);
             // One traced section = one plane, so complexity still drives waste.
             planes.push({
               areaFt2: areaM2 * M2_TO_FT2 * state.pitchMult,
               pitchDeg,
               azimuthDeg: 0, // not measurable from a traced outline
+              outline: path.map((pt: any) => ({ lat: pt.lat(), lng: pt.lng() })),
             });
           });
           const planFt2 = planM2 * M2_TO_FT2;
@@ -804,6 +806,9 @@ const seo = {
                 imageryQuality: null,
                 method: "manual",
                 complexity: state.complexity,
+                // Traced edge length: drip edge, starter and gutter runs.
+                // 3.28084 ft per metre.
+                perimeterFt: perimeterM * 3.28084,
               }),
               "manual",
             );
@@ -868,7 +873,7 @@ const seo = {
           if (!summary || downloadBtn.disabled) return;
           const original = dlLabel.textContent;
           downloadBtn.disabled = true;
-          dlLabel.textContent = "Building your report…";
+          dlLabel.textContent = "Building the report…";
           try {
             const [{ buildRoofReportPdf, reportFilename }, propertyImage] = await Promise.all([
               import("~/lib/roof-report-pdf"),

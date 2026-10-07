@@ -15,7 +15,7 @@
  *     guarantee and never a material order. Percentages sourced in Sheet 8.
  */
 
-/** One roof plane as measured from aerial data. */
+/** One roof plane or traced section. */
 export interface RoofPlane {
   /** Sloped surface area of this plane, square feet. */
   areaFt2: number;
@@ -23,6 +23,12 @@ export interface RoofPlane {
   pitchDeg: number;
   /** Compass bearing the plane faces, degrees (0 = north). */
   azimuthDeg: number;
+  /**
+   * The outline as traced, in lat/lng. Present only in trace mode — and only
+   * then may the report draw a roof diagram, because this is geometry a person
+   * actually drew rather than something inferred.
+   */
+  outline?: { lat: number; lng: number }[];
 }
 
 export type Confidence = "good" | "reduced" | "blocked";
@@ -76,6 +82,22 @@ export function pitchRangeLabel(range: { minDeg: number; maxDeg: number } | null
   const hi = pitchToRise12(range.maxDeg);
   return lo === hi ? `${lo}/12` : `${lo}/12–${hi}/12`;
 }
+
+/**
+ * Rise-over-12 → slope factor: the multiplier from flat footprint to sloped
+ * roof surface. Pure geometry — sec(pitch) = √(1 + (rise/12)²). A 9/12 roof
+ * covers 1.25× its own footprint.
+ *
+ * This is NOT a waste factor; the two get confused constantly. Waste is the
+ * extra material cutting costs you (`wasteAllowance`), and it is applied after
+ * this, to the sloped area.
+ */
+export function slopeFactor(rise12: number): number {
+  return Math.sqrt(1 + (rise12 / 12) ** 2);
+}
+
+/** The slope factors a homeowner is most likely to see, for a reference row. */
+export const COMMON_SLOPE_FACTORS = [4, 6, 8, 9, 10, 12] as const;
 
 const COMPASS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"] as const;
 
@@ -274,6 +296,14 @@ export interface RoofSummary {
   /** Measured squares plus the waste allowance, for ordering. */
   squaresWithWaste: number;
   confidence: ConfidenceVerdict;
+  /** Total traced edge length in feet — drip edge, starter, gutter runs. */
+  perimeterFt: number | null;
+  /**
+   * Net free ventilation area the roof needs, in square inches, under the
+   * 1-in-300 balanced-ventilation ratio (IRC R806.2 plus industry guidance —
+   * docs/research-facts.md). Derived from the measured footprint.
+   */
+  ventilationNfaSqIn: number | null;
   imageryQuality: ImageryQuality;
   imageryDate: { year?: number; month?: number; day?: number } | null;
 }
@@ -295,6 +325,8 @@ export interface BuildSummaryInput {
   buildingFound?: boolean;
   /** Metres from the requested address to the matched building's centre. */
   buildingOffsetM?: number | null;
+  /** Total traced edge length in feet, when the outline was drawn by hand. */
+  perimeterFt?: number | null;
   /**
    * "aerial" runs the full occlusion gate. "manual" means a person traced the
    * outline themselves on the satellite view — they can see the trees, so the
@@ -375,6 +407,11 @@ export function buildRoofSummary(input: BuildSummaryInput): RoofSummary {
     waste,
     squaresWithWaste: round(squares * (1 + waste.factor), 1),
     confidence,
+    perimeterFt: input.perimeterFt != null ? Math.round(input.perimeterFt) : null,
+    // 1 sq ft of net free area per 300 sq ft of attic, split intake/exhaust.
+    // Attic area is taken as the building footprint.
+    ventilationNfaSqIn:
+      input.footprintFt2 > 0 ? Math.round((input.footprintFt2 / 300) * 144) : null,
     imageryQuality: input.imageryQuality,
     imageryDate: input.imageryDate ?? null,
   };

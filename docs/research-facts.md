@@ -1276,3 +1276,43 @@ has. The moment the env var exists, the fix activates with no code change.
 Until then the live defences remain: the gold box around the measured
 building, the confirmation prompt, one-tap re-measure anywhere on the map, and
 the "bigger building next door" offer.
+
+---
+
+### Sheet 8 — addendum 5: the report is an information document, not a sales one (2026-10-07)
+
+Owner direction: the downloadable measurement report should read as a **roof
+measurement record**, not as Northvale marketing — "this is not a sales
+document, it's a roof report designed to give information… this is not a biased
+report, it's accurate information."
+
+What changed, and the line that was NOT crossed:
+
+- The cover masthead now leads with **ROOF MEASUREMENT REPORT**, not the
+  Northvale wordmark. The call-to-action block, the "free inspection" panel and
+  the price-factor list are gone; the sections that replaced them describe what
+  the measurement is, how it was produced and what it excludes.
+- **Who produced it is still disclosed on every page** — "Measurement prepared
+  by Northvale Roofing LLC · (713) 449-7661" in the footer, plus a named
+  preparer block on the final page. De-branding the *tone* is legitimate;
+  implying an unaffiliated third party measured the roof would be a fabricated
+  fact (Hard Rule #2) and is not done. If the owner later wants a distinct
+  service name on the masthead, it needs a trademark check first and the
+  preparer disclosure stays either way.
+- Report reference prefix changed `NV-` → `RM-`; download filename
+  `Northvale-Roof-Report-*` → `Roof-Measurement-Report-*`.
+
+**Waste allowance is now explained rather than asserted** (owner asked for
+this explicitly). The report states what waste is (material cut to fit at hips,
+valleys, rakes and penetrations, plus starter and cap, plus a margin for
+damaged bundles), why it exists (offcuts cannot be reused), what it is for
+(the quantity to ORDER, so a crew does not run short mid-tear-off), and prints
+the full rule table — base 10 / 13 / 15% by complexity, +2% at 9/12 or steeper,
+capped at 20% — with the applied row marked. Percentages unchanged and still
+sourced in Sheet 8; only the explanation is new.
+
+One correction found while writing it: the complexity table's middle column
+read "9 sections or more" in trace mode, where complexity is **selected by the
+person tracing**, not derived from a section count. It now prints the shape
+descriptions in trace mode and the plane counts in aerial mode, so the table
+always describes the rule that actually ran.
