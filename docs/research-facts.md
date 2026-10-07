@@ -1248,3 +1248,31 @@ report already presents waste as industry guidance, not a quantity to order.
 **No area correction factor applied.** With the wrong-building rows removed the
 remaining spread (0.90–1.02) is too tight and too small a sample to justify a
 multiplier, and applying one would amplify every mis-selected building.
+
+### Sheet 8 addendum 4 — rooftop geocoding needs its own key (2026-10-07)
+
+Tested whether a ROOFTOP-precision geocode fixes the wrong-building problem
+(addendum 3). **Google refuses the request outright:**
+
+> `REQUEST_DENIED: API keys with referer restrictions cannot be used with this API.`
+
+The Geocoding API does not accept HTTP-referrer (website) restricted keys —
+by design, it is a server-side web service. So the site's single public
+browser key **cannot** call it, no matter which APIs are enabled on it.
+
+Consequence for the "one key, no Vercel config" architecture the owner chose
+on 2026-08: rooftop geocoding is **not reachable** under it. Using it requires
+a SECOND key with no website restriction, which is a genuine secret and must
+live in a server environment variable — it can never be committed to the repo
+or shipped to the browser (that is exactly the mistake the competitor's embed
+makes with its own key).
+
+`/api/geocode` is built and env-gated on `GOOGLE_GEOCODING_API_KEY`: with no
+key it returns `{ available: false }` and the page silently keeps the Places
+pin, so nothing breaks. The page only accepts a geocode whose `location_type`
+is `ROOFTOP` — a vaguer result is no better than the Places point it already
+has. The moment the env var exists, the fix activates with no code change.
+
+Until then the live defences remain: the gold box around the measured
+building, the confirmation prompt, one-tap re-measure anywhere on the map, and
+the "bigger building next door" offer.

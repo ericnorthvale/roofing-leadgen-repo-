@@ -550,9 +550,21 @@ const seo = {
               }
               const loc = place?.location;
               if (!loc) return;
-              const lat = typeof loc.lat === "function" ? loc.lat() : loc.lat;
-              const lng = typeof loc.lng === "function" ? loc.lng() : loc.lng;
+              let lat = typeof loc.lat === "function" ? loc.lat() : loc.lat;
+              let lng = typeof loc.lng === "function" ? loc.lng() : loc.lng;
               state.address = place.formattedAddress ?? "";
+
+              // Prefer a ROOFTOP-precision pin when the server has a geocoding
+              // key: the Places point is tuned for finding places, not for
+              // landing on a roof, and an off-by-20 m pin is what makes the
+              // measurement grab a garage (Sheet 8 addendum 3). Falls through
+              // silently to the Places point when unconfigured.
+              const better = await rooftopPin(state.address);
+              if (better) {
+                lat = better.lat;
+                lng = better.lng;
+              }
+
               map.setCenter({ lat, lng });
               map.setZoom(20);
               await measureAuto(lat, lng);
@@ -745,6 +757,20 @@ const seo = {
         biggerBtn.addEventListener("click", () => {
           if (biggerTarget) measureAuto(biggerTarget.lat, biggerTarget.lng);
         });
+
+        /** ROOFTOP geocode via our server, or null when unavailable. */
+        async function rooftopPin(address: string): Promise<{ lat: number; lng: number } | null> {
+          if (!address) return null;
+          try {
+            const res = await fetch(`/api/geocode?address=${encodeURIComponent(address)}`);
+            const d = await res.json();
+            // Only trust a verified rooftop hit; a vaguer geocode is no better
+            // than the Places point we already have.
+            return d?.available && d.rooftop ? { lat: d.lat, lng: d.lng } : null;
+          } catch {
+            return null;
+          }
+        }
 
         async function fetchSolar(lat: number, lng: number): Promise<any | null> {
           try {
