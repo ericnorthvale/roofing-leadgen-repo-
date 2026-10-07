@@ -122,6 +122,17 @@ const seo = {
                 or next door, just tap your own house on the map and we'll measure that instead.
               </p>
 
+              <button
+                id="rt-bigger"
+                type="button"
+                class="mt-2 hidden w-full rounded-lg border-2 border-[color:var(--color-gold-400)] bg-white px-3 py-2.5 text-left text-sm text-[color:var(--color-ink-800)] hover:bg-[color:var(--color-gold-50)]"
+              >
+                <strong class="text-[color:var(--color-navy-900)]">
+                  Bigger building next to this one.
+                </strong>
+                <span id="rt-bigger-msg" />
+              </button>
+
               <div class="mt-4 flex flex-wrap items-center gap-2.5">
                 <button
                   id="rt-draw"
@@ -641,6 +652,7 @@ const seo = {
           measuredShapes.forEach((s) => s.setMap(null));
           measuredShapes = [];
           el("rt-verify").classList.add("hidden");
+          hideBigger();
         }
         function drawMeasuredShapes(data: any) {
           clearMeasuredShapes();
@@ -681,6 +693,58 @@ const seo = {
           );
           el("rt-verify").classList.remove("hidden");
         }
+
+        /**
+         * findClosest returns the nearest building CENTRE, so a shed 2 m away
+         * beats the actual house whose centre sits 21 m off. Measured against
+         * six EagleView reports, that mis-pick was the single biggest source
+         * of error (two roofs came back at 55% and 68% of true).
+         *
+         * No automatic rule fixed it safely — "biggest within 30 m" repaired
+         * those two but overshot another by 30% (Sheet 8 addendum 3). So we
+         * OFFER the alternative instead of silently switching: one probe ring,
+         * and if something materially bigger is adjacent, the homeowner gets a
+         * one-tap way to correct it.
+         */
+        const biggerBtn = el("rt-bigger") as HTMLButtonElement;
+        let biggerTarget: { lat: number; lng: number } | null = null;
+
+        function hideBigger() {
+          biggerBtn.classList.add("hidden");
+          biggerTarget = null;
+        }
+
+        async function offerBiggerBuilding(lat: number, lng: number, currentFt2: number) {
+          hideBigger();
+          const STEP = 0.00018; // ~20 m
+          const probes: [number, number][] = [
+            [STEP, 0],
+            [-STEP, 0],
+            [0, STEP],
+            [0, -STEP],
+          ];
+          let best: { ft2: number; lat: number; lng: number } | null = null;
+          for (const [dy, dx] of probes) {
+            const d = await fetchSolar(lat + dy, lng + dx);
+            const segs: any[] = d?.solarPotential?.roofSegmentStats ?? [];
+            if (!segs.length || !d?.center) continue;
+            const ft2 =
+              segs.reduce((a, x) => a + Number(x?.stats?.areaMeters2 ?? 0), 0) * M2_TO_FT2;
+            if (ft2 > (best?.ft2 ?? 0)) {
+              best = { ft2, lat: d.center.latitude, lng: d.center.longitude };
+            }
+          }
+          // Only worth interrupting for a clearly different structure.
+          if (!best || best.ft2 < currentFt2 * 1.25) return;
+          biggerTarget = { lat: best.lat, lng: best.lng };
+          el("rt-bigger-msg").textContent =
+            ` If your house is the larger one, tap here to measure it instead — about ${(best.ft2 / 100).toFixed(1)} squares.`;
+          biggerBtn.classList.remove("hidden");
+        }
+
+        biggerBtn.addEventListener("click", () => {
+          if (biggerTarget) measureAuto(biggerTarget.lat, biggerTarget.lng);
+        });
 
         async function fetchSolar(lat: number, lng: number): Promise<any | null> {
           try {
@@ -726,7 +790,8 @@ const seo = {
             }
 
             disableManual();
-            setStatus("Done — measured plane by plane. Not looking right? Trace it yourself (✏️).");
+            setStatus("Done — measured plane by plane. Not your roof? Tap your house on the map.");
+            void offerBiggerBuilding(lat, lng, summary.surfaceFt2);
           } catch {
             setStatus("Measurement hiccup — trace your roof with the ✏️ tool instead.");
             enableManual();

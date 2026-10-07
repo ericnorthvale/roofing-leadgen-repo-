@@ -1185,3 +1185,66 @@ This also hard-caps what the free tool can honestly claim. It is a lead magnet
 and an orientation estimate, not an ordering figure. Order-grade numbers come
 from an on-site measurement or a paid photogrammetric report (Roofr ~$13,
 EagleView ~$15–87) — see the main Sheet 8 entry.
+
+### Sheet 8 addendum 3 — six-roof calibration against EagleView / GAF (2026-10-07)
+
+Owner supplied five measurement reports; combined with the earlier Sugar Bush
+figure that gives six ground-truth roofs. Each address was geocoded exactly as
+the page does and measured through the live Solar API.
+
+| Property                        | Truth (sq) | Facets | Pitch | Tool at pin | Ratio     |
+| ------------------------------- | ---------- | ------ | ----- | ----------- | --------- |
+| 7223 Kennedale Ln, Spring       | 31.6       | 8      | 6/12  | 32.3        | **1.024** |
+| 103 Grove Clover Ln, Montgomery | 56.6       | 41     | 6/12  | 55.0        | **0.971** |
+| 5806 Sugar Bush Dr, Magnolia    | 47.9       | —      | 9/12  | 44.4        | **0.926** |
+| 2305 Acadiana Ln, Seabrook      | 42.5       | 27     | 12/12 | 38.3        | **0.902** |
+| 5523 Cheena Dr, Houston         | 37.1       | 13     | 5/12  | 25.1        | **0.676** |
+| 3019 Rushing Brook Dr, Kingwood | 43.4       | 23     | 7/12  | 23.9        | **0.549** |
+
+Sources: EagleView reports 68563074 / 68976627 / 68976619, GAF QuickMeasure for
+Grove Clover and Cheena, owner-reported for Sugar Bush.
+
+**The headline finding: the measurement is good; the BUILDING SELECTION is not.**
+When the right building is matched, the ratio runs 0.90–1.02. Both bad rows are
+wrong-building matches — at Rushing Brook the correct structure (42.8 sq, ratio
+0.986) sits 21 m away; at Cheena the correct one (40.0 sq, ratio 1.079) sits
+25 m away. In every case `findClosest` reported an offset of 0–2 m, imagery
+HIGH and coverage 1.000, so **no existing gate could have caught it.**
+
+Root cause: `buildingInsights:findClosest` returns the nearest building
+**centre**. A detached garage 2 m from the address pin beats the actual house
+whose centre is 21 m away.
+
+**Automatic selection rules were tested and rejected:**
+
+| Rule                              | Mean ratio | Worst     | Within ±15% |
+| --------------------------------- | ---------- | --------- | ----------- |
+| findClosest (current)             | 0.841      | 0.549     | 4/6         |
+| Pin inside building's padded bbox | 0.841      | 0.549     | 4/6         |
+| Biggest building within 30 m      | 1.065      | **1.302** | 5/6         |
+
+"Biggest within 30 m" repairs Rushing Brook and Cheena but overshoots Grove
+Clover by 30% (it grabs a neighbour). **No rule was safe**, so the tool keeps
+findClosest and instead OFFERS the alternative: after a measurement it probes
+four points ~20 m out, and if a building ≥25% larger is adjacent it surfaces a
+one-tap "measure that one instead" button. Offer, never auto-switch.
+
+**Pitch** shows no systematic bias and should not be corrected: Google's
+area-weighted average vs the report's predominant pitch ran 6.0 vs 6, 8.2 vs 6,
+10.1 vs 12, 4.9 vs 5, 8.3 vs 9 — scatter of roughly ±2, in both directions.
+
+**Plane count ≠ facet count.** Google consistently resolves fewer planes than a
+photogrammetric report (9 vs 23, 6 vs 8, 20 vs 27, 22 vs 41, 5 vs 13), so the
+complexity buckets are tuned to GOOGLE plane counts, not report facet counts.
+
+**Waste model vs the reports' suggested factors:** Grove Clover 17% (model 17%
+✓), Sugar Bush 17% (model 17% ✓), Cheena 7% (model 15% ✗). Cheena is a simple
+roof with many small facets and only 69 ft of valleys, against Grove Clover's
+266 ft. **Valley and hip linear footage is the real driver of waste and free
+aerial data does not provide it** — plane count is a proxy that over-calls
+roofs like Cheena. Left unchanged rather than overfit to three data points; the
+report already presents waste as industry guidance, not a quantity to order.
+
+**No area correction factor applied.** With the wrong-building rows removed the
+remaining spread (0.90–1.02) is too tight and too small a sample to justify a
+multiplier, and applying one would amplify every mis-selected building.
