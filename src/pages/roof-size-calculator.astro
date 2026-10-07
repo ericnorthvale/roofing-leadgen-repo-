@@ -230,6 +230,19 @@ const seo = {
                 />
               </figure>
 
+              {/* A photo the rep takes (or picks from their phone) beats any
+                  licensed imagery: it's sharp, it's the actual house, Northvale
+                  owns it outright, and it proves someone was there. No
+                  `capture` attribute on purpose — that would force the camera
+                  and remove the choice of an existing photo. */}
+              <label
+                for="rt-own-photo"
+                class="mb-5 flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-[color:var(--color-navy-100)] px-3 py-2.5 text-sm font-semibold text-[color:var(--color-navy-900)] hover:border-[color:var(--color-gold-400)] hover:text-[color:var(--color-gold-600)]"
+              >
+                <span id="rt-own-photo-label">📷 Use a photo of the home</span>
+              </label>
+              <input id="rt-own-photo" type="file" accept="image/*" class="sr-only" />
+
               <p class="text-xs font-semibold tracking-[0.14em] text-[color:var(--color-ink-500)] uppercase">
                 Your roof measures
               </p>
@@ -412,6 +425,8 @@ const seo = {
       pitchMult: 1.118,
       complexity: "moderate" as "simple" | "moderate" | "complex",
       photoCredit: "" as string,
+      /** Rep-supplied photo (JPEG bytes), overrides any fetched imagery. */
+      ownPhoto: null as Uint8Array | null,
       /** Last publishable measurement — drives the panel, form and PDF alike. */
       summary: null as RoofSummary | null,
       method: "aerial" as "aerial" | "manual",
@@ -446,7 +461,7 @@ const seo = {
     const photoImg = el("rt-photo") as HTMLImageElement;
     /** Load the report's cover photo; stay hidden if there's no coverage. */
     function showPropertyPhoto() {
-      if (!state.center) return;
+      if (!state.center || state.ownPhoto) return; // never overwrite their photo
       const src = `/api/property-image?lat=${state.center.lat}&lng=${state.center.lng}`;
       if (photoImg.getAttribute("src") === src) return;
       photoImg.onload = () => photoWrap.classList.remove("hidden");
@@ -464,6 +479,50 @@ const seo = {
       photoWrap.classList.add("hidden");
       photoImg.src = src;
     }
+    /**
+     * Read a photo the rep took or picked, downscale it and re-encode as JPEG.
+     * Re-encoding through a canvas also strips EXIF — which matters, because
+     * phone photos carry GPS coordinates we have no business putting in a
+     * document. Nothing is uploaded; the bytes go straight into the PDF.
+     */
+    const ownInput = el("rt-own-photo") as HTMLInputElement;
+    ownInput.addEventListener("change", async () => {
+      const file = ownInput.files?.[0];
+      if (!file) return;
+      const label = el("rt-own-photo-label");
+      label.textContent = "Preparing photo…";
+      try {
+        // `from-image` honours the EXIF rotation flag, so portrait shots from a
+        // phone don't land sideways in the report.
+        const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+        const maxW = 1400;
+        const scale = Math.min(1, maxW / bitmap.width);
+        const w = Math.round(bitmap.width * scale);
+        const h = Math.round(bitmap.height * scale);
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext("2d")!.drawImage(bitmap, 0, 0, w, h);
+        bitmap.close?.();
+
+        const blob: Blob | null = await new Promise((res) =>
+          canvas.toBlob((b) => res(b), "image/jpeg", 0.85),
+        );
+        if (!blob) throw new Error("encode failed");
+
+        state.ownPhoto = new Uint8Array(await blob.arrayBuffer());
+        state.photoCredit = "Photo: Northvale Roofing";
+        photoImg.src = URL.createObjectURL(blob);
+        photoImg.alt = "Photo of the property supplied by Northvale Roofing";
+        photoWrap.classList.remove("hidden");
+        el("rt-photo-credit").textContent = state.photoCredit;
+        label.textContent = "📷 Use a different photo";
+      } catch {
+        label.textContent = "Couldn't read that image — try another";
+        setTimeout(() => (label.textContent = "📷 Use a photo of the home"), 4000);
+      }
+    });
+
     function hidePropertyPhoto() {
       photoWrap.classList.add("hidden");
       photoImg.removeAttribute("src");
@@ -844,6 +903,9 @@ const seo = {
 
         /** Public-domain USGS aerial for the cover. Optional by design. */
         async function fetchPropertyImage(): Promise<Uint8Array | null> {
+          // A photo the rep supplied always wins — it's sharper, it's the real
+          // house, and Northvale owns it.
+          if (state.ownPhoto) return state.ownPhoto;
           if (!state.center) return null;
           try {
             const res = await fetch(
