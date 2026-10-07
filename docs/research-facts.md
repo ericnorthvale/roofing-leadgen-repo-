@@ -1294,7 +1294,7 @@ What changed, and the line that was NOT crossed:
   the measurement is, how it was produced and what it excludes.
 - **Who produced it is still disclosed on every page** — "Measurement prepared
   by Northvale Roofing LLC · (713) 449-7661" in the footer, plus a named
-  preparer block on the final page. De-branding the *tone* is legitimate;
+  preparer block on the final page. De-branding the _tone_ is legitimate;
   implying an unaffiliated third party measured the roof would be a fabricated
   fact (Hard Rule #2) and is not done. If the owner later wants a distinct
   service name on the masthead, it needs a trademark check first and the
@@ -1316,3 +1316,39 @@ read "9 sections or more" in trace mode, where complexity is **selected by the
 person tracing**, not derived from a section count. It now prints the shape
 descriptions in trace mode and the plane counts in aerial mode, so the table
 always describes the rule that actually ran.
+
+---
+
+### Sheet 8 — addendum 6: the report's visual language (2026-10-07)
+
+Addendum 5 de-branded the report's _content_; the owner's next note was that it
+still looked like Northvale — "still branded in Northvale font and colors, make
+this more like an EagleView". Fair: the words were neutral but Cormorant
+Garamond and brand gold were doing the opposite job.
+
+The report is now set the way measurement documents are set, and
+**`src/lib/roof-report-pdf.ts` is a stated exception to
+`docs/brand-guidelines.md`, not a drift from it:**
+
+- **Type:** Helvetica only (pdf-lib's built-in standard font), regular and
+  bold. No Cormorant, no Montserrat, nothing fetched or embedded. Side effects:
+  one less network round trip on download, the `@pdf-lib/fontkit` dependency
+  removed entirely, and the old-style-figures bug ("11.1" setting as "II.I")
+  gone by construction.
+- **Colour:** greyscale (`#14161a` / `#33373f` / `#6b7078` / `#d4d8dd` /
+  `#f2f4f6`) plus a single functional accent `#1c4f82`, used only where it
+  means something — the traced outline, the rule that applied, the ordering
+  figure. No brand gold or navy anywhere in the file.
+- **Structure:** black masthead bar on the cover; a running head on every
+  continuation page (document name left, subject property right); key figures
+  as a ruled five-cell strip over a dark ordering band, instead of one oversized
+  headline number; square bullets; rules instead of ornament.
+
+`public/fonts/pdf/*.ttf` (the four brand TTFs added for the previous version)
+are now unreferenced. Left in place rather than deleted — removing them is a
+cleanup for a human to confirm (Hard Rule #7).
+
+Also removed this round, at the owner's request: the rep photo picker on the
+calculator ("we won't need the take a photo option"). The automatic property
+image (Mapillary street level → USGS aerial) is unchanged; `ownPhoto` state,
+the EXIF-stripping canvas re-encode and the upload control are gone.

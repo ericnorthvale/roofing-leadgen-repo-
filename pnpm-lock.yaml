@@ -35,9 +35,6 @@ importers:
       '@keystatic/core':
         specifier: ^0.5.50
         version: 0.5.50(@react-spectrum/provider@3.11.1(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      '@pdf-lib/fontkit':
-        specifier: ^1.1.1
-        version: 1.1.1
       '@tailwindcss/vite':
         specifier: ^4.0.0
         version: 4.2.4(vite@6.4.2(@types/node@22.19.17)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.23.0)(yaml@2.8.3))
@@ -1393,9 +1390,6 @@ packages:
 
   '@paulirish/trace_engine@0.0.23':
     resolution: {integrity: sha512-2ym/q7HhC5K+akXkNV6Gip3oaHpbI6TsGjmcAsl7bcJ528MVbacPQeoauLFEeLXH4ulJvsxQwNDIg/kAEhFZxw==}
-
-  '@pdf-lib/fontkit@1.1.1':
-    resolution: {integrity: sha512-KjMd7grNapIWS/Dm0gvfHEilSyAmeLvrEGVcqLGi0VYebuqqzTbgF29efCx7tvx+IEbG3zQciRSWl3GkUSvjZg==}
 
   '@pdf-lib/standard-fonts@1.0.0':
     resolution: {integrity: sha512-hU30BK9IUN/su0Mn9VdlVKsWBS6GyhVfqjwl1FjZN4TxP6cCw0jP2w7V3Hf5uX7M0AZJ16vey9yE0ny7Sa59ZA==}
@@ -7188,10 +7182,6 @@ snapshots:
   '@oslojs/encoding@1.1.0': {}
 
   '@paulirish/trace_engine@0.0.23': {}
-
-  '@pdf-lib/fontkit@1.1.1':
-    dependencies:
-      pako: 1.0.11
 
   '@pdf-lib/standard-fonts@1.0.0':
     dependencies:

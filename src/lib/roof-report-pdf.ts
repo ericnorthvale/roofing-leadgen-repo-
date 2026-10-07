@@ -1,10 +1,23 @@
 /**
- * Roof measurement report → branded PDF.
+ * Roof measurement report → PDF.
  *
- * Runs in the browser (pdf-lib + the brand TTFs from /fonts/pdf), so there is
- * no server key, no env var and no per-download cost — it works on the owner's
- * "no Vercel configuration" constraint. pdf-lib is imported dynamically by the
- * caller so none of this weight loads until someone clicks Download.
+ * Runs in the browser (pdf-lib), so there is no server key, no env var and no
+ * per-download cost — it works on the owner's "no Vercel configuration"
+ * constraint. pdf-lib is imported dynamically by the caller so none of this
+ * weight loads until someone clicks Download.
+ *
+ * DELIBERATELY NOT BRAND-STYLED (owner, 2026-10). This document is a
+ * measurement record, read alongside EagleView and carrier scopes, so it uses
+ * the visual language those documents use: one neutral grotesque, greyscale
+ * with a single functional accent, and rules instead of ornament. Using the
+ * Northvale typeface and gold here made a measurement look like an
+ * advertisement for the company that took it. See docs/brand-guidelines.md —
+ * this file is the stated exception to it, not an oversight.
+ *
+ * Typography is pdf-lib's built-in Helvetica. That is the point, not a
+ * shortcut: it carries no brand, it is what technical documents are set in,
+ * and it also removes a font fetch, the fontkit dependency and the old
+ * old-style-figures bug ("11.1" rendering as "II.I").
  *
  * Hard rules this file exists to honour:
  *  - No pricing. Ever. The report states size, not money (owner, 2026-08).
@@ -12,7 +25,8 @@
  *    blocked measurement never reaches this module (see roof-report.ts).
  *  - The aerial photo is PUBLIC-DOMAIN USGS imagery, credited on the page.
  *    Google imagery must never be embedded here (geo-guidelines, Sheet 8).
- *  - NAP comes from brand.ts, never hardcoded.
+ *  - Who prepared the measurement is disclosed on every page, from brand.ts.
+ *    Neutral styling must never shade into implying an independent surveyor.
  */
 
 import type { PDFDocument, PDFFont, PDFPage, RGB } from "pdf-lib";
@@ -44,23 +58,25 @@ export interface ReportInput {
   now?: Date;
 }
 
-/* ------------------------------------------------------------ brand ink -- */
+/* ---------------------------------------------------------- document ink -- */
 
 const PAGE_W = 612; // US Letter, portrait
 const PAGE_H = 792;
 const MARGIN = 54;
 const CONTENT_W = PAGE_W - MARGIN * 2;
 
-/** Brand tokens mirrored from globals.css (docs/brand-guidelines.md §3). */
+/**
+ * Document palette: neutral greys plus one functional accent, used only where
+ * it carries meaning (the traced outline, the row that applied, the rule under
+ * a heading). No brand colour appears in this file by design — see the header.
+ */
 const HEX = {
-  navy950: "#060e21",
-  navy900: "#0e182f",
-  navy100: "#e8ebf3",
-  gold400: "#c9a26c",
-  gold600: "#956e37",
-  ink800: "#2e2f33",
-  ink500: "#6e727c",
-  ivory: "#f8f5ef",
+  slate900: "#14161a",
+  slate700: "#33373f",
+  slate500: "#6b7078",
+  rule: "#d4d8dd",
+  fill: "#f2f4f6",
+  accent: "#1c4f82",
   white: "#ffffff",
 } as const;
 
@@ -68,25 +84,25 @@ type Ink = Record<keyof typeof HEX, RGB>;
 
 /* --------------------------------------------------------------- assets -- */
 
-const FONT_FILES = {
-  serif: "/fonts/pdf/cormorant-600.ttf",
-  body: "/fonts/pdf/montserrat-400.ttf",
-  bodySemi: "/fonts/pdf/montserrat-600.ttf",
-  bodyBold: "/fonts/pdf/montserrat-700.ttf",
-} as const;
+export type FontSet = {
+  /** Page headings. */
+  serif: PDFFont;
+  body: PDFFont;
+  bodySemi: PDFFont;
+  bodyBold: PDFFont;
+};
 
-export type FontSet = Record<keyof typeof FONT_FILES, PDFFont>;
-
-async function loadFonts(doc: PDFDocument, fetchImpl: typeof fetch): Promise<FontSet> {
-  const entries = Object.entries(FONT_FILES) as [keyof typeof FONT_FILES, string][];
-  const loaded = await Promise.all(
-    entries.map(async ([key, path]) => {
-      const res = await fetchImpl(path);
-      if (!res.ok) throw new Error(`font ${path} → ${res.status}`);
-      return [key, await doc.embedFont(await res.arrayBuffer(), { subset: true })] as const;
-    }),
-  );
-  return Object.fromEntries(loaded) as FontSet;
+/**
+ * Helvetica, from pdf-lib's built-in standard fonts: nothing to fetch, nothing
+ * to embed, and the face technical documents are conventionally set in. The
+ * four slots are kept so call sites read as hierarchy rather than as font
+ * names; regular and bold are the whole hierarchy, which is the look.
+ */
+async function loadFonts(doc: PDFDocument): Promise<FontSet> {
+  const { StandardFonts } = await import("pdf-lib");
+  const regular = await doc.embedFont(StandardFonts.Helvetica);
+  const bold = await doc.embedFont(StandardFonts.HelveticaBold);
+  return { serif: bold, body: regular, bodySemi: bold, bodyBold: bold };
 }
 
 /* ------------------------------------------------------------- drawing  -- */
@@ -144,9 +160,58 @@ function drawParagraph(
   return opts.y - (lines.length - 1) * leading;
 }
 
-/** The gold hairline the brand uses under headings. */
-function goldRule(page: PDFPage, x: number, y: number, ink: Ink, width = 54) {
-  page.drawRectangle({ x, y, width, height: 2, color: ink.gold400 });
+/** Full-width hairline under a page heading. */
+function goldRule(page: PDFPage, x: number, y: number, ink: Ink, width = CONTENT_W) {
+  page.drawRectangle({ x, y, width, height: 0.75, color: ink.rule });
+}
+
+/**
+ * Page heading in the document idiom: small caps-ish setting with a hairline
+ * across the measure, rather than a display serif. Returns the next y.
+ */
+function sectionHeading(ctx: Ctx, page: PDFPage, text: string, top: number): number {
+  const { fonts, ink } = ctx;
+  page.drawText(text.toUpperCase(), {
+    x: MARGIN,
+    y: top,
+    size: 13,
+    font: fonts.bodyBold,
+    color: ink.slate900,
+  });
+  goldRule(page, MARGIN, top - 11, ink);
+  return top - 11;
+}
+
+/**
+ * Running head on continuation pages: what the document is on the left, the
+ * property it concerns on the right. Returns the y to start content at.
+ */
+function runningHead(ctx: Ctx, page: PDFPage, address: string): number {
+  const { fonts, ink } = ctx;
+  const y = PAGE_H - 46;
+  page.drawText("ROOF MEASUREMENT REPORT", {
+    x: MARGIN,
+    y,
+    size: 7,
+    font: fonts.bodyBold,
+    color: ink.slate500,
+  });
+  const right = address.replace(/,\s*USA$/, "");
+  const fitted = wrap(right, fonts.body, 7, CONTENT_W * 0.55)[0] ?? right;
+  page.drawText(fitted, {
+    x: PAGE_W - MARGIN - fonts.body.widthOfTextAtSize(fitted, 7),
+    y,
+    size: 7,
+    font: fonts.body,
+    color: ink.slate500,
+  });
+  page.drawLine({
+    start: { x: MARGIN, y: y - 8 },
+    end: { x: PAGE_W - MARGIN, y: y - 8 },
+    thickness: 0.75,
+    color: ink.rule,
+  });
+  return y - 44;
 }
 
 /**
@@ -181,21 +246,21 @@ function drawFooter(page: PDFPage, ctx: Ctx, pageLabel: string, note?: string, r
     start: { x: MARGIN, y: 64 },
     end: { x: PAGE_W - MARGIN, y: 64 },
     thickness: 0.75,
-    color: ink.navy100,
+    color: ink.rule,
   });
   page.drawText(`Measurement prepared by ${BRAND.legalName} · ${BRAND.phoneDisplay}`, {
     x: MARGIN,
     y: 50,
     size: 7.5,
     font: fonts.body,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   page.drawText(note ?? "Estimate — confirmed on site before any contract price.", {
     x: MARGIN,
     y: 39,
     size: 7.5,
     font: fonts.body,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   const label = pageLabel;
   page.drawText(label, {
@@ -203,7 +268,7 @@ function drawFooter(page: PDFPage, ctx: Ctx, pageLabel: string, note?: string, r
     y: 50,
     size: 7.5,
     font: fonts.body,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   if (reference) {
     page.drawText(reference, {
@@ -211,7 +276,7 @@ function drawFooter(page: PDFPage, ctx: Ctx, pageLabel: string, note?: string, r
       y: 39,
       size: 7.5,
       font: fonts.body,
-      color: ink.ink500,
+      color: ink.slate500,
     });
   }
 }
@@ -233,68 +298,80 @@ async function drawCover(
   // EagleView or a contractor's own figures should read it as information
   // rather than as a pitch (owner, 2026-10). Who measured it is disclosed
   // plainly in the footer of every page, never implied away.
-  const bandH = 104;
-  page.drawRectangle({ x: 0, y: PAGE_H - bandH, width: PAGE_W, height: bandH, color: ink.navy950 });
+  const bandH = 74;
+  page.drawRectangle({
+    x: 0,
+    y: PAGE_H - bandH,
+    width: PAGE_W,
+    height: bandH,
+    color: ink.slate900,
+  });
   page.drawText("ROOF MEASUREMENT REPORT", {
     x: MARGIN,
-    y: PAGE_H - 56,
-    size: 21,
-    font: fonts.serif,
+    y: PAGE_H - 42,
+    size: 17,
+    font: fonts.bodyBold,
     color: ink.white,
   });
-  page.drawText("A R E A   ·   P I T C H   ·   M A T E R I A L  Q U A N T I T Y", {
-    x: MARGIN + 2,
-    y: PAGE_H - 72,
-    size: 7,
-    font: fonts.bodySemi,
-    color: ink.gold400,
-  });
-
-  let y = PAGE_H - bandH - 44;
-
-  // Address + date.
-  page.drawText("SUBJECT PROPERTY", {
+  page.drawText("AREA  ·  PITCH  ·  MATERIAL QUANTITY", {
     x: MARGIN,
-    y,
-    size: 8,
-    font: fonts.bodySemi,
-    color: ink.ink500,
+    y: PAGE_H - 57,
+    size: 7.5,
+    font: fonts.body,
+    color: ink.rule,
   });
-  y -= 26;
-  y = drawParagraph(page, input.address || "Address not provided", {
-    x: MARGIN,
-    y,
-    font: fonts.serif,
-    size: 21,
-    color: ink.navy900,
-    width: CONTENT_W,
-    leading: 25,
-  });
-  y -= 16;
-  goldRule(page, MARGIN, y, ink);
-  y -= 24;
 
+  let y = PAGE_H - bandH - 40;
+
+  // Subject, date and reference as a labelled data block — the way a technical
+  // report identifies itself, rather than as a display-type title page.
+  const reference = reportReference(input.address, input.now ?? new Date());
   const dateStr = (input.now ?? new Date()).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
-  page.drawText(`Report date: ${dateStr}`, {
+
+  page.drawText("SUBJECT PROPERTY", {
     x: MARGIN,
     y,
-    size: 9,
-    font: fonts.body,
-    color: ink.ink500,
+    size: 7,
+    font: fonts.bodyBold,
+    color: ink.slate500,
   });
-  const reference = reportReference(input.address, input.now ?? new Date());
-  page.drawText(`Report no. ${reference}`, {
-    x: PAGE_W - MARGIN - fonts.body.widthOfTextAtSize(`Report no. ${reference}`, 9),
+  y -= 18;
+  y = drawParagraph(page, input.address || "Address not provided", {
+    x: MARGIN,
     y,
-    size: 9,
-    font: fonts.body,
-    color: ink.ink500,
+    font: fonts.bodyBold,
+    size: 15,
+    color: ink.slate900,
+    width: CONTENT_W * 0.72,
+    leading: 19,
   });
-  y -= 24;
+
+  // Date and reference sit in a right-hand column against the address.
+  const meta: [string, string][] = [
+    ["REPORT DATE", dateStr],
+    ["REPORT NO.", reference],
+  ];
+  let my = PAGE_H - bandH - 40;
+  const metaX = MARGIN + CONTENT_W * 0.74;
+  for (const [label, value] of meta) {
+    page.drawText(label, { x: metaX, y: my, size: 7, font: fonts.bodyBold, color: ink.slate500 });
+    page.drawText(value, {
+      x: metaX,
+      y: my - 13,
+      size: 9,
+      font: fonts.body,
+      color: ink.slate900,
+    });
+    my -= 32;
+  }
+
+  y = Math.min(y, my) - 10;
+  goldRule(page, MARGIN, y, ink);
+  y -= 22;
 
   // Aerial image.
   if (embedded && imageDims) {
@@ -308,7 +385,7 @@ async function drawCover(
       y: y - h - 2,
       width: w + 4,
       height: h + 4,
-      color: ink.navy100,
+      color: ink.rule,
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     page.drawImage(embedded as any, { x, y: y - h, width: w, height: h });
@@ -320,7 +397,7 @@ async function drawCover(
         y,
         size: 7,
         font: fonts.body,
-        color: ink.ink500,
+        color: ink.slate500,
       },
     );
     y -= 22;
@@ -328,78 +405,87 @@ async function drawCover(
     y -= 6;
   }
 
-  // Headline figure band.
-  const bandTop = y;
-  const bandHeight = 92;
-  page.drawRectangle({
-    x: MARGIN,
-    y: bandTop - bandHeight,
-    width: CONTENT_W,
-    height: bandHeight,
-    color: ink.ivory,
-  });
-  page.drawRectangle({
-    x: MARGIN,
-    y: bandTop - bandHeight,
-    width: 3,
-    height: bandHeight,
-    color: ink.gold400,
-  });
-
-  const squares = summary.squares.toFixed(1);
-  page.drawText("TOTAL ROOF AREA", {
-    x: MARGIN + 22,
-    y: bandTop - 26,
-    size: 8,
-    font: fonts.bodySemi,
-    color: ink.ink500,
-  });
-  // Figures use Montserrat, not Cormorant: Cormorant's old-style numerals
-  // render "11.1" as "II.I", which reads as Roman numerals on a measurement.
-  page.drawText(squares, {
-    x: MARGIN + 22,
-    y: bandTop - 64,
-    size: 34,
-    font: fonts.bodyBold,
-    color: ink.gold600,
-  });
-  page.drawText("squares measured", {
-    x: MARGIN + 28 + fonts.bodyBold.widthOfTextAtSize(squares, 34),
-    y: bandTop - 58,
-    size: 11,
-    font: fonts.body,
-    color: ink.ink500,
-  });
-  page.drawText(
-    `${summary.squaresWithWaste.toFixed(1)} squares to order, including the ${summary.waste.percent}% waste allowance`,
-    { x: MARGIN + 22, y: bandTop - 82, size: 9, font: fonts.bodySemi, color: ink.navy900 },
-  );
-
-  const stats: [string, string][] = [
-    ["Roof surface", `${money(summary.surfaceFt2)} ft²`],
-    ["Footprint", `${money(summary.footprintFt2)} ft²`],
-    ["Roof pitch", pitchRangeLabel(summary.pitchRangeDeg)],
+  // Key figures as a ruled cell strip with a summary band beneath it — the
+  // convention measurement reports use, and far easier to read against another
+  // report than one oversized headline number.
+  const cells: [string, string][] = [
+    ["TOTAL ROOF AREA", `${summary.squares.toFixed(1)} sq`],
+    ["ROOF SURFACE", `${money(summary.surfaceFt2)} ft²`],
+    ["FOOTPRINT", `${money(summary.footprintFt2)} ft²`],
+    ["PITCH", pitchRangeLabel(summary.pitchRangeDeg)],
+    ["WASTE ALLOWANCE", `${summary.waste.percent}%`],
   ];
-  let sx = MARGIN + 236;
-  for (const [label, value] of stats) {
-    page.drawText(label.toUpperCase(), {
-      x: sx,
-      y: bandTop - 26,
-      size: 7,
-      font: fonts.bodySemi,
-      color: ink.ink500,
+  const cellH = 54;
+  const bandTop = y;
+  page.drawRectangle({
+    x: MARGIN,
+    y: bandTop - cellH,
+    width: CONTENT_W,
+    height: cellH,
+    borderColor: ink.rule,
+    borderWidth: 0.75,
+  });
+  const cellW = CONTENT_W / cells.length;
+  cells.forEach(([label, value], i) => {
+    const cx = MARGIN + i * cellW;
+    if (i > 0) {
+      page.drawLine({
+        start: { x: cx, y: bandTop - cellH },
+        end: { x: cx, y: bandTop },
+        thickness: 0.75,
+        color: ink.rule,
+      });
+    }
+    page.drawText(label, {
+      x: cx + 10,
+      y: bandTop - 18,
+      size: 6.5,
+      font: fonts.bodyBold,
+      color: ink.slate500,
     });
     page.drawText(value, {
-      x: sx,
-      y: bandTop - 46,
-      size: 13,
-      font: fonts.bodySemi,
-      color: ink.navy900,
+      x: cx + 10,
+      y: bandTop - 40,
+      size: 14,
+      font: fonts.bodyBold,
+      color: ink.slate900,
     });
-    sx += 92;
-  }
+  });
 
-  y = bandTop - bandHeight - 22;
+  // The ordering figure, given the emphasis it earns.
+  const orderH = 34;
+  page.drawRectangle({
+    x: MARGIN,
+    y: bandTop - cellH - orderH,
+    width: CONTENT_W,
+    height: orderH,
+    color: ink.slate900,
+  });
+  page.drawText("QUANTITY TO ORDER", {
+    x: MARGIN + 10,
+    y: bandTop - cellH - 21,
+    size: 7,
+    font: fonts.bodyBold,
+    color: ink.rule,
+  });
+  const orderValue = `${summary.squaresWithWaste.toFixed(1)} squares`;
+  page.drawText(orderValue, {
+    x: MARGIN + 120,
+    y: bandTop - cellH - 23,
+    size: 13,
+    font: fonts.bodyBold,
+    color: ink.white,
+  });
+  const orderNote = `measured area plus the ${summary.waste.percent}% waste allowance`;
+  page.drawText(orderNote, {
+    x: PAGE_W - MARGIN - 10 - fonts.body.widthOfTextAtSize(orderNote, 8),
+    y: bandTop - cellH - 21,
+    size: 8,
+    font: fonts.body,
+    color: ink.rule,
+  });
+
+  y = bandTop - cellH - orderH - 24;
 
   // Confidence note when the measurement is usable but imperfect.
   if (summary.confidence.level === "reduced") {
@@ -408,14 +494,15 @@ async function drawCover(
       y: y - 34,
       width: CONTENT_W,
       height: 40,
-      color: ink.navy100,
+      color: ink.fill,
     });
+    page.drawRectangle({ x: MARGIN, y: y - 34, width: 2, height: 40, color: ink.accent });
     drawParagraph(page, `Note: ${summary.confidence.message}`, {
       x: MARGIN + 12,
       y: y - 6,
       font: fonts.body,
       size: 8,
-      color: ink.ink800,
+      color: ink.slate700,
       width: CONTENT_W - 24,
       leading: 11,
     });
@@ -430,7 +517,7 @@ async function drawCover(
     y,
     size: 8,
     font: fonts.bodySemi,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   y -= 20;
   const steps: [string, string][] = [
@@ -447,30 +534,29 @@ async function drawCover(
       "How the figures were produced, what they exclude, and the checks that still have to happen on the roof itself.",
     ],
   ];
+  const gutter = 26;
   steps.forEach(([title, body], i) => {
-    const n = `${i + 1}`;
-    page.drawCircle({ x: MARGIN + 7, y: y + 3, size: 8, color: ink.navy950 });
-    page.drawText(n, {
-      x: MARGIN + 7 - fonts.bodySemi.widthOfTextAtSize(n, 7) / 2,
+    page.drawText(`${String(i + 1).padStart(2, "0")}`, {
+      x: MARGIN,
       y,
-      size: 7,
-      font: fonts.bodySemi,
-      color: ink.white,
+      size: 9,
+      font: fonts.bodyBold,
+      color: ink.accent,
     });
     page.drawText(title, {
-      x: MARGIN + 22,
+      x: MARGIN + gutter,
       y,
       size: 9.5,
-      font: fonts.bodySemi,
-      color: ink.navy900,
+      font: fonts.bodyBold,
+      color: ink.slate900,
     });
     y = drawParagraph(page, body, {
-      x: MARGIN + 22,
+      x: MARGIN + gutter,
       y: y - 13,
       font: fonts.body,
       size: 8.5,
-      color: ink.ink800,
-      width: CONTENT_W - 22,
+      color: ink.slate700,
+      width: CONTENT_W - gutter,
       leading: 11.5,
     });
     y -= 18;
@@ -521,7 +607,7 @@ function drawRoofDiagram(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
   const spanY = Math.max(1, maxY - minY);
 
   const boxW = CONTENT_W;
-  const boxH = 260;
+  const boxH = 232;
   const pad = 26;
   const footer = 26; // clear lane at the bottom for the scale bar
   const usableH = boxH - pad - footer;
@@ -537,8 +623,8 @@ function drawRoofDiagram(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
     y: top - boxH,
     width: boxW,
     height: boxH,
-    color: ink.ivory,
-    borderColor: ink.navy100,
+    color: ink.fill,
+    borderColor: ink.rule,
     borderWidth: 0.75,
   });
 
@@ -558,9 +644,9 @@ function drawRoofDiagram(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
     page.drawSvgPath(path, {
       x: 0,
       y: PAGE_H,
-      color: ink.gold400,
+      color: ink.accent,
       opacity: 0.18,
-      borderColor: ink.gold600,
+      borderColor: ink.accent,
       borderWidth: 1.6,
     });
 
@@ -574,14 +660,14 @@ function drawRoofDiagram(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
       y: cy + 2,
       size: 11,
       font: fonts.bodyBold,
-      color: ink.navy900,
+      color: ink.slate900,
     });
     page.drawText(areaLabel, {
       x: cx - fonts.body.widthOfTextAtSize(areaLabel, 7.5) / 2,
       y: cy - 9,
       size: 7.5,
       font: fonts.body,
-      color: ink.ink800,
+      color: ink.slate700,
     });
   });
 
@@ -592,14 +678,14 @@ function drawRoofDiagram(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
     start: { x: nx, y: ny - 14 },
     end: { x: nx, y: ny },
     thickness: 1.2,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   page.drawText("N", {
     x: nx - fonts.bodySemi.widthOfTextAtSize("N", 8) / 2,
     y: ny + 3,
     size: 8,
     font: fonts.bodySemi,
-    color: ink.ink500,
+    color: ink.slate500,
   });
 
   // Scale bar: the largest round number of feet that fits in a third of the
@@ -613,14 +699,14 @@ function drawRoofDiagram(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
     start: { x: bx, y: by },
     end: { x: bx + barPt, y: by },
     thickness: 1.4,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   page.drawText(`${targetFt} ft`, {
     x: bx,
     y: by + 5,
     size: 7,
     font: fonts.body,
-    color: ink.ink500,
+    color: ink.slate500,
   });
 
   return top - boxH - 18;
@@ -632,40 +718,32 @@ function drawDiagramPage(ctx: Ctx, input: ReportInput): PDFPage {
   const page = doc.addPage([PAGE_W, PAGE_H]);
   const { summary } = input;
 
-  let y = PAGE_H - 64;
-  page.drawText("The measured roof outline", {
-    x: MARGIN,
-    y,
-    size: 20,
-    font: fonts.serif,
-    color: ink.navy900,
-  });
-  y -= 14;
-  goldRule(page, MARGIN, y, ink);
-  y -= 26;
+  let y = runningHead(ctx, page, input.address);
+  y = sectionHeading(ctx, page, "The measured roof outline", y);
+  y -= 22;
 
   y = drawParagraph(
     page,
     "The outline the measurement was taken from, drawn to scale over the satellite view of the property. Each numbered section is measured separately and the areas are added together.",
-    { x: MARGIN, y, font: fonts.body, size: 9, color: ink.ink800, width: CONTENT_W, leading: 13 },
+    { x: MARGIN, y, font: fonts.body, size: 9, color: ink.slate700, width: CONTENT_W, leading: 13 },
   );
   y -= 26;
 
   y = drawRoofDiagram(ctx, page, summary, y);
-  y -= 16;
+  y -= 8;
 
   if (summary.planes.length > 0) {
-    page.drawText("SECTIONS", { x: MARGIN, y, size: 8, font: fonts.bodySemi, color: ink.ink500 });
+    page.drawText("SECTIONS", { x: MARGIN, y, size: 8, font: fonts.bodySemi, color: ink.slate500 });
     y -= 18;
     const cols = [MARGIN, MARGIN + 90, MARGIN + 200];
-    page.drawRectangle({ x: MARGIN, y: y - 6, width: CONTENT_W, height: 20, color: ink.navy950 });
+    page.drawRectangle({ x: MARGIN, y: y - 6, width: CONTENT_W, height: 20, color: ink.slate900 });
     ["SECTION", "AREA", "SQUARES"].forEach((h, i) =>
       page.drawText(h, { x: cols[i] + 8, y, size: 7.5, font: fonts.bodySemi, color: ink.white }),
     );
     y -= 22;
     summary.planes.forEach((plane, i) => {
       if (i % 2 === 1) {
-        page.drawRectangle({ x: MARGIN, y: y - 5, width: CONTENT_W, height: 18, color: ink.ivory });
+        page.drawRectangle({ x: MARGIN, y: y - 5, width: CONTENT_W, height: 18, color: ink.fill });
       }
       const row = [
         `${i + 1}`,
@@ -678,7 +756,7 @@ function drawDiagramPage(ctx: Ctx, input: ReportInput): PDFPage {
           y,
           size: 9,
           font: c === 0 ? fonts.bodySemi : fonts.body,
-          color: ink.ink800,
+          color: ink.slate700,
         }),
       );
       y -= 18;
@@ -686,7 +764,7 @@ function drawDiagramPage(ctx: Ctx, input: ReportInput): PDFPage {
     y -= 6;
     page.drawText(
       `Total ${money(summary.surfaceFt2)} ft² — ${summary.squares.toFixed(1)} squares`,
-      { x: MARGIN + 8, y, size: 10, font: fonts.bodySemi, color: ink.navy900 },
+      { x: MARGIN + 8, y, size: 10, font: fonts.bodySemi, color: ink.slate900 },
     );
     y -= 30;
   }
@@ -713,7 +791,7 @@ function drawCalculation(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
     y,
     size: 8,
     font: fonts.bodySemi,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   y -= 20;
 
@@ -748,7 +826,7 @@ function drawCalculation(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
         start: { x: MARGIN, y: y + 13 },
         end: { x: PAGE_W - MARGIN, y: y + 13 },
         thickness: 0.75,
-        color: ink.navy100,
+        color: ink.rule,
       });
       y -= 6;
     }
@@ -757,7 +835,7 @@ function drawCalculation(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
       y,
       size: 9,
       font: strong ? fonts.bodySemi : fonts.body,
-      color: strong ? ink.navy900 : ink.ink800,
+      color: strong ? ink.slate900 : ink.slate700,
     });
     const font = strong ? fonts.bodyBold : fonts.bodySemi;
     const size = strong ? 10 : 9;
@@ -766,7 +844,7 @@ function drawCalculation(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
       y,
       size,
       font,
-      color: strong ? ink.gold600 : ink.navy900,
+      color: strong ? ink.accent : ink.slate900,
     });
     y -= 18;
   }
@@ -784,7 +862,7 @@ function drawCalculation(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
     y,
     size: 7,
     font: fonts.bodySemi,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   y -= 14;
   let rx = MARGIN;
@@ -798,8 +876,8 @@ function drawCalculation(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
         y: y - 3,
         width: w + 8,
         height: 15,
-        color: ink.ivory,
-        borderColor: ink.gold400,
+        color: ink.fill,
+        borderColor: ink.accent,
         borderWidth: 0.6,
       });
     }
@@ -808,7 +886,7 @@ function drawCalculation(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
       y,
       size: 8,
       font,
-      color: used ? ink.gold600 : ink.ink500,
+      color: used ? ink.accent : ink.slate500,
     });
     rx += w + 22;
   }
@@ -816,7 +894,7 @@ function drawCalculation(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
   drawParagraph(
     page,
     "A pitched roof covers more area than the ground under it. The slope factor is that ratio — pure geometry, the same for every roofer — and it is not a charge.",
-    { x: MARGIN, y, font: fonts.body, size: 8, color: ink.ink500, width: CONTENT_W, leading: 11 },
+    { x: MARGIN, y, font: fonts.body, size: 8, color: ink.slate500, width: CONTENT_W, leading: 11 },
   );
 
   return y - 24;
@@ -839,28 +917,20 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
   const page = doc.addPage([PAGE_W, PAGE_H]);
   const { summary } = input;
 
-  let y = PAGE_H - 64;
-  page.drawText("Waste allowance and material quantity", {
-    x: MARGIN,
-    y,
-    size: 20,
-    font: fonts.serif,
-    color: ink.navy900,
-  });
-  y -= 14;
-  goldRule(page, MARGIN, y, ink);
-  y -= 30;
+  let y = runningHead(ctx, page, input.address);
+  y = sectionHeading(ctx, page, "Waste allowance and material quantity", y);
+  y -= 26;
 
   y = drawParagraph(
     page,
     "A roof never uses exactly its measured area in material. Shingles arrive as rectangles and a roof is not one: every hip, valley, rake and penetration is cut to fit, and the offcuts cannot be used anywhere else. Starter course and ridge cap consume further material, and a bundle occasionally arrives damaged or short.",
-    { x: MARGIN, y, font: fonts.body, size: 9, color: ink.ink800, width: CONTENT_W, leading: 13 },
+    { x: MARGIN, y, font: fonts.body, size: 9, color: ink.slate700, width: CONTENT_W, leading: 13 },
   );
   y -= 26;
   y = drawParagraph(
     page,
     "The waste allowance is the industry's way of accounting for that. It is added to the measured area to give the quantity a supplier should be asked for — so the crew does not run short mid-tear-off — and it is an allowance, not a charge and not a prediction: the material actually consumed depends on how the roof cuts up on the day.",
-    { x: MARGIN, y, font: fonts.body, size: 9, color: ink.ink800, width: CONTENT_W, leading: 13 },
+    { x: MARGIN, y, font: fonts.body, size: 9, color: ink.slate700, width: CONTENT_W, leading: 13 },
   );
   y -= 30;
 
@@ -871,7 +941,7 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
     y,
     size: 8,
     font: fonts.bodySemi,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   y -= 18;
 
@@ -881,9 +951,9 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
     y: y - boxH + 12,
     width: CONTENT_W,
     height: boxH,
-    color: ink.ivory,
+    color: ink.fill,
   });
-  page.drawRectangle({ x: MARGIN, y: y - boxH + 12, width: 3, height: boxH, color: ink.gold400 });
+  page.drawRectangle({ x: MARGIN, y: y - boxH + 12, width: 3, height: boxH, color: ink.accent });
 
   let by = y - 6;
   page.drawText(`Roof complexity: ${COMPLEXITY_LABEL[w.complexity]}`, {
@@ -891,7 +961,7 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
     y: by,
     size: 9.5,
     font: fonts.bodySemi,
-    color: ink.navy900,
+    color: ink.slate900,
   });
   by -= 16;
   const unit =
@@ -907,7 +977,7 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
     y: by,
     font: fonts.body,
     size: 8.5,
-    color: ink.ink800,
+    color: ink.slate700,
     width: CONTENT_W - 36,
     leading: 12,
   });
@@ -918,14 +988,14 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
     y: by - 10,
     size: 20,
     font: fonts.bodyBold,
-    color: ink.gold600,
+    color: ink.accent,
   });
   page.drawText("allowance applied", {
     x: MARGIN + 18 + fonts.bodyBold.widthOfTextAtSize(`${w.percent}%`, 20) + 8,
     y: by - 5,
     size: 8,
     font: fonts.body,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   const quantities: [string, string][] = [
     ["MEASURED ROOF AREA", `${summary.squares.toFixed(1)} squares`],
@@ -938,14 +1008,14 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
       y: by + 2,
       size: 7,
       font: fonts.bodySemi,
-      color: ink.ink500,
+      color: ink.slate500,
     });
     page.drawText(value, {
       x: qx,
       y: by - 16,
       size: 14,
       font: fonts.bodySemi,
-      color: ink.navy900,
+      color: ink.slate900,
     });
     qx += 130;
   }
@@ -958,7 +1028,7 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
     y,
     size: 8,
     font: fonts.bodySemi,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   y -= 16;
   const covers = [
@@ -968,13 +1038,13 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
     "A small margin for damaged, short or colour-mismatched bundles on delivery.",
   ];
   for (const c of covers) {
-    page.drawText("•", { x: MARGIN, y, size: 9, font: fonts.body, color: ink.gold600 });
+    page.drawRectangle({ x: MARGIN + 1, y: y + 3, width: 3, height: 3, color: ink.accent });
     y = drawParagraph(page, c, {
       x: MARGIN + 12,
       y,
       font: fonts.body,
       size: 8.5,
-      color: ink.ink800,
+      color: ink.slate700,
       width: CONTENT_W - 12,
       leading: 12,
     });
@@ -989,11 +1059,11 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
     y,
     size: 8,
     font: fonts.bodySemi,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   y -= 18;
   const ruleCols = [MARGIN, MARGIN + 210, MARGIN + 330];
-  page.drawRectangle({ x: MARGIN, y: y - 6, width: CONTENT_W, height: 20, color: ink.navy950 });
+  page.drawRectangle({ x: MARGIN, y: y - 6, width: CONTENT_W, height: 20, color: ink.slate900 });
   // The middle column has to say how complexity was actually decided, and that
   // differs by method: an aerial model counts planes, a traced roof takes the
   // shape the person selected. Printing "9 sections or more" beside a roof
@@ -1023,8 +1093,8 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
         y: y - 5,
         width: CONTENT_W,
         height: 18,
-        color: ink.ivory,
-        borderColor: ink.gold400,
+        color: ink.fill,
+        borderColor: ink.accent,
         borderWidth: 0.6,
       });
     }
@@ -1035,7 +1105,7 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
         y,
         size: 8.5,
         font: applied ? fonts.bodySemi : fonts.body,
-        color: applied ? ink.gold600 : ink.ink800,
+        color: applied ? ink.accent : ink.slate700,
       }),
     );
     y -= 18;
@@ -1044,13 +1114,21 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
   y = drawParagraph(
     page,
     `A roof with any section at 9/12 or steeper adds a further 2%, because steep slopes are cut and staged with less margin for error. The total is capped at 20%. This roof: ${Math.round(w.base * 100)}% base${w.steepAdder > 0 ? ` + ${Math.round(w.steepAdder * 100)}% steep-pitch` : ", no steep-pitch adder"} = ${w.percent}%.`,
-    { x: MARGIN, y, font: fonts.body, size: 8.5, color: ink.ink800, width: CONTENT_W, leading: 12 },
+    {
+      x: MARGIN,
+      y,
+      font: fonts.body,
+      size: 8.5,
+      color: ink.slate700,
+      width: CONTENT_W,
+      leading: 12,
+    },
   );
   y -= 20;
   y = drawParagraph(
     page,
     "Material is sold in whole bundles, so a supplier order rounds up from the figure above. Bundles per square vary by product — the supplier converts the square count at the point of order.",
-    { x: MARGIN, y, font: fonts.body, size: 8, color: ink.ink500, width: CONTENT_W, leading: 11 },
+    { x: MARGIN, y, font: fonts.body, size: 8, color: ink.slate500, width: CONTENT_W, leading: 11 },
   );
   y -= 28;
 
@@ -1062,7 +1140,7 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
     y,
     size: 8,
     font: fonts.bodySemi,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   y -= 16;
   const usage = [
@@ -1071,13 +1149,13 @@ function drawWastePage(ctx: Ctx, input: ReportInput) {
     "Against another measurement: differences usually trace to pitch or to where the roof edge was drawn, not to arithmetic. Check those two first.",
   ];
   for (const u of usage) {
-    page.drawText("•", { x: MARGIN, y, size: 9, font: fonts.body, color: ink.gold600 });
+    page.drawRectangle({ x: MARGIN + 1, y: y + 3, width: 3, height: 3, color: ink.accent });
     y = drawParagraph(page, u, {
       x: MARGIN + 12,
       y,
       font: fonts.body,
       size: 8.5,
-      color: ink.ink800,
+      color: ink.slate700,
       width: CONTENT_W - 12,
       leading: 12,
     });
@@ -1095,17 +1173,9 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
   const page = doc.addPage([PAGE_W, PAGE_H]);
   const { summary } = input;
 
-  let y = PAGE_H - 64;
-  page.drawText("Method, and the limits of this measurement", {
-    x: MARGIN,
-    y,
-    size: 20,
-    font: fonts.serif,
-    color: ink.navy900,
-  });
-  y -= 14;
-  goldRule(page, MARGIN, y, ink);
-  y -= 30;
+  let y = runningHead(ctx, page, input.address);
+  y = sectionHeading(ctx, page, "Method, and the limits of this measurement", y);
+  y -= 26;
 
   const imagery = formatImageryDate(summary.imageryDate);
   const methodBits =
@@ -1123,7 +1193,7 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
     y,
     font: fonts.body,
     size: 9,
-    color: ink.ink800,
+    color: ink.slate700,
     width: CONTENT_W,
     leading: 13,
   });
@@ -1138,13 +1208,13 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
       y,
       size: 8,
       font: fonts.bodySemi,
-      color: ink.ink500,
+      color: ink.slate500,
     });
     y -= 18;
 
     const cols = [MARGIN, MARGIN + 70, MARGIN + 210, MARGIN + 330];
     const headers = ["PLANE", "AREA", "PITCH", "FACING"];
-    page.drawRectangle({ x: MARGIN, y: y - 6, width: CONTENT_W, height: 20, color: ink.navy950 });
+    page.drawRectangle({ x: MARGIN, y: y - 6, width: CONTENT_W, height: 20, color: ink.slate900 });
     headers.forEach((h, i) => {
       page.drawText(h, { x: cols[i] + 8, y, size: 7.5, font: fonts.bodySemi, color: ink.white });
     });
@@ -1152,7 +1222,7 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
 
     summary.planes.forEach((plane, i) => {
       if (i % 2 === 1) {
-        page.drawRectangle({ x: MARGIN, y: y - 5, width: CONTENT_W, height: 18, color: ink.ivory });
+        page.drawRectangle({ x: MARGIN, y: y - 5, width: CONTENT_W, height: 18, color: ink.fill });
       }
       const row = [
         `${i + 1}`,
@@ -1166,7 +1236,7 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
           y,
           size: 9,
           font: c === 0 ? fonts.bodySemi : fonts.body,
-          color: ink.ink800,
+          color: ink.slate700,
         });
       });
       y -= 18;
@@ -1196,24 +1266,24 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
       y,
       size: 8,
       font: fonts.bodySemi,
-      color: ink.ink500,
+      color: ink.slate500,
     });
     y -= 18;
     for (const [label, value, note] of extras) {
-      page.drawText(label, { x: MARGIN, y, size: 7.5, font: fonts.bodySemi, color: ink.ink500 });
+      page.drawText(label, { x: MARGIN, y, size: 7.5, font: fonts.bodySemi, color: ink.slate500 });
       page.drawText(value, {
         x: MARGIN + 118,
         y: y + 1,
         size: 12,
         font: fonts.bodySemi,
-        color: ink.navy900,
+        color: ink.slate900,
       });
       y = drawParagraph(page, note, {
         x: MARGIN + 196,
         y: y + 2,
         font: fonts.body,
         size: 8,
-        color: ink.ink800,
+        color: ink.slate700,
         width: CONTENT_W - 196,
         leading: 10,
       });
@@ -1230,7 +1300,7 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
     y,
     size: 8,
     font: fonts.bodySemi,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   y -= 16;
   const notCovered = [
@@ -1241,13 +1311,13 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
     "Access and staging constraints around the property.",
   ];
   for (const f of notCovered) {
-    page.drawText("•", { x: MARGIN, y, size: 9, font: fonts.body, color: ink.gold600 });
+    page.drawRectangle({ x: MARGIN + 1, y: y + 3, width: 3, height: 3, color: ink.accent });
     y = drawParagraph(page, f, {
       x: MARGIN + 12,
       y,
       font: fonts.body,
       size: 8.5,
-      color: ink.ink800,
+      color: ink.slate700,
       width: CONTENT_W - 12,
       leading: 12,
     });
@@ -1261,7 +1331,7 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
     y,
     size: 8,
     font: fonts.bodySemi,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   y -= 16;
   const shared = [
@@ -1282,13 +1352,13 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
           ...shared,
         ];
   for (const line of limits) {
-    page.drawText("•", { x: MARGIN, y, size: 9, font: fonts.body, color: ink.gold600 });
+    page.drawRectangle({ x: MARGIN + 1, y: y + 3, width: 3, height: 3, color: ink.accent });
     y = drawParagraph(page, line, {
       x: MARGIN + 12,
       y,
       font: fonts.body,
       size: 8.5,
-      color: ink.ink800,
+      color: ink.slate700,
       width: CONTENT_W - 12,
       leading: 12,
     });
@@ -1304,7 +1374,7 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
     y,
     size: 8,
     font: fonts.bodySemi,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   y -= 16;
   const glossary: [string, string][] = [
@@ -1327,13 +1397,13 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
     ],
   ];
   for (const [term, meaning] of glossary) {
-    page.drawText(term, { x: MARGIN, y, size: 8.5, font: fonts.bodySemi, color: ink.navy900 });
+    page.drawText(term, { x: MARGIN, y, size: 8.5, font: fonts.bodySemi, color: ink.slate900 });
     y = drawParagraph(page, meaning, {
       x: MARGIN + 92,
       y,
       font: fonts.body,
       size: 8.5,
-      color: ink.ink800,
+      color: ink.slate700,
       width: CONTENT_W - 92,
       leading: 11.5,
     });
@@ -1350,8 +1420,8 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
     y: y - boxH2 + 10,
     width: CONTENT_W,
     height: boxH2,
-    color: ink.ivory,
-    borderColor: ink.navy100,
+    color: ink.fill,
+    borderColor: ink.rule,
     borderWidth: 0.75,
   });
   page.drawText("MEASUREMENT PREPARED BY", {
@@ -1359,18 +1429,18 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
     y: y - 6,
     size: 7,
     font: fonts.bodySemi,
-    color: ink.ink500,
+    color: ink.slate500,
   });
   page.drawText(BRAND.legalName, {
     x: MARGIN + 18,
     y: y - 22,
     size: 10,
     font: fonts.bodySemi,
-    color: ink.navy900,
+    color: ink.slate900,
   });
   page.drawText(
     `Questions about any figure in this report: ${BRAND.phoneDisplay} · ${BRAND.email}`,
-    { x: MARGIN + 18, y: y - 36, size: 8, font: fonts.body, color: ink.ink800 },
+    { x: MARGIN + 18, y: y - 36, size: 8, font: fonts.body, color: ink.slate700 },
   );
 
   return page;
@@ -1379,20 +1449,19 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
 /* ----------------------------------------------------------------- api  -- */
 
 /**
- * Build the report and return PDF bytes. `deps` is injectable so tests can run
- * this in Node with local font bytes instead of a browser fetch.
+ * Build the report and return PDF bytes.
+ *
+ * `deps` is retained for callers that pass a fetch implementation; nothing in
+ * the report fetches any more, since the typeface is a built-in standard font.
  */
 export async function buildRoofReportPdf(
   input: ReportInput,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   deps?: { fetchImpl?: typeof fetch },
 ): Promise<Uint8Array> {
   const { PDFDocument, rgb } = await import("pdf-lib");
-  const fontkit = (await import("@pdf-lib/fontkit")).default;
-  const fetchImpl = deps?.fetchImpl ?? fetch;
 
   const doc = await PDFDocument.create();
-  // Required before embedding any non-standard (brand) font.
-  doc.registerFontkit(fontkit);
   doc.setTitle(`Roof Measurement Report — ${input.address || "Property"}`);
   doc.setAuthor(BRAND.legalName);
   doc.setSubject("Roof area, pitch and material quantity. A measurement record, not a quote.");
@@ -1407,7 +1476,7 @@ export async function buildRoofReportPdf(
     );
   const ink = Object.fromEntries(Object.entries(HEX).map(([k, v]) => [k, hexToRgb(v)])) as Ink;
 
-  const fonts = await loadFonts(doc, fetchImpl);
+  const fonts = await loadFonts(doc);
   const ctx: Ctx = { doc, fonts, ink };
 
   // Aerial photo is optional by design — a failed fetch must not fail the PDF.
