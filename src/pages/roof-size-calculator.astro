@@ -214,21 +214,31 @@ const seo = {
               class="self-start rounded-2xl border border-[color:var(--color-navy-100)] bg-white p-6 shadow-sm md:p-7"
               aria-live="polite"
             >
-              {/* Cover photo for the PDF, shown here first so what you
-                  download is never a surprise. Hidden unless it loads. */}
+              {/* Cover photo for the report. Supplied by the person, never
+                  fetched from an imagery service (owner, 2026-10): a photo of
+                  the actual house beats anything found by coordinates, and it
+                  is unambiguously ours to print. With no photo the report falls
+                  back to the traced outline as its cover image. Previewed here
+                  so what downloads is never a surprise. */}
               <figure id="rt-photo-wrap" class="mb-5 hidden">
                 <img
                   id="rt-photo"
-                  alt="Aerial view of the measured property"
+                  alt="Photograph of the measured property"
                   class="block w-full rounded-xl border border-[color:var(--color-navy-100)]"
-                  loading="lazy"
                   decoding="async"
                 />
-                <figcaption
-                  id="rt-photo-credit"
-                  class="mt-1.5 text-[11px] text-[color:var(--color-ink-500)]"
-                />
               </figure>
+
+              {/* No `capture` attribute on purpose: with it the phone opens
+                  straight to the camera and the existing-photo option is lost.
+                  Without it the OS offers both. */}
+              <label
+                for="rt-own-photo"
+                class="mb-5 flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-[color:var(--color-navy-100)] px-3 py-2.5 text-sm font-semibold text-[color:var(--color-navy-900)] hover:border-[color:var(--color-gold-400)] hover:text-[color:var(--color-gold-600)]"
+              >
+                <span id="rt-own-photo-label">Add a photo of the home (optional)</span>
+              </label>
+              <input id="rt-own-photo" type="file" accept="image/*" class="sr-only" />
 
               <p class="text-xs font-semibold tracking-[0.14em] text-[color:var(--color-ink-500)] uppercase">
                 Your roof measures
@@ -463,7 +473,8 @@ const seo = {
       polygons: [] as any[],
       pitchMult: 1.118,
       complexity: "moderate" as "simple" | "moderate" | "complex",
-      photoCredit: "" as string,
+      /** Photo the person supplied (JPEG bytes). The only cover image source. */
+      ownPhoto: null as Uint8Array | null,
       /** Last publishable measurement — drives the panel, form and PDF alike. */
       summary: null as RoofSummary | null,
       method: "aerial" as "aerial" | "manual",
@@ -496,30 +507,50 @@ const seo = {
 
     const photoWrap = el("rt-photo-wrap");
     const photoImg = el("rt-photo") as HTMLImageElement;
-    /** Load the report's cover photo; stay hidden if there's no coverage. */
-    function showPropertyPhoto() {
-      if (!state.center) return;
-      const src = `/api/property-image?lat=${state.center.lat}&lng=${state.center.lng}`;
-      if (photoImg.getAttribute("src") === src) return;
-      photoImg.onload = () => photoWrap.classList.remove("hidden");
-      // The credit must match whichever source actually answered.
-      fetch(`${src}&debug=1`)
-        .then((r) => r.json())
-        .then((d) => {
-          if (d?.ok && d.credit) {
-            el("rt-photo-credit").textContent = d.credit;
-            state.photoCredit = d.credit;
-          }
-        })
-        .catch(() => {});
-      photoImg.onerror = () => photoWrap.classList.add("hidden");
-      photoWrap.classList.add("hidden");
-      photoImg.src = src;
-    }
-    function hidePropertyPhoto() {
-      photoWrap.classList.add("hidden");
-      photoImg.removeAttribute("src");
-    }
+    const ownInput = el("rt-own-photo") as HTMLInputElement;
+    const ownLabel = el("rt-own-photo-label");
+    const PICK_LABEL = "Add a photo of the home (optional)";
+
+    /**
+     * Read the chosen photo, downscale it and re-encode as JPEG.
+     *
+     * Re-encoding through a canvas also strips EXIF, which matters: phone
+     * photos carry GPS coordinates, and those have no business travelling
+     * inside a document someone forwards. Nothing is uploaded anywhere — the
+     * bytes go from the file straight into the PDF in this browser.
+     */
+    ownInput.addEventListener("change", async () => {
+      const file = ownInput.files?.[0];
+      if (!file) return;
+      ownLabel.textContent = "Preparing photo…";
+      try {
+        // `from-image` honours the EXIF rotation flag, so portrait shots from
+        // a phone don't land sideways in the report.
+        const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+        const maxW = 1400;
+        const scale = Math.min(1, maxW / bitmap.width);
+        const w = Math.round(bitmap.width * scale);
+        const h = Math.round(bitmap.height * scale);
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext("2d")!.drawImage(bitmap, 0, 0, w, h);
+        bitmap.close?.();
+
+        const blob: Blob | null = await new Promise((res) =>
+          canvas.toBlob((b) => res(b), "image/jpeg", 0.85),
+        );
+        if (!blob) throw new Error("encode failed");
+
+        state.ownPhoto = new Uint8Array(await blob.arrayBuffer());
+        photoImg.src = URL.createObjectURL(blob);
+        photoWrap.classList.remove("hidden");
+        ownLabel.textContent = "Use a different photo";
+      } catch {
+        ownLabel.textContent = "Couldn't read that image — try another";
+        setTimeout(() => (ownLabel.textContent = PICK_LABEL), 4000);
+      }
+    });
 
     /**
      * Single render path for both modes. A blocked verdict clears the figures
@@ -538,7 +569,6 @@ const seo = {
         el("rt-pitchout").textContent = "—";
         el("rt-meta").textContent = "";
         downloadBtn.disabled = true;
-        hidePropertyPhoto();
         if (summary) showBlocked(summary.confidence.message);
         else hideBlocked();
         return;
@@ -546,7 +576,6 @@ const seo = {
 
       hideBlocked();
       state.summary = summary;
-      showPropertyPhoto();
       el("rt-squares").textContent = summary.squares.toFixed(1);
       el("rt-order").textContent = summary.squaresWithWaste.toFixed(1);
       el("rt-order-note").textContent = `squares to order (incl. ${summary.waste.percent}% waste)`;
@@ -639,7 +668,6 @@ const seo = {
               map.setCenter({ lat, lng });
               map.setZoom(20);
               state.center = { lat, lng };
-              showPropertyPhoto();
               // Trace-first (owner, 2026-10). Automatic aerial measurement was
               // wrong on 1 in 3 of the EagleView-checked roofs because it
               // picked the wrong building; tracing puts that choice in the
@@ -869,15 +897,14 @@ const seo = {
           downloadBtn.disabled = true;
           dlLabel.textContent = "Building the report…";
           try {
-            const [{ buildRoofReportPdf, reportFilename }, propertyImage] = await Promise.all([
-              import("~/lib/roof-report-pdf"),
-              fetchPropertyImage(),
-            ]);
+            const { buildRoofReportPdf, reportFilename } = await import("~/lib/roof-report-pdf");
             const bytes = await buildRoofReportPdf({
               summary,
               address: state.address,
-              propertyImage,
-              propertyImageCredit: state.photoCredit || undefined,
+              // Only ever a photo the person chose. With none, the report uses
+              // the traced outline as its cover image instead of going and
+              // finding imagery of its own (owner, 2026-10).
+              propertyImage: state.ownPhoto,
               method: state.method,
             });
             const blob = new Blob([bytes as BlobPart], { type: "application/pdf" });
@@ -899,21 +926,6 @@ const seo = {
             downloadBtn.disabled = false;
           }
         });
-
-        /** Public-domain USGS aerial for the cover. Optional by design. */
-        async function fetchPropertyImage(): Promise<Uint8Array | null> {
-          if (!state.center) return null;
-          try {
-            const res = await fetch(
-              `/api/property-image?lat=${state.center.lat}&lng=${state.center.lng}`,
-            );
-            if (res.status !== 200) return null;
-            const buf = await res.arrayBuffer();
-            return buf.byteLength > 0 ? new Uint8Array(buf) : null;
-          } catch {
-            return null;
-          }
-        }
       })
       .catch(() => {
         setStatus(

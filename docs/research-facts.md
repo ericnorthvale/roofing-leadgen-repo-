@@ -1405,3 +1405,38 @@ The imagery credit under the cover photo is NOT a company byline and stays: it
 names whichever source answered. USGS is public domain and needs no credit, but
 Mapillary street-level imagery is CC-BY-SA and attribution is a licence
 condition, so the line has to remain for that path.
+
+---
+
+### Sheet 8 — addendum 8: the cover image is supplied, never found (2026-10-07)
+
+Owner: "for the roof image allow me to upload or take an image please — only so
+not adding one you find. Make it so we only can upload one, but if it's not
+uploaded automatically use the outline as the roof image."
+
+This reverses the automatic-imagery approach of addendum 5 and supersedes the
+removal of the photo picker in addendum 6.
+
+- **A photograph only ever comes from the person running the measurement.** The
+  picker is back on the calculator: one control, `accept="image/*"` and
+  deliberately no `capture` attribute, so a phone offers both the camera and the
+  existing photo library. The file is downscaled to 1400px and re-encoded as
+  JPEG through a canvas, which also strips EXIF — phone photos carry GPS
+  coordinates that have no business travelling inside a forwarded document.
+  Nothing is uploaded to a server; the bytes go from the file straight into the
+  PDF in the browser.
+- **The report no longer fetches imagery by coordinate.** The page stopped
+  calling `/api/property-image`. With no photo supplied, the cover falls back to
+  the traced outline, drawn to scale in the photo's slot, unlabelled, captioned
+  "Traced roof outline — measured section by section on page 2".
+- **Why the fallback is the better default anyway:** the outline is the actual
+  geometry the figures were taken from, and it is unambiguously ours to print —
+  no licence condition, no credit line, and no risk of showing the wrong
+  building, which was the failure mode that produced the 0.55 and 0.68 ratios in
+  the original calibration table.
+- The imagery credit line is gone from the cover entirely, since neither path
+  needs one. `propertyImageCredit` was dropped from `ReportInput`.
+
+`/api/property-image` (Mapillary → USGS) is now unreferenced. Left in place
+rather than deleted — it is env-gated and harmless, and removing a route is a
+cleanup for a human to confirm (Hard Rule #7).

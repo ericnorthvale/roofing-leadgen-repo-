@@ -52,10 +52,11 @@ export interface ReportInput {
   summary: RoofSummary;
   /** Formatted property address as the homeowner selected it. */
   address: string;
-  /** Property JPEG bytes (street-level or aerial), or null. */
+  /**
+   * JPEG bytes of a photo the person supplied, or null. Never imagery fetched
+   * by coordinate — with none, the cover falls back to the traced outline.
+   */
   propertyImage: Uint8Array | null;
-  /** Credit line for whichever imagery source answered. */
-  propertyImageCredit?: string;
   /** How the roof was measured, for the method line. */
   method: "aerial" | "manual";
   /** Injected in tests; defaults to now. */
@@ -379,10 +380,17 @@ async function drawCover(
   goldRule(page, MARGIN, y, ink);
   y -= 22;
 
-  // Aerial image.
+  // Cover image.
+  //
+  // A photograph only ever comes from the person running the measurement —
+  // the report never goes looking for imagery of the property by coordinate
+  // (owner, 2026-10). With no photo supplied it falls back to the traced
+  // outline, which is honest in a way found imagery is not: it is the actual
+  // geometry these figures were taken from, and it is unambiguously ours to
+  // print. Hence no credit line on either path.
+  const coverH = 190;
   if (embedded && imageDims) {
-    const maxH = 190;
-    const scale = Math.min(CONTENT_W / imageDims.w, maxH / imageDims.h);
+    const scale = Math.min(CONTENT_W / imageDims.w, coverH / imageDims.h);
     const w = imageDims.w * scale;
     const h = imageDims.h * scale;
     const x = MARGIN + (CONTENT_W - w) / 2;
@@ -395,17 +403,17 @@ async function drawCover(
     });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     page.drawImage(embedded as any, { x, y: y - h, width: w, height: h });
-    y -= h + 12;
-    page.drawText(
-      input.propertyImageCredit || "Aerial imagery: USGS The National Map (public domain)",
-      {
-        x: MARGIN,
-        y,
-        size: 7,
-        font: fonts.body,
-        color: ink.slate500,
-      },
-    );
+    y -= h + 22;
+  } else if (summary.planes.some((p) => p.outline && p.outline.length >= 3)) {
+    drawRoofDiagram(ctx, page, summary, y, { height: coverH, labels: false });
+    y -= coverH + 10;
+    page.drawText("Traced roof outline — measured section by section on page 2", {
+      x: MARGIN,
+      y,
+      size: 7,
+      font: fonts.body,
+      color: ink.slate500,
+    });
     y -= 22;
   } else {
     y -= 6;
@@ -585,7 +593,13 @@ async function drawCover(
  * Returns the y position below the drawing, or the input y when there is
  * nothing to draw.
  */
-function drawRoofDiagram(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: number): number {
+function drawRoofDiagram(
+  ctx: Ctx,
+  page: PDFPage,
+  summary: RoofSummary,
+  top: number,
+  opts?: { left?: number; width?: number; height?: number; labels?: boolean },
+): number {
   const { fonts, ink } = ctx;
   const outlines = summary.planes
     .map((p) => p.outline)
@@ -612,20 +626,22 @@ function drawRoofDiagram(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
   const spanX = Math.max(1, maxX - minX);
   const spanY = Math.max(1, maxY - minY);
 
-  const boxW = CONTENT_W;
-  const boxH = 232;
+  const left = opts?.left ?? MARGIN;
+  const boxW = opts?.width ?? CONTENT_W;
+  const boxH = opts?.height ?? 232;
+  const labels = opts?.labels ?? true;
   const pad = 26;
   const footer = 26; // clear lane at the bottom for the scale bar
   const usableH = boxH - pad - footer;
   const scale = Math.min((boxW - pad * 2) / spanX, usableH / spanY);
   const drawW = spanX * scale;
   const drawH = spanY * scale;
-  const originX = MARGIN + (boxW - drawW) / 2 - minX * scale;
+  const originX = left + (boxW - drawW) / 2 - minX * scale;
   // PDF y grows upward and so does latitude, so no flip is needed.
   const originY = top - boxH + footer + (usableH - drawH) / 2 - minY * scale;
 
   page.drawRectangle({
-    x: MARGIN,
+    x: left,
     y: top - boxH,
     width: boxW,
     height: boxH,
@@ -656,7 +672,10 @@ function drawRoofDiagram(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
       borderWidth: 1.6,
     });
 
-    // Label at the section's centroid.
+    // Label at the section's centroid. Suppressed on the cover, where the
+    // drawing is small and stands in for a photograph; the labelled version is
+    // the full-page one on the outline page.
+    if (!labels) return;
     const cx = pts.reduce((a, p) => a + p.x, 0) / pts.length;
     const cy = pts.reduce((a, p) => a + p.y, 0) / pts.length;
     const label = `${i + 1}`;
@@ -678,7 +697,7 @@ function drawRoofDiagram(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
   });
 
   // North arrow — latitude increases up the page, so north is simply up.
-  const nx = MARGIN + boxW - 26;
+  const nx = left + boxW - 26;
   const ny = top - 26;
   page.drawLine({
     start: { x: nx, y: ny - 14 },
@@ -699,7 +718,7 @@ function drawRoofDiagram(ctx: Ctx, page: PDFPage, summary: RoofSummary, top: num
   const ptPerFt = scale / 3.28084;
   const targetFt = [100, 50, 25, 20, 10].find((f) => f * ptPerFt <= drawW / 3) ?? 10;
   const barPt = targetFt * ptPerFt;
-  const bx = MARGIN + 18;
+  const bx = left + 18;
   const by = top - boxH + 12;
   page.drawLine({
     start: { x: bx, y: by },
