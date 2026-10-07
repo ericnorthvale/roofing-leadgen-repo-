@@ -239,7 +239,16 @@ export function reportReference(address: string, date: Date): string {
   return `RM-${yy}${mm}${dd}-${tail}`;
 }
 
-/** Shared footer: NAP from brand.ts + the standing honesty line. */
+/**
+ * Shared footer.
+ *
+ * No byline: the owner asked for the report to carry no "prepared by" line
+ * (2026-10). Note what that does and does not mean — the document is simply
+ * UNATTRIBUTED, which is a choice a measurement record is entitled to make. It
+ * must never go further and assert, in words or in styling, that an
+ * independent surveyor produced it. The PDF's own author metadata is left
+ * accurate for the same reason.
+ */
 function drawFooter(page: PDFPage, ctx: Ctx, pageLabel: string, note?: string, reference?: string) {
   const { fonts, ink } = ctx;
   page.drawLine({
@@ -248,16 +257,9 @@ function drawFooter(page: PDFPage, ctx: Ctx, pageLabel: string, note?: string, r
     thickness: 0.75,
     color: ink.rule,
   });
-  page.drawText(`Measurement prepared by ${BRAND.legalName} · ${BRAND.phoneDisplay}`, {
+  page.drawText(note ?? "Measurement estimate. Verify on the roof before ordering material.", {
     x: MARGIN,
     y: 50,
-    size: 7.5,
-    font: fonts.body,
-    color: ink.slate500,
-  });
-  page.drawText(note ?? "Estimate — confirmed on site before any contract price.", {
-    x: MARGIN,
-    y: 39,
     size: 7.5,
     font: fonts.body,
     color: ink.slate500,
@@ -530,8 +532,8 @@ async function drawCover(
       "Why a roof needs more material than its measured area, how the allowance here was set, and the resulting figure a supplier would be asked for.",
     ],
     [
-      "Method, and what this measurement cannot show",
-      "How the figures were produced, what they exclude, and the checks that still have to happen on the roof itself.",
+      "Method, ventilation and reference",
+      "How the figures were produced, the attic ventilation the roof area calls for, and what the units in this report mean.",
     ],
   ];
   const gutter = 26;
@@ -1174,7 +1176,7 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
   const { summary } = input;
 
   let y = runningHead(ctx, page, input.address);
-  y = sectionHeading(ctx, page, "Method, and the limits of this measurement", y);
+  y = sectionHeading(ctx, page, "Method, ventilation and reference", y);
   y -= 26;
 
   const imagery = formatImageryDate(summary.imageryDate);
@@ -1253,13 +1255,6 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
       "traced perimeter — the run for drip edge, starter and gutters",
     ]);
   }
-  if (summary.ventilationNfaSqIn) {
-    extras.push([
-      "VENTILATION TARGET",
-      `${money(summary.ventilationNfaSqIn)} sq in`,
-      "net free area at the balanced 1-in-300 ratio (IRC R806.2), split evenly intake and exhaust",
-    ]);
-  }
   if (extras.length) {
     page.drawText("ALSO MEASURED", {
       x: MARGIN,
@@ -1292,41 +1287,78 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
     y -= 2;
   }
 
-  // What the measurement does not establish. Deliberately framed as scope
-  // rather than as price drivers: this document reports a size, and the things
-  // below are simply outside what any overhead measurement can see.
-  page.drawText("NOT ESTABLISHED BY THIS MEASUREMENT", {
-    x: MARGIN,
-    y,
-    size: 8,
-    font: fonts.bodySemi,
-    color: ink.slate500,
-  });
-  y -= 16;
-  const notCovered = [
-    "How many layers of roofing are already in place, and the condition of the decking beneath them.",
-    "The condition of flashing at walls, chimneys, skylights and pipe penetrations.",
-    "Existing ventilation — what is installed, and whether intake and exhaust are balanced.",
-    "Storm, hail or wind damage, and any leak history.",
-    "Access and staging constraints around the property.",
-  ];
-  for (const f of notCovered) {
-    page.drawRectangle({ x: MARGIN + 1, y: y + 3, width: 3, height: 3, color: ink.accent });
-    y = drawParagraph(page, f, {
-      x: MARGIN + 12,
+  // Ventilation, with the arithmetic shown. Kept and expanded at the owner's
+  // request — it is the one figure here a homeowner can act on directly, and
+  // the 1-in-300 ratio is a published code requirement rather than a judgement
+  // call, so the working can be printed in full.
+  if (summary.ventilationNfaSqIn && summary.footprintFt2) {
+    page.drawText("VENTILATION REQUIREMENT", {
+      x: MARGIN,
       y,
-      font: fonts.body,
-      size: 8.5,
-      color: ink.slate700,
-      width: CONTENT_W - 12,
-      leading: 12,
+      size: 8,
+      font: fonts.bodySemi,
+      color: ink.slate500,
     });
-    y -= 14;
-  }
-  y -= 10;
+    y -= 18;
 
-  // Accuracy limits.
-  page.drawText("ACCURACY AND LIMITS", {
+    const nfa = summary.ventilationNfaSqIn;
+    const half = Math.round(nfa / 2);
+    const ventBoxH = 50;
+    page.drawRectangle({
+      x: MARGIN,
+      y: y - ventBoxH + 12,
+      width: CONTENT_W,
+      height: ventBoxH,
+      color: ink.fill,
+    });
+    page.drawRectangle({
+      x: MARGIN,
+      y: y - ventBoxH + 12,
+      width: 2,
+      height: ventBoxH,
+      color: ink.accent,
+    });
+    const ventCells: [string, string][] = [
+      ["TOTAL NET FREE AREA", `${money(nfa)} sq in`],
+      ["INTAKE (AT THE EAVES)", `${money(half)} sq in`],
+      ["EXHAUST (AT THE RIDGE)", `${money(half)} sq in`],
+    ];
+    ventCells.forEach(([label, value], i) => {
+      const vx = MARGIN + 18 + i * 168;
+      page.drawText(label, {
+        x: vx,
+        y: y - 4,
+        size: 6.5,
+        font: fonts.bodyBold,
+        color: ink.slate500,
+      });
+      page.drawText(value, {
+        x: vx,
+        y: y - 24,
+        size: 13,
+        font: fonts.bodyBold,
+        color: ink.slate900,
+      });
+    });
+    y -= ventBoxH + 10;
+    y = drawParagraph(
+      page,
+      `Attic ventilation is sized from the footprint, not the roof surface: ${money(summary.footprintFt2)} ft² ÷ 300 × 144 = ${money(nfa)} square inches of net free area, split evenly between intake and exhaust (IRC R806.2, balanced 1-in-300 ratio). Net free area is the open area air can actually pass through, which is less than a vent's overall size — the figure is printed on the product.`,
+      {
+        x: MARGIN,
+        y,
+        font: fonts.body,
+        size: 8.5,
+        color: ink.slate700,
+        width: CONTENT_W,
+        leading: 12,
+      },
+    );
+    y -= 26;
+  }
+
+  // Short, and only what a reader actually needs to know about scope.
+  page.drawText("NOTES ON THESE FIGURES", {
     x: MARGIN,
     y,
     size: 8,
@@ -1334,23 +1366,14 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
     color: ink.slate500,
   });
   y -= 16;
-  const shared = [
-    "The waste allowance is an industry-standard estimate derived from complexity and pitch. It is not a guarantee of the quantity a given roof will consume.",
-    "This report states a size. It contains no pricing, and is not a quote, a contract or a material order.",
-    "Verify on the roof before ordering material or committing to a price.",
-  ];
-  const limits =
+  const limits = [
+    "Decking material is not calculated in this report. The figures cover the roof covering only — the sheathing beneath it, and its condition, are established on the roof.",
     input.method === "manual"
-      ? [
-          "Figures are derived from an outline traced on satellite imagery, so they are only as accurate as that outline. Overhangs, low additions and sections obscured by tree cover may be under- or over-captured.",
-          "The pitch is the one selected when the roof was traced, not one measured on the roof. Pitch drives the slope factor directly, so an incorrect pitch moves every area figure in this report.",
-          ...shared,
-        ]
-      : [
-          "Figures are derived from an aerial roof model. Such models read slightly under a full photogrammetric or on-site measurement: they tend to clip eaves and overhangs and to smooth out the steepest slopes.",
-          "Tree cover, recent construction and complex rooflines all reduce what the imagery resolves.",
-          ...shared,
-        ];
+      ? "Figures follow the traced outline and the pitch selected with it, so they are only as accurate as those two inputs."
+      : "Figures come from an aerial roof model, which tends to read slightly under an on-roof measurement.",
+    "The waste allowance is an estimate from complexity and pitch, not a guarantee of the quantity a roof will consume.",
+    "This report states a size. It contains no pricing and is not a quote or a material order.",
+  ];
   for (const line of limits) {
     page.drawRectangle({ x: MARGIN + 1, y: y + 3, width: 3, height: 3, color: ink.accent });
     y = drawParagraph(page, line, {
@@ -1409,39 +1432,6 @@ function drawMethodPage(ctx: Ctx, input: ReportInput) {
     });
     y -= 14;
   }
-
-  y -= 10;
-
-  // Who produced it. Disclosure, not a pitch: the reader is entitled to know
-  // where the measurement came from, and to be able to query it.
-  const boxH2 = 56;
-  page.drawRectangle({
-    x: MARGIN,
-    y: y - boxH2 + 10,
-    width: CONTENT_W,
-    height: boxH2,
-    color: ink.fill,
-    borderColor: ink.rule,
-    borderWidth: 0.75,
-  });
-  page.drawText("MEASUREMENT PREPARED BY", {
-    x: MARGIN + 18,
-    y: y - 6,
-    size: 7,
-    font: fonts.bodySemi,
-    color: ink.slate500,
-  });
-  page.drawText(BRAND.legalName, {
-    x: MARGIN + 18,
-    y: y - 22,
-    size: 10,
-    font: fonts.bodySemi,
-    color: ink.slate900,
-  });
-  page.drawText(
-    `Questions about any figure in this report: ${BRAND.phoneDisplay} · ${BRAND.email}`,
-    { x: MARGIN + 18, y: y - 36, size: 8, font: fonts.body, color: ink.slate700 },
-  );
 
   return page;
 }

@@ -1352,3 +1352,37 @@ Also removed this round, at the owner's request: the rep photo picker on the
 calculator ("we won't need the take a photo option"). The automatic property
 image (Mapillary street level → USGS aerial) is unchanged; `ownPhoto` state,
 the EXIF-stripping canvas re-encode and the upload control are gone.
+
+---
+
+### Sheet 8 — addendum 7: no byline, shorter limitations (2026-10-07)
+
+Owner, 2026-10-07: "don't say who the measurement was prepared by, and also not
+as much info on the limitations — and if you do say things there, say that
+decking material is not calculated in the report. I like the ventilation
+information."
+
+Applied:
+
+- **No byline anywhere in the document.** The footer's "Measurement prepared by
+  Northvale Roofing LLC" line and the named preparer block on the final page
+  are both gone. The report is now UNATTRIBUTED.
+- **The distinction that keeps this honest:** unattributed is not the same as
+  falsely attributed. A measurement record is entitled to carry no byline. What
+  it must never do — in words or in styling — is assert that an independent
+  surveyor or a third-party firm produced it. Nothing in the document does, and
+  the PDF's own `Author`/`Producer` metadata is deliberately left accurate for
+  the same reason. This was raised with the owner before the first de-brand
+  (addendum 5) and he confirmed the direction; the constraint is recorded here
+  and in the `drawFooter` doc comment so a later change doesn't cross it by
+  accident.
+- **Limitations cut** from two sections and ten bullets to one section of four,
+  led by the one the owner asked for: _"Decking material is not calculated in
+  this report. The figures cover the roof covering only — the sheathing beneath
+  it, and its condition, are established on the roof."_
+- **Ventilation promoted**, since he likes it: its own block showing total net
+  free area and the even intake/exhaust split, with the working printed —
+  footprint ÷ 300 × 144 — and a plain definition of net free area. Source
+  unchanged (IRC R806.2 balanced 1-in-300 ratio, Sheet 8).
+- Final page retitled "Method, ventilation and reference", since it is no longer
+  mostly limitations.
