@@ -30,8 +30,10 @@ export interface ReportInput {
   summary: RoofSummary;
   /** Formatted property address as the homeowner selected it. */
   address: string;
-  /** Aerial JPEG bytes, or null when imagery wasn't available. */
+  /** Property JPEG bytes (street-level or aerial), or null. */
   propertyImage: Uint8Array | null;
+  /** Credit line for whichever imagery source answered. */
+  propertyImageCredit?: string;
   /** How the roof was measured, for the method line. */
   method: "aerial" | "manual";
   /** Injected in tests; defaults to now. */
@@ -269,13 +271,16 @@ async function drawCover(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     page.drawImage(embedded as any, { x, y: y - h, width: w, height: h });
     y -= h + 12;
-    page.drawText("Aerial imagery: USGS The National Map (public domain)", {
-      x: MARGIN,
-      y,
-      size: 7,
-      font: fonts.body,
-      color: ink.ink500,
-    });
+    page.drawText(
+      input.propertyImageCredit || "Aerial imagery: USGS The National Map (public domain)",
+      {
+        x: MARGIN,
+        y,
+        size: 7,
+        font: fonts.body,
+        color: ink.ink500,
+      },
+    );
     y -= 22;
   } else {
     y -= 6;

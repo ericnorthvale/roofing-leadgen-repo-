@@ -224,9 +224,10 @@ const seo = {
                   loading="lazy"
                   decoding="async"
                 />
-                <figcaption class="mt-1.5 text-[11px] text-[color:var(--color-ink-500)]">
-                  Aerial imagery: USGS The National Map (public domain)
-                </figcaption>
+                <figcaption
+                  id="rt-photo-credit"
+                  class="mt-1.5 text-[11px] text-[color:var(--color-ink-500)]"
+                />
               </figure>
 
               <p class="text-xs font-semibold tracking-[0.14em] text-[color:var(--color-ink-500)] uppercase">
@@ -410,6 +411,7 @@ const seo = {
       polygons: [] as any[],
       pitchMult: 1.118,
       complexity: "moderate" as "simple" | "moderate" | "complex",
+      photoCredit: "" as string,
       /** Last publishable measurement — drives the panel, form and PDF alike. */
       summary: null as RoofSummary | null,
       method: "aerial" as "aerial" | "manual",
@@ -448,6 +450,16 @@ const seo = {
       const src = `/api/property-image?lat=${state.center.lat}&lng=${state.center.lng}`;
       if (photoImg.getAttribute("src") === src) return;
       photoImg.onload = () => photoWrap.classList.remove("hidden");
+      // The credit must match whichever source actually answered.
+      fetch(`${src}&debug=1`)
+        .then((r) => r.json())
+        .then((d) => {
+          if (d?.ok && d.credit) {
+            el("rt-photo-credit").textContent = d.credit;
+            state.photoCredit = d.credit;
+          }
+        })
+        .catch(() => {});
       photoImg.onerror = () => photoWrap.classList.add("hidden");
       photoWrap.classList.add("hidden");
       photoImg.src = src;
@@ -807,6 +819,7 @@ const seo = {
               summary,
               address: state.address,
               propertyImage,
+              propertyImageCredit: state.photoCredit || undefined,
               method: state.method,
             });
             const blob = new Blob([bytes as BlobPart], { type: "application/pdf" });
