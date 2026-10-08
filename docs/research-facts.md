@@ -1579,3 +1579,52 @@ adder still bites where there is headroom: simple steep 12→14, moderate steep
 15→17.
 
 The measured area is still never touched. Only the allowance moved.
+
+---
+
+### Sheet 8 — addendum 12: the 12/15/20 model re-checked against all six reports (2026-10-08)
+
+Owner asked whether the raised waste factors still come back level with the
+EagleView / GAF reports. Re-ran the model (`wasteAllowance`, the real code) for
+every roof in the addendum-3 set, at the report's own predominant pitch and the
+roof shape a rep would pick from the facet and valley counts.
+
+| Roof                            | Pitch | Facets | Valleys | Report | Model | Δ   | Their order | Our order | Δ sq |
+| ------------------------------- | ----- | ------ | ------- | ------ | ----- | --- | ----------- | --------- | ---- |
+| 7223 Kennedale Ln, Spring       | 6/12  | 8      | 35 ft   | 15%    | 15%   | +0  | 36.3        | 36.3      | +0.0 |
+| 103 Grove Clover Ln, Montgomery | 6/12  | 41     | 266 ft  | 17%    | 20%   | +3  | 66.2        | 67.9      | +1.7 |
+| 5806 Sugar Bush Dr, Magnolia    | 9/12  | 17     | —       | 17%    | 20%   | +3  | 56.0        | 57.5      | +1.4 |
+| 2305 Acadiana Ln, Seabrook      | 12/12 | 27     | 153 ft  | 20%    | 20%   | +0  | 51.0        | 51.0      | +0.0 |
+| 5523 Cheena Dr, Houston         | 5/12  | 13     | 69 ft   | 7%     | 15%   | +8  | 39.7        | 42.7      | +3.0 |
+| 3019 Rushing Brook Dr, Houston  | 7/12  | 23     | 105 ft  | 15%\*  | 20%   | +5  | 49.9        | 52.1      | +2.2 |
+
+**The model meets or exceeds the report's waste on 6 of 6, and never falls under
+it.** Over-order runs +0.0 to +3.0 squares, which is the owner's stated intent
+("1-2 more than needed … so we don't underquote or order").
+
+Provenance of the "Report" column — worth knowing which are stated and which are
+read off the table:
+
+- **GAF QuickMeasure** (Grove Clover 17%, Cheena 7%): the first non-zero column
+  of the waste ladder is GAF's suggested factor. Stated.
+- **EagleView Kennedale (15%) and Acadiana (20%)**: inferred, but reliably. The
+  standard ladder is 0/5/10/15/20/25/30 and EagleView inserts the suggested
+  factor flanked by ±2 — Kennedale reads 0,5,10,**13,15,17**,20,25,30 and
+  Acadiana 0,5,10,15,**18,20,22**,25,30.
+- **\*Rushing Brook (15%)**: the short table offers only 0/10/15 with no
+  suggestion marked, so 15% is the TOP of what the report offered, not a stated
+  recommendation. Treated as the conservative read.
+
+**Cheena remains the known outlier** (+8 points) and the reason is unchanged
+since addendum 4: 13 facets but only 69 ft of valleys, against Grove Clover's
+266 ft. Facet count over-calls a roof that is busy-looking but barely cut up.
+The error is in the SAFE direction, so it no longer threatens an order — it just
+costs about 3 squares of surplus on roofs of that shape.
+
+**What this does NOT test.** Only the waste factor was re-checked. The square
+count could not be: the addendum-3 "Tool at pin" column came from the automatic
+aerial measurement, which no longer exists — the tool is trace-first, so the
+outline is drawn by a person and cannot be reproduced from here. Validating the
+measurement needs the owner to trace each of the six addresses and compare
+against the report's 0%-waste square count (31.6 / 56.6 / 47.9 / 42.5 / 37.1 /
+43.4). Procedure handed over 2026-10-08.
