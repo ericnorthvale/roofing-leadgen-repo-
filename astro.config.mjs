@@ -121,6 +121,18 @@ export default defineConfig({
       CALLRAIL_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
       CALLRAIL_ACCOUNT_ID: envField.string({ context: "server", access: "secret", optional: true }),
       GOOGLE_MAPS_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+      // Rooftop geocoding for the roof tool. MUST be a separate key with NO
+      // referrer restriction — Google rejects referrer-restricted keys on the
+      // Geocoding API. Server-only; never ship it to the browser.
+      // Free Mapillary token — optional street-level property photo for the
+      // roof report (CC-BY-SA, credited). Without it the report uses the
+      // public-domain USGS aerial instead.
+      MAPILLARY_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),
+      GOOGLE_GEOCODING_API_KEY: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       GOOGLE_PLACES_API_KEY: envField.string({
         context: "server",
         access: "secret",

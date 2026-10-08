@@ -1031,3 +1031,600 @@ often. NOTHING from the UNVERIFIED list goes on the site.
    any listed company — if it ever does, FTC disclosure is REQUIRED on the
    page. Current page copy states the list is "a convenience, not an
    endorsement" and claims no compensation either way.
+
+## Sheet 8 — Roof measurement report (waste factors + imagery licensing, 2026-10-07)
+
+Backs the downloadable report on /roof-size-calculator. Owner approved the
+model in session 2026-10-07 ("I agree with your waste factor assumptions").
+
+### Waste allowance — industry standard, NOT a Northvale guarantee
+
+Waste is driven primarily by roof COMPLEXITY (hips, valleys, dormers — the
+diagonal cuts), with pitch a secondary factor. Published ranges agree closely:
+
+- Simple gable: **10%** (some estimating guides go as low as 5–8%).
+- Hip / standard with dormers: **12–15%**.
+- Cut-up multi-valley / complex: **15–20%**.
+  — SOURCES (all accessed 2026-10-07):
+  https://www.1esx.com/understanding-roof-waste-factor-calculation-a-guide-for-accurate-bidding/
+  https://calcforhomes.com/guides/waste-factor-guide
+  https://www.oneclickcode.com/blog/the-roofing-contractors-guide-to-shingle-waste-factor-calculation
+  https://open-exam-prep.com/study-guides/la-roofing-contractor/roofing-estimating-plan-reading-math/material-takeoff-wastage-costing
+
+**Implemented model** (src/lib/roof-report.ts, unit-tested):
+
+| Resolved roof planes | Complexity                    | Base allowance |
+| -------------------- | ----------------------------- | -------------- |
+| 2–4                  | simple (gable-style)          | 10%            |
+| 5–8                  | moderate (hip / dormers)      | 15%            |
+| 9+                   | complex (cut-up hip & valley) | 18%            |
+
+Plus **+2%** when average pitch is 9/12 or steeper (handling and cut loss on
+steep work); hard-capped at **20%**, the top of the published range. Plane
+count comes from Google Solar API `roofSegmentStats` — a measured proxy for
+cut-up complexity, not an estimate.
+
+The report prints this as an "allowance", states it is an industry-standard
+estimate, and states it is not a guarantee or a material order.
+
+### What the report must never contain
+
+- **No pricing.** Owner decision 2026-08: the tool shows size only.
+- **No Google imagery.** Google's geo-guidelines state Street View imagery may
+  not be used for print purposes at all, and Maps/satellite imagery is
+  restricted in material used to promote a business — a branded, downloadable,
+  printable report is both. Google imagery therefore stays in the on-screen
+  live map only (permitted display), never in the PDF.
+  — SOURCES: https://about.google/brand-resource-center/products-and-services/geo-guidelines/
+  https://cloud.google.com/maps-platform/terms/maps-service-terms
+  NOTE: Google's own pages were unreachable from the build environment; the
+  above reflects two independent searches quoting those guidelines. Re-confirm
+  before any change that would put Google imagery into a distributed file.
+
+### Report imagery source — USGS, public domain
+
+The cover photo comes from **USGS "The National Map"** imagery
+(basemap.nationalmap.gov), a work of the U.S. federal government and therefore
+in the public domain — safe to print and redistribute. Credited on the report
+page as "Aerial imagery: USGS The National Map (public domain)". No API key is
+required, so there is nothing for the owner to configure or rotate.
+
+### Tree / low-confidence blocking (owner instruction, 2026-10-07)
+
+Owner: "if trees are a problem I need this to be a block if trees make it hard
+to get a true count." Heavy pine canopy is common across this market, so the
+tool BLOCKS rather than softening a number it cannot stand behind. A blocked
+measurement shows no figures and no PDF — only an honest explanation and the
+free on-site measurement. Gate (src/lib/roof-report.ts, unit-tested):
+
+- No building found in the aerial data → blocked.
+- Google `imageryQuality: LOW` → blocked.
+- Fewer than 2 resolved roof planes → blocked.
+- Resolved planes cover < 80% of the whole-roof area → blocked (occlusion).
+- Coverage 80–92%, or `imageryQuality: MEDIUM` → published with a visible
+  reduced-confidence caveat on screen and in the PDF.
+
+Hand-traced measurements bypass the aerial gate: the person tracing can see the
+trees themselves, so their own outline is not second-guessed.
+
+### Sheet 8 addendum — calibration against EagleView (2026-10-07)
+
+Owner supplied a real EagleView report for **5806 Sugar Bush Dr, Magnolia TX**
+and compared it to the tool. Ground truth: **47.9 squares · 17% waste ·
+predominantly 9/12**. Google Solar API for the same address returned 44.4
+squares (17 roof planes, imageryQuality HIGH, March 2023, building matched at
+0 m offset — so this was NOT a wrong-building match).
+
+**Decomposition of the 7.4% gap** (computed, not assumed):
+
+- Google footprint 3,648 ft²; a 47.9-square roof at a true 9/12 pitch requires
+  ~3,832 ft². Footprint shortfall **≈5%** — consistent with Google's roof mask
+  clipping eaves/overhangs (~7–8 inches around the perimeter).
+- Google's area ÷ footprint implies an **8.3/12** average pitch where EagleView
+  reports predominantly **9/12** — the DSM smooths the steepest planes. Worth
+  **≈2.4%** of area.
+
+**Conclusion: Google's Solar API is a solar-modelling product, not a
+measurement product, and reads systematically LOW on both footprint and
+pitch.** No correction factor has been applied — one ground-truth roof is not
+a calibration set, and inventing a multiplier would breach Hard Rule #2. The
+tool instead states the limitation plainly on screen and in the PDF. If the
+owner supplies 5–10 more EagleView reports, a sourced correction can be
+derived and documented here.
+
+**Waste model recalibrated** to this ground truth (still inside the published
+ranges in the main Sheet 8 entry): simple 10% · moderate 13% · complex 15% ·
+steep (9/12+) adder +2% · cap 20%. Sugar Bush = 17 planes (complex, 15%) +
+steep (10.1/12 max plane) = **17%, matching EagleView exactly.**
+
+**Pitch is reported as a measured range**, never a single "predominant" figure:
+on this roof Google's planes span 6.2/12–10.1/12 and the area-weighted average
+is 8.3/12, so any single number would misrepresent it. The displayed range
+(7/12–10/12, slivers excluded) does bracket EagleView's 9/12.
+
+### Sheet 8 addendum 2 — the blind spot (3019 Rushing Brook Dr, Kingwood, 2026-10-07)
+
+Owner's second ground-truth check: **EagleView 44 squares, tool 23.9 (−46%).**
+Unlike Sugar Bush this is NOT eave clipping — the gap is far too large.
+
+What the API returned at the geocoded address: building `ZqxuCM_qVg`, 9 roof
+planes, 23.9 squares, 2,057 ft² footprint, imageryQuality HIGH, **matched 2 m
+from the address pin**, coverage 1.000. Every automated check passed.
+
+Probing the surrounding ~50 m found nine distinct building records, including
+**`pUi7R4DR7A` at 42.7 squares just 21 m east** (bounding extents overlap the
+matched one) and `N6zv-5ivAY` at 42.8 squares. 42.7 vs EagleView's 44 is −3%,
+right in line with the eave-clipping bias measured at Sugar Bush.
+
+Two explanations fit the data and **the API alone cannot distinguish them**:
+
+1. The geocode resolved to a secondary structure and the real house is the
+   42.7-square record 21 m away; or
+2. Kingwood's heavy canopy ("the Livable Forest") left Google modelling only
+   part of the roof — supported by the implausible pitch spread on the matched
+   building (0.7/12 flat alongside 12.9/12 and 15.1/12).
+
+(Google Static Maps is not enabled on the key, so the property could not be
+inspected visually from the build environment.)
+
+**THE STRUCTURAL LESSON — this is the important part.** Every automated gate in
+roof-report.ts compares _Google against Google_: coverage compares segments to
+Google's own whole-roof figure; the offset check compares Google's geocode to
+Google's own building model. When those two agree with each other and both
+disagree with reality, **no automated check can catch it** — and the wrong
+number looks completely plausible.
+
+The only reliable defence is a human eye. Hence:
+
+- Every measured roof plane is outlined in gold on the satellite map.
+- A visible prompt asks the homeowner to confirm the outline is on their roof.
+- **Tapping any building on the map re-measures that building** — one click to
+  correct a bad match, at the cost of one extra API call only when needed.
+
+This also hard-caps what the free tool can honestly claim. It is a lead magnet
+and an orientation estimate, not an ordering figure. Order-grade numbers come
+from an on-site measurement or a paid photogrammetric report (Roofr ~$13,
+EagleView ~$15–87) — see the main Sheet 8 entry.
+
+### Sheet 8 addendum 3 — six-roof calibration against EagleView / GAF (2026-10-07)
+
+Owner supplied five measurement reports; combined with the earlier Sugar Bush
+figure that gives six ground-truth roofs. Each address was geocoded exactly as
+the page does and measured through the live Solar API.
+
+| Property                        | Truth (sq) | Facets | Pitch | Tool at pin | Ratio     |
+| ------------------------------- | ---------- | ------ | ----- | ----------- | --------- |
+| 7223 Kennedale Ln, Spring       | 31.6       | 8      | 6/12  | 32.3        | **1.024** |
+| 103 Grove Clover Ln, Montgomery | 56.6       | 41     | 6/12  | 55.0        | **0.971** |
+| 5806 Sugar Bush Dr, Magnolia    | 47.9       | —      | 9/12  | 44.4        | **0.926** |
+| 2305 Acadiana Ln, Seabrook      | 42.5       | 27     | 12/12 | 38.3        | **0.902** |
+| 5523 Cheena Dr, Houston         | 37.1       | 13     | 5/12  | 25.1        | **0.676** |
+| 3019 Rushing Brook Dr, Kingwood | 43.4       | 23     | 7/12  | 23.9        | **0.549** |
+
+Sources: EagleView reports 68563074 / 68976627 / 68976619, GAF QuickMeasure for
+Grove Clover and Cheena, owner-reported for Sugar Bush.
+
+**The headline finding: the measurement is good; the BUILDING SELECTION is not.**
+When the right building is matched, the ratio runs 0.90–1.02. Both bad rows are
+wrong-building matches — at Rushing Brook the correct structure (42.8 sq, ratio
+0.986) sits 21 m away; at Cheena the correct one (40.0 sq, ratio 1.079) sits
+25 m away. In every case `findClosest` reported an offset of 0–2 m, imagery
+HIGH and coverage 1.000, so **no existing gate could have caught it.**
+
+Root cause: `buildingInsights:findClosest` returns the nearest building
+**centre**. A detached garage 2 m from the address pin beats the actual house
+whose centre is 21 m away.
+
+**Automatic selection rules were tested and rejected:**
+
+| Rule                              | Mean ratio | Worst     | Within ±15% |
+| --------------------------------- | ---------- | --------- | ----------- |
+| findClosest (current)             | 0.841      | 0.549     | 4/6         |
+| Pin inside building's padded bbox | 0.841      | 0.549     | 4/6         |
+| Biggest building within 30 m      | 1.065      | **1.302** | 5/6         |
+
+"Biggest within 30 m" repairs Rushing Brook and Cheena but overshoots Grove
+Clover by 30% (it grabs a neighbour). **No rule was safe**, so the tool keeps
+findClosest and instead OFFERS the alternative: after a measurement it probes
+four points ~20 m out, and if a building ≥25% larger is adjacent it surfaces a
+one-tap "measure that one instead" button. Offer, never auto-switch.
+
+**Pitch** shows no systematic bias and should not be corrected: Google's
+area-weighted average vs the report's predominant pitch ran 6.0 vs 6, 8.2 vs 6,
+10.1 vs 12, 4.9 vs 5, 8.3 vs 9 — scatter of roughly ±2, in both directions.
+
+**Plane count ≠ facet count.** Google consistently resolves fewer planes than a
+photogrammetric report (9 vs 23, 6 vs 8, 20 vs 27, 22 vs 41, 5 vs 13), so the
+complexity buckets are tuned to GOOGLE plane counts, not report facet counts.
+
+**Waste model vs the reports' suggested factors:** Grove Clover 17% (model 17%
+✓), Sugar Bush 17% (model 17% ✓), Cheena 7% (model 15% ✗). Cheena is a simple
+roof with many small facets and only 69 ft of valleys, against Grove Clover's
+266 ft. **Valley and hip linear footage is the real driver of waste and free
+aerial data does not provide it** — plane count is a proxy that over-calls
+roofs like Cheena. Left unchanged rather than overfit to three data points; the
+report already presents waste as industry guidance, not a quantity to order.
+
+**No area correction factor applied.** With the wrong-building rows removed the
+remaining spread (0.90–1.02) is too tight and too small a sample to justify a
+multiplier, and applying one would amplify every mis-selected building.
+
+### Sheet 8 addendum 4 — rooftop geocoding needs its own key (2026-10-07)
+
+Tested whether a ROOFTOP-precision geocode fixes the wrong-building problem
+(addendum 3). **Google refuses the request outright:**
+
+> `REQUEST_DENIED: API keys with referer restrictions cannot be used with this API.`
+
+The Geocoding API does not accept HTTP-referrer (website) restricted keys —
+by design, it is a server-side web service. So the site's single public
+browser key **cannot** call it, no matter which APIs are enabled on it.
+
+Consequence for the "one key, no Vercel config" architecture the owner chose
+on 2026-08: rooftop geocoding is **not reachable** under it. Using it requires
+a SECOND key with no website restriction, which is a genuine secret and must
+live in a server environment variable — it can never be committed to the repo
+or shipped to the browser (that is exactly the mistake the competitor's embed
+makes with its own key).
+
+`/api/geocode` is built and env-gated on `GOOGLE_GEOCODING_API_KEY`: with no
+key it returns `{ available: false }` and the page silently keeps the Places
+pin, so nothing breaks. The page only accepts a geocode whose `location_type`
+is `ROOFTOP` — a vaguer result is no better than the Places point it already
+has. The moment the env var exists, the fix activates with no code change.
+
+Until then the live defences remain: the gold box around the measured
+building, the confirmation prompt, one-tap re-measure anywhere on the map, and
+the "bigger building next door" offer.
+
+---
+
+### Sheet 8 — addendum 5: the report is an information document, not a sales one (2026-10-07)
+
+Owner direction: the downloadable measurement report should read as a **roof
+measurement record**, not as Northvale marketing — "this is not a sales
+document, it's a roof report designed to give information… this is not a biased
+report, it's accurate information."
+
+What changed, and the line that was NOT crossed:
+
+- The cover masthead now leads with **ROOF MEASUREMENT REPORT**, not the
+  Northvale wordmark. The call-to-action block, the "free inspection" panel and
+  the price-factor list are gone; the sections that replaced them describe what
+  the measurement is, how it was produced and what it excludes.
+- **Who produced it is still disclosed on every page** — "Measurement prepared
+  by Northvale Roofing LLC · (713) 449-7661" in the footer, plus a named
+  preparer block on the final page. De-branding the _tone_ is legitimate;
+  implying an unaffiliated third party measured the roof would be a fabricated
+  fact (Hard Rule #2) and is not done. If the owner later wants a distinct
+  service name on the masthead, it needs a trademark check first and the
+  preparer disclosure stays either way.
+- Report reference prefix changed `NV-` → `RM-`; download filename
+  `Northvale-Roof-Report-*` → `Roof-Measurement-Report-*`.
+
+**Waste allowance is now explained rather than asserted** (owner asked for
+this explicitly). The report states what waste is (material cut to fit at hips,
+valleys, rakes and penetrations, plus starter and cap, plus a margin for
+damaged bundles), why it exists (offcuts cannot be reused), what it is for
+(the quantity to ORDER, so a crew does not run short mid-tear-off), and prints
+the full rule table — base 10 / 13 / 15% by complexity, +2% at 9/12 or steeper,
+capped at 20% — with the applied row marked. Percentages unchanged and still
+sourced in Sheet 8; only the explanation is new.
+
+One correction found while writing it: the complexity table's middle column
+read "9 sections or more" in trace mode, where complexity is **selected by the
+person tracing**, not derived from a section count. It now prints the shape
+descriptions in trace mode and the plane counts in aerial mode, so the table
+always describes the rule that actually ran.
+
+---
+
+### Sheet 8 — addendum 6: the report's visual language (2026-10-07)
+
+Addendum 5 de-branded the report's _content_; the owner's next note was that it
+still looked like Northvale — "still branded in Northvale font and colors, make
+this more like an EagleView". Fair: the words were neutral but Cormorant
+Garamond and brand gold were doing the opposite job.
+
+The report is now set the way measurement documents are set, and
+**`src/lib/roof-report-pdf.ts` is a stated exception to
+`docs/brand-guidelines.md`, not a drift from it:**
+
+- **Type:** Helvetica only (pdf-lib's built-in standard font), regular and
+  bold. No Cormorant, no Montserrat, nothing fetched or embedded. Side effects:
+  one less network round trip on download, the `@pdf-lib/fontkit` dependency
+  removed entirely, and the old-style-figures bug ("11.1" setting as "II.I")
+  gone by construction.
+- **Colour:** greyscale (`#14161a` / `#33373f` / `#6b7078` / `#d4d8dd` /
+  `#f2f4f6`) plus a single functional accent `#1c4f82`, used only where it
+  means something — the traced outline, the rule that applied, the ordering
+  figure. No brand gold or navy anywhere in the file.
+- **Structure:** black masthead bar on the cover; a running head on every
+  continuation page (document name left, subject property right); key figures
+  as a ruled five-cell strip over a dark ordering band, instead of one oversized
+  headline number; square bullets; rules instead of ornament.
+
+`public/fonts/pdf/*.ttf` (the four brand TTFs added for the previous version)
+are now unreferenced. Left in place rather than deleted — removing them is a
+cleanup for a human to confirm (Hard Rule #7).
+
+Also removed this round, at the owner's request: the rep photo picker on the
+calculator ("we won't need the take a photo option"). The automatic property
+image (Mapillary street level → USGS aerial) is unchanged; `ownPhoto` state,
+the EXIF-stripping canvas re-encode and the upload control are gone.
+
+---
+
+### Sheet 8 — addendum 7: no byline, shorter limitations (2026-10-07)
+
+Owner, 2026-10-07: "don't say who the measurement was prepared by, and also not
+as much info on the limitations — and if you do say things there, say that
+decking material is not calculated in the report. I like the ventilation
+information."
+
+Applied:
+
+- **No byline anywhere in the document.** The footer's "Measurement prepared by
+  Northvale Roofing LLC" line and the named preparer block on the final page
+  are both gone. The report is now UNATTRIBUTED.
+- **The distinction that keeps this honest:** unattributed is not the same as
+  falsely attributed. A measurement record is entitled to carry no byline. What
+  it must never do — in words or in styling — is assert that an independent
+  surveyor or a third-party firm produced it. Nothing in the document does, and
+  the PDF's own `Author`/`Producer` metadata is deliberately left accurate for
+  the same reason. This was raised with the owner before the first de-brand
+  (addendum 5) and he confirmed the direction; the constraint is recorded here
+  and in the `drawFooter` doc comment so a later change doesn't cross it by
+  accident.
+- **Limitations cut** from two sections and ten bullets to one section of four,
+  led by the one the owner asked for: _"Decking material is not calculated in
+  this report. The figures cover the roof covering only — the sheathing beneath
+  it, and its condition, are established on the roof."_
+- **Ventilation promoted**, since he likes it: its own block showing total net
+  free area and the even intake/exhaust split, with the working printed —
+  footprint ÷ 300 × 144 — and a plain definition of net free area. Source
+  unchanged (IRC R806.2 balanced 1-in-300 ratio, Sheet 8).
+- Final page retitled "Method, ventilation and reference", since it is no longer
+  mostly limitations.
+
+**Follow-up the same day — no company name at all, including metadata.** Owner:
+"take out all things Northvale and don't replace it with anything." So
+`roof-report-pdf.ts` no longer imports `brand.ts`, and the PDF's `Author` and
+`Producer` metadata fields are now left UNSET rather than filled with Northvale
+or with any substitute — an absent field claims nothing, whereas inventing a
+name would be a fabricated fact. Verified on a built sample: `Author` empty,
+`Producer` the pdf-lib default, and the string "Northvale" absent from the text
+of all four pages.
+
+This supersedes the note above about metadata being "left accurate". The
+substantive constraint is unchanged and is restated in the file header: the
+report is unattributed, and must never assert that an independent surveyor or
+third-party firm produced it.
+
+The imagery credit under the cover photo is NOT a company byline and stays: it
+names whichever source answered. USGS is public domain and needs no credit, but
+Mapillary street-level imagery is CC-BY-SA and attribution is a licence
+condition, so the line has to remain for that path.
+
+---
+
+### Sheet 8 — addendum 8: the cover image is supplied, never found (2026-10-07)
+
+Owner: "for the roof image allow me to upload or take an image please — only so
+not adding one you find. Make it so we only can upload one, but if it's not
+uploaded automatically use the outline as the roof image."
+
+This reverses the automatic-imagery approach of addendum 5 and supersedes the
+removal of the photo picker in addendum 6.
+
+- **A photograph only ever comes from the person running the measurement.** The
+  picker is back on the calculator: one control, `accept="image/*"` and
+  deliberately no `capture` attribute, so a phone offers both the camera and the
+  existing photo library. The file is downscaled to 1400px and re-encoded as
+  JPEG through a canvas, which also strips EXIF — phone photos carry GPS
+  coordinates that have no business travelling inside a forwarded document.
+  Nothing is uploaded to a server; the bytes go from the file straight into the
+  PDF in the browser.
+- **The report no longer fetches imagery by coordinate.** The page stopped
+  calling `/api/property-image`. With no photo supplied, the cover falls back to
+  the traced outline, drawn to scale in the photo's slot, unlabelled, captioned
+  "Traced roof outline — measured section by section on page 2".
+- **Why the fallback is the better default anyway:** the outline is the actual
+  geometry the figures were taken from, and it is unambiguously ours to print —
+  no licence condition, no credit line, and no risk of showing the wrong
+  building, which was the failure mode that produced the 0.55 and 0.68 ratios in
+  the original calibration table.
+- The imagery credit line is gone from the cover entirely, since neither path
+  needs one. `propertyImageCredit` was dropped from `ReportInput`.
+
+`/api/property-image` (Mapillary → USGS) is now unreferenced. Left in place
+rather than deleted — it is env-gated and harmless, and removing a route is a
+cleanup for a human to confirm (Hard Rule #7).
+
+---
+
+### Sheet 8 — addendum 9: ordering margin (2026-10-07)
+
+Owner: "does this follow industry guidelines or is it undervalued? I want it 1-2
+more than needed on squares if ever possible, not fully accurate … so we don't
+underquote or order."
+
+**Answer to the first part: the percentages are not undervalued.** 10 / 13 / 15
+sit inside the published ranges in the main Sheet 8 entry (simple 10%, hip
+12–15%, cut-up 15–20%), and the model reproduced EagleView's 17% exactly on both
+Sugar Bush and Grove Clover. The under-call risk is real but it is **not in the
+waste percentage** — it is in two other places:
+
+1. **The measured area reads light.** On the four correctly-matched roofs of the
+   calibration set the tool/truth ratios were 1.024, 0.971, 0.926 and 0.902 —
+   mean ≈ 0.96. Traced and aerial outlines clip eaves and overhangs.
+2. **Part squares.** Material is sold in whole bundles, so anything not rounded
+   up is short on arrival.
+
+**What was added: an explicit ordering margin, separate from the allowance.**
+
+```
+measured squares
+  × (1 + waste factor)      → squaresWithWaste   (unchanged, EagleView-matched)
+  rounded UP to whole square
+  + margin                  → squaresToOrder
+```
+
+Margin is **2 squares**, or **1** below 20 squares after waste, where 2 would be
+a tenth of the order.
+
+**Why a separate line rather than fatter waste percentages.** Raising the bases
+to smuggle in a safety margin would (a) break the EagleView match that is the
+report's entire credibility claim, and (b) misstate what a waste allowance is,
+in a document that prints the rule in full. The margin is a purchasing decision,
+so it is added after the allowance, labelled, and shown on its own row in the
+arithmetic chain. **The measured area is never touched by either** — inflating a
+measurement would breach Hard Rule #2, and is a different thing entirely from
+choosing to buy more than the measurement implies.
+
+This also supersedes the "no area correction factor" note above in practice: the
+bias that note identified is now absorbed by a visible, labelled margin instead
+of an invisible multiplier.
+
+Constants live in `src/lib/roof-report.ts` (`ORDER_MARGIN_SQUARES`,
+`ORDER_MARGIN_SMALL_SQUARES`, `SMALL_ROOF_SQUARES`) and are unit-tested,
+including that `squaresToOrder` can never fall below `squaresWithWaste`.
+
+**Still open:** valley linear footage remains the real driver of waste and is
+still unavailable (addendum 4). The margin reduces the consequence of that gap;
+it does not close it.
+
+---
+
+### Sheet 8 — addendum 10: starter and hip-and-ridge are separate orders (2026-10-07)
+
+Owner: "don't forget also that starter, hip and ridge shingles count also as
+squares for ordering."
+
+He is right that they were being under-accounted, and the report had an outright
+error: "WHAT THE ALLOWANCE COVERS" claimed the waste allowance covered "starter
+course along the eaves and rakes, and cap shingles along the hips and ridges."
+
+That is only true when starter and cap are **cut from field shingles**, which is
+3-tab practice. With laminated/architectural shingles — what IKO Cambridge and
+Dynasty are — starter and hip-and-ridge are **dedicated products, ordered in
+linear feet, outside the field square count entirely**. Claiming the allowance
+covered them meant a reader could order the square figure and arrive short of
+two whole product lines.
+
+Corrected, and the honest limit stated with it:
+
+- The allowance bullet now says starter and cap are covered only where they are
+  cut from field shingles, and points to the accessory list.
+- The ordering paragraph states the quantity covers **FIELD SHINGLES ONLY**.
+- A new block on the reference page, "ACCESSORY MATERIAL — ORDERED SEPARATELY,
+  NOT IN THE SQUARE COUNT":
+  - **ROOF EDGE — 268 ft** (measured: the traced perimeter; drip edge, starter
+    and gutter runs).
+  - **HIP & RIDGE — not measured.** An outline trace captures the perimeter and
+    nothing about the lines inside it. There is no sourced relationship between
+    footprint and ridge-plus-hip footage, so a plausible-looking figure here
+    would be invented (Hard Rule #2). It is printed as a stated absence, small
+    and grey so it cannot read as a quantity, with the instruction to measure it
+    on the roof and add it before ordering.
+
+**Deliberately NOT converted to squares**, despite the owner asking for squares:
+starter coverage runs roughly 100–120 lf per bundle and hip-and-ridge roughly
+20–33 lf per bundle, both varying by product. Picking one rate would state a
+bundle count the product may not deliver. Linear feet is what these are ordered
+in and what a supplier converts from — the same reasoning already applied to
+bundles per square. If the owner names the IKO starter and hip-and-ridge
+products the company stocks, their published coverage rates can be sourced here
+and the report can then print bundles.
+
+**This is the second time hip/ridge/valley line length has been the blocker**
+(see addendum 4 on valley footage driving waste). One change fixes both: let the
+rep trace ridge, hip and valley LINES as well as the outline. That is the next
+real build on this tool.
+
+---
+
+### Sheet 8 — addendum 11: margin folded into the waste factor (2026-10-07)
+
+Owner: "don't say we are adding 2 additional squares, just automatically add it
+to the waste factor … so a 12%, 15% and 20% waste factor instead."
+
+This replaces addendum 9. The separate "ordering margin" line, the round-up row
+and the `orderMargin` / `squaresToOrder` fields are all gone; there is one
+number again, and the safety sits inside it.
+
+**New bases: simple 12% · moderate 15% · complex 20%** (was 10 / 13 / 15).
+Steep-pitch adder +2% and the 20% cap are unchanged.
+
+**Where this sits against the sourced ranges** (main Sheet 8 entry: simple 10%,
+hip 12–15%, cut-up 15–20%): 12 / 15 / 20 is the **top of each published range
+without leaving any of them**. The report now says so in those words — "these
+allowances sit at the upper end of published industry guidance rather than the
+middle, so an order is not short" — rather than calling them simply
+industry-standard, which would understate the deliberate conservatism.
+
+**What this costs, stated plainly:** the model no longer matches EagleView. Sugar
+Bush was the calibration anchor at 17% and now prints 20%; Grove Clover the same.
+On a 52-square roof that is 62.6 squares to order against EagleView's 61.1 —
+about 1.5 squares of head room, which is the owner's stated intent. A homeowner
+holding both documents will see a 3-point difference in the waste line. The unit
+test that asserted the EagleView match has been inverted to assert the gap is
+intentional, so nobody "fixes" it back.
+
+**A consequence worth watching:** complex roofs now sit ON the 20% cap, so the
+steep-pitch adder has nowhere to go and is silently swallowed there. Rather than
+print "20% + 2% = 20%" and look like an arithmetic error, the report says
+"capped at 20%" / "held at the cap" whenever the ceiling actually binds. The
+adder still bites where there is headroom: simple steep 12→14, moderate steep
+15→17.
+
+The measured area is still never touched. Only the allowance moved.
+
+---
+
+### Sheet 8 — addendum 12: the 12/15/20 model re-checked against all six reports (2026-10-08)
+
+Owner asked whether the raised waste factors still come back level with the
+EagleView / GAF reports. Re-ran the model (`wasteAllowance`, the real code) for
+every roof in the addendum-3 set, at the report's own predominant pitch and the
+roof shape a rep would pick from the facet and valley counts.
+
+| Roof                            | Pitch | Facets | Valleys | Report | Model | Δ   | Their order | Our order | Δ sq |
+| ------------------------------- | ----- | ------ | ------- | ------ | ----- | --- | ----------- | --------- | ---- |
+| 7223 Kennedale Ln, Spring       | 6/12  | 8      | 35 ft   | 15%    | 15%   | +0  | 36.3        | 36.3      | +0.0 |
+| 103 Grove Clover Ln, Montgomery | 6/12  | 41     | 266 ft  | 17%    | 20%   | +3  | 66.2        | 67.9      | +1.7 |
+| 5806 Sugar Bush Dr, Magnolia    | 9/12  | 17     | —       | 17%    | 20%   | +3  | 56.0        | 57.5      | +1.4 |
+| 2305 Acadiana Ln, Seabrook      | 12/12 | 27     | 153 ft  | 20%    | 20%   | +0  | 51.0        | 51.0      | +0.0 |
+| 5523 Cheena Dr, Houston         | 5/12  | 13     | 69 ft   | 7%     | 15%   | +8  | 39.7        | 42.7      | +3.0 |
+| 3019 Rushing Brook Dr, Houston  | 7/12  | 23     | 105 ft  | 15%\*  | 20%   | +5  | 49.9        | 52.1      | +2.2 |
+
+**The model meets or exceeds the report's waste on 6 of 6, and never falls under
+it.** Over-order runs +0.0 to +3.0 squares, which is the owner's stated intent
+("1-2 more than needed … so we don't underquote or order").
+
+Provenance of the "Report" column — worth knowing which are stated and which are
+read off the table:
+
+- **GAF QuickMeasure** (Grove Clover 17%, Cheena 7%): the first non-zero column
+  of the waste ladder is GAF's suggested factor. Stated.
+- **EagleView Kennedale (15%) and Acadiana (20%)**: inferred, but reliably. The
+  standard ladder is 0/5/10/15/20/25/30 and EagleView inserts the suggested
+  factor flanked by ±2 — Kennedale reads 0,5,10,**13,15,17**,20,25,30 and
+  Acadiana 0,5,10,15,**18,20,22**,25,30.
+- **\*Rushing Brook (15%)**: the short table offers only 0/10/15 with no
+  suggestion marked, so 15% is the TOP of what the report offered, not a stated
+  recommendation. Treated as the conservative read.
+
+**Cheena remains the known outlier** (+8 points) and the reason is unchanged
+since addendum 4: 13 facets but only 69 ft of valleys, against Grove Clover's
+266 ft. Facet count over-calls a roof that is busy-looking but barely cut up.
+The error is in the SAFE direction, so it no longer threatens an order — it just
+costs about 3 squares of surplus on roofs of that shape.
+
+**What this does NOT test.** Only the waste factor was re-checked. The square
+count could not be: the addendum-3 "Tool at pin" column came from the automatic
+aerial measurement, which no longer exists — the tool is trace-first, so the
+outline is drawn by a person and cannot be reproduced from here. Validating the
+measurement needs the owner to trace each of the six addresses and compare
+against the report's 0%-waste square count (31.6 / 56.6 / 47.9 / 42.5 / 37.1 /
+43.4). Procedure handed over 2026-10-08.

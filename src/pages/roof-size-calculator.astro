@@ -64,9 +64,10 @@ const seo = {
     <h1 class="mt-6 text-4xl md:text-5xl">How big is your roof?</h1>
     <div class="rule-gold mt-6" aria-hidden="true"></div>
     <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
-      Type your address and get your roof's size in seconds — measured plane by plane from aerial
-      imagery, or traced by you on the satellite map. Size only, no price games: the exact number
-      comes free, in writing, from a real inspection.
+      Find your address, trace your roof on the satellite view, and get its size in squares. You
+      pick the outline, so it follows your real eaves — not a computer's guess at which building is
+      yours. Size only, no price games: the exact number comes free, in writing, from a real
+      inspection.
     </p>
     <div class="mt-6 flex flex-wrap gap-3">
       <CTAButton href="/contact" label="Get the exact number free" ctaId="rooftool-book" />
@@ -106,19 +107,20 @@ const seo = {
                 class="mt-2.5 min-h-5 text-sm text-[color:var(--color-ink-600)]"
                 aria-live="polite"
               >
-                Start typing and pick your address — we'll find your roof.
+                Start typing and pick your address — then trace your roof on the map.
               </p>
               <div
                 id="rt-map"
                 class="mt-4 h-[380px] w-full overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] md:h-[440px]"
               />
+
               <div class="mt-4 flex flex-wrap items-center gap-2.5">
                 <button
                   id="rt-draw"
                   type="button"
                   class="rounded-full border border-[color:var(--color-navy-100)] bg-white px-4 py-2 text-sm font-semibold text-[color:var(--color-navy-900)] transition-colors hover:border-[color:var(--color-gold-400)] hover:text-[color:var(--color-gold-600)]"
                 >
-                  ✏️ Trace it myself
+                  ✏️ Trace my roof
                 </button>
                 <button
                   id="rt-reset"
@@ -148,6 +150,31 @@ const seo = {
                 >
                   Clear outline
                 </button>
+                <div id="rt-complexity" class="hidden w-full flex-wrap items-center gap-2">
+                  <span class="text-xs text-[color:var(--color-ink-600)]">Roof shape:</span>
+                  <button
+                    type="button"
+                    data-complexity="simple"
+                    class="rt-cx-btn rounded-full border border-[color:var(--color-navy-100)] bg-white px-3 py-1.5 text-xs font-semibold text-[color:var(--color-navy-900)]"
+                  >
+                    Simple gable
+                  </button>
+                  <button
+                    type="button"
+                    data-complexity="moderate"
+                    class="rt-cx-btn rt-cx-active rounded-full border border-[color:var(--color-navy-100)] bg-white px-3 py-1.5 text-xs font-semibold text-[color:var(--color-navy-900)]"
+                  >
+                    Hips / a dormer or two
+                  </button>
+                  <button
+                    type="button"
+                    data-complexity="complex"
+                    class="rt-cx-btn rounded-full border border-[color:var(--color-navy-100)] bg-white px-3 py-1.5 text-xs font-semibold text-[color:var(--color-navy-900)]"
+                  >
+                    Cut up — lots of valleys
+                  </button>
+                </div>
+
                 <div id="rt-pitch" class="hidden flex-wrap items-center gap-2" data-mult="1.118">
                   <span class="text-xs text-[color:var(--color-ink-600)]">Roof steepness:</span>
                   <button
@@ -187,6 +214,32 @@ const seo = {
               class="self-start rounded-2xl border border-[color:var(--color-navy-100)] bg-white p-6 shadow-sm md:p-7"
               aria-live="polite"
             >
+              {/* Cover photo for the report. Supplied by the person, never
+                  fetched from an imagery service (owner, 2026-10): a photo of
+                  the actual house beats anything found by coordinates, and it
+                  is unambiguously ours to print. With no photo the report falls
+                  back to the traced outline as its cover image. Previewed here
+                  so what downloads is never a surprise. */}
+              <figure id="rt-photo-wrap" class="mb-5 hidden">
+                <img
+                  id="rt-photo"
+                  alt="Photograph of the measured property"
+                  class="block w-full rounded-xl border border-[color:var(--color-navy-100)]"
+                  decoding="async"
+                />
+              </figure>
+
+              {/* No `capture` attribute on purpose: with it the phone opens
+                  straight to the camera and the existing-photo option is lost.
+                  Without it the OS offers both. */}
+              <label
+                for="rt-own-photo"
+                class="mb-5 flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-[color:var(--color-navy-100)] px-3 py-2.5 text-sm font-semibold text-[color:var(--color-navy-900)] hover:border-[color:var(--color-gold-400)] hover:text-[color:var(--color-gold-600)]"
+              >
+                <span id="rt-own-photo-label">Add a photo of the home (optional)</span>
+              </label>
+              <input id="rt-own-photo" type="file" accept="image/*" class="sr-only" />
+
               <p class="text-xs font-semibold tracking-[0.14em] text-[color:var(--color-ink-500)] uppercase">
                 Your roof measures
               </p>
@@ -197,7 +250,17 @@ const seo = {
                 >
                   —
                 </span>
-                <span class="text-lg text-[color:var(--color-ink-500)]"> squares</span>
+                <span class="text-lg text-[color:var(--color-ink-500)]"> squares measured</span>
+              </p>
+              {/* The with-waste figure is what other estimators headline, so
+                  show it with equal weight rather than burying it. */}
+              <p class="mt-2.5 flex items-baseline gap-2">
+                <span id="rt-order" class="font-serif text-3xl text-[color:var(--color-navy-900)]">
+                  —
+                </span>
+                <span id="rt-order-note" class="text-sm text-[color:var(--color-ink-500)]">
+                  squares to order
+                </span>
               </p>
               <dl class="mt-6 space-y-3 border-t border-[color:var(--color-navy-100)] pt-5 text-sm">
                 <div class="flex items-baseline justify-between gap-4">
@@ -223,15 +286,42 @@ const seo = {
                 id="rt-meta"
                 class="mt-4 min-h-4 text-xs leading-relaxed text-[color:var(--color-ink-500)]"
               />
+
+              {/* Shown instead of numbers when canopy/imagery makes the
+                  measurement untrustworthy — we block rather than guess. */}
+              <div
+                id="rt-blocked"
+                class="mt-4 hidden rounded-xl border border-[color:var(--color-gold-400)] bg-[color:var(--color-gold-50)] p-4"
+              >
+                <p class="text-sm font-semibold text-[color:var(--color-navy-900)]">
+                  We can't measure this one from the air
+                </p>
+                <p
+                  id="rt-blocked-msg"
+                  class="mt-1.5 text-xs leading-relaxed text-[color:var(--color-ink-700)]"
+                />
+              </div>
+
+              <button
+                id="rt-download"
+                type="button"
+                disabled
+                class="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-[color:var(--color-navy-900)] px-5 py-3 text-sm font-bold text-[color:var(--color-navy-900)] transition-colors hover:bg-[color:var(--color-navy-900)] hover:text-white disabled:cursor-not-allowed disabled:border-[color:var(--color-navy-100)] disabled:text-[color:var(--color-ink-500)] disabled:hover:bg-transparent disabled:hover:text-[color:var(--color-ink-500)]"
+              >
+                <span id="rt-download-label">Download measurement report (PDF)</span>
+              </button>
+
               <a
                 href="#roof-lead"
-                class="mt-6 inline-flex w-full items-center justify-center rounded-full bg-[color:var(--color-gold-400)] px-5 py-3 text-sm font-bold text-[color:var(--color-navy-950)] transition-colors hover:bg-[color:var(--color-gold-300)]"
+                class="mt-3 inline-flex w-full items-center justify-center rounded-full bg-[color:var(--color-gold-400)] px-5 py-3 text-sm font-bold text-[color:var(--color-navy-950)] transition-colors hover:bg-[color:var(--color-gold-300)]"
               >
                 Get the exact number, free & in writing
               </a>
               <p class="mt-3 text-xs leading-relaxed text-[color:var(--color-ink-500)]">
-                A satellite estimate is for orientation — trees, new construction, and complex
-                rooflines can throw it off. We measure on-site before any contract price.
+                A satellite estimate is for orientation. Aerial models tend to clip eaves and smooth
+                the steepest slopes, so they read a little under a full measurement — and trees, new
+                construction and complex rooflines all affect them. We measure on-site before any
+                contract price.
               </p>
             </div>
           </div>
@@ -246,9 +336,8 @@ const seo = {
       <p>
         Roofers measure in <strong>squares</strong> — one square is 100 square feet of roof surface. Your
         roof's surface is larger than your home's floor plan, because slope adds area: the steeper the
-        pitch, the more roof sits over the same footprint. When aerial data is available we measure every
-        roof plane and its own slope; when it isn't, you trace the building outline and pick a steepness,
-        and we do the honest math from there.
+        pitch, the more roof sits over the same footprint. You trace the outline and pick the steepness,
+        and we do the geometry from there — the same slope math a roofer uses.
       </p>
       <h2>Why we stop at size</h2>
       <p>
@@ -270,36 +359,105 @@ const seo = {
 </BaseLayout>
 
 <style is:global>
+  .rt-cx-active,
   .rt-pitch-active {
     background: var(--color-gold-400);
     border-color: var(--color-gold-400) !important;
     color: var(--color-navy-950) !important;
   }
-  /* The Google autocomplete web component fills its white pill shell.
-     color-scheme + the gmp-mat tokens pin it to our light palette even when
-     the visitor's device is in dark mode (otherwise it paints itself black). */
-  #rt-pac gmp-place-autocomplete {
+  /* Google's autocomplete web component.
+     Styled through the documented ::part() hooks rather than the internal
+     --gmp-mat-* tokens those were undocumented, and when they stopped applying
+     the suggestion list lost its background entirely and rendered transparent
+     over the map (owner bug report, 2026-10).
+     Parts per the PlaceAutocompleteElement reference: prediction-list,
+     prediction-item, prediction-item-main-text, prediction-item-match,
+     prediction-item-selected.
+     Not scoped under #rt-pac on purpose: the list can render in the top layer,
+     and ::part is matched through the host element either way. */
+  gmp-place-autocomplete {
     display: block;
     width: 100%;
+    /* Pin to light even when the visitor's device is dark, or the widget
+       paints itself black inside our white pill. */
     color-scheme: light;
-    font-family: inherit;
-    --gmp-mat-color-surface: #ffffff;
-    --gmp-mat-color-on-surface: var(--color-ink-800);
-    --gmp-mat-color-on-surface-variant: var(--color-ink-500);
-    --gmp-mat-color-primary: var(--color-gold-600);
-    --gmp-mat-color-outline: transparent;
-    --gmp-mat-color-outline-variant: var(--color-navy-100);
-    background: #ffffff;
+    background-color: #ffffff;
+    /* NOT `inherit`: inheritable properties cross into the shadow DOM, which
+       was dragging Cormorant into the dropdown at heading size. */
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: var(--color-ink-800);
+  }
+  /* The surface. Google's own rule is
+     `background-color: light-dark(#fff, #131314)`, which yields nothing at all
+     if that declaration is ever dropped — hence the transparent list. Stating
+     it here removes the dependency: an outer-tree ::part rule wins over the
+     shadow tree's own styles.
+     Deliberately no `display` here: the widget shows and hides the list with an
+     inline style, which a ::part rule could only beat with !important, and that
+     would pin it open. */
+  gmp-place-autocomplete::part(prediction-list) {
+    background-color: #ffffff;
+    border: 1px solid var(--color-navy-100);
+    border-radius: 14px;
+    box-shadow: 0 14px 34px rgb(14 24 47 / 0.18);
+    padding: 4px;
+    margin-top: 6px;
+    max-height: 320px;
+    overflow-y: auto;
+  }
+  /* Each row lays itself out, so a row still reads as a row even if the
+     widget's internal stylesheet never applies. */
+  gmp-place-autocomplete::part(prediction-item) {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #ffffff;
+    color: var(--color-ink-500);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.35;
+    white-space: normal;
+    padding: 10px 12px;
+    border-radius: 10px;
+  }
+  gmp-place-autocomplete::part(prediction-item-main-text) {
+    color: var(--color-navy-900);
+    font-weight: 600;
+  }
+  gmp-place-autocomplete::part(prediction-item-match) {
+    /* Gold Deep, not Gold 400 — gold fails WCAG on white
+       (docs/brand-guidelines.md). */
+    color: var(--color-gold-600);
+    font-weight: 700;
+  }
+  gmp-place-autocomplete::part(prediction-item-selected) {
+    background-color: var(--color-surface-ivory);
   }
 </style>
 
 <script>
   /**
-   * Roof measuring tool. Auto mode: address → lat/lng → /api/roof-measure
-   * (server-side Solar API). Manual mode: draw polygons on the satellite map;
-   * area × chosen pitch multiplier (real geometry — sqrt(1 + rise²/144), no
-   * hidden "waste" padding). Nothing typed here is stored server-side.
+   * Roof measuring tool.
+   *
+   * Auto mode: address → lat/lng → Google's Solar API (browser-direct with the
+   * site's domain-locked public key), reduced to the shared RoofSummary so the
+   * screen and the PDF can never disagree. Manual mode: tap the roof's corners;
+   * traced area × the chosen slope multiplier (real geometry, sec(pitch) — no
+   * hidden "waste" padding in the measurement itself).
+   *
+   * A measurement that fails the confidence gate (heavy canopy, poor imagery,
+   * planes that don't add up) shows NO number at all — see lib/roof-report.ts.
+   * Nothing typed here is stored server-side.
    */
+  import {
+    buildRoofSummary,
+    pitchRangeLabel,
+    formatImageryDate,
+    type RoofPlane,
+    type RoofSummary,
+  } from "~/lib/roof-report";
+
   const root = document.getElementById("nv-rooftool");
   const KEY = root?.dataset.key ?? "";
 
@@ -314,7 +472,13 @@ const seo = {
       address: "",
       polygons: [] as any[],
       pitchMult: 1.118,
-      lastResult: null as null | { squares: number; surface: number; source: string },
+      complexity: "moderate" as "simple" | "moderate" | "complex",
+      /** Photo the person supplied (JPEG bytes). The only cover image source. */
+      ownPhoto: null as Uint8Array | null,
+      /** Last publishable measurement — drives the panel, form and PDF alike. */
+      summary: null as RoofSummary | null,
+      method: "aerial" as "aerial" | "manual",
+      center: null as { lat: number; lng: number } | null,
     };
 
     function loadMaps(key: string): Promise<any> {
@@ -330,42 +494,129 @@ const seo = {
       });
     }
 
-    const pitchLabel = (deg: number) => {
-      const rise = Math.round(Math.tan((deg * Math.PI) / 180) * 12);
-      return `≈ ${rise}/12 (${deg}°)`;
-    };
+    const blockedBox = el("rt-blocked");
+    const downloadBtn = el("rt-download") as HTMLButtonElement;
 
-    function render(
-      surfaceFt2: number,
-      footprintFt2: number,
-      pitchText: string,
-      meta: string,
-      source: string,
-    ) {
-      const squares = surfaceFt2 / 100;
-      el("rt-squares").textContent = squares > 0 ? squares.toFixed(1) : "—";
-      el("rt-surface").textContent = surfaceFt2 > 0 ? `${fmt(surfaceFt2)} ft²` : "—";
-      el("rt-footprint").textContent = footprintFt2 > 0 ? `${fmt(footprintFt2)} ft²` : "—";
-      el("rt-pitchout").textContent = pitchText;
-      el("rt-meta").textContent = meta;
-      state.lastResult = squares > 0 ? { squares, surface: surfaceFt2, source } : null;
+    function showBlocked(message: string) {
+      blockedBox.classList.remove("hidden");
+      el("rt-blocked-msg").textContent = message;
+    }
+    function hideBlocked() {
+      blockedBox.classList.add("hidden");
+    }
+
+    const photoWrap = el("rt-photo-wrap");
+    const photoImg = el("rt-photo") as HTMLImageElement;
+    const ownInput = el("rt-own-photo") as HTMLInputElement;
+    const ownLabel = el("rt-own-photo-label");
+    const PICK_LABEL = "Add a photo of the home (optional)";
+
+    /**
+     * Read the chosen photo, downscale it and re-encode as JPEG.
+     *
+     * Re-encoding through a canvas also strips EXIF, which matters: phone
+     * photos carry GPS coordinates, and those have no business travelling
+     * inside a document someone forwards. Nothing is uploaded anywhere — the
+     * bytes go from the file straight into the PDF in this browser.
+     */
+    ownInput.addEventListener("change", async () => {
+      const file = ownInput.files?.[0];
+      if (!file) return;
+      ownLabel.textContent = "Preparing photo…";
+      try {
+        // `from-image` honours the EXIF rotation flag, so portrait shots from
+        // a phone don't land sideways in the report.
+        const bitmap = await createImageBitmap(file, { imageOrientation: "from-image" });
+        const maxW = 1400;
+        const scale = Math.min(1, maxW / bitmap.width);
+        const w = Math.round(bitmap.width * scale);
+        const h = Math.round(bitmap.height * scale);
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext("2d")!.drawImage(bitmap, 0, 0, w, h);
+        bitmap.close?.();
+
+        const blob: Blob | null = await new Promise((res) =>
+          canvas.toBlob((b) => res(b), "image/jpeg", 0.85),
+        );
+        if (!blob) throw new Error("encode failed");
+
+        state.ownPhoto = new Uint8Array(await blob.arrayBuffer());
+        photoImg.src = URL.createObjectURL(blob);
+        photoWrap.classList.remove("hidden");
+        ownLabel.textContent = "Use a different photo";
+      } catch {
+        ownLabel.textContent = "Couldn't read that image — try another";
+        setTimeout(() => (ownLabel.textContent = PICK_LABEL), 4000);
+      }
+    });
+
+    /**
+     * Single render path for both modes. A blocked verdict clears the figures
+     * entirely — we show nothing rather than a number we don't trust.
+     */
+    function applySummary(summary: RoofSummary | null, method: "aerial" | "manual") {
+      state.method = method;
+
+      if (!summary || summary.confidence.level === "blocked") {
+        state.summary = null;
+        el("rt-squares").textContent = "—";
+        el("rt-order").textContent = "—";
+        el("rt-order-note").textContent = "squares to order";
+        el("rt-surface").textContent = "—";
+        el("rt-footprint").textContent = "—";
+        el("rt-pitchout").textContent = "—";
+        el("rt-meta").textContent = "";
+        downloadBtn.disabled = true;
+        if (summary) showBlocked(summary.confidence.message);
+        else hideBlocked();
+        return;
+      }
+
+      hideBlocked();
+      state.summary = summary;
+      el("rt-squares").textContent = summary.squares.toFixed(1);
+      el("rt-order").textContent = summary.squaresWithWaste.toFixed(1);
+      el("rt-order-note").textContent = `squares to order (incl. ${summary.waste.percent}% waste)`;
+      el("rt-surface").textContent = `${fmt(summary.surfaceFt2)} ft²`;
+      el("rt-footprint").textContent = `${fmt(summary.footprintFt2)} ft²`;
+      el("rt-pitchout").textContent = pitchRangeLabel(summary.pitchRangeDeg);
+
+      const imagery = formatImageryDate(summary.imageryDate);
+      const parts: string[] = [];
+      if (method === "aerial") {
+        parts.push(
+          `Measured across ${summary.planes.length} roof plane${summary.planes.length === 1 ? "" : "s"}.`,
+        );
+        if (imagery) parts.push(`Imagery ${imagery}.`);
+      } else {
+        parts.push("Traced by you — drag the dots to fine-tune.");
+      }
+      parts.push(
+        `Waste allowance ${summary.waste.percent}% → ${summary.squaresWithWaste.toFixed(1)} squares to order.`,
+      );
+      if (summary.confidence.level === "reduced") parts.push(summary.confidence.message);
+      el("rt-meta").textContent = parts.join(" ");
+
+      downloadBtn.disabled = false;
       prefillLeadForm();
     }
 
     function prefillLeadForm() {
-      if (!state.lastResult) return;
+      const s = state.summary;
+      if (!s) return;
       const form = document.querySelector<HTMLElement>("#roof-lead");
       const addressInput = form?.querySelector<HTMLInputElement>('input[name="address"]');
       const notes = form?.querySelector<HTMLTextAreaElement>('textarea[name="notes"]');
       if (addressInput && state.address && !addressInput.value) addressInput.value = state.address;
       if (notes) {
-        notes.value = `Roof size tool: ≈ ${state.lastResult.squares.toFixed(1)} squares (~${fmt(state.lastResult.surface)} ft² surface)${state.address ? ` at ${state.address}` : ""} — ${state.lastResult.source} measurement.`;
+        notes.value = `Roof size tool: ≈ ${s.squares.toFixed(1)} squares (~${fmt(s.surfaceFt2)} ft² surface, ${pitchRangeLabel(s.pitchRangeDeg)} pitch, ${s.waste.percent}% waste → ${s.squaresWithWaste.toFixed(1)} to order)${state.address ? ` at ${state.address}` : ""} — ${state.method === "aerial" ? "aerial" : "hand-traced"} measurement.`;
       }
     }
 
     function clearResults(prompt: string) {
-      render(0, 0, "—", "", "");
-      el("rt-meta").textContent = "";
+      applySummary(null, state.method);
       setStatus(prompt);
     }
 
@@ -399,12 +650,31 @@ const seo = {
               }
               const loc = place?.location;
               if (!loc) return;
-              const lat = typeof loc.lat === "function" ? loc.lat() : loc.lat;
-              const lng = typeof loc.lng === "function" ? loc.lng() : loc.lng;
+              let lat = typeof loc.lat === "function" ? loc.lat() : loc.lat;
+              let lng = typeof loc.lng === "function" ? loc.lng() : loc.lng;
               state.address = place.formattedAddress ?? "";
+
+              // Prefer a ROOFTOP-precision pin when the server has a geocoding
+              // key: the Places point is tuned for finding places, not for
+              // landing on a roof, and an off-by-20 m pin is what makes the
+              // measurement grab a garage (Sheet 8 addendum 3). Falls through
+              // silently to the Places point when unconfigured.
+              const better = await rooftopPin(state.address);
+              if (better) {
+                lat = better.lat;
+                lng = better.lng;
+              }
+
               map.setCenter({ lat, lng });
               map.setZoom(20);
-              await measureAuto(lat, lng);
+              state.center = { lat, lng };
+              // Trace-first (owner, 2026-10). Automatic aerial measurement was
+              // wrong on 1 in 3 of the EagleView-checked roofs because it
+              // picked the wrong building; tracing puts that choice in the
+              // hands of someone who can see the house, and follows the eave
+              // edge that Google's model clips.
+              enableManual();
+              computeManual();
             } catch {
               setStatus("Couldn't read that address — try picking it from the list again.");
             }
@@ -420,98 +690,20 @@ const seo = {
         }
 
         // --- Auto measurement ---
-        // Primary: the site's one public key calls the Solar API straight
-        // from the browser (the key is domain-locked + quota-capped, so this
-        // is the whole configuration — "Wix-style" per the owner). If the
-        // optional server proxy (/api/roof-measure) is ever configured in
-        // Vercel, it is tried first and simply wins.
-        function solarReduce(data: any) {
-          const sp = data?.solarPotential;
-          const segs: any[] = Array.isArray(sp?.roofSegmentStats) ? sp.roofSegmentStats : [];
-          let roofM2 = 0;
-          let planM2 = 0;
-          let pitchWeighted = 0;
-          for (const seg of segs) {
-            const pitchDeg = Number(seg?.pitchDegrees ?? 0);
-            const area = Number(seg?.stats?.areaMeters2 ?? 0);
-            const ground = Number(seg?.stats?.groundAreaMeters2 ?? 0);
-            const cos = Math.cos((pitchDeg * Math.PI) / 180) || 1;
-            const segRoof = area || ground / cos;
-            roofM2 += segRoof;
-            planM2 += ground || area * cos;
-            pitchWeighted += pitchDeg * segRoof;
-          }
-          if (roofM2 <= 0 && sp?.wholeRoofStats) {
-            roofM2 = Number(sp.wholeRoofStats.areaMeters2 ?? 0);
-            planM2 = Number(sp.wholeRoofStats.groundAreaMeters2 ?? 0) || roofM2;
-          }
-          if (roofM2 <= 0) return null;
-          const M2_TO_FT2 = 10.7639;
-          const roofFt2 = roofM2 * M2_TO_FT2;
-          return {
-            available: true,
-            roofFt2: Math.round(roofFt2),
-            planFt2: Math.round((planM2 || roofM2) * M2_TO_FT2),
-            avgPitchDeg: segs.length > 0 ? Math.round(pitchWeighted / roofM2) : null,
-            segments: segs.length,
-            imageryDate: data?.imageryDate ?? null,
-          };
-        }
+        const M2_TO_FT2 = 10.7639;
 
-        async function fetchMeasurement(lat: number, lng: number): Promise<any | null> {
-          // Optional server proxy first (present only when Vercel env is set).
+        /**
+         * ROOFTOP geocode via our server, or null. Used only to centre the map
+         * tightly on the house — nothing is measured from it.
+         */
+        async function rooftopPin(address: string): Promise<{ lat: number; lng: number } | null> {
+          if (!address) return null;
           try {
-            const res = await fetch(`/api/roof-measure?lat=${lat}&lng=${lng}`);
-            const data = await res.json();
-            if (data.available) return data;
-            if (data.reason && data.reason !== "unconfigured") return null; // real "no coverage"
-          } catch {
-            /* fall through to direct */
-          }
-          // Direct from the browser with the site's public, domain-locked key.
-          try {
-            const res = await fetch(
-              "https://solar.googleapis.com/v1/buildingInsights:findClosest" +
-                `?location.latitude=${lat}&location.longitude=${lng}` +
-                `&requiredQuality=LOW&key=${encodeURIComponent(KEY)}`,
-            );
-            if (!res.ok) return null;
-            return solarReduce(await res.json());
+            const res = await fetch(`/api/geocode?address=${encodeURIComponent(address)}`);
+            const d = await res.json();
+            return d?.available && d.rooftop ? { lat: d.lat, lng: d.lng } : null;
           } catch {
             return null;
-          }
-        }
-
-        async function measureAuto(lat: number, lng: number) {
-          setStatus("Measuring your roof from aerial imagery…");
-          try {
-            const data = await fetchMeasurement(lat, lng);
-            if (!data) {
-              setStatus(
-                "No aerial roof data for this address — trace your roof with the ✏️ tool instead.",
-              );
-              enableManual();
-              return;
-            }
-            state.mode = "auto";
-            disableManual();
-            const when = data.imageryDate?.year
-              ? ` Imagery from ${data.imageryDate.month ?? ""}/${data.imageryDate.year}.`.replace(
-                  " /",
-                  " ",
-                )
-              : "";
-            render(
-              data.roofFt2,
-              data.planFt2,
-              data.avgPitchDeg != null ? pitchLabel(data.avgPitchDeg) : "—",
-              `Measured across ${data.segments} roof plane${data.segments === 1 ? "" : "s"}.${when}`,
-              "aerial",
-            );
-            setStatus("Done — measured plane by plane. Not looking right? Trace it yourself (✏️).");
-          } catch {
-            setStatus("Measurement hiccup — trace your roof with the ✏️ tool instead.");
-            enableManual();
           }
         }
 
@@ -528,6 +720,8 @@ const seo = {
           tracing = true;
           el("rt-pitch").classList.remove("hidden");
           el("rt-pitch").classList.add("flex");
+          el("rt-complexity").classList.remove("hidden");
+          el("rt-complexity").classList.add("flex");
           traceBtnEls().forEach((b) => b.classList.remove("hidden"));
           map.setOptions({ draggableCursor: "crosshair" });
         }
@@ -536,11 +730,20 @@ const seo = {
           currentPoly = null;
           el("rt-pitch").classList.add("hidden");
           el("rt-pitch").classList.remove("flex");
+          el("rt-complexity").classList.add("hidden");
+          el("rt-complexity").classList.remove("flex");
           traceBtnEls().forEach((b) => b.classList.add("hidden"));
           map.setOptions({ draggableCursor: undefined });
         }
         map.addListener("click", (e: any) => {
-          if (!tracing || !e.latLng) return;
+          if (!e.latLng) return;
+          // Not tracing? A click re-runs the measurement on whatever building
+          // you tapped. This is the only real defence against a confidently
+          // wrong match: every automated check we have compares Google's
+          // geocode against Google's own building model, so when those two
+          // agree with each other and disagree with reality, nothing catches
+          // it but a person looking at the map (owner bug report, 2026-10).
+          if (!tracing) return;
           if (!currentPoly) {
             currentPoly = new google.maps.Polygon({
               map,
@@ -584,32 +787,76 @@ const seo = {
           computeManual();
         });
         function computeManual() {
-          const M2_TO_FT2 = 10.7639;
+          // The slope multiplier is sec(pitch), so pitch = acos(1/mult).
+          const pitchDeg = (Math.acos(1 / state.pitchMult) * 180) / Math.PI;
+          const planes: RoofPlane[] = [];
           let planM2 = 0;
+          let perimeterM = 0;
           state.polygons.forEach((poly) => {
             const path = poly.getPath().getArray();
-            if (path.length >= 3) planM2 += google.maps.geometry.spherical.computeArea(path);
+            if (path.length < 3) return;
+            const areaM2 = google.maps.geometry.spherical.computeArea(path);
+            if (areaM2 <= 0) return;
+            planM2 += areaM2;
+            perimeterM += google.maps.geometry.spherical.computeLength([...path, path[0]]);
+            // One traced section = one plane, so complexity still drives waste.
+            planes.push({
+              areaFt2: areaM2 * M2_TO_FT2 * state.pitchMult,
+              pitchDeg,
+              azimuthDeg: 0, // not measurable from a traced outline
+              outline: path.map((pt: any) => ({ lat: pt.lat(), lng: pt.lng() })),
+            });
           });
           const planFt2 = planM2 * M2_TO_FT2;
-          const surface = planFt2 * state.pitchMult;
           if (planFt2 > 0) {
-            render(
-              surface,
-              planFt2,
-              `your pick (×${state.pitchMult})`,
-              "Traced by you — tap to add corners, drag the dots to adjust, then pick the steepness.",
-              "hand-traced",
+            // Centre the report's aerial photo on what they actually traced.
+            const bounds = new google.maps.LatLngBounds();
+            state.polygons.forEach((poly) =>
+              poly
+                .getPath()
+                .getArray()
+                .forEach((pt: any) => bounds.extend(pt)),
+            );
+            const c = bounds.getCenter();
+            state.center = { lat: c.lat(), lng: c.lng() };
+
+            applySummary(
+              buildRoofSummary({
+                planes,
+                surfaceFt2: planFt2 * state.pitchMult,
+                footprintFt2: planFt2,
+                imageryQuality: null,
+                method: "manual",
+                complexity: state.complexity,
+                // Traced edge length: drip edge, starter and gutter runs.
+                // 3.28084 ft per metre.
+                perimeterFt: perimeterM * 3.28084,
+              }),
+              "manual",
             );
             setStatus("Keep tapping corners or drag the dots to fine-tune — numbers update live.");
           } else {
+            applySummary(null, "manual");
             const n = currentPoly ? currentPoly.getPath().getLength() : 0;
             setStatus(
               n > 0
                 ? `${n} corner${n === 1 ? "" : "s"} placed — a shape needs at least 3.`
-                : "Tap your roof's corners on the map, one by one — the outline builds as you go.",
+                : "Tap each corner of your roof on the map — the outline builds as you go.",
             );
           }
         }
+
+        // --- Roof-shape chips (drives the waste allowance) ---
+        document.querySelectorAll<HTMLButtonElement>(".rt-cx-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            document
+              .querySelectorAll(".rt-cx-btn")
+              .forEach((b) => b.classList.remove("rt-cx-active"));
+            btn.classList.add("rt-cx-active");
+            state.complexity = (btn.dataset.complexity as typeof state.complexity) || "moderate";
+            computeManual();
+          });
+        });
 
         // --- Pitch chips ---
         document.querySelectorAll<HTMLButtonElement>(".rt-pitch-btn").forEach((btn) => {
@@ -633,8 +880,51 @@ const seo = {
           state.polygons = [];
           state.address = "";
           state.mode = "auto";
+          state.center = null;
           disableManual();
           clearResults("Start typing and pick your address — we'll find your roof.");
+        });
+
+        // --- Download the branded PDF report ---
+        // pdf-lib and the brand fonts are pulled in only on click, so the page
+        // itself stays light. Everything runs in the browser: no key, no
+        // server round trip, nothing stored.
+        const dlLabel = el("rt-download-label");
+        downloadBtn.addEventListener("click", async () => {
+          const summary = state.summary;
+          if (!summary || downloadBtn.disabled) return;
+          const original = dlLabel.textContent;
+          downloadBtn.disabled = true;
+          dlLabel.textContent = "Building the report…";
+          try {
+            const { buildRoofReportPdf, reportFilename } = await import("~/lib/roof-report-pdf");
+            const bytes = await buildRoofReportPdf({
+              summary,
+              address: state.address,
+              // Only ever a photo the person chose. With none, the report uses
+              // the traced outline as its cover image instead of going and
+              // finding imagery of its own (owner, 2026-10).
+              propertyImage: state.ownPhoto,
+              method: state.method,
+            });
+            const blob = new Blob([bytes as BlobPart], { type: "application/pdf" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = reportFilename(state.address);
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            // Give the browser a beat to start the download before revoking.
+            setTimeout(() => URL.revokeObjectURL(url), 10_000);
+            dlLabel.textContent = "Report downloaded ✓";
+            setTimeout(() => (dlLabel.textContent = original), 4000);
+          } catch {
+            dlLabel.textContent = "Couldn't build the report — try again";
+            setTimeout(() => (dlLabel.textContent = original), 4000);
+          } finally {
+            downloadBtn.disabled = false;
+          }
         });
       })
       .catch(() => {
