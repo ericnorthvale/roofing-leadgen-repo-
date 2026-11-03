@@ -1797,3 +1797,33 @@ metal barn, and a view over what look like storage units — settings that do no
 resemble The Woodlands township. The owner stated all are in The Woodlands and
 that is what the alt text says, but it is worth a second look, because a wrong
 city in alt text is the kind of local-SEO signal Google treats as spam.
+
+---
+
+### Sheet 9 addendum 4 — image metadata is for Google, not for the page (2026-11-03)
+
+Owner, clarifying addendum 3: the per-image titles and descriptions "just need
+to be Meta data on the image so that when searching Google images, you can find
+them" — not text a visitor reads.
+
+Removed from the rendered page:
+
+- the `<figcaption>` under each gallery tile, which was printing the title; and
+- the `title` attribute on the `<img>`, which renders as a hover tooltip. That
+  one is worth naming explicitly: it is visitor-facing by definition, and Google
+  does not use `title` for image ranking, so it was visible text with no SEO
+  return. The `title` prop came off `RoofImage` too rather than sitting unused.
+
+Kept, because this is where the metadata actually works: the `ImageGallery` /
+`ImageObject` JSON-LD, carrying `name`, `description`, `caption` and `keywords`
+per photo. Verified after the change — 29 ImageObjects intact, zero figcaptions,
+zero title attributes.
+
+**Not built, and why:** an image sitemap (`<image:image>` entries) is the other
+Google Images mechanism. It was left alone because the gallery `<img>` tags are
+plain server-rendered HTML on a page already in the sitemap, so Google will
+crawl them without help; and because Google deprecated `image:caption`,
+`image:title` and `image:license` in 2022, leaving only `image:loc` — so a
+sitemap would add discovery that already works, and none of the descriptive
+metadata. Worth revisiting only if Search Console shows the gallery images are
+not being indexed.
