@@ -26,8 +26,12 @@
  * replacement city-service page, so that file remains in use. work-08-during is
  * now unused sitewide.
  *
- * Alt text is deliberately city-neutral until the owner confirms each job's
- * location (then add it — city-anchored alts are stronger for local SEO).
+ * Alt text is city-neutral until the owner confirms a job's location, then it
+ * gets anchored — city-anchored alts are stronger for local SEO. The owner
+ * confirmed (2026-11) that the seven-photo job above is in THE WOODLANDS, TX,
+ * so those carry the city in both filename and alt. work-01 through work-07
+ * remain neutral: their locations are still unconfirmed, and guessing a city to
+ * win a keyword would be inventing a fact about a real customer's home.
  */
 export interface WorkPhoto {
   src: string;
@@ -36,32 +40,32 @@ export interface WorkPhoto {
 
 export const WORK_PHOTOS: WorkPhoto[] = [
   {
-    src: "/work/roof-tear-off-to-deck.webp",
-    alt: "Red-brick home stripped to bare roof decking during a Northvale Roofing tear-off, ladders up and the debris trailer in the driveway",
+    src: "/work/roof-tear-off-to-deck-the-woodlands-tx.webp",
+    alt: "Red-brick home in The Woodlands, TX stripped to bare roof decking during a Northvale Roofing tear-off, ladders up and the debris trailer in the driveway",
   },
   {
-    src: "/work/roof-deck-valley-membrane.webp",
-    alt: "Valley membrane set into fresh roof decking before shingles go on — install detail",
+    src: "/work/roof-deck-valley-membrane-the-woodlands-tx.webp",
+    alt: "Valley membrane set into fresh roof decking on a roof replacement in The Woodlands, TX — install detail",
   },
   {
-    src: "/work/valley-membrane-install-detail.webp",
-    alt: "Northvale Roofing crew installing valley membrane over new roof decking",
+    src: "/work/valley-membrane-install-the-woodlands-tx.webp",
+    alt: "Northvale Roofing crew installing valley membrane over new roof decking in The Woodlands, TX",
   },
   {
-    src: "/work/synthetic-underlayment-installed.webp",
-    alt: "Synthetic underlayment laid across the new decking as the Northvale Roofing crew begins shingling",
+    src: "/work/synthetic-underlayment-the-woodlands-tx.webp",
+    alt: "Synthetic underlayment laid across the new decking as the Northvale Roofing crew begins shingling in The Woodlands, TX",
   },
   {
-    src: "/work/completed-roof-front-elevation.webp",
-    alt: "The same red-brick home with its roof replacement completed, seen from the driveway",
+    src: "/work/completed-roof-replacement-the-woodlands-tx.webp",
+    alt: "The same red-brick home in The Woodlands, TX with its roof replacement completed, seen from the driveway",
   },
   {
-    src: "/work/completed-shingle-roof-brick-home.webp",
-    alt: "Completed charcoal architectural shingle roof on a red-brick home with arched entryways",
+    src: "/work/completed-shingle-roof-brick-home-the-woodlands-tx.webp",
+    alt: "Completed charcoal architectural shingle roof on a red-brick home with arched entryways in The Woodlands, TX",
   },
   {
-    src: "/work/completed-shingle-roof-rear-elevation.webp",
-    alt: "Completed charcoal shingle roof above the rear covered patio, ridge cap and chimney finished",
+    src: "/work/completed-roof-rear-elevation-the-woodlands-tx.webp",
+    alt: "Completed charcoal shingle roof above the rear covered patio of a home in The Woodlands, TX, ridge cap and chimney finished",
   },
   {
     src: "/work/work-02.webp",

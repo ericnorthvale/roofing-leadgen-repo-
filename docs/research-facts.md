@@ -1726,3 +1726,29 @@ from this job in job order → 5 older process shots.
 Filenames and alt text stay **city-neutral**, per the standing rule in
 `work-photos.ts`: the owner has not said where this job was, and the photos
 contain nothing that identifies a city.
+
+---
+
+### Sheet 9 addendum 2 — the seven-photo job is in The Woodlands (2026-11-03)
+
+Owner confirmed the location of the end-to-end job documented in addendum 1.
+Applied everywhere it earns something:
+
+- **Filenames** now carry the city, e.g.
+  `roof-tear-off-to-deck-the-woodlands-tx.webp`,
+  `completed-roof-replacement-the-woodlands-tx.webp`. Renamed with `git mv` and
+  all references repointed in the same commit.
+- **Alt text** on all seven is city-anchored.
+- **Band copy** in all three places now reads "A real Northvale project/
+  replacement **in The Woodlands**", and both band alts name the city.
+
+This closes out the standing rule in `work-photos.ts`, which said alt text stays
+neutral "until the owner confirms each job's location". That rule still governs
+`work-01` through `work-07`: their locations are unconfirmed, so they stay
+neutral. Guessing a city on those to win a keyword would be inventing a fact
+about a real customer's home — the keyword is not worth it, and the rule exists
+precisely so a later pass does not quietly do it.
+
+Incidental benefit: the Woodlands roof-replacement city-service page now carries
+a before/after band from a job that is genuinely in The Woodlands, which is the
+strongest form that page's proof can take.

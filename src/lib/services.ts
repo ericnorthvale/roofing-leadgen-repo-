@@ -110,13 +110,14 @@ export const SERVICES: Record<ServiceTag, Service> = {
     ],
     beforeAfter: {
       intro:
-        "A real Northvale replacement — the same roof stripped to bare decking and completed, photographed from the same spot in the driveway.",
-      beforeSrc: "/work/roof-tear-off-to-deck.webp",
+        "A real Northvale replacement in The Woodlands — the same roof stripped to bare decking and completed, photographed from the same spot in the driveway.",
+      beforeSrc: "/work/roof-tear-off-to-deck-the-woodlands-tx.webp",
       beforeAlt:
-        "Red-brick home stripped to bare roof decking during tear-off, seen from the driveway",
+        "Red-brick home in The Woodlands, TX stripped to bare roof decking during tear-off, seen from the driveway",
       beforeCaption: "Tear-off to deck",
-      afterSrc: "/work/completed-roof-front-elevation.webp",
-      afterAlt: "The same home with its roof replacement completed, seen from the same spot",
+      afterSrc: "/work/completed-roof-replacement-the-woodlands-tx.webp",
+      afterAlt:
+        "The same home in The Woodlands, TX with its roof replacement completed, seen from the same spot",
       afterCaption: "Completed",
     },
     sections: [
