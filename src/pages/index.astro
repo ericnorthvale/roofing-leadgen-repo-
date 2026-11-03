@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Hero from "@components/Hero.astro";
+import BeforeAfter from "@components/BeforeAfter.astro";
 import TrustBar from "@components/TrustBar.astro";
 import ServiceCard from "@components/ServiceCard.astro";
 import LeadForm from "@components/LeadForm.astro";
@@ -237,12 +238,21 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
   </section>
 
   {
-    /* "See the difference" band is out until a new mid-install/finished pair
-      arrives (owner, 2026-11): the only documented pair had a competitor's
-      brand printed across the underlayment in the "during" shot. Restore the
-      <BeforeAfter> here with the replacement photos, and re-add its import
-      from "@components/BeforeAfter.astro" at the top of this file. */
+    /* Real Northvale job — the same house stripped to deck and finished, shot
+      from the same spot in the driveway. The owner confirmed every completed
+      photo in this set is the NEW roof; none shows the old one, so this is
+      captioned tear-off/completed rather than before/after. */
   }
+  <BeforeAfter
+    heading="See the difference"
+    intro="A real Northvale project — the same roof stripped to bare decking and completed, photographed from the same spot in the driveway. We document every job start to finish; never stock photos."
+    beforeSrc="/work/roof-tear-off-to-deck.webp"
+    beforeAlt="Red-brick home stripped to bare roof decking during tear-off, seen from the driveway"
+    beforeCaption="Tear-off to deck"
+    afterSrc="/work/completed-roof-front-elevation.webp"
+    afterAlt="The same home with its roof replacement completed, seen from the same spot"
+    afterCaption="Completed"
+  />
 
   <section class="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-[1fr_420px]">
     <div class="prose-northvale">

@@ -1690,3 +1690,39 @@ before/after bands by direct path.
 The four superseded `/public/projects/iko-roof-replacement-*.jpg` files are now
 unreferenced. Left in place pending the owner's confirmation to delete
 (Hard Rule #7).
+
+---
+
+### Sheet 9 addendum 1 — one job documented end to end (2026-11-03)
+
+Owner supplied seven photos of a single roof: tear-off to bare deck, valley
+membrane on fresh decking (two shots), synthetic underlayment with the crew
+shingling, and the finished roof from three angles.
+
+**Brand check, done by eye at full zoom before use** — the standing procedure
+now, because `work-08-during` was retired for having a competitor's name
+legible across its underlayment and the no-competitor-brands test reads source
+text, not image pixels. Findings: the underlayment printing in the shingling
+shot is NOT legible at any zoom (blue repeating print, no readable name), and
+the valley membrane is unbranded granulated sheet. All seven cleared.
+
+**Before/after settled by asking, not inferring.** Three photos show a complete
+roof and the old and new roofs are both dark charcoal laminate in similar
+condition — indistinguishable to me. The owner confirmed **all three are the NEW
+roof** and that no photograph of the old roof exists in this set. So the bands
+are captioned **"Tear-off to deck" / "Completed"**, not before/after. Captioning
+an in-progress photo as a "before" would be a fabricated comparison, which is
+the same objection that killed the previous pair.
+
+**The pair works because the framing matches:** the tear-off shot and one
+completed shot are the same house from the same spot in the driveway. Both were
+pre-cropped to the band's 4:3 so the house is framed deliberately rather than
+wherever a centre `object-cover` happens to land.
+
+Bands restored in all three places (homepage, replacement service page,
+Woodlands replacement city page). Gallery now runs 4 project photos → the seven
+from this job in job order → 5 older process shots.
+
+Filenames and alt text stay **city-neutral**, per the standing rule in
+`work-photos.ts`: the owner has not said where this job was, and the photos
+contain nothing that identifies a city.

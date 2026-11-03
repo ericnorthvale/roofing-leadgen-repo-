@@ -108,11 +108,17 @@ export const SERVICES: Record<ServiceTag, Service> = {
       { value: "40 photos", label: "the documentation packet you keep at close" },
       { value: "In writing", label: "your exact price before we leave the driveway" },
     ],
-    // beforeAfter intentionally absent (owner, 2026-11): the only documented
-    // mid-install drone shot had a competitor's brand printed across the
-    // underlayment. Both layouts guard on `beforeAfter &&`, so the band simply
-    // does not render until a replacement pair lands. Restore by adding the
-    // object back with the new photos.
+    beforeAfter: {
+      intro:
+        "A real Northvale replacement — the same roof stripped to bare decking and completed, photographed from the same spot in the driveway.",
+      beforeSrc: "/work/roof-tear-off-to-deck.webp",
+      beforeAlt:
+        "Red-brick home stripped to bare roof decking during tear-off, seen from the driveway",
+      beforeCaption: "Tear-off to deck",
+      afterSrc: "/work/completed-roof-front-elevation.webp",
+      afterAlt: "The same home with its roof replacement completed, seen from the same spot",
+      afterCaption: "Completed",
+    },
     sections: [
       {
         heading: "What a full replacement includes",
