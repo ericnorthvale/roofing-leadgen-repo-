@@ -215,3 +215,40 @@ export function projectStoryJsonLd(
       : {}),
   };
 }
+
+/**
+ * ImageGallery structured data: one ImageObject per photo, each with its own
+ * name, description and keywords (owner, 2026-11 — "unique titles and meta
+ * descriptions and meta tags on each image").
+ *
+ * This is where per-image metadata actually earns something. Alt text serves
+ * screen readers and gives Google a hint; an ImageObject gives each photo a
+ * name, a description and keywords of its own, which is what image search
+ * indexes. A page of twenty-five photos with no structured data is one result;
+ * with it, it is twenty-five.
+ *
+ * Photos without a title are skipped rather than given a generic one — a
+ * duplicated name across many images is worse for image search than no name.
+ */
+export function galleryImagesJsonLd(
+  siteUrl: string,
+  pathname: string,
+  photos: { url: string; alt: string; title?: string; description?: string; tags?: string[] }[],
+): Record<string, unknown> | null {
+  const described = photos.filter((p) => p.title);
+  if (described.length === 0) return null;
+  const abs = (u: string) => new URL(u, siteUrl).toString();
+  return {
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    url: abs(pathname),
+    image: described.map((p) => ({
+      "@type": "ImageObject",
+      contentUrl: abs(p.url),
+      name: p.title,
+      description: p.description ?? p.alt,
+      caption: p.alt,
+      ...(p.tags?.length ? { keywords: p.tags.join(", ") } : {}),
+    })),
+  };
+}

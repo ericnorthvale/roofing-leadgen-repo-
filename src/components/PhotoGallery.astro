@@ -1,14 +1,20 @@
 ---
 /**
- * Responsive photo gallery — renders real job photos (e.g. from CompanyCam) via
- * the RoofImage wrapper so alt text is always present. Renders nothing when there
- * are no photos, so it's safe to drop on a page before CompanyCam is connected.
+ * Responsive photo gallery — renders real job photos via the RoofImage wrapper
+ * so alt text is always present. Renders nothing when there are no photos.
+ *
+ * Each photo may carry a unique `title` (owner, 2026-11). It is rendered as the
+ * `title` attribute and reused as the `name` of that photo's ImageObject in the
+ * page's structured data, so the gallery is indexable image by image rather
+ * than as one anonymous grid. The caller builds the JSON-LD — see
+ * `galleryImagesJsonLd` in src/lib/seo.ts.
  */
 import RoofImage from "@components/RoofImage.astro";
 
-interface GalleryPhoto {
+export interface GalleryPhoto {
   url: string;
   alt: string;
+  title?: string;
 }
 interface Props {
   photos: GalleryPhoto[];
@@ -23,11 +29,19 @@ const { photos, heading = "Recent work" } = Astro.props;
       <h2 class="text-3xl">{heading}</h2>
       <div class="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
         {photos.map((p) => (
-          <RoofImage
-            src={p.url}
-            alt={p.alt}
-            class="aspect-square w-full rounded-[var(--radius-card)] object-cover"
-          />
+          <figure class="m-0">
+            <RoofImage
+              src={p.url}
+              alt={p.alt}
+              title={p.title}
+              class="aspect-square w-full rounded-[var(--radius-card)] object-cover"
+            />
+            {p.title && (
+              <figcaption class="mt-1.5 text-xs leading-snug text-[color:var(--color-ink-500)]">
+                {p.title}
+              </figcaption>
+            )}
+          </figure>
         ))}
       </div>
     </section>

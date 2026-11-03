@@ -1752,3 +1752,48 @@ precisely so a later pass does not quietly do it.
 Incidental benefit: the Woodlands roof-replacement city-service page now carries
 a before/after band from a job that is genuinely in The Woodlands, which is the
 strongest form that page's proof can take.
+
+---
+
+### Sheet 9 addendum 3 — 13 more Woodlands photos, and per-image metadata (2026-11-03)
+
+Owner supplied 16 more photos, all stated to be in The Woodlands, TX, and asked
+for "unique titles and Meta descriptions and Meta tags on each image".
+
+**Brand check (standing procedure) stopped three of the sixteen:**
+
+1. **Shingles over blue underlayment** — `ROOFNADO AnchorDeck™` printed across
+   most of the frame, large and perfectly legible. Not croppable; the branding
+   IS the photo. Held.
+2. **Roofer on blue underlayment** — branded underlayment again, logo repeated
+   and semi-legible. Held.
+3. A carton reading `OmniRidge … Shingle Over Ridge Vent` sat on the right edge
+   of the aerial patio-cover shot. Croppable, so it was cropped (right 10%) and
+   the photo published.
+
+Also held, for fit rather than branding: a **commercial low-slope roof** —
+white-coated membrane, rust staining, patching and debris. The gallery is
+residential finished work; that photo reads as a defect report, and the site
+does not position commercial roofing.
+
+**Per-image metadata, implemented where it actually earns something.** Alt text
+already served screen readers. The new `title` / `description` / `tags` fields on
+`WorkPhoto` feed `galleryImagesJsonLd` (src/lib/seo.ts), which emits an
+`ImageGallery` with one `ImageObject` per photo — `name`, `description`,
+`caption`, `keywords`. That is what image search indexes. A 29-photo page with
+no structured data is one result; with it, 29. The `title` also renders as the
+native tooltip and a small caption under each tile.
+
+Photos without a title are skipped by the helper rather than given a generic
+one — a name duplicated across many images is worse than no name.
+
+**Project-story photos feed the same structure**, taking their name from the
+story title, description from the shortStory and keywords from serviceTags.
+
+**Verified in the built page:** 29 images, 29 ImageObjects, every name unique.
+
+**Open question put to the owner:** several of these photos show open fields, a
+metal barn, and a view over what look like storage units — settings that do not
+resemble The Woodlands township. The owner stated all are in The Woodlands and
+that is what the alt text says, but it is worth a second look, because a wrong
+city in alt text is the kind of local-SEO signal Google treats as spam.

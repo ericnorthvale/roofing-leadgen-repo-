@@ -12,18 +12,21 @@ interface Props {
   src: string;
   /** Required, specific, truthful description of the image. */
   alt: string;
+  /** Short unique headline; surfaced as the native tooltip. */
+  title?: string;
   width?: number;
   height?: number;
   /** Use eager + high priority for above-the-fold hero images only. */
   priority?: boolean;
   class?: string;
 }
-const { src, alt, width, height, priority = false, class: className } = Astro.props;
+const { src, alt, title, width, height, priority = false, class: className } = Astro.props;
 ---
 
 <img
   src={src}
   alt={alt}
+  title={title}
   width={width}
   height={height}
   loading={priority ? "eager" : "lazy"}

@@ -5,6 +5,7 @@ import PhotoGallery from "@components/PhotoGallery.astro";
 import LeadForm from "@components/LeadForm.astro";
 import { getPublishedProjects } from "~/lib/projects";
 import { WORK_PHOTOS } from "~/lib/work-photos";
+import { galleryImagesJsonLd } from "~/lib/seo";
 
 // Real Northvale photos only: the published project-story photos plus the
 // owner-supplied process shots (~/lib/work-photos). Presenting stock imagery as
@@ -18,8 +19,24 @@ import { WORK_PHOTOS } from "~/lib/work-photos";
 // answers to "what does a finished Northvale roof look like".
 const projectPhotos = (await getPublishedProjects())
   .filter((p) => p.data.photo)
-  .map((p) => ({ url: p.data.photo!.src, alt: p.data.photo!.alt }));
-const photos = [...projectPhotos, ...WORK_PHOTOS.map((w) => ({ url: w.src, alt: w.alt }))];
+  .map((p) => ({
+    url: p.data.photo!.src,
+    alt: p.data.photo!.alt,
+    title: p.data.title,
+    description: p.data.shortStory,
+    tags: p.data.serviceTags,
+  }));
+const photos = [
+  ...projectPhotos,
+  ...WORK_PHOTOS.map((w) => ({
+    url: w.src,
+    alt: w.alt,
+    title: w.title,
+    description: w.description,
+    tags: w.tags,
+  })),
+];
+const imagesJsonLd = galleryImagesJsonLd(Astro.site!.toString(), "/gallery", photos);
 const hasRealPhotos = photos.length > 0;
 ---
 
@@ -30,6 +47,7 @@ const hasRealPhotos = photos.length > 0;
       "Completed roof replacements and repairs by Northvale Roofing across The Woodlands and NW Houston — documented start to finish.",
     pathname: "/gallery",
     noindex: !hasRealPhotos,
+    ...(imagesJsonLd ? { jsonLd: imagesJsonLd } : {}),
   }}
 >
   {
