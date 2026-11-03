@@ -10,14 +10,15 @@
  * competing answers to "what does a finished Northvale roof look like".
  *
  * Retired from the gallery but NOT deleted: work-04, work-06, work-08-during
- * and work-09-after. work-08-during/work-09-after are the same house and still
- * feed the homepage, services and city-page "See the difference" before/after
- * bands by direct path, so the files must stay.
+ * and work-09-after. work-09-after is still the hero photo on the Woodlands
+ * replacement city-service page, so that file is in use.
  *
- * work-08-during was pulled by the owner (2026-11). Worth knowing if it is ever
- * considered again: the underlayment across that roof is printed with a
+ * work-08-during is now unused sitewide (owner, 2026-11). It was the "during"
+ * half of the homepage/services/city "See the difference" bands, and those were
+ * removed with it: the underlayment across that roof is printed with a
  * competitor's brand name, legible at full size. The no-competitor-brands test
- * reads text, not pixels, so nothing here would have flagged it.
+ * reads source text, not image pixels, so nothing here would have flagged it.
+ * Any replacement mid-install photo needs the same check by eye.
  *
  * Alt text is deliberately city-neutral until the owner confirms each job's
  * location (then add it — city-anchored alts are stronger for local SEO).

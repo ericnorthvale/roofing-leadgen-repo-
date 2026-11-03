@@ -5,7 +5,6 @@ import TrustBar from "@components/TrustBar.astro";
 import ServiceCard from "@components/ServiceCard.astro";
 import LeadForm from "@components/LeadForm.astro";
 import Reviews from "@components/Reviews.astro";
-import BeforeAfter from "@components/BeforeAfter.astro";
 import Faq from "@components/Faq.astro";
 import TableOfContents from "@components/TableOfContents.astro";
 import VillageShowcase from "@components/VillageShowcase.astro";
@@ -237,17 +236,13 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
     </div>
   </section>
 
-  {/* Real Northvale job — the same house mid-install and finished (drone). */}
-  <BeforeAfter
-    heading="See the difference"
-    intro="A real Northvale project — the same Houston-area roof mid-installation and completed. We document every job start to finish; never stock photos."
-    beforeSrc="/work/work-08-during.webp"
-    beforeAlt="Northvale Roofing crew installing synthetic underlayment during this roof replacement — drone view"
-    beforeCaption="During installation"
-    afterSrc="/work/work-09-after.webp"
-    afterAlt="The same roof completed — drone view of the finished shingle roof replacement"
-    afterCaption="Completed"
-  />
+  {
+    /* "See the difference" band is out until a new mid-install/finished pair
+      arrives (owner, 2026-11): the only documented pair had a competitor's
+      brand printed across the underlayment in the "during" shot. Restore the
+      <BeforeAfter> here with the replacement photos, and re-add its import
+      from "@components/BeforeAfter.astro" at the top of this file. */
+  }
 
   <section class="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-[1fr_420px]">
     <div class="prose-northvale">
