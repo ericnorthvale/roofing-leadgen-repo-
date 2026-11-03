@@ -9,10 +9,15 @@
  * the gallery instead (see src/pages/gallery.astro). Keeping both sets meant two
  * competing answers to "what does a finished Northvale roof look like".
  *
- * Retired from the gallery but NOT deleted: work-04, work-06 and work-09-after.
- * work-08-during/work-09-after are the same house and still feed the homepage,
- * services and city-page "See the difference" before/after bands by direct path,
- * so the files must stay.
+ * Retired from the gallery but NOT deleted: work-04, work-06, work-08-during
+ * and work-09-after. work-08-during/work-09-after are the same house and still
+ * feed the homepage, services and city-page "See the difference" before/after
+ * bands by direct path, so the files must stay.
+ *
+ * work-08-during was pulled by the owner (2026-11). Worth knowing if it is ever
+ * considered again: the underlayment across that roof is printed with a
+ * competitor's brand name, legible at full size. The no-competitor-brands test
+ * reads text, not pixels, so nothing here would have flagged it.
  *
  * Alt text is deliberately city-neutral until the owner confirms each job's
  * location (then add it — city-anchored alts are stronger for local SEO).
@@ -23,10 +28,6 @@ export interface WorkPhoto {
 }
 
 export const WORK_PHOTOS: WorkPhoto[] = [
-  {
-    src: "/work/work-08-during.webp",
-    alt: "Northvale Roofing crew installing synthetic underlayment during a roof replacement, seen from above",
-  },
   {
     src: "/work/work-02.webp",
     alt: "Northvale Roofing crew mid tear-off on a single-story home",
