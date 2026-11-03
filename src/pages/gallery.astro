@@ -6,13 +6,20 @@ import LeadForm from "@components/LeadForm.astro";
 import { getPublishedProjects } from "~/lib/projects";
 import { WORK_PHOTOS } from "~/lib/work-photos";
 
-// Real Northvale photos only: owner-supplied job photos (~/lib/work-photos)
-// plus the published project-story photos. Presenting stock imagery as our
-// work would violate FTC rules (Hard Rule #2), so this only ever shows real jobs.
+// Real Northvale photos only: the published project-story photos plus the
+// owner-supplied process shots (~/lib/work-photos). Presenting stock imagery as
+// our work would violate FTC rules (Hard Rule #2), so this only ever shows real
+// jobs.
+//
+// Finished roofs lead, process follows (owner, 2026-11). The project photos are
+// the owner's own finished-roof drone shots and are the strongest thing on the
+// page, so they open it; the work photos are now tear-off, underlayment and
+// install detail, which read as supporting evidence rather than competing
+// answers to "what does a finished Northvale roof look like".
 const projectPhotos = (await getPublishedProjects())
   .filter((p) => p.data.photo)
   .map((p) => ({ url: p.data.photo!.src, alt: p.data.photo!.alt }));
-const photos = [...WORK_PHOTOS.map((w) => ({ url: w.src, alt: w.alt })), ...projectPhotos];
+const photos = [...projectPhotos, ...WORK_PHOTOS.map((w) => ({ url: w.src, alt: w.alt }))];
 const hasRealPhotos = photos.length > 0;
 ---
 

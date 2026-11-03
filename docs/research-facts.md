@@ -1628,3 +1628,65 @@ outline is drawn by a person and cannot be reproduced from here. Validating the
 measurement needs the owner to trace each of the six addresses and compare
 against the report's 0%-waste square count (31.6 / 56.6 / 47.9 / 42.5 / 37.1 /
 43.4). Procedure handed over 2026-10-08.
+
+---
+
+### Sheet 9 — project photography reset (2026-11-03)
+
+Owner supplied four new job photos and reported that the wrong images had been
+used on the project stories.
+
+**The mix-up, confirmed in the repo before changing anything:** the
+solar-panel roof photo was on the **Magnolia** story ("choosing the right roof,
+not the cheapest" — a renovation with no solar in the narrative), while
+**Humble** — which IS the solar story, a roof replaced beneath existing panels —
+carried a photo with no panels on it at all. That Humble image also had a website
+carousel arrow button baked into the right-hand side, so it had been screenshotted
+from a page rather than saved from the original.
+
+Owner confirmed (2026-11-03) that only the PHOTOS were swapped and no story text
+moves. Noted and accepted by him: the Magnolia story still does not mention
+ventilation or a solar attic fan, while its new photo shows one. The Magnolia
+city-page summary does mention ventilation, so the pairing is defensible there.
+
+**Assignment** (owner's order: first photo → Woodlands, second → Spring, the
+solar roof → the solar project, the attic fan → "the last project not accounted
+for"):
+
+| Story                 | New file                                             |
+| --------------------- | ---------------------------------------------------- |
+| The Woodlands (hail)  | `hail-claim-roof-replacement-the-woodlands-tx.webp`  |
+| Spring (appraisal)    | `insurance-claim-roof-replacement-spring-tx.webp`    |
+| Humble (solar)        | `roof-replacement-under-solar-panels-humble-tx.webp` |
+| Magnolia (right roof) | `solar-attic-fan-roof-ventilation-magnolia-tx.webp`  |
+
+**Filenames carry the page's primary query** rather than a generic
+`iko-roof-replacement-<city>` pattern, which gave four near-identical names
+competing for the same image-search result.
+
+**"IKO" was dropped from the new filenames and alt text.** The old set asserted
+IKO on every photo; shingle brand is not verifiable from a drone photo, and
+stating it would be an unverified fact (Hard Rule #2). The alt text describes
+what is visible instead. If the owner confirms these roofs are IKO, the brand can
+go back in — that is a sourced fact once he states it.
+
+**City names in alt text come from the owner's assignment**, not from anything
+visible in the photos. Flagged to him: if a photo is actually from a different
+job, the alt and filename need correcting.
+
+**Six other references** pointed at the old files and were repointed: the
+homepage insurance card, `services.ts` and `city-services.ts` insurance hero
+photos, and three city-page proof photos in `service-areas.ts` (Spring, The
+Woodlands, Magnolia).
+
+**Gallery** (owner: "don't use those images currently in there"): the three
+finished-roof drone shots were retired from `WORK_PHOTOS` (work-04, work-06,
+work-09-after) and the six process shots kept — tear-off, underlayment,
+protection, inspection, install detail. The project photos now lead the gallery
+and the process shots follow. The retired FILES stay in `/public/work`:
+work-08-during and work-09-after still feed the homepage, services and city-page
+before/after bands by direct path.
+
+The four superseded `/public/projects/iko-roof-replacement-*.jpg` files are now
+unreferenced. Left in place pending the owner's confirmation to delete
+(Hard Rule #7).
