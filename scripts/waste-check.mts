@@ -1,7 +1,8 @@
-import {
-  wasteAllowance,
-  type Complexity,
-} from "/home/user/roofing-leadgen-repo-/src/lib/roof-report.ts";
+// Relative, NOT absolute: this script was drafted in a scratchpad and first
+// committed with a container-absolute import. That path exists on the machine
+// it was written on, so `astro check` passed locally and failed everywhere
+// else — which took the Vercel build down with it.
+import { wasteAllowance, type Complexity } from "../src/lib/roof-report.ts";
 
 const deg = (rise: number) => (Math.atan(rise / 12) * 180) / Math.PI;
 
