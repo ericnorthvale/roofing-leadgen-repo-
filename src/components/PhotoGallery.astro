@@ -1,12 +1,22 @@
 ---
 /**
- * Responsive photo gallery — renders real job photos (e.g. from CompanyCam) via
- * the RoofImage wrapper so alt text is always present. Renders nothing when there
- * are no photos, so it's safe to drop on a page before CompanyCam is connected.
+ * Responsive photo gallery — renders real job photos via the RoofImage wrapper
+ * so alt text is always present. Renders nothing when there are no photos.
+ *
+ * DELIBERATELY NO VISIBLE CAPTIONS (owner, 2026-11). Each photo carries a
+ * unique title, description and keywords, but those exist for Google Images,
+ * not for the person on the page — they ride in the `ImageGallery` /
+ * `ImageObject` structured data the caller emits (see `galleryImagesJsonLd` in
+ * src/lib/seo.ts), which is what image search actually indexes. The grid stays
+ * a grid of photographs.
+ *
+ * No `title` attribute either: it renders as a hover tooltip, so it is
+ * visitor-facing by definition, and Google does not use it for image ranking.
+ * It would be visible text with no SEO return.
  */
 import RoofImage from "@components/RoofImage.astro";
 
-interface GalleryPhoto {
+export interface GalleryPhoto {
   url: string;
   alt: string;
 }

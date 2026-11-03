@@ -1,11 +1,11 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Hero from "@components/Hero.astro";
+import BeforeAfter from "@components/BeforeAfter.astro";
 import TrustBar from "@components/TrustBar.astro";
 import ServiceCard from "@components/ServiceCard.astro";
 import LeadForm from "@components/LeadForm.astro";
 import Reviews from "@components/Reviews.astro";
-import BeforeAfter from "@components/BeforeAfter.astro";
 import Faq from "@components/Faq.astro";
 import TableOfContents from "@components/TableOfContents.astro";
 import VillageShowcase from "@components/VillageShowcase.astro";
@@ -174,8 +174,8 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
         blurb="Texas claim rules, deadlines, and documentation — from the contractor, not a public adjuster."
         image={{
           slot: "SERVICE: adjuster meeting on a roof",
-          alt: "Aerial view of a completed IKO roof replaced by Northvale Roofing on a Woodlands, TX home — an approved insurance claim",
-          src: "/projects/iko-roof-replacement-the-woodlands-tx.jpg",
+          alt: "Aerial view of a completed roof replacement on a hip-and-valley home in The Woodlands, TX — an approved insurance claim",
+          src: "/projects/hail-claim-roof-replacement-the-woodlands-tx.webp",
         }}
       />
       <ServiceCard
@@ -237,15 +237,20 @@ const aggregateRating = aggregateRatingJsonLd(siteUrl, await getSiteReviews());
     </div>
   </section>
 
-  {/* Real Northvale job — the same house mid-install and finished (drone). */}
+  {
+    /* Real Northvale job — the same house stripped to deck and finished, shot
+      from the same spot in the driveway. The owner confirmed every completed
+      photo in this set is the NEW roof; none shows the old one, so this is
+      captioned tear-off/completed rather than before/after. */
+  }
   <BeforeAfter
     heading="See the difference"
-    intro="A real Northvale project — the same Houston-area roof mid-installation and completed. We document every job start to finish; never stock photos."
-    beforeSrc="/work/work-08-during.webp"
-    beforeAlt="Northvale Roofing crew installing synthetic underlayment during this roof replacement — drone view"
-    beforeCaption="During installation"
-    afterSrc="/work/work-09-after.webp"
-    afterAlt="The same roof completed — drone view of the finished shingle roof replacement"
+    intro="A real Northvale project in The Woodlands — the same roof stripped to bare decking and completed, photographed from the same spot in the driveway. We document every job start to finish; never stock photos."
+    beforeSrc="/work/roof-tear-off-to-deck-the-woodlands-tx.webp"
+    beforeAlt="Red-brick home in The Woodlands, TX stripped to bare roof decking during tear-off, seen from the driveway"
+    beforeCaption="Tear-off to deck"
+    afterSrc="/work/completed-roof-replacement-the-woodlands-tx.webp"
+    afterAlt="The same home in The Woodlands, TX with its roof replacement completed, seen from the same spot"
     afterCaption="Completed"
   />
 

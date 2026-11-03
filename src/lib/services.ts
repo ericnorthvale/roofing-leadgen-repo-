@@ -110,13 +110,14 @@ export const SERVICES: Record<ServiceTag, Service> = {
     ],
     beforeAfter: {
       intro:
-        "A real Northvale replacement — the same roof mid-installation and completed, by drone.",
-      beforeSrc: "/work/work-08-during.webp",
+        "A real Northvale replacement in The Woodlands — the same roof stripped to bare decking and completed, photographed from the same spot in the driveway.",
+      beforeSrc: "/work/roof-tear-off-to-deck-the-woodlands-tx.webp",
       beforeAlt:
-        "Northvale Roofing crew installing synthetic underlayment during this roof replacement — drone view",
-      beforeCaption: "During installation",
-      afterSrc: "/work/work-09-after.webp",
-      afterAlt: "The same roof completed — drone view of the finished shingle roof replacement",
+        "Red-brick home in The Woodlands, TX stripped to bare roof decking during tear-off, seen from the driveway",
+      beforeCaption: "Tear-off to deck",
+      afterSrc: "/work/completed-roof-replacement-the-woodlands-tx.webp",
+      afterAlt:
+        "The same home in The Woodlands, TX with its roof replacement completed, seen from the same spot",
       afterCaption: "Completed",
     },
     sections: [
@@ -579,8 +580,8 @@ export const SERVICES: Record<ServiceTag, Service> = {
     // Visual system (presentation only — every word above/below unchanged).
     // Photo is the real reopened-claim job from Projects (published record).
     heroPhoto: {
-      src: "/projects/iko-roof-replacement-the-woodlands-tx.jpg",
-      alt: "Aerial view of a completed IKO shingle roof replaced by Northvale Roofing on a Woodlands, TX home",
+      src: "/projects/hail-claim-roof-replacement-the-woodlands-tx.webp",
+      alt: "Aerial view of a completed architectural shingle roof replacement on a large hip-and-valley home in The Woodlands, TX, after an approved hail claim",
     },
     // Each chip restates the Ch. 542 deadlines already detailed on this page.
     glance: [
