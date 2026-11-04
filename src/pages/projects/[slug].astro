@@ -44,7 +44,7 @@ const jsonLd = projectStoryJsonLd(Astro.site!.toString(), {
 
 <BaseLayout
   seo={{
-    title: `${d.title} — Northvale Roofing`,
+    title: d.title,
     description: d.shortStory.slice(0, 155),
     pathname: `/projects/${project.id}/`,
     ogImage: d.photo?.src,

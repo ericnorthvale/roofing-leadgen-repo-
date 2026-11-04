@@ -56,7 +56,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     name: "Grogan's Mill",
     citySlug: "the-woodlands",
     county: "Montgomery",
-    seoTitle: "Grogan's Mill Roofing — Replacement & Repair | The Woodlands",
+    seoTitle: "Grogan's Mill Roofing — The Woodlands",
     seoDescription:
       "Roofing in Grogan's Mill, The Woodlands' original 1974 village: replacement, repair, and RDRC-compliant re-roofs on the community's oldest housing stock.",
     intro:
@@ -102,7 +102,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     name: "Panther Creek",
     citySlug: "the-woodlands",
     county: "Montgomery",
-    seoTitle: "Panther Creek Roofing — Lakeside Village of The Woodlands",
+    seoTitle: "Panther Creek Roofing — The Woodlands",
     seoDescription:
       "Roof replacement and repair in Panther Creek, The Woodlands' mid-1970s lakeside village. Township-compliant materials, RDRC paperwork handled.",
     intro:
@@ -143,7 +143,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     name: "Cochran's Crossing",
     citySlug: "the-woodlands",
     county: "Montgomery",
-    seoTitle: "Cochran's Crossing Roofing — Repair & Replacement",
+    seoTitle: "Cochran's Crossing Roofing — The Woodlands",
     seoDescription:
       "Roofing in Cochran's Crossing, The Woodlands: 1980s-90s housing stock at prime re-roof age, Township-compliant materials, RDRC submittals handled.",
     intro:
@@ -183,7 +183,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     name: "Indian Springs",
     citySlug: "the-woodlands",
     county: "Montgomery",
-    seoTitle: "Indian Springs Roofing — The Woodlands Village Experts",
+    seoTitle: "Indian Springs Roofing — The Woodlands",
     seoDescription:
       "Roof replacement, repair and inspections in Indian Springs, The Woodlands — 1984 village by the George Mitchell Nature Preserve. RDRC paperwork handled.",
     intro:
@@ -224,7 +224,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     name: "Alden Bridge",
     citySlug: "the-woodlands",
     county: "Montgomery",
-    seoTitle: "Alden Bridge Roofing — Repair & Replacement Experts",
+    seoTitle: "Alden Bridge Roofing — The Woodlands",
     seoDescription:
       "Roofing across Alden Bridge, The Woodlands' big 1994 village — 1990s-2000s roofs hitting replacement age, Township-compliant re-roofs, RDRC handled.",
     intro:
@@ -269,7 +269,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     name: "College Park",
     citySlug: "the-woodlands",
     county: "Montgomery",
-    seoTitle: "College Park & Harper's Landing Roofing — The Woodlands",
+    seoTitle: "College Park Roofing — The Woodlands",
     seoDescription:
       "Roofing in College Park and Harper's Landing — the only Woodlands village east of I-45. 1990s-2000s roofs at replacement age; Township paperwork handled.",
     intro:
@@ -310,7 +310,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     name: "Sterling Ridge",
     citySlug: "the-woodlands",
     county: "Montgomery",
-    seoTitle: "Sterling Ridge Roofing — West Woodlands Village Experts",
+    seoTitle: "Sterling Ridge Roofing — The Woodlands",
     seoDescription:
       "Roof replacement and repair in Sterling Ridge, The Woodlands' 1999 western village around the Player course. Township-compliant re-roofs, RDRC handled.",
     intro:
@@ -351,7 +351,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     name: "Carlton Woods",
     citySlug: "the-woodlands",
     county: "Montgomery",
-    seoTitle: "Carlton Woods Roofing — Luxury Roof Specialists",
+    seoTitle: "Carlton Woods Roofing — The Woodlands",
     seoDescription:
       "Roofing for Carlton Woods, The Woodlands' gated golf community: tile, slate, standing seam and premium shingle on estate homes. Discreet, documented work.",
     intro:
@@ -391,7 +391,7 @@ export const NEIGHBORHOODS: Record<string, Neighborhood> = {
     name: "Creekside Park",
     citySlug: "the-woodlands",
     county: "Harris",
-    seoTitle: "Creekside Park Roofing — Harris County's Woodlands Village",
+    seoTitle: "Creekside Park Roofing — The Woodlands",
     seoDescription:
       "Roofing in Creekside Park, The Woodlands' newest village (2007) and its only Harris County village. First-generation roofs coming due; RDRC handled.",
     intro:

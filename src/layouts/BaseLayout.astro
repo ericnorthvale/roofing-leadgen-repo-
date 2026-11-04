@@ -1,7 +1,7 @@
 ---
 import "~/styles/globals.css";
 import { BRAND } from "~/lib/brand";
-import { buildSeo, localBusinessJsonLd } from "~/lib/seo";
+import { buildSeo, localBusinessJsonLd, webSiteJsonLd } from "~/lib/seo";
 import SiteHeader from "@components/SiteHeader.astro";
 import SiteFooter from "@components/SiteFooter.astro";
 import MobileClickToCall from "@components/MobileClickToCall.astro";
@@ -17,6 +17,7 @@ const { seo, bare = false } = Astro.props;
 const siteUrl = Astro.site?.toString() ?? "https://northvaleroofing.com";
 const s = buildSeo(seo, siteUrl);
 const biz = localBusinessJsonLd(siteUrl);
+const site = webSiteJsonLd(siteUrl);
 const gtmId = import.meta.env.PUBLIC_GTM_ID;
 const ga4Id = import.meta.env.PUBLIC_GA4_ID;
 const gscVerification = import.meta.env.PUBLIC_GSC_VERIFICATION;
@@ -85,6 +86,7 @@ const gtagLoaderId = ga4Id ?? adsId;
     <meta name="theme-color" content="#060E21" />
 
     <script type="application/ld+json" set:html={JSON.stringify(biz)} />
+    <script type="application/ld+json" set:html={JSON.stringify(site)} />
     {
       Array.isArray(s.jsonLd)
         ? s.jsonLd.map((block) => (
