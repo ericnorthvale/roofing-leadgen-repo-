@@ -1827,3 +1827,64 @@ crawl them without help; and because Google deprecated `image:caption`,
 sitemap would add discovery that already works, and none of the descriptive
 metadata. Worth revisiting only if Search Console shows the gallery images are
 not being indexed.
+
+---
+
+### Sheet 9 addendum 5 — IKO confirmed, and the rest are Houston (2026-11-03)
+
+Owner answered both open questions.
+
+**The four project roofs ARE IKO.** That was the fact missing in addendum 2,
+where IKO was stripped from the filenames and alt text because shingle brand is
+not verifiable from a drone photo. Now that he has stated it, it is a sourced
+fact and goes back in: the four project photos carry an `iko-` filename prefix
+and name IKO in their alt text. Worth having — "IKO roofer Houston" and similar
+are queries the brand name is the whole point of.
+
+**The remaining photos are, in his words, "just generic Houston roofs."** So
+they are anchored to the Houston AREA and no further. He did not name a city and
+the photos do not support one, so "Houston-area" is exactly as precise as the
+evidence — anything tighter would be inventing a location for a real customer's
+home, which is the rule that kept them neutral until now.
+
+Those eight were also renamed off the meaningless `work-0N` pattern onto
+descriptive, query-bearing names:
+
+| was           | now                                          |
+| ------------- | -------------------------------------------- |
+| work-01       | `roof-inspection-steep-two-story-houston`    |
+| work-02       | `roof-tear-off-single-story-home-houston`    |
+| work-03       | `landscaping-tarped-during-re-roof-houston`  |
+| work-04       | `completed-roof-red-brick-home-houston`      |
+| work-05       | `underlayment-and-starter-course-houston`    |
+| work-06       | `completed-roof-two-story-oak-houston`       |
+| work-07       | `hand-nailing-shingles-houston`              |
+| work-09-after | `completed-shingle-roof-replacement-houston` |
+
+`work-08-during.webp` keeps its name: it is the retired competitor-branded photo
+and is unreferenced, so there is nothing to gain from renaming it.
+
+The standing rule in `work-photos.ts` was rewritten rather than deleted. Every
+location is confirmed today, but the rule still governs anything new: a city
+goes in only when the owner states it.
+
+Gallery structured data after the change: 29 images — 21 Woodlands, 5 Houston,
+3 project stories. Verified no built page references a missing image file.
+
+### Sheet 9 addendum 5a — three of the four superseded photos deleted (2026-11-03)
+
+Owner reviewed the four old `iko-roof-replacement-*.jpg` project photos and
+asked for three to go, keeping **`iko-roof-replacement-humble-tx.jpg`**. Done.
+All three were unreferenced, and the build confirms no page points at a missing
+image. They remain recoverable from git history.
+
+Two things worth knowing about the file he kept:
+
+1. **It is unreferenced.** Nothing on the site links to it, so it will not
+   appear anywhere until something points at it.
+2. **It has a website carousel arrow baked into the right edge** — a white
+   circle with a chevron, at roughly 92% width, mid-height. It was screenshotted
+   from a page rather than saved from the original. Cropping the right ~10%
+   removes it cleanly, the same fix applied to the aerial patio-cover photo in
+   addendum 3. Not done unprompted, because the owner asked for the file kept,
+   not changed.

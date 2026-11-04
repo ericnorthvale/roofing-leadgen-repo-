@@ -73,8 +73,8 @@ export const CITY_SERVICES: Record<string, CityService> = {
       "A Woodlands re-roof is two jobs: the roof itself, and the Township covenant approval that must come first. We do both — tear-off to deck, Standards-compliant materials, and the RDRC paperwork filed before a single shingle is ordered.",
     // Visual system (presentation only — every word above/below unchanged).
     heroPhoto: {
-      src: "/work/work-09-after.webp",
-      alt: "Drone view of a completed shingle roof replacement by Northvale Roofing",
+      src: "/work/completed-shingle-roof-replacement-houston.webp",
+      alt: "Drone view of a completed shingle roof replacement by Northvale Roofing on a Houston-area home",
     },
     // Each chip restates a fact already on this page (install time: FAQ;
     // 45-day clock: Standards/FAQ; written price: summary + costs section).
@@ -145,7 +145,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
         heading: "Tear-off to the deck — because code and climate both say so",
         body: "We replace roofs by removing everything down to the decking. The residential code (IRC R908.3) requires removing existing layers before new covering goes on, with narrow exceptions — and prohibits a roof-over where the deck is water-soaked or two layers already exist. In this climate the code is just common sense: Gulf Coast heat bakes a second layer from below, and you can't inspect or repair decking you never see. Tear-off is also when we replace what actually fails on Woodlands roofs — flashing, pipe boots, and ventilation sized to the ARMA 1-in-300 guideline, because a poorly-vented attic here can run decades of extra heat stress through your shingles.",
         photo: {
-          src: "/work/work-02.webp",
+          src: "/work/roof-tear-off-single-story-home-houston.webp",
           alt: "Northvale Roofing crew mid tear-off on a single-story home",
           caption:
             "Tear-off on a Northvale re-roof — decking exposed, inspected, and repaired before anything new goes on.",
@@ -209,7 +209,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
       "Leaks, cracked pipe boots, lifted ridge caps, tired flashing — most Woodlands repairs are same-day or next-day, documented with photos, and handled with the Township's repair-permit rule covered.",
     // Visual system (presentation only — every word above/below unchanged).
     heroPhoto: {
-      src: "/work/work-07.webp",
+      src: "/work/hand-nailing-shingles-houston.webp",
       alt: "Roofer hand-nailing shingles during installation — close-up detail",
     },
     // Each chip restates a fact already on this page (scheduling: summary +
@@ -296,7 +296,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
       "A free, documented look at exactly where your roof stands — forty photos, written findings within 24 hours, no pressure. The starting point for storm checks, home sales, and Township-compliant re-roof planning.",
     // Visual system (presentation only — every word above/below unchanged).
     heroPhoto: {
-      src: "/work/work-01.webp",
+      src: "/work/roof-inspection-steep-two-story-houston.webp",
       alt: "Northvale Roofing inspector walking a steep two-story roof",
     },
     // Each chip restates a fact already on this page (free vs. paid average:
@@ -390,7 +390,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
       "Hail, wind, and falling limbs are a matter of record here, not a maybe. We document storm damage to claim-ready standard, tarp what's urgent, and tell you honestly whether filing is worth it.",
     // Visual system (presentation only — every word above/below unchanged).
     heroPhoto: {
-      src: "/work/work-03.webp",
+      src: "/work/landscaping-tarped-during-re-roof-houston.webp",
       alt: "Home and landscaping protected with tarps during a Northvale Roofing re-roof",
     },
     // Each chip restates a fact already on this page (NOAA hail record:
@@ -485,8 +485,8 @@ export const CITY_SERVICES: Record<string, CityService> = {
     // Visual system (presentation only — every word above/below unchanged).
     // Photo is the real reopened-claim job from Projects (published record).
     heroPhoto: {
-      src: "/projects/hail-claim-roof-replacement-the-woodlands-tx.webp",
-      alt: "Aerial view of a completed architectural shingle roof replacement on a large hip-and-valley home in The Woodlands, TX, after an approved hail claim",
+      src: "/projects/iko-hail-claim-roof-replacement-the-woodlands-tx.webp",
+      alt: "Aerial view of a completed IKO architectural shingle roof replacement on a large hip-and-valley home in The Woodlands, TX, after an approved hail claim",
     },
     // Each chip restates a fact already on this page (15-day acknowledgment +
     // 60-day penalty line: deadlines section; two-part payment: first section).

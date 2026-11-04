@@ -162,8 +162,8 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
         summary:
           "Reopened a denied claim on a renovated Spring home: we documented covered storm damage, pursued the appraisal process after the initial denial, and secured a full roof replacement — managing the whole process. (Full story under Projects.)",
         photo: {
-          src: "/projects/insurance-claim-roof-replacement-spring-tx.webp",
-          alt: "Aerial view of a completed charcoal architectural shingle roof replacement on a two-story Spring, TX home with dormers and a brick chimney",
+          src: "/projects/iko-insurance-claim-roof-replacement-spring-tx.webp",
+          alt: "Aerial view of a completed charcoal IKO architectural shingle roof replacement on a two-story Spring, TX home with dormers and a brick chimney",
         },
       },
     ],
@@ -284,8 +284,8 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
         summary:
           "Reopened a denied hail claim: after another contractor missed the adjuster meeting, we re-inspected, documented one-inch hail damage, met the adjuster on-site, and secured a full roof replacement — then added a solar-powered attic fan. (See the full story under Projects.)",
         photo: {
-          src: "/projects/hail-claim-roof-replacement-the-woodlands-tx.webp",
-          alt: "Aerial view of a completed architectural shingle roof replacement on a large hip-and-valley home in The Woodlands, TX, after an approved hail claim",
+          src: "/projects/iko-hail-claim-roof-replacement-the-woodlands-tx.webp",
+          alt: "Aerial view of a completed IKO architectural shingle roof replacement on a large hip-and-valley home in The Woodlands, TX, after an approved hail claim",
         },
       },
     ],
@@ -440,8 +440,8 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
         summary:
           "Helped a Magnolia homeowner choose the right roof, not the cheapest — comparing IKO Dynasty and Nordic, colors, and ventilation to finish a major renovation. (Full story under Projects.)",
         photo: {
-          src: "/projects/solar-attic-fan-roof-ventilation-magnolia-tx.webp",
-          alt: "Solar-powered attic fan and pipe vent installed on a completed shingle roof in Magnolia, TX, part of a ventilation upgrade",
+          src: "/projects/iko-solar-attic-fan-roof-ventilation-magnolia-tx.webp",
+          alt: "Solar-powered attic fan and pipe vent installed on a completed IKO shingle roof in Magnolia, TX, part of a ventilation upgrade",
         },
       },
     ],

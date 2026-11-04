@@ -26,12 +26,14 @@
  * replacement city-service page, so that file remains in use. work-08-during is
  * now unused sitewide.
  *
- * Alt text is city-neutral until the owner confirms a job's location, then it
- * gets anchored — city-anchored alts are stronger for local SEO. The owner
- * confirmed (2026-11) that the seven-photo job above is in THE WOODLANDS, TX,
- * so those carry the city in both filename and alt. work-01 through work-07
- * remain neutral: their locations are still unconfirmed, and guessing a city to
- * win a keyword would be inventing a fact about a real customer's home.
+ * LOCATIONS ARE NOW ALL CONFIRMED (owner, 2026-11). The twenty photos above are
+ * THE WOODLANDS, TX jobs; the five below are, in his words, "just generic
+ * Houston roofs", so they are anchored to the Houston AREA and no further —
+ * that is as precise as he was and as precise as the photos support.
+ *
+ * The rule that got us here still stands for anything new: a location goes in
+ * only when the owner states it. Guessing a city to win a keyword would be
+ * inventing a fact about a real customer's home.
  */
 export interface WorkPhoto {
   src: string;
@@ -112,7 +114,7 @@ export const WORK_PHOTOS: WorkPhoto[] = [
     alt: "Northvale Roofing crew member shovelling old shingles off a roof during a tear-off in The Woodlands, TX",
     description:
       "Tear-off on this Woodlands, TX roof was done by hand down to the deck so the sheathing underneath could actually be inspected.",
-    tags: ["roof tear-off", "roofing crew", "roof replacement", "The Woodlands TX"],
+    tags: ["roof tear-off", "roofing crew", "Houston TX", "roof replacement", "The Woodlands TX"],
   },
   {
     src: "/work/rotted-roof-decking-exposed-the-woodlands-tx.webp",
@@ -211,38 +213,42 @@ export const WORK_PHOTOS: WorkPhoto[] = [
     tags: ["roofing crew", "roof replacement", "The Woodlands TX"],
   },
   {
-    src: "/work/work-02.webp",
-    title: "Mid tear-off on a single-storey home",
-    alt: "Northvale Roofing crew mid tear-off on a single-story home",
-    description: "Tear-off underway, old shingles coming off down to the deck.",
-    tags: ["roof tear-off", "roofing crew"],
+    src: "/work/roof-tear-off-single-story-home-houston.webp",
+    title: "Mid tear-off on a Houston home",
+    alt: "Northvale Roofing crew mid tear-off on a single-story home in the Houston area",
+    description:
+      "Tear-off underway on a Houston-area roof, old shingles coming off down to the deck.",
+    tags: ["roof tear-off", "roofing crew", "Houston TX"],
   },
   {
-    src: "/work/work-03.webp",
-    title: "Landscaping tarped before work starts",
-    alt: "Home and landscaping protected with tarps during a Northvale Roofing re-roof",
-    description: "Beds, shrubs and walls go under tarps before the first shingle comes off.",
-    tags: ["site protection", "roof replacement"],
+    src: "/work/landscaping-tarped-during-re-roof-houston.webp",
+    title: "Landscaping tarped on a Houston re-roof",
+    alt: "Home and landscaping protected with tarps during a Northvale Roofing re-roof in the Houston area",
+    description:
+      "On every Houston-area job, beds, shrubs and walls go under tarps before the first shingle comes off.",
+    tags: ["site protection", "roof replacement", "Houston TX"],
   },
   {
-    src: "/work/work-01.webp",
-    title: "Inspecting a steep two-storey roof",
-    alt: "Northvale Roofing inspector walking a steep two-story roof",
-    description: "Every inspection is walked, not flown — steep roofs included.",
-    tags: ["roof inspection", "steep roof"],
+    src: "/work/roof-inspection-steep-two-story-houston.webp",
+    title: "Inspecting a steep Houston roof",
+    alt: "Northvale Roofing inspector walking a steep two-story roof in the Houston area",
+    description: "Every Houston-area inspection is walked, not flown — steep roofs included.",
+    tags: ["roof inspection", "steep roof", "Houston TX"],
   },
   {
-    src: "/work/work-05.webp",
-    title: "Starter course at the roof edge",
-    alt: "Synthetic underlayment and starter course installed at a roof edge — install detail",
-    description: "Underlayment and the starter course set at the eave, where wind uplift starts.",
-    tags: ["starter course", "synthetic underlayment", "install detail"],
+    src: "/work/underlayment-and-starter-course-houston.webp",
+    title: "Starter course at a Houston roof edge",
+    alt: "Synthetic underlayment and starter course installed at a roof edge on a Houston-area home — install detail",
+    description:
+      "Underlayment and the starter course set at the eave of a Houston-area roof, where wind uplift starts.",
+    tags: ["starter course", "synthetic underlayment", "install detail", "Houston TX"],
   },
   {
-    src: "/work/work-07.webp",
-    title: "Hand-nailing the field shingles",
-    alt: "Roofer hand-nailing shingles during installation — close-up detail",
-    description: "Hand-nailing keeps every fastener in the nail line and at the right depth.",
-    tags: ["hand nailing", "shingle installation", "install detail"],
+    src: "/work/hand-nailing-shingles-houston.webp",
+    title: "Hand-nailing shingles on a Houston roof",
+    alt: "Roofer hand-nailing shingles during installation on a Houston-area home — close-up detail",
+    description:
+      "Hand-nailing on a Houston-area install keeps every fastener in the nail line and at the right depth.",
+    tags: ["hand nailing", "shingle installation", "install detail", "Houston TX"],
   },
 ];
