@@ -11,7 +11,13 @@ import { CITY_SERVICES } from "../../src/lib/city-services";
 import { SERVICE_AREAS } from "../../src/lib/service-areas";
 import { evaluateNeighborhood, evaluateCityService } from "../../src/lib/quality-gate";
 import { dataRouteStatuses, isAllowedInSitemap } from "../../src/lib/routes";
-import { blogPostingJsonLd, aggregateRatingJsonLd, faqPageJsonLd } from "../../src/lib/seo";
+import {
+  blogPostingJsonLd,
+  aggregateRatingJsonLd,
+  faqPageJsonLd,
+  titleWithBrand,
+  SERP_TITLE_MAX,
+} from "../../src/lib/seo";
 import { headingId } from "../../src/lib/headings";
 
 const neighborhoods = Object.values(NEIGHBORHOODS);
@@ -38,9 +44,16 @@ describe("unique titles + descriptions across all records", () => {
     expect(new Set(descriptions).size).toBe(descriptions.length);
   });
 
-  it("titles stay within SERP-safe length (records only)", () => {
+  /**
+   * This used to measure the record's OWN title, while buildSeo then appended
+   * " — Northvale Roofing" — so a title that passed at 60 shipped at 80, and
+   * 39 of 67 indexable pages were being truncated in search results (audit,
+   * 2026-11). Measure what actually renders.
+   */
+  it("titles stay within SERP-safe length AS RENDERED, brand included", () => {
     for (const t of titles) {
-      expect(t.length, `too long: "${t}"`).toBeLessThanOrEqual(60);
+      const rendered = titleWithBrand(t);
+      expect(rendered.length, `too long: "${rendered}"`).toBeLessThanOrEqual(SERP_TITLE_MAX);
     }
   });
 

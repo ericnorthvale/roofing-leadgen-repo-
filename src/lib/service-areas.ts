@@ -77,7 +77,7 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     intro:
       "We serve Greater Houston from our Spring base — from mature inner-loop bungalows to sprawling suburban builds, and unlike the unincorporated suburbs, a re-roof inside the city limits is permitted work we handle.",
     seoDescription:
-      "Roofing in Houston, TX — IKO roof replacement, repair, storm and insurance help across Memorial, Spring Branch, the Heights, Champions, and Cy-Fair. City of Houston roof permits handled.",
+      "Roofing in Houston, TX — IKO roof replacement, repair, storm damage and insurance help across Memorial, Spring Branch, the Heights, Champions and Cy-Fair.",
     localContext:
       "Greater Houston is the most varied roofing market we serve. Inner-loop neighborhoods like the Heights and parts of Memorial mix early- and mid-century homes — often with steeper pitches, additions, and complex flashing — while Spring Branch, Champions, and the Cypress-Fairbanks corridor run from 1970s subdivisions to newer suburban builds. The through-line is exposure: Houston sits squarely in the Gulf Coast storm corridor, and it's one of the few parts of our area where a re-roof inside the city limits requires a permit. We work Houston from our Spring base to the north.",
     climateNote:
@@ -127,7 +127,7 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     intro:
       "Spring is home base — off I-45 near Klein, Gleannloch Farms, and Champions Forest — so most jobs here are a short drive away, and we know which roofs in which subdivisions are coming due.",
     seoDescription:
-      "Roofing in Spring, TX by a local company based here — IKO roof replacement, repair, and storm/insurance help across Klein, Gleannloch Farms, Champions, and Augusta Pines.",
+      "Roofing in Spring, TX from a company based here — IKO roof replacement, repair and storm/insurance help across Klein, Gleannloch Farms and Augusta Pines.",
     localContext:
       "Spring is our home base, straddling the Harris–Montgomery county line north of Houston along I-45. It's a patchwork of eras: Klein and Champions Forest built out largely in the 1970s and '80s, so those roofs are well into replacement age, while Gleannloch Farms, Augusta Pines, and Harmony are 1990s-through-2010s master-planned communities whose original builder roofs are now aging out in waves. Old Town Spring anchors the historic railroad district. Because we're based here, we can be on a Spring roof quickly after a storm — and we already know the covenant expectations street to street.",
     climateNote:
@@ -184,7 +184,7 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     intro:
       "Cypress is master-planned country — Bridgeland, Towne Lake, and Fairfield — where getting the architectural-review submittal right the first time is half the job.",
     seoDescription:
-      "Roofing in Cypress (Cy-Fair), TX — IKO roof replacement, repair, storm and insurance help across Bridgeland, Towne Lake, Fairfield, and Blackhorse Ranch. ARC submittals handled.",
+      "Roofing in Cypress (Cy-Fair), TX — IKO roof replacement, repair, storm damage and insurance help across Bridgeland, Towne Lake, Fairfield and Blackhorse Ranch.",
     localContext:
       "Cypress — Cy-Fair to locals — is unincorporated Harris County inside the City of Houston's extraterritorial jurisdiction, so it's not a city but a sprawling corridor of master-planned communities: Bridgeland, Towne Lake, Fairfield, Cypress Creek Lakes, and Blackhorse Ranch. Nearly all of them were built on Municipal Utility District (MUD) land with strict architectural-review committees that approve specific shingle lines and colors. Roof age runs the full range here — 1990s Fairfield roofs are aging out while Bridgeland is still adding phases — but the constant is that the ARC submittal, not a city permit, is what governs your re-roof.",
     climateNote:
@@ -307,7 +307,7 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     intro:
       'Kingwood — the "Livable Forest" of far northeast Houston. Its tree canopy is beautiful and brutal on roofs, and because Kingwood is part of the City of Houston, a re-roof here is permitted work.',
     seoDescription:
-      "Roofing in Kingwood, TX (the Livable Forest) — IKO roof replacement, repair, storm and insurance help across Kings Point, Bear Branch, Elm Grove, and Kings Forest. City permits handled.",
+      "Roofing in Kingwood, TX, the Livable Forest — IKO roof replacement, repair, storm damage and insurance help across Kings Point, Bear Branch and Elm Grove.",
     localContext:
       'Kingwood is a ~14,000-acre master-planned community northeast of downtown, marketed for decades as "The Livable Forest" — and that dense tree canopy defines roofing here. Its villages, from Kings Point and Bear Branch to Elm Grove and Kings Forest, largely date to earlier build eras, so many roofs are well into replacement age. Two things set Kingwood apart from our other suburbs: it was annexed into the City of Houston at the end of 1996, so City of Houston roof permits apply; and it flooded severely during Hurricane Harvey in 2017, which put a lot of local attention on doing roof and building work correctly.',
     climateNote:
@@ -356,7 +356,7 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     intro:
       "We cover Tomball up FM 2920 from Spring — from historic Old Town to fast-growing new subdivisions — and inside the city limits a re-roof is permitted work we handle.",
     seoDescription:
-      "Roofing in Tomball, TX — IKO roof replacement, repair, storm and insurance help across Old Town Tomball, Willowcreek Ranch, Rose Hill, and Vintage Oaks. City of Tomball permits handled.",
+      "Roofing in Tomball, TX — IKO roof replacement, repair, storm damage and insurance help across Old Town Tomball, Willowcreek Ranch, Rose Hill and Vintage Oaks.",
     localContext:
       "Tomball blends a historic railroad-and-German-heritage Old Town with a fast wave of new master-planned growth on its fringes (Willowcreek Ranch, Rose Hill, and newer communities like Amira and Rosehill Reserve). That gives it two roof populations: older homes near downtown, and builder-grade shingle roofs in newer subdivisions that reach end-of-life in waves. Tomball is an incorporated city in Harris County near the Montgomery line, so — unlike the surrounding unincorporated areas — a re-roof inside the city limits is permitted work. We reach Tomball up FM 2920 from our Spring base.",
     climateNote:
@@ -405,7 +405,7 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     intro:
       "Magnolia is acreage country — one-acre-plus wooded homesites, bigger and more complex roofs, and tall pines and oaks that drop limbs and shade in every storm.",
     seoDescription:
-      "Roofing in Magnolia, TX for acreage and custom homes — IKO roof replacement, repair, storm and insurance help across High Meadow Ranch, Audubon, Mostyn Manor, and the FM 1488 corridor.",
+      "Roofing for Magnolia, TX acreage and custom homes — IKO replacement, repair, storm and insurance help across High Meadow Ranch, Audubon and Mostyn Manor.",
     localContext:
       "Magnolia is the rural, wooded edge of southern Montgomery County along the FM 1488 corridor. Where The Woodlands is dense villages, Magnolia is acreage: one-acre-plus homesites in communities like High Meadow Ranch and High Meadow Estates (gated, heavily treed), newer master-planned Audubon, Mostyn Manor, Magnolia Reserve, and 1-to-5-acre spreads like Sendera Ranch. That means bigger, more complex roofs — more valleys, dormers, and steep pitches — and a canopy of tall pines and oaks directly overhead. Those trees are the local story: they drop limbs in wind, pile debris in valleys, and shade north-facing slopes that then streak with algae.",
     climateNote:
@@ -462,7 +462,7 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     intro:
       "Conroe spans gated Lake Conroe communities, new master-planned neighborhoods, and older inland homes — and unlike most of our area, roofs inside the city limits are permitted work.",
     seoDescription:
-      "Roofing in Conroe, TX — IKO roof replacement, repair, storm and insurance help across Lake Conroe communities (April Sound, Bentwater), Grand Central Park, and inland Conroe. City permits handled.",
+      "Roofing in Conroe, TX — IKO roof replacement, repair, storm damage and insurance help around Lake Conroe, April Sound, Bentwater and Grand Central Park.",
     localContext:
       "Conroe is the Montgomery County seat, and it's really three roofing markets in one. On Lake Conroe, gated communities like April Sound and Bentwater sit on open water, where sustained wind and humidity work harder on fasteners, sealant, and ridge caps than on a sheltered inland lot. Around I-45 and the Grand Parkway, new master-planned neighborhoods like Grand Central Park are filling in with builder roofs. And across older inland Conroe — Graystone Hills, Longmire, and the neighborhoods near downtown — you'll find roofs of every era. The wrinkle that sets Conroe apart from the rest of our service area: much of it is inside an incorporated city with a building department, so re-roofs there are permitted work.",
     climateNote:

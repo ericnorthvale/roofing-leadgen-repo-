@@ -91,7 +91,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
     slug: "roof-replacement",
     title: "Roof replacement",
     serviceTag: "replacement",
-    seoTitle: "Roof Replacement — NW Houston & Montgomery County",
+    seoTitle: "Roof Replacement — NW Houston, TX",
     seoDescription:
       "Full roof replacement across NW Houston: tear-off to deck, synthetic underlayment, wind-rated architectural shingles, and a written price before we leave.",
     summary:
@@ -263,7 +263,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
     slug: "roof-repair",
     title: "Roof repair",
     serviceTag: "repair",
-    seoTitle: "Roof repair — same-day or next-day in NW Houston",
+    seoTitle: "Same-Day Roof Repair — NW Houston",
     seoDescription:
       "Leaks, lifted shingles, failed flashing, bad pipe boots. Same-day or next-day roof repair across The Woodlands, Spring, Tomball, Magnolia, Conroe, and Cypress.",
     summary:
@@ -353,7 +353,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
     slug: "roof-inspection",
     title: "Free roof inspection",
     serviceTag: "inspection",
-    seoTitle: "Free same-day roof inspection — Montgomery County",
+    seoTitle: "Free Roof Inspection, Montgomery County",
     seoDescription:
       "Free roof inspection with a forty-photo documentation packet and written findings within 24 hours. No obligation, no pressure, no door-knocking.",
     summary:
@@ -478,7 +478,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
     slug: "storm-damage",
     title: "Storm damage",
     serviceTag: "storm",
-    seoTitle: "Storm damage roofing — Houston hail + wind",
+    seoTitle: "Storm Damage Roof Repair — Houston",
     seoDescription:
       "Hail, wind, and tree-impact roof damage documented with a forty-photo packet built for your insurance claim. Houston-area same-day response.",
     summary:

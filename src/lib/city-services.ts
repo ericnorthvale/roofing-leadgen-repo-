@@ -65,7 +65,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
     citySlug: "the-woodlands",
     serviceTag: "replacement",
     slug: "roof-replacement",
-    seoTitle: "Roof Replacement The Woodlands TX — RDRC-Compliant",
+    seoTitle: "Roof Replacement in The Woodlands, TX",
     seoDescription:
       "Roof replacement in The Woodlands: Township RDRC approval handled, tear-off to deck, Standards-compliant materials, written price before we leave the driveway.",
     title: "Roof replacement in The Woodlands",
@@ -201,7 +201,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
     citySlug: "the-woodlands",
     serviceTag: "repair",
     slug: "roof-repair",
-    seoTitle: "Roof Repair The Woodlands TX — Same-Day & Next-Day",
+    seoTitle: "Roof Repair in The Woodlands, TX",
     seoDescription:
       "Roof repair in The Woodlands: leaks, pipe boots, flashing, wind damage. Same-day or next-day across all nine villages, with the Township permit rule handled.",
     title: "Roof repair in The Woodlands",
@@ -288,7 +288,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
     citySlug: "the-woodlands",
     serviceTag: "inspection",
     slug: "roof-inspection",
-    seoTitle: "Roof Inspection The Woodlands TX — Free, 40 Photos",
+    seoTitle: "Free Roof Inspection in The Woodlands",
     seoDescription:
       "Free roof inspection in The Woodlands: forty-photo packet, written findings in 24 hours. Storm checks, buyer/seller inspections, and RDRC re-roof planning.",
     title: "Roof inspection in The Woodlands",
@@ -382,7 +382,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
     citySlug: "the-woodlands",
     serviceTag: "storm",
     slug: "storm-damage",
-    seoTitle: "Storm Damage Roof Repair The Woodlands — Hail & Wind",
+    seoTitle: "Storm & Hail Roof Damage, The Woodlands",
     seoDescription:
       "Storm-damaged roof in The Woodlands? Hail and wind documentation built for Texas claims, emergency tarping, and honest guidance on whether to file.",
     title: "Storm damage roofing in The Woodlands",
@@ -476,7 +476,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
     citySlug: "the-woodlands",
     serviceTag: "insurance",
     slug: "insurance-claims",
-    seoTitle: "Roof Insurance Claim Help The Woodlands — TX Rules",
+    seoTitle: "Roof Insurance Claims in The Woodlands",
     seoDescription:
       "Roof insurance claim support in The Woodlands: Texas deadlines, deductible law, ACV vs replacement cost, and claim-ready documentation from your contractor.",
     title: "Roof insurance claims in The Woodlands",

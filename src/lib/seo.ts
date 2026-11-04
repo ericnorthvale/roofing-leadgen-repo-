@@ -25,28 +25,78 @@ export interface SeoOutput extends SeoInput {
 // PNG, not SVG — social crawlers (FB/LinkedIn/X) don't rasterize SVG og:images.
 const DEFAULT_OG = "/og/default.png";
 
+/**
+ * Character budget for a rendered <title>. Google truncates on PIXEL width
+ * (~600px desktop), so this is a proxy, but a conservative one — 60 characters
+ * of mixed-case text is comfortably inside the box.
+ */
+export const SERP_TITLE_MAX = 60;
+const BRAND_SUFFIX = ` — ${BRAND.name}`;
+
+/**
+ * The brand suffix is appended only when it still FITS.
+ *
+ * This used to be unconditional, and the regression test capped the page's own
+ * title at 60 — then this function added 20 more characters, so 39 of 67
+ * indexable pages shipped a title Google had to cut (audit, 2026-11). What a
+ * cut title loses is its tail, and the tail is the brand: an over-long suffix
+ * buys nothing and costs the words that would otherwise have been visible.
+ *
+ * So the rule is: the page's own words come first, and the brand rides along
+ * when there is room. A page whose title is already 58 characters of useful,
+ * specific language keeps all 58 and drops the suffix — Google shows the site
+ * name beside the result anyway. A title that already contains the brand is
+ * left alone, which is how the homepage puts the brand first.
+ */
+export function titleWithBrand(title: string): string {
+  if (title.includes(BRAND.name)) return title;
+  return title.length + BRAND_SUFFIX.length <= SERP_TITLE_MAX ? title + BRAND_SUFFIX : title;
+}
+
 export function buildSeo(input: SeoInput, siteUrl: string): SeoOutput {
   const base = siteUrl.replace(/\/+$/, "");
   const path = input.pathname ?? "/";
   const canonical = path.startsWith("http") ? path : `${base}${path}`;
   const ogInput = input.ogImage ?? DEFAULT_OG;
   const ogImageAbsolute = ogInput.startsWith("http") ? ogInput : `${base}${ogInput}`;
-  const titleWithBrand = input.title.includes(BRAND.name)
-    ? input.title
-    : `${input.title} — ${BRAND.name}`;
   return {
     ...input,
     canonical,
     ogImageAbsolute,
     siteName: BRAND.name,
     brandName: BRAND.name,
-    titleWithBrand,
+    titleWithBrand: titleWithBrand(input.title),
   };
 }
 
 /** Service areas surfaced in structured data. Single source = the data model. */
 export function areaServedNames(): string[] {
   return SERVICE_AREA_SLUGS.map((slug) => `${SERVICE_AREAS[slug].name}, TX`);
+}
+
+/**
+ * `WebSite` node, emitted once per page beside the business node.
+ *
+ * It is what lets Google treat the pages as one site rather than a pile of
+ * URLs, and it names the site explicitly — which matters because Google
+ * otherwise guesses the site name shown beside every result from the domain,
+ * the title tags or the logo.
+ *
+ * Deliberately NO `potentialAction` / `SearchAction`: that markup promises a
+ * site-search endpoint, and this site has none. Declaring one that 404s is a
+ * structured-data error, not a feature.
+ */
+export function webSiteJsonLd(siteUrl: string): Record<string, unknown> {
+  const base = siteUrl.replace(/\/+$/, "");
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${base}#website`,
+    url: `${base}/`,
+    name: BRAND.name,
+    publisher: { "@id": `${base}#business` },
+    inLanguage: "en-US",
+  };
 }
 
 export function localBusinessJsonLd(siteUrl: string): Record<string, unknown> {
