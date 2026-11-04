@@ -2066,3 +2066,26 @@ names, roles and photos.
 | Descriptions over 160          | 11     | 0                   |
 | Descriptions under 110         | 12     | 4 (legal + sitemap) |
 | Pages with `WebSite` schema    | 0      | 70/70               |
+
+---
+
+### Addendum — Google Search Console ownership proof (2026-11-04)
+
+`public/google8b7495ca11ad6a26.html` is Google's HTML-file verification for the
+Search Console property. It serves at
+`https://northvaleroofing.com/google8b7495ca11ad6a26.html` and contains one
+line, which must stay byte-exact — Google compares the file to the string it
+issued, so reformatting it (or adding a trailing newline) un-verifies the
+property. It is in `.prettierignore` for that reason.
+
+**Do not delete it.** Google re-checks ownership periodically, not once. If the
+file disappears, the property is un-verified and the Search Console data goes
+with it.
+
+It is not a page: it lives in `/public`, so it has no route, is absent from the
+sitemap, and carries no `noindex` need (it is not linked from anywhere).
+
+This verifies a URL-prefix property for `https://northvaleroofing.com/`. A
+Domain property (DNS TXT at the registrar) would additionally cover `www.` and
+`http://` — worth adding later, but it needs the owner at the registrar, and
+DNS is off-limits per Hard Rule #6.
