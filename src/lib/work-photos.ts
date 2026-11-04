@@ -34,6 +34,14 @@
  * The rule that got us here still stands for anything new: a location goes in
  * only when the owner states it. Guessing a city to win a keyword would be
  * inventing a fact about a real customer's home.
+ *
+ * ONE EXCEPTION, reasoned rather than guessed: the IKO pool-home aerial is
+ * "Houston-area" and no tighter. It came out of the old project set, where the
+ * city-named files were demonstrably scrambled — the file named for Magnolia
+ * held the solar-panel roof that belongs to the Humble story (Sheet 9). So the
+ * city in its old filename is exactly the label that proved unreliable. Every
+ * candidate job is in the Houston metro, so "Houston-area" is true whichever
+ * one it is, and that is as precise as the evidence goes.
  */
 export interface WorkPhoto {
   src: string;
@@ -211,6 +219,14 @@ export const WORK_PHOTOS: WorkPhoto[] = [
     description:
       "Crews start at first light in The Woodlands, TX through the Texas summer so most of the tear-off is done before the heat sets in.",
     tags: ["roofing crew", "roof replacement", "The Woodlands TX"],
+  },
+  {
+    src: "/work/iko-shingle-roof-replacement-pool-home-houston.webp",
+    title: "Completed IKO roof on a Houston-area pool home",
+    alt: "Aerial view of a completed IKO architectural shingle roof with dormers on a Houston-area home with a pool",
+    description:
+      "A cut-up hip-and-dormer roof finished in IKO architectural shingle, photographed from above.",
+    tags: ["completed roof replacement", "IKO shingles", "architectural shingles", "Houston TX"],
   },
   {
     src: "/work/roof-tear-off-single-story-home-houston.webp",

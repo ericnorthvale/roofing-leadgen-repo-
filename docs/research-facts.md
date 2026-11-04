@@ -1905,3 +1905,27 @@ work; removing a strip of frame is not.
 
 The file is still unreferenced — it is now clean and available, but nothing
 points at it.
+
+### Sheet 9 addendum 5c — the pool-home aerial goes in the gallery (2026-11-03)
+
+Owner asked for the cropped photo to be added to the gallery. It was the last
+survivor of the old project set and was referenced by nothing.
+
+Moved `public/projects/iko-roof-replacement-humble-tx.jpg` →
+`public/work/iko-shingle-roof-replacement-pool-home-houston.webp` (converted to
+webp, descriptive name matching the rest of the set) and added to
+`WORK_PHOTOS`. Gallery is now 30 images, 30 ImageObjects.
+
+**It is anchored "Houston-area" and no tighter, on purpose.** The obvious move
+would have been to call it Humble, after its old filename. But that filename is
+exactly the label this project has already proved unreliable: the old set was
+scrambled, with the file named for Magnolia holding the solar-panel roof that
+belongs to the Humble story (addendum 2). Suggestively, this photo shows a
+prominent pool, and the _Magnolia_ story is the one about a renovation "including
+a new backyard and pool" — so it may well be the Magnolia job, not Humble.
+
+Every candidate job sits in the Houston metro, so "Houston-area" is true
+whichever it is. IKO is safe to state regardless: the owner confirmed all four
+project roofs are IKO (addendum 5), and this is one of those four.
+
+If the owner identifies the job, the city can be anchored properly.
