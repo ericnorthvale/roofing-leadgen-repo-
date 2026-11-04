@@ -2,6 +2,7 @@
 import CTAButton from "@components/CTAButton.astro";
 import PhoneCTAButton from "@components/PhoneCTAButton.astro";
 import ImagePlaceholder from "@components/ImagePlaceholder.astro";
+import RoofImage from "@components/RoofImage.astro";
 
 interface Props {
   eyebrow?: string;
@@ -45,13 +46,12 @@ const isBackdrop = Boolean(fullBleed && image?.src);
       {/* Backdrop photo — the LCP; eager + high priority. */}
       <picture>
         {image!.mobileSrc && <source media="(max-width: 640px)" srcset={image!.mobileSrc} />}
-        <img
-          src={image!.src}
+        <RoofImage
+          src={image!.src!}
           alt={image!.alt}
+          priority={true}
+          sizes="100vw"
           class="absolute inset-0 h-full w-full object-cover object-[72%_center]"
-          loading="eager"
-          fetchpriority="high"
-          decoding="async"
         />
       </picture>
       {/* Brand scrim: near-solid navy behind the copy, falling away fast so the
@@ -133,6 +133,7 @@ const isBackdrop = Boolean(fullBleed && image?.src);
               demoKey={image.demoKey}
               ratio={image.ratio ?? "4/3"}
               priority={true}
+              sizes="(min-width: 1152px) 560px, (min-width: 768px) 48vw, 92vw"
               tone="mixed"
               class="relative shadow-[var(--shadow-card)]"
             />

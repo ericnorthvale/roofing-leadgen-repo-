@@ -39,6 +39,7 @@ const projects = await getPublishedProjects();
                   <RoofImage
                     src={p.data.photo.src}
                     alt={p.data.photo.alt}
+                    sizes="(min-width: 1152px) 560px, (min-width: 768px) 48vw, 92vw"
                     class="aspect-[16/10] w-full object-cover"
                   />
                 </a>

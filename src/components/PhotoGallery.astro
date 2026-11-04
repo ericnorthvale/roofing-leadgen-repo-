@@ -36,6 +36,7 @@ const { photos, heading = "Recent work" } = Astro.props;
           <RoofImage
             src={p.url}
             alt={p.alt}
+            sizes="(min-width: 1152px) 272px, (min-width: 1024px) 24vw, (min-width: 768px) 31vw, 48vw"
             class="aspect-square w-full rounded-[var(--radius-card)] object-cover"
           />
         ))}

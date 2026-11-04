@@ -7,25 +7,58 @@
  * `alt` must describe the actual image (e.g. "Hail-dented aluminum gutter apron
  * on a Spring, TX home"). Never use a city/keyword-stuffed alt that doesn't
  * match the photo.
+ *
+ * SIZING IS AUTOMATIC (2026-11). `scripts/optimize-images.mjs` measures every
+ * photo under /public at build time and writes `image-manifest.json`;
+ * `src/lib/image-attrs.ts` reads it, so:
+ *
+ *  - `width` and `height` are always emitted, which reserves the box and stops
+ *    the layout shifting as the image loads. Before this, all 227 images on the
+ *    site shipped without them — Cumulative Layout Shift on every page, and it
+ *    is a ranking signal;
+ *  - a `srcset` of down-scaled siblings is emitted when they exist, so a
+ *    272px gallery thumbnail no longer downloads a 1MB photo.
+ *
+ * Pass `sizes` whenever the image is not full-bleed. It tells the browser how
+ * wide the slot will be BEFORE layout, and getting it wrong is the one way to
+ * make a correct srcset useless — a grid thumbnail left at the default will
+ * still pull the largest file.
  */
+import { imageAttrs } from "~/lib/image-attrs";
+
 interface Props {
   src: string;
   /** Required, specific, truthful description of the image. */
   alt: string;
+  /** Overrides the measured size. Rarely needed — the manifest knows. */
   width?: number;
   height?: number;
+  /** CSS width of the slot, e.g. "(max-width: 640px) 50vw, 25vw". */
+  sizes?: string;
   /** Use eager + high priority for above-the-fold hero images only. */
   priority?: boolean;
   class?: string;
 }
-const { src, alt, width, height, priority = false, class: className } = Astro.props;
+const {
+  src,
+  alt,
+  width,
+  height,
+  sizes = "100vw",
+  priority = false,
+  class: className,
+} = Astro.props;
+
+const measured = imageAttrs(src);
 ---
 
 <img
   src={src}
   alt={alt}
-  width={width}
-  height={height}
+  width={width ?? measured.width}
+  height={height ?? measured.height}
+  srcset={measured.srcSet}
+  sizes={measured.srcSet ? sizes : undefined}
   loading={priority ? "eager" : "lazy"}
   decoding={priority ? "auto" : "async"}
   fetchpriority={priority ? "high" : "auto"}

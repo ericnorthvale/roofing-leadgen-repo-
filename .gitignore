@@ -12,6 +12,12 @@ node_modules/
 
 # runtime generated
 *.tsbuildinfo
+# Responsive image siblings emitted by scripts/optimize-images.mjs on every
+# build (pnpm run images). Generated from the committed originals, so they are
+# build output, not source — keeping ~9MB of them in git would bloat every clone.
+public/**/*-400.webp
+public/**/*-800.webp
+public/**/*-1200.webp
 
 # test + coverage
 coverage/

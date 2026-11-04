@@ -73,6 +73,7 @@ const jsonLd = projectStoryJsonLd(Astro.site!.toString(), {
           src={d.photo.src}
           alt={d.photo.alt}
           priority={true}
+          sizes="(min-width: 768px) 736px, 92vw"
           class="mt-6 aspect-[16/9] w-full rounded-[var(--radius-card)] object-cover"
         />
       )

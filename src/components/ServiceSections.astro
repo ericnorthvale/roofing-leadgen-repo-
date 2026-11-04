@@ -10,6 +10,7 @@
  * in globals.css.
  */
 import { headingId } from "~/lib/headings";
+import RoofImage from "@components/RoofImage.astro";
 import type { ServiceSection } from "~/lib/services";
 
 interface Props {
@@ -119,11 +120,10 @@ const { sections } = Astro.props;
       {section.photo && (
         <figure class="my-8">
           <div class="overflow-hidden rounded-[var(--radius-card)]" style="aspect-ratio:16/9;">
-            <img
+            <RoofImage
               src={section.photo.src}
               alt={section.photo.alt}
-              loading="lazy"
-              decoding="async"
+              sizes="(min-width: 768px) 736px, 92vw"
               class="block h-full w-full object-cover"
             />
           </div>

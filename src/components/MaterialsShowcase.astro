@@ -17,6 +17,7 @@
  * observer in ClimateThreats picks these up). The #materials anchor is kept
  * for the table of contents.
  */
+import RoofImage from "@components/RoofImage.astro";
 
 interface Line {
   badge: string;
@@ -98,11 +99,10 @@ const BARS = [
       LINES.map((l) => (
         <div class="nv-anim-item flex flex-col overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-white">
           <div class="relative overflow-hidden" style="aspect-ratio:16/9;">
-            <img
+            <RoofImage
               src={l.photo}
               alt={l.alt}
-              loading="lazy"
-              decoding="async"
+              sizes="(min-width: 1152px) 560px, (min-width: 768px) 48vw, 92vw"
               class="block h-full w-full object-cover"
             />
             <span class="absolute top-3 left-3 border border-[color:var(--color-gold-400)]/60 bg-[color:var(--color-navy-950)]/85 px-2.5 py-1 text-[10px] font-semibold tracking-[0.16em] text-[color:var(--color-gold-300)] uppercase">

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { STUDIO_LINES, type StudioColor, type StudioLineKey } from "~/lib/design-studio";
 import { selectColor, scrollToSection } from "./store";
+import { imageAttrs } from "~/lib/image-attrs";
 
 /**
  * Shingle Studio — the Design Center centerpiece. Pick a line, tap a color,
@@ -35,10 +36,14 @@ function Stage({ src, alt }: { src: string; alt: string }) {
   return (
     <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[var(--radius-card)] bg-[color:var(--color-navy-100)]">
       {layers.map((layer, i) => (
+        /* This is a React island, so it cannot use the RoofImage wrapper —
+           it reads the same build-time manifest directly instead. */
         <img
           key={layer.key}
           src={layer.src}
           alt={i === layers.length - 1 ? layer.alt : ""}
+          {...imageAttrs(layer.src)}
+          sizes="(min-width: 1024px) 620px, 92vw"
           className="nv-stage-img absolute inset-0 h-full w-full object-cover"
           style={i === layers.length - 1 ? undefined : { animation: "none" }}
           decoding="async"
