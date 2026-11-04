@@ -2011,3 +2011,58 @@ picks one.
 **If you add photos:** nothing to remember — `build` regenerates both the
 variants and the manifest. The variants are gitignored (build output); the
 manifest is committed and is in `.prettierignore` because it is generated.
+
+---
+
+### Addendum — SERP titles + descriptions (2026-11-04)
+
+**The bug that produced 39 truncated titles.** `buildSeo` appended
+" — Northvale Roofing" unconditionally while `tests/unit/seo-content.test.ts`
+capped the record's own title at 60 — so a title that passed at 60 shipped at 80. The test now measures the rendered title, and `titleWithBrand` only appends
+the suffix when it fits (`SERP_TITLE_MAX = 60`). Character count is a proxy for
+Google's real limit, which is pixel width (~600px desktop); 60 characters of
+mixed-case text sits comfortably inside it.
+
+**Rule going forward:** a page's own words come first; the brand rides along
+only when there is room. A blog post at 58 characters keeps all 58 and drops
+the suffix — Google shows the site name beside the result regardless (which is
+also what the new `WebSite` node is for).
+
+**Homepage title changed, and the keyword map calls it owner-specified.** It
+was `Roofing Company The Woodlands TX | Roof Repair & Replacement | Northvale
+Roofing` (84 chars). It is now `Northvale Roofing — The Woodlands, TX Roofing
+Company` (55). The head term the owner asked for is intact; the second and
+third keyword phrases were dropped because they were the part being cut off.
+Flagged to the owner — revert or reword on request.
+
+**`/services` was cannibalizing.** Its title targeted "The Woodlands", which
+docs/keyword-map.md assigns to `/the-woodlands/*`. Now "North Houston, TX". The
+existing test only enforced this on individual SERVICE_LIST records, not on the
+index page.
+
+**Village titles are now uniform** (`<Village> Roofing — The Woodlands`). The
+differentiators that used to ride in the title moved to the descriptions. This
+is not a doorway-page risk: the rule is about page CONTENT, and the quality
+gate still requires village-distinct content. A title that is the primary query
+and nothing else is the correct shape.
+
+**Descriptions under 110 characters** get discarded by Google, which then writes
+its own snippet from the page — so the SERP copy stops being ours. The persona
+landing pages were reusing `promise`, a field capped at 14 words for on-page
+display; they now carry their own `seoDescription`. The four legal/sitemap
+pages keep short accurate descriptions on purpose.
+
+**`WebSite` schema** added sitewide, `publisher` → the existing business node.
+No `potentialAction`/`SearchAction`: that promises a site-search endpoint this
+site does not have, and declaring one that 404s is an error, not a feature.
+
+**`/team` is orphaned on purpose,** not by oversight — `noindex` until real
+team members exist (Hard Rule #2). It stays unlinked until the owner supplies
+names, roles and photos.
+
+| Built HTML, 67 indexable pages | Before | After               |
+| ------------------------------ | ------ | ------------------- |
+| Titles over 60                 | 39     | 0                   |
+| Descriptions over 160          | 11     | 0                   |
+| Descriptions under 110         | 12     | 4 (legal + sitemap) |
+| Pages with `WebSite` schema    | 0      | 70/70               |
