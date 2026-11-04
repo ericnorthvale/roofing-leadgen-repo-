@@ -1884,7 +1884,24 @@ Two things worth knowing about the file he kept:
    appear anywhere until something points at it.
 2. **It has a website carousel arrow baked into the right edge** — a white
    circle with a chevron, at roughly 92% width, mid-height. It was screenshotted
-   from a page rather than saved from the original. Cropping the right ~10%
-   removes it cleanly, the same fix applied to the aerial patio-cover photo in
-   addendum 3. Not done unprompted, because the owner asked for the file kept,
-   not changed.
+   from a page rather than saved from the original. Cropped out on 2026-11-03
+   at the owner's instruction — see below.
+
+### Sheet 9 addendum 5b — carousel arrow cropped out (2026-11-03)
+
+Owner: "Definitely crop that photo so it doesn't show the carousel arrow."
+
+The arrow's leftmost pixel was measured at x≈1244 of 1350, so the image was cut
+at **x = 1238** — 112px, 8.3% of the width, with 6px of margin. 1350×960 →
+1238×960.
+
+Nothing of the subject was lost: the house, pool, driveway and fence line all
+sit left of the cut, and the removed strip is empty lawn. Verified by eye after
+the crop.
+
+Cropping rather than painting the arrow out was deliberate. Cloning grass over
+it would be altering the content of a photograph presented as a record of real
+work; removing a strip of frame is not.
+
+The file is still unreferenced — it is now clean and available, but nothing
+points at it.
