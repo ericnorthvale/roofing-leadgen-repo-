@@ -1929,3 +1929,38 @@ whichever it is. IKO is safe to state regardless: the owner confirmed all four
 project roofs are IKO (addendum 5), and this is one of those four.
 
 If the owner identifies the job, the city can be anchored properly.
+
+---
+
+### Sheet 10 — the real business address (2026-11-04)
+
+Owner supplied it: **25700 Interstate 45 N, Suite 4018, The Woodlands, TX 77386**.
+`business-info.json` previously had `addressLine1: ""`, `postalCode: ""` and
+`city: "Spring"`, so the LocalBusiness schema was omitting street and ZIP
+entirely. All three fields are now filled and the schema completes itself —
+`seo.ts` already had the conditional spread, nothing else to change.
+
+**ZIP 77386 city naming, checked rather than assumed.** USPS's _preferred_ city
+for 77386 is **Spring, TX**; **The Woodlands is an accepted alternate** (with
+Oak Ridge North). So "The Woodlands" is legitimate, not a stretch — but it is
+the alternate, which has one practical consequence: some data aggregators
+normalise to the USPS preferred name, so a citation built from this address may
+come back reading "Spring". NAP consistency matters more than which variant is
+chosen, so the variant must be identical everywhere: GBP, the site, every
+directory. Sources (third-party ZIP databases, not USPS's own tool — worth
+confirming against the USPS lookup before mass citation building):
+https://www.zipwise.com/zip-code/77386 · https://uszipcodes.org/texas/montgomery/spring/77386
+
+**This corrects strategic advice given earlier the same day.** Working from
+`city: "Spring"`, the recommendation was to build out Spring first because
+proximity would work in its favour and The Woodlands map pack would be out of
+reach from ~10 miles away. With a Woodlands address that reasoning no longer
+holds: the Woodlands map pack is a realistic target, and the Spring build-out
+drops from "highest ROI" to "worth doing, but second". Recorded here because the
+earlier reasoning is in the conversation and would otherwise be followed.
+
+Caveat worth the owner's attention, not resolved here: Google Business Profile
+requires a real location staffed during stated hours. A suite in a multi-tenant
+building is fine if genuinely occupied; a virtual office, mailbox or unstaffed
+co-working address is against GBP guidelines and risks suspension — an expensive
+failure to discover after citations are built on it.
