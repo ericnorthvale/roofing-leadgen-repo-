@@ -98,7 +98,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       "Tear-off to deck, a rebuilt roof system — decking to ridge vent — and the exact price in writing before we leave the driveway. Architectural shingle standard; Class-4 impact and metal options quoted side by side.",
     // Visual system (presentation only — every word above/below unchanged).
     heroPhoto: {
-      src: "/work/work-04.webp",
+      src: "/work/completed-roof-red-brick-home-houston.webp",
       alt: "Completed roof replacement in dark architectural shingle on a red-brick Houston-area home",
     },
     // Each chip restates a fact already on this page (install time: process
@@ -174,7 +174,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
         body: "Shingles are the visible 20% of a roof. Replacements fail or last on the other 80%:",
         kind: "cards",
         photo: {
-          src: "/work/work-05.webp",
+          src: "/work/underlayment-and-starter-course-houston.webp",
           alt: "Synthetic underlayment and starter course installed at a roof edge — install detail",
           caption: "The system under the shingles — a real Northvale install",
         },
@@ -270,7 +270,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       "Leaks, lifted shingles, failed flashing, bad pipe boots. Usually same-day or next-day. Written diagnosis before any cash changes hands.",
     // Visual system (presentation only — every word above/below unchanged).
     heroPhoto: {
-      src: "/work/work-07.webp",
+      src: "/work/hand-nailing-shingles-houston.webp",
       alt: "Roofer hand-nailing shingles during installation — close-up detail",
     },
     // Each chip restates a fact already on this page (scheduling: summary +
@@ -360,7 +360,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       "Forty-photo packet. Written findings within 24 hours. No obligation, no pressure, no door-knocking.",
     // Visual system (presentation only — every word above/below unchanged).
     heroPhoto: {
-      src: "/work/work-01.webp",
+      src: "/work/roof-inspection-steep-two-story-houston.webp",
       alt: "Northvale Roofing inspector walking a steep two-story roof",
     },
     // Each chip restates a fact already on this page (free + no obligation:
@@ -485,7 +485,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       "Hail, wind, fallen-limb impact. We document everything your adjuster will ask for, and then some.",
     // Visual system (presentation only — every word above/below unchanged).
     heroPhoto: {
-      src: "/work/work-03.webp",
+      src: "/work/landscaping-tarped-during-re-roof-houston.webp",
       alt: "Home and landscaping protected with tarps during a Northvale Roofing re-roof",
     },
     // Each chip restates a fact already on this page (NWS storm-day count:
@@ -580,8 +580,8 @@ export const SERVICES: Record<ServiceTag, Service> = {
     // Visual system (presentation only — every word above/below unchanged).
     // Photo is the real reopened-claim job from Projects (published record).
     heroPhoto: {
-      src: "/projects/hail-claim-roof-replacement-the-woodlands-tx.webp",
-      alt: "Aerial view of a completed architectural shingle roof replacement on a large hip-and-valley home in The Woodlands, TX, after an approved hail claim",
+      src: "/projects/iko-hail-claim-roof-replacement-the-woodlands-tx.webp",
+      alt: "Aerial view of a completed IKO architectural shingle roof replacement on a large hip-and-valley home in The Woodlands, TX, after an approved hail claim",
     },
     // Each chip restates the Ch. 542 deadlines already detailed on this page.
     glance: [
