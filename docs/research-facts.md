@@ -1964,3 +1964,50 @@ requires a real location staffed during stated hours. A suite in a multi-tenant
 building is fine if genuinely occupied; a virtual office, mailbox or unstaffed
 co-working address is against GBP guidelines and risks suspension — an expensive
 failure to discover after citations are built on it.
+
+---
+
+### Addendum — image pipeline / Core Web Vitals (2026-11-04)
+
+Not published facts; an engineering record so the next person doesn't undo it.
+
+**Problem.** The SEO audit found (a) all 227 `<img>` tags shipping with no
+`width`/`height`, so every page shifted as photos loaded, and (b) the gallery
+downloading 12.37 MB to render ~272px thumbnails.
+
+**Why not Astro's `<Image>`.** It only processes images it can import from
+`src/`. Every image path on this site is a plain string in a data file
+(`work-photos.ts`, `service-areas.ts`, the project JSON) or inside JSON-LD
+`contentUrl` / OG tags, which need stable public URLs. Moving them to `src/`
+would mean rewriting all of that and hashing URLs already published in
+structured data and in the roof report PDF.
+
+**What was built.** `scripts/optimize-images.mjs` measures everything under
+`/public` and writes `src/lib/image-manifest.json`, plus down-scaled siblings
+(`name-400.webp` …). Originals are never modified. Runs from `build`,
+idempotent, ~23s cold. `src/lib/image-attrs.ts` is the only reader; both
+`RoofImage.astro` and the React design-center studio go through it.
+
+**The part that is easy to get wrong.** `sizes`. Without it the browser assumes
+`100vw` and a correct `srcset` buys nothing. Every non-full-bleed call site now
+passes one, and `ServiceCard` takes it as a prop because it is 3-up on `/` and
+2-up on `/services` — a value baked into the component is wrong on one page.
+Verified in a real browser at 2x DPR: declared slot width within 2% of rendered
+width everywhere, nothing under-resolved.
+
+**Measured, against the built output:**
+
+| Page        | Before   | After   |
+| ----------- | -------- | ------- |
+| `/gallery`  | 12.37 MB | 0.93 MB |
+| `/`         | 3.61 MB  | 0.52 MB |
+| `/about`    | 1.05 MB  | 0.24 MB |
+| `/projects` | 1.10 MB  | 0.30 MB |
+
+226 of 227 images now carry `width` + `height`; the exception is the roof
+calculator's own-photo preview, which has no file to measure until a visitor
+picks one.
+
+**If you add photos:** nothing to remember — `build` regenerates both the
+variants and the manifest. The variants are gitignored (build output); the
+manifest is committed and is in `.prettierignore` because it is generated.
