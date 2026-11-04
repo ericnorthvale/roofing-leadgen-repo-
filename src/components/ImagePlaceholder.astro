@@ -30,6 +30,12 @@ interface Props {
   alt: string;
   /** Above-the-fold (hero) images only: eager + high fetchpriority. */
   priority?: boolean;
+  /**
+   * CSS width of this slot, e.g. "(min-width: 768px) 48vw, 92vw". Passed to
+   * RoofImage. Set it on every slot that is not full-bleed, otherwise the
+   * browser assumes 100vw and downloads the largest file for a small box.
+   */
+  sizes?: string;
   /** Placeholder color treatment. */
   tone?: "navy" | "gold" | "mixed";
   class?: string;
@@ -41,6 +47,7 @@ const {
   demoKey,
   alt,
   priority = false,
+  sizes,
   tone = "mixed",
   class: className,
 } = Astro.props;
@@ -65,6 +72,7 @@ const gradients: Record<NonNullable<Props["tone"]>, string> = {
         src={resolved}
         alt={alt}
         priority={priority}
+        sizes={sizes}
         class="block h-full w-full object-cover"
       />
     </div>

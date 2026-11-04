@@ -1,0 +1,721 @@
+{
+  "/about/greg-labbe.webp": {
+    "w": 880,
+    "h": 1100,
+    "v": [
+      400
+    ]
+  },
+  "/design-center/armourshake/greystone-home.webp": {
+    "w": 1400,
+    "h": 1051,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/armourshake/shadow-black-home.webp": {
+    "w": 1400,
+    "h": 935,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/armourshake/weathered-stone-home.webp": {
+    "w": 1400,
+    "h": 933,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/cambridge/driftwood-home.webp": {
+    "w": 1400,
+    "h": 1408,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/cambridge/dual-black-home.webp": {
+    "w": 1400,
+    "h": 933,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/cambridge/dual-black-swatch.webp": {
+    "w": 1100,
+    "h": 1100,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/cambridge/weatherwood-home.webp": {
+    "w": 1400,
+    "h": 1408,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/cambridge/weatherwood-swatch.webp": {
+    "w": 1100,
+    "h": 1041,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/dynasty/cornerstone-weatherwood-swatch.webp": {
+    "w": 1100,
+    "h": 1106,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/dynasty/glacier-swatch.webp": {
+    "w": 1100,
+    "h": 1039,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/dynasty/granite-black-home.webp": {
+    "w": 1400,
+    "h": 934,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/dynasty/granite-black-swatch.webp": {
+    "w": 1100,
+    "h": 1039,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/dynasty/olde-style-weatherwood-swatch.webp": {
+    "w": 1100,
+    "h": 1060,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/dynasty/shadow-brown-swatch.webp": {
+    "w": 1100,
+    "h": 1039,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/dynasty/summit-grey-home.webp": {
+    "w": 1400,
+    "h": 1408,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/dynasty/summit-grey-swatch.webp": {
+    "w": 1100,
+    "h": 1100,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/nordic/driftshake-home.webp": {
+    "w": 1400,
+    "h": 1408,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/nordic/driftshake-swatch.webp": {
+    "w": 1100,
+    "h": 1039,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/nordic/glacier-swatch.webp": {
+    "w": 1100,
+    "h": 1039,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/nordic/granite-black-home.webp": {
+    "w": 1400,
+    "h": 1408,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/nordic/granite-black-swatch.webp": {
+    "w": 1100,
+    "h": 1039,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/nordic/olde-style-weatherwood-swatch.webp": {
+    "w": 1100,
+    "h": 1060,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/nordic/shadow-brown-home.webp": {
+    "w": 1400,
+    "h": 946,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/nordic/shadow-brown-swatch.webp": {
+    "w": 1100,
+    "h": 1039,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/design-center/nordic/summit-grey-swatch.webp": {
+    "w": 1100,
+    "h": 1100,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/hero/roof-replacement-woodlands-mobile.webp": {
+    "w": 800,
+    "h": 667,
+    "v": [
+      400
+    ]
+  },
+  "/hero/roof-replacement-woodlands.webp": {
+    "w": 1280,
+    "h": 667,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/placeholders/after.jpg": {
+    "w": 900,
+    "h": 1522,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/placeholders/before.jpg": {
+    "w": 700,
+    "h": 1049,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/crew-foreman.jpg": {
+    "w": 700,
+    "h": 1244,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/crew-install.jpg": {
+    "w": 700,
+    "h": 1050,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/crew-pm.jpg": {
+    "w": 700,
+    "h": 1245,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/hero.jpg": {
+    "w": 1200,
+    "h": 1800,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/placeholders/neighborhood.jpg": {
+    "w": 700,
+    "h": 1050,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/svc-inspection.jpg": {
+    "w": 700,
+    "h": 1050,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/svc-insurance.jpg": {
+    "w": 700,
+    "h": 467,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/svc-repair.jpg": {
+    "w": 700,
+    "h": 1244,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/svc-replacement.jpg": {
+    "w": 700,
+    "h": 467,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/svc-storm.jpg": {
+    "w": 700,
+    "h": 467,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/truck.jpg": {
+    "w": 700,
+    "h": 478,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/work-1.jpg": {
+    "w": 800,
+    "h": 533,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/work-2.jpg": {
+    "w": 800,
+    "h": 533,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/work-3.jpg": {
+    "w": 800,
+    "h": 1422,
+    "v": [
+      400
+    ]
+  },
+  "/placeholders/work-4.jpg": {
+    "w": 800,
+    "h": 533,
+    "v": [
+      400
+    ]
+  },
+  "/projects/iko-hail-claim-roof-replacement-the-woodlands-tx.webp": {
+    "w": 1400,
+    "h": 1050,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/projects/iko-insurance-claim-roof-replacement-spring-tx.webp": {
+    "w": 1000,
+    "h": 750,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/projects/iko-roof-replacement-under-solar-panels-humble-tx.webp": {
+    "w": 1200,
+    "h": 628,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/projects/iko-solar-attic-fan-roof-ventilation-magnolia-tx.webp": {
+    "w": 1500,
+    "h": 1125,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/villages/alden-bridge.webp": {
+    "w": 900,
+    "h": 600,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/villages/carlton-woods.webp": {
+    "w": 900,
+    "h": 600,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/villages/cochrans-crossing.webp": {
+    "w": 900,
+    "h": 600,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/villages/college-park.webp": {
+    "w": 900,
+    "h": 600,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/villages/creekside-park.webp": {
+    "w": 900,
+    "h": 600,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/villages/grogans-mill.webp": {
+    "w": 900,
+    "h": 600,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/villages/indian-springs.webp": {
+    "w": 900,
+    "h": 600,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/villages/panther-creek.webp": {
+    "w": 900,
+    "h": 600,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/villages/sterling-ridge.webp": {
+    "w": 900,
+    "h": 600,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/work/completed-roof-aerial-patio-cover-the-woodlands-tx.webp": {
+    "w": 1360,
+    "h": 2016,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/completed-roof-brick-ranch-the-woodlands-tx.webp": {
+    "w": 1600,
+    "h": 1200,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/completed-roof-rear-elevation-the-woodlands-tx.webp": {
+    "w": 1600,
+    "h": 1200,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/completed-roof-red-brick-home-houston.webp": {
+    "w": 1400,
+    "h": 1050,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/completed-roof-replacement-brick-home-the-woodlands-tx.webp": {
+    "w": 1600,
+    "h": 2133,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/completed-roof-replacement-ranch-home-the-woodlands-tx.webp": {
+    "w": 1600,
+    "h": 2133,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/completed-roof-replacement-the-woodlands-tx.webp": {
+    "w": 1600,
+    "h": 1200,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/completed-roof-ridge-vent-aerial-the-woodlands-tx.webp": {
+    "w": 1512,
+    "h": 2016,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/completed-roof-two-story-oak-houston.webp": {
+    "w": 1200,
+    "h": 2133,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/work/completed-shingle-roof-brick-home-the-woodlands-tx.webp": {
+    "w": 1600,
+    "h": 1200,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/completed-shingle-roof-replacement-houston.webp": {
+    "w": 1200,
+    "h": 900,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/work/completed-shingle-roof-vents-the-woodlands-tx.webp": {
+    "w": 1600,
+    "h": 2133,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/full-roof-redeck-the-woodlands-tx.webp": {
+    "w": 1600,
+    "h": 1200,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/hand-nailing-shingles-houston.webp": {
+    "w": 1200,
+    "h": 2133,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/work/hip-roof-and-chimney-brick-home-the-woodlands-tx.webp": {
+    "w": 1242,
+    "h": 2208,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/work/iko-shingle-roof-replacement-pool-home-houston.webp": {
+    "w": 1238,
+    "h": 960,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/work/landscaping-tarped-during-re-roof-houston.webp": {
+    "w": 1400,
+    "h": 1048,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/new-roof-decking-installed-the-woodlands-tx.webp": {
+    "w": 1600,
+    "h": 2133,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/roof-deck-valley-membrane-the-woodlands-tx.webp": {
+    "w": 1512,
+    "h": 2016,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/roof-inspection-steep-two-story-houston.webp": {
+    "w": 1264,
+    "h": 1688,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/work/roof-tear-off-single-story-home-houston.webp": {
+    "w": 1400,
+    "h": 781,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/roof-tear-off-to-deck-the-woodlands-tx.webp": {
+    "w": 1242,
+    "h": 932,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/work/roof-vent-and-pipe-boot-detail-the-woodlands-tx.webp": {
+    "w": 1600,
+    "h": 2133,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/roofline-at-sunrise-the-woodlands-tx.webp": {
+    "w": 1600,
+    "h": 1200,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/rotted-roof-decking-exposed-the-woodlands-tx.webp": {
+    "w": 1242,
+    "h": 2208,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/work/synthetic-underlayment-the-woodlands-tx.webp": {
+    "w": 1242,
+    "h": 2208,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/work/tear-off-crew-removing-shingles-the-woodlands-tx.webp": {
+    "w": 1512,
+    "h": 2016,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/underlayment-and-starter-course-houston.webp": {
+    "w": 1200,
+    "h": 2133,
+    "v": [
+      400,
+      800
+    ]
+  },
+  "/work/valley-membrane-install-the-woodlands-tx.webp": {
+    "w": 1512,
+    "h": 2016,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/work/work-08-during.webp": {
+    "w": 1200,
+    "h": 900,
+    "v": [
+      400,
+      800
+    ]
+  }
+}

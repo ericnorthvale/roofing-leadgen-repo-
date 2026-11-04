@@ -8,8 +8,23 @@ interface Props {
   badge?: string;
   /** Optional card thumbnail. Pass `src` later to swap the placeholder for a photo. */
   image?: { slot: string; alt: string; src?: string; demoKey?: string };
+  /**
+   * How wide this card's thumbnail will be, for picking a file size. These
+   * cards sit in a 2-up grid on /services and a 3-up grid on the homepage, so
+   * the GRID has to say — a single value baked in here is wrong on one of
+   * them. Defaults to the 2-up (wider) case, because over-fetching one step
+   * costs bytes while under-fetching looks soft.
+   */
+  sizes?: string;
 }
-const { href, title, blurb, badge, image } = Astro.props;
+const {
+  href,
+  title,
+  blurb,
+  badge,
+  image,
+  sizes = "(min-width: 1152px) 560px, (min-width: 768px) 48vw, 92vw",
+} = Astro.props;
 ---
 
 <a
@@ -25,6 +40,7 @@ const { href, title, blurb, badge, image } = Astro.props;
         alt={image.alt}
         src={image.src}
         ratio="3/2"
+        sizes={sizes}
         tone="mixed"
       />
     )

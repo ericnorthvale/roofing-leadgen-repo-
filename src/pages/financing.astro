@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
+import RoofImage from "@components/RoofImage.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import CTAButton from "@components/CTAButton.astro";
 import PhoneCTAButton from "@components/PhoneCTAButton.astro";
@@ -176,13 +177,12 @@ const seo = {
 <BaseLayout seo={seo}>
   {/* Photo header — matches the service-page visual system. Real work photo. */}
   <section class="relative overflow-hidden bg-[color:var(--color-navy-950)]">
-    <img
+    <RoofImage
       src="/work/completed-roof-two-story-oak-houston.webp"
       alt="Completed roof replacement on a two-story Houston-area home beneath a mature oak tree"
+      priority={true}
+      sizes="100vw"
       class="absolute inset-0 h-full w-full object-cover object-[70%_center]"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
     />
     <div class="nv-svc-scrim absolute inset-0" aria-hidden="true"></div>
     <div class="relative mx-auto max-w-6xl px-4 py-14 md:py-20">
