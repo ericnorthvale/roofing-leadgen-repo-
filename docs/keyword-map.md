@@ -20,12 +20,23 @@ sitewide (enforced by tests/unit/seo-content.test.ts).
 
 ## Secondary city spokes (Phase 4 expansion)
 
-| Page                       | Primary query family                              | Notes                                                                                                                                                            |
-| -------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/conroe/storm-damage`     | storm / hail damage roof Conroe                   | City permit inside limits; Lake Conroe open-water wind                                                                                                           |
-| `/conroe/insurance-claims` | roof insurance claim Conroe                       |                                                                                                                                                                  |
-| `/spring/roof-replacement` | roof replacement Spring TX / new roof cost Spring | Home base; Klein + Champions '70s–'80s stock; Harris Co. no-permit rule. ALSO owns "signs you need a new roof Spring" — deliberately ONE page, not two thin ones |
-| `/cypress/storm-damage`    | storm / hail damage roof Cypress (Cy-Fair)        | NCEI ~104 mph gust at Cypress in the 2024 derecho; MUD/ARC approval                                                                                              |
+| Page                         | Primary query family                                                            | Notes                                                                                                                                                            |
+| ---------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/conroe/storm-damage`       | storm / hail damage roof Conroe                                                 | City permit inside limits; Lake Conroe open-water wind                                                                                                           |
+| `/conroe/insurance-claims`   | roof insurance claim Conroe                                                     |                                                                                                                                                                  |
+| `/spring/roof-replacement`   | roof replacement Spring TX / new roof cost Spring                               | Home base; Klein + Champions '70s–'80s stock; Harris Co. no-permit rule. ALSO owns "signs you need a new roof Spring" — deliberately ONE page, not two thin ones |
+| `/cypress/storm-damage`      | storm / hail damage roof Cypress (Cy-Fair)                                      | NCEI ~104 mph gust at Cypress in the 2024 derecho; MUD/ARC approval                                                                                              |
+| `/houston/roof-replacement`  | roof replacement Houston / **do I need a permit to replace my roof in Houston** | The permit question, not the head term — "roofer Houston" is unwinnable against national aggregators                                                             |
+| `/kingwood/roof-repair`      | roof repair Kingwood / tree damage roof Kingwood                                | The canopy, NOT permits — Kingwood's permit answer is Houston's, and leading on it would duplicate that page                                                     |
+| `/tomball/roof-inspection`   | roof inspection Tomball                                                         | Two housing stocks in one small city (Old Town vs the new fringe). Permit is a closing note, not the hook                                                        |
+| `/magnolia/roof-replacement` | roof replacement Magnolia / acreage + custom roofs                              | Acreage: access, outbuildings, metal as a real option, no inspector                                                                                              |
+
+> **Why four cities, four different services.** Three of these four share one
+> hook (a city re-roof permit applies). Building them all as permit-led
+> replacement pages would have produced exactly the duplication Hard Rule #1
+> forbids. Each page is therefore a different service answering a different
+> local question — and `scripts/check-uniqueness.mjs` now enforces it at build
+> time. Highest overlap involving any of the four: **1.4%**.
 
 ## Metro-wide service guides (NON-city-qualified queries)
 

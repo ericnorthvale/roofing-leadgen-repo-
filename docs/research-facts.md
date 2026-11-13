@@ -2550,3 +2550,121 @@ Illustrating a hail-identification article with stock imagery would be exactly
 the Hard Rule #2 violation the gallery rules exist to prevent. The post ships
 without images; the ventilation and repair-vs-replace posts use real Woodlands
 job photos (ridge vent, rotted decking) as their social preview images.
+
+---
+
+## Sheet 16 — Houston, Kingwood, Tomball, Magnolia spokes (2026-11-13)
+
+Four city spokes built after the owner asked whether adding more city pages
+risked a doorway-page problem. It does — so this sheet records both the facts
+AND the differentiation strategy, because the strategy is the thing that keeps
+them legal.
+
+**The measured problem.** Before building, a shingle-similarity check across
+the nine existing city-service pages found the worst pair at 12.0% (Conroe vs
+Cypress storm damage) — the two SAME-SERVICE, different-city pages. That is the
+pattern that degrades with scale. Three of the four remaining cities share one
+hook (a city re-roof permit applies), so building all four as permit-led
+replacement pages would have walked straight into it.
+
+**The strategy: four cities, four DIFFERENT services, four different hooks.**
+
+| Page                         | Hook nothing else on the site covers                   |
+| ---------------------------- | ------------------------------------------------------ |
+| `/houston/roof-replacement`  | City permit + what it is actually checking (wind code) |
+| `/kingwood/roof-repair`      | The canopy — trees as the primary threat, not hail     |
+| `/tomball/roof-inspection`   | Two housing stocks in one small city                   |
+| `/magnolia/roof-replacement` | Acreage — big custom roofs, access, no inspector       |
+
+Kingwood deliberately does NOT lead on permits even though it has the same
+answer as Houston (annexed 1996), because that would have duplicated the
+Houston page. Result after building: the highest overlap involving any of the
+four is **1.4%**, including Houston-vs-Spring and Houston-vs-Magnolia, both
+roof-replacement pages. Enforced from now on by `scripts/check-uniqueness.mjs`.
+
+### Houston — City of Houston re-roof permit
+
+- City of Houston issues a **Residential Roofing Permit** for a re-roof or
+  roofing overlay on a residence, applied for with the **Residential
+  Re-Roofing Only Worksheet (Form CE-1109)**. Valid period **6 months**,
+  inspection required, **no renewal**. Re-roofs go through structural and
+  floodplain review. Plans are generally not required for a straightforward
+  re-roof — this does NOT extend to replacing rafters or joists — SOURCES:
+  https://www.houstonpermittingcenter.org/hpwcode1140 ;
+  https://www.houstonpermittingcenter.org/sites/g/files/nwywnm431/files/2026-02/Training%20PP%20-%20One-Stop%20Shop%20Residential%20-%20Shared%20-%202026.02.19.pdf
+- Houston's adopted code set is the **2021 IRC, effective 1 January 2024** —
+  SOURCE: HPC One-Stop residential training deck (2026-02-19), above.
+- Jurisdiction split (city limits vs unincorporated Harris County) already
+  sourced in Sheet 5.
+
+### Houston — UNVERIFIED (do not publish)
+
+1. Permit fee figures. One HPC page cites a $32.16 admin fee and ~10 business
+   days processing; third-party guides quote $150–$500. Not verified against
+   the current fee schedule — the site quotes NO Houston permit fee.
+2. The "plans not required" line was found on a mirror of the HPC page as well
+   as HPC itself; phrased on-site as "generally not required" with the
+   rafter/joist exclusion stated.
+3. Any claim about small-job permit exemptions.
+
+### Tomball — City of Tomball roofing permit
+
+- **$50.00 residential roofing permit** per the city's own Roofing Permit
+  Application – Residential (revised February 2023). Commercial roofing instead
+  requires a commercial building permit. Applications submit through the **City
+  of Tomball SmartGov portal**. Building Division at **501 James St** —
+  SOURCES: https://tomballtx.gov/DocumentCenter/View/2166/Roofing-Permit-Application-Residential ;
+  https://www.tomballtx.gov/812/Building-Permits ;
+  https://www.tomballtx.gov/852/Building-Division
+- Old Town historic railroad/German-heritage district plus fast-growing
+  master-planned fringe (Amira, Rosehill Reserve) — Sheet 5.
+
+### Tomball — UNVERIFIED (do not publish)
+
+1. The roofing inspection sequence (decking / underlayment / final). Only
+   third-party compliance sites assert it; the city's general inspections page
+   says only that field inspections occur after plan approval. The page says a
+   permit is required and does not describe an inspection schedule.
+2. Phone number conflict: the application lists (281) 290-1450, the Building
+   Division page (281) 290-1400. **No Tomball phone number is published on the
+   site** — the page tells the reader we confirm it.
+
+### Kingwood — the canopy
+
+- Kingwood was **annexed into the City of Houston on 31 Dec 1996**, so City of
+  Houston permitting applies (Sheet 5). This is deliberately a secondary note
+  on the page, not its hook — see the strategy table above.
+- **Trees for Kingwood**, a local replanting nonprofit, launched **2022** and
+  has planted roughly **3,000 trees**, working to restore canopy lost to
+  storms, disease and drought; a nonprofit leader puts losses at over 10,000
+  trees across five decades — SOURCE (attribute, community journalism):
+  https://communityimpact.com/lake-houston-humble-kingwood/nonprofit/trees-for-kingwood-aims-to-restore-canopy-in-the-livable-forest/
+- Trees fell onto Kingwood homes during **Imelda** and during **Beryl** (2024),
+  including a documented case on Forest Cove Drive; a local arborist describes
+  **pine bark beetle** infestation worsened by drought — SOURCES (attribute,
+  local TV news): https://abc13.com/post/giant-tree-topples-onto-kingwood-home/5552681/ ;
+  https://abc13.com/post/hurricane-beryl-kingwood-texas-damage-fall-louis-flory-ability-tree-experts/15091495/
+
+### Kingwood — UNVERIFIED (do not publish)
+
+1. "~50% of urbanized-area trees impacted by Beryl" — a quoted estimate inside
+   a community-journalism piece, not a primary survey. The page describes
+   regional tree damage as severe WITHOUT a percentage.
+2. The arborist's "600 trees a year" figure — single practitioner, older
+   article. Pine beetle is described qualitatively.
+3. Every roof-repair cost range found for Kingwood came from contractor
+   marketing pages. **No cost figure appears on the page.**
+4. Kingwood's ~14,000-acre size (already Sheet 5 UNVERIFIED #4) — not used.
+
+### Magnolia — acreage
+
+- Predominantly **rural/acreage southern Montgomery County**: one-acre-plus
+  wooded homesites in High Meadow Ranch/Estates (gated), Sendera Ranch (1–5
+  acre, bridle trails), Mostyn Manor, Magnolia Reserve, and the newer Audubon
+  master-planned development. Most Magnolia-addressed property is
+  unincorporated (no county re-roof permit); the City of Magnolia itself is
+  incorporated and small — confirm the address — Sheet 5.
+- Metal roofing is framed as a genuine option here rather than an upsell,
+  because acreage homes are frequently outside architectural-committee control.
+  Material facts reuse Sheet 1/1B; no lifespan or cost figure is asserted on
+  the page beyond what is already sourced sitewide.
