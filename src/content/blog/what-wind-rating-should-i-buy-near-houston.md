@@ -88,7 +88,7 @@ shingles we install:
 Notice the pattern: the shingle alone isn't the warranty — the _system and the
 installation method_ are. Make your contract name the warranty and the components
 and application spec that earn it. (For a fuller comparison of the two IKO lines,
-see [Dynasty vs. Nordic](/blog/iko-dynasty-vs-nordic).)
+see [Dynasty vs. Nordic](/blog/iko-dynasty-vs-nordic/).)
 
 ## Nailing patterns: cheap insurance
 
@@ -111,7 +111,7 @@ straight answer:
    with the ArmourZone install and sealed starter course named in the contract.
 3. **Upgrade the fastening** to the manufacturer's high-wind pattern.
 4. Worried about hail too? That's a separate rating — see our
-   [Class 4 impact-resistant shingle guide](/blog/class-4-impact-resistant-shingles-texas).
+   [Class 4 impact-resistant shingle guide](/blog/class-4-impact-resistant-shingles-texas/).
 
 We spec every one of these items in writing on the estimate — same day we
 inspect, before we leave the driveway. [Text or call us](/contact) and you'll

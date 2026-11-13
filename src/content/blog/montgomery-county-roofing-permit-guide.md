@@ -66,7 +66,7 @@ One genuine oddity: homes in **Grogan's Forest Sections 5, 6 and 7** submit
 roof applications to the **City of Shenandoah**, not the Township, per the
 Township's own permitting-process page. If that's your section, read on.
 
-We wrote a [step-by-step RDRC walkthrough](/blog/woodlands-hoa-roof-approval-guide)
+We wrote a [step-by-step RDRC walkthrough](/blog/woodlands-hoa-roof-approval-guide/)
 if The Woodlands is your situation — and our
 [Woodlands roof replacement page](/the-woodlands/roof-replacement) covers how
 we fold the application into the job.

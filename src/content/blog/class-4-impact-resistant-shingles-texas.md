@@ -54,4 +54,4 @@ certification paperwork your insurer needs. No pressure either way — it's your
 and we'll give you the honest trade-off.
 
 Planning around a recent storm instead? Start with
-[what to do after hail or wind damage](/blog/storm-damage-what-to-do).
+[what to do after hail or wind damage](/blog/storm-damage-what-to-do/).

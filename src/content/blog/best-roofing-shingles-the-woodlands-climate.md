@@ -86,8 +86,8 @@ earning the highest hail rating, **UL 2218 Class 4** (the shingle withstands a
 10-year algae warranty. Per TDI, a Class 4 roof receives the highest premium credit
 insurers offer — but the rating is a lab classification, not a hail guarantee, and
 discount amounts are set company-by-company, so ask your carrier what they'd credit.
-Full breakdown in [our Class 4 shingle guide](/blog/class-4-impact-resistant-shingles-texas)
-and a head-to-head in [Dynasty vs. Nordic](/blog/iko-dynasty-vs-nordic).
+Full breakdown in [our Class 4 shingle guide](/blog/class-4-impact-resistant-shingles-texas/)
+and a head-to-head in [Dynasty vs. Nordic](/blog/iko-dynasty-vs-nordic/).
 
 ### Standing-seam metal
 

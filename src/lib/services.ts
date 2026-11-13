@@ -161,7 +161,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
             text: "IKO's highest-performing line — polymer-modified (SBS) asphalt that flexes for the highest hail rating, UL 2218 Class 4, with the same 130-mph wind, Limited Lifetime, and Iron Clad coverage as Dynasty.",
           },
           {
-            html: "<strong>Class 3 vs. Class 4 & insurance</strong> — Class 4 (Nordic) is the highest UL 2218 impact rating, but it's a lab classification, not a hail guarantee, and hail isn't covered by the shingle warranty. Its value is qualifying you for an insurance premium discount where your carrier offers one. See <a href=\"/blog/class-4-impact-resistant-shingles-texas\">our Class-4 breakdown</a>.",
+            html: "<strong>Class 3 vs. Class 4 & insurance</strong> — Class 4 (Nordic) is the highest UL 2218 impact rating, but it's a lab classification, not a hail guarantee, and hail isn't covered by the shingle warranty. Its value is qualifying you for an insurance premium discount where your carrier offers one. See <a href=\"/blog/class-4-impact-resistant-shingles-texas/\">our Class-4 breakdown</a>.",
           },
           {
             lead: "Standing-seam metal",
@@ -287,7 +287,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
         bullets: [
           {
             lead: "Pipe boot failures",
-            html: 'the neoprene collar around plumbing vents degrades in UV and commonly cracks within roughly 10–15 years — one of the most common causes of roof leaks, and the usual culprit behind a mystery ceiling stain. <a href="/blog/why-roofs-leak-around-pipe-boots">Here\'s why they fail</a>.',
+            html: 'the neoprene collar around plumbing vents degrades in UV and commonly cracks within roughly 10–15 years — one of the most common causes of roof leaks, and the usual culprit behind a mystery ceiling stain. <a href="/blog/why-roofs-leak-around-pipe-boots/">Here\'s why they fail</a>.',
           },
           {
             lead: "Ridge-cap lift and wind-creased shingles",

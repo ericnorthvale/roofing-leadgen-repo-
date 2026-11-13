@@ -35,7 +35,7 @@ for how that packet feeds a claim.
 Valleys carry the most water on the roof, so they fail first and get inspected
 hardest. Then every penetration: pipe boots (the neoprene collars around
 plumbing vents are one of the most common causes of roof leaks — [we wrote a
-whole post on them](/blog/why-roofs-leak-around-pipe-boots)), furnace and vent
+whole post on them](/blog/why-roofs-leak-around-pipe-boots/)), furnace and vent
 stacks, satellite mounts, and the flashing at chimneys, walls, and skylights.
 A surprising share of "my roof is leaking" calls trace to a $10 rubber collar
 or a lifted piece of step flashing, not the shingles at all.
@@ -104,7 +104,7 @@ with them. Details on the
 
 - **After a storm.** Hail and wind damage is often invisible from the ground.
   If a storm just hit, start with our
-  [storm-damage checklist](/blog/storm-damage-what-to-do), then get the
+  [storm-damage checklist](/blog/storm-damage-what-to-do/), then get the
   documented inspection before you decide whether to file.
 - **Buying a home.** A general home inspection covers the roof briefly; a
   roof-specific inspection tells you what the next decade costs. Agents: a

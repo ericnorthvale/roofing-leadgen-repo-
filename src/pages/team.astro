@@ -2,10 +2,12 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import LeadForm from "@components/LeadForm.astro";
+import { HAS_REAL_TEAM } from "~/lib/routes";
 
 // Quality gate: stays noindex until real team members (names, roles, photos)
 // are supplied by the owner. NEVER invent people (FTC + Hard Rule #2).
-const hasRealTeam = false;
+// Shared with the sitemap filter so the page and the sitemap can't disagree.
+const hasRealTeam = HAS_REAL_TEAM;
 ---
 
 <BaseLayout
