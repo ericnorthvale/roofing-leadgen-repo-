@@ -2240,3 +2240,59 @@ page's core argument visible. Replace with real photos when they exist.
 photo-header variant of `ServiceLayout`, so any service page without a hero
 photo silently dropped them. Now rendered in both, using Gold Deep
 (`gold-600`) on the ivory band — brand gold `#C9A26C` fails WCAG there.
+
+---
+
+### Addendum — internal linking for the material pages (2026-11-13)
+
+Audit after shipping metal/tile/flat found the pages were isolated: 72 pages
+linked to each, but **all through the nav and footer**, which Google discounts
+as template links. **Editorial in-content links: zero.** Meanwhile five existing
+pages already discussed these materials without linking anywhere.
+
+The new pages were also dead ends — **zero outbound body links** — because
+`ServiceSection` only had a plain-text `body` field. Only bullets could carry a
+link. Added `ServiceSection.html` (same trusted-authored-markup pattern as
+`ServiceBullet.html`); `city-services.ts` shares the type and gets it too.
+
+`NeighborhoodLayout` rendered `commonRoofTypes` as escaped text, so the city
+hubs' own roof-type lists couldn't link either. Now rendered with `set:html`.
+These strings are code-authored, never user-submitted.
+
+|                           | Editorial links in | Body links out |
+| ------------------------- | ------------------ | -------------- |
+| `/services/metal-roofing` | 0 → **8**          | 0 → 3          |
+| `/services/tile-roofing`  | 0 → **3**          | 0 → 2          |
+| `/services/flat-roofing`  | 0 → **1**          | 0 → 2          |
+
+Flat had nothing pointing at it because **nothing on the site mentioned flat
+roofs at all**. Rather than manufacture a link, added a genuine repair bullet to
+`/services/roof-repair` — the low-slope section on an otherwise shingled house,
+which really is a common hidden leak source. Flat remains the thinnest-linked of
+the three; the honest fix is a real low-slope job to write about.
+
+### IKO Metals — confirmed, and new (2026-11-13)
+
+Owner supplied five stone-coated steel swatch photos described as "IKO Spanish
+tile". Verified: **IKO launched IKO Metals in September 2026**, bringing DECRA
+stone-coated steel into its North American portfolio. Three launch profiles —
+Mediterranean Tile, Farmhouse Shake, **Spanish Tile**. Class 4 impact rating,
+Class A fire rating, Lifetime Limited Warranty, manufactured in Ennis, Texas.
+
+Sources: [Roofing Contractor](https://www.roofingcontractor.com/articles/102769-iko-launches-decra-stone-coated-steel-roofing-line),
+[IKO Metals — Spanish Tile](https://www.iko.com/na/metals/product/spanish-tile/),
+[IKO Metals](https://ikometals.com/).
+
+**Why this matters:** it is genuinely IKO, so it reinforces the site's IKO
+positioning rather than tripping the competitor-brand guard; it is Class 4,
+which ties to the existing impact-resistance and insurance-credit content; and
+it is two months old, so almost nobody has content on it.
+
+**Blocked on the owner.** Swatches are held at
+`public/design-center/iko-metals-spanish-tile/swatch-{a..e}.webp` under neutral
+filenames because IKO's official colour names are not known — naming them from
+the photos would be inventing product facts. Also, `StudioLine` requires
+asphalt-specific warranty fields (`ironCladYears`, `algaeYears`, shingle wind
+wording) that do not apply to a metal product, so adding this line to the Design
+Center needs those made optional first. Do not claim an Iron Clad or algae
+warranty on a metal roof.

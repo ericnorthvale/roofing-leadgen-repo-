@@ -54,8 +54,9 @@ The Woodlands Township's 2024 Residential Development Standards require prior
 written approval from your village's Residential Design Review Committee for any
 roof replacement, and approved materials must be "muted in shades and without
 color pattern," harmonizing with the natural landscape. Composition shingles,
-tile, slate, stone-coated or standing-seam metal, and cement-fiberboard are the
-acceptable categories — and metal must be free of glossy finish. In practice:
+[tile](/services/tile-roofing), slate, [stone-coated or standing-seam
+metal](/services/metal-roofing), and cement-fiberboard are the acceptable
+categories — and metal must be free of glossy finish. In practice:
 weathered wood, slate gray, and driftwood tones sail through; anything loud
 doesn't. We handle the application as part of every [roof replacement in The
 Woodlands](/the-woodlands/roof-replacement).
@@ -96,7 +97,9 @@ asphalt), carry 140-mph wind ratings, and can save 10–40% in energy costs — 
 roughly 2–3× the cost of asphalt. Standing seam uses concealed fasteners with
 raised interlocking seams, avoiding the gasketed screws that make exposed-fastener
 panels a maintenance item. The Township allows standing-seam metal, provided the
-finish isn't glossy and the color is muted.
+finish isn't glossy and the color is muted. Our
+[metal roofing page](/services/metal-roofing) covers the three systems and the
+hail-dent insurance question that comes with all of them.
 
 ## Our honest take
 

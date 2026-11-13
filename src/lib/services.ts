@@ -22,6 +22,13 @@ export interface ServiceBullet {
 export interface ServiceSection {
   heading: string;
   body?: string;
+  /**
+   * Trusted authored markup for the section body, used instead of `body` when
+   * the paragraph needs an internal link. Only `body` existed before, so a
+   * section could not link anywhere — which left the material pages with no
+   * outbound links at all (audit, 2026-11-13).
+   */
+  html?: string;
   bullets?: ServiceBullet[];
   /** Render bullets as an ordered list (process steps). */
   ordered?: boolean;
@@ -173,7 +180,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
           },
           {
             lead: "Standing-seam metal",
-            text: "30–50+ year service life per the Metal Roofing Alliance, concealed fasteners, 140-mph wind rating — at roughly two to three times the cost of asphalt.",
+            html: '30–50+ year service life per the Metal Roofing Alliance, concealed fasteners, 140-mph wind rating — at roughly two to three times the cost of asphalt. <a href="/services/metal-roofing">More on metal systems</a>.',
           },
         ],
       },
@@ -316,6 +323,10 @@ export const SERVICES: Record<ServiceTag, Service> = {
           {
             lead: "Granule loss and blistering",
             text: "granules are the shingle's UV armor — IBHS research shows exposed asphalt embrittles and ages faster. Heavy loss usually signals a roof near end-of-life; we'll show you photos and let you decide.",
+          },
+          {
+            lead: "The flat section nobody checked",
+            html: 'plenty of shingled houses have a low-slope piece — an addition, a patio cover, the roof over a bay — and it is a different system with different failure points. It is frequently the real source of a leak that has been blamed on the shingles for years. See <a href="/services/flat-roofing">flat and low-slope roofing</a>.',
           },
         ],
       },
@@ -736,7 +747,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       },
       {
         heading: "The hail question nobody tells metal roof owners about",
-        body: "Hail does something different to metal than it does to asphalt. Asphalt fractures and sheds granules — visible, measurable damage. Metal usually dents. The roof keeps water out perfectly well, and it looks hailed-on. That gap is where Texas metal roof claims get fought. The Texas Department of Insurance adopted an optional cosmetic-damage endorsement decades ago — HO-145 on homeowners forms, TDP-022 on dwelling forms — and carriers have since filed their own variations. Where one applies, damage that is cosmetic rather than a breach of the roof can be excluded, usually in exchange for a premium credit. It is worth knowing which side of that line your policy sits on BEFORE a storm, not after.",
+        html: 'Hail does something different to metal than it does to asphalt. Asphalt fractures and sheds granules — visible, measurable damage. Metal usually dents. The roof keeps water out perfectly well, and it looks hailed-on. That gap is where Texas metal roof claims get fought. The Texas Department of Insurance adopted an optional cosmetic-damage endorsement decades ago — HO-145 on homeowners forms, TDP-022 on dwelling forms — and carriers have since filed their own variations. Where one applies, damage that is cosmetic rather than a breach of the roof can be excluded, usually in exchange for a premium credit. It is worth knowing which side of that line your policy sits on BEFORE a storm, not after. Our <a href="/services/insurance-claims">insurance claim support</a> page covers the Texas rules that apply once a claim is open, and <a href="/services/storm-damage">storm damage</a> covers what to do in the first 48 hours.',
       },
       {
         heading: "What we do about it",
@@ -759,7 +770,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       },
       {
         heading: "What metal costs, honestly",
-        body: "Metal costs more than asphalt — meaningfully more for standing seam, modestly more for exposed-fastener panel. Published market figures vary too widely by panel, gauge and roof complexity for any national average to mean much on your specific house, so we do not quote one. What we will do is measure your roof and put both paths in writing side by side, asphalt and metal, so you are comparing real numbers on your own roof instead of ranges from an article.",
+        html: 'Metal costs more than asphalt — meaningfully more for standing seam, modestly more for exposed-fastener panel. Published market figures vary too widely by panel, gauge and roof complexity for any national average to mean much on your specific house, so we do not quote one. What we will do is measure your roof and put both paths in writing side by side, asphalt and metal, so you are comparing real numbers on your own roof instead of ranges from an article. If asphalt turns out to be the right answer, that is a <a href="/services/roof-replacement">roof replacement</a> like any other.',
       },
     ],
     faqs: [
@@ -804,7 +815,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
     sections: [
       {
         heading: "Your tile is almost certainly fine. The felt under it isn't.",
-        body: "This is the single most useful thing to understand about a tile roof, and it is the reason tile quotes vary so wildly. The tile is not the waterproofing. The tile is a rain screen and a wear surface — it breaks up the water and takes the sun. The actual waterproof layer is the underlayment underneath it. Clay and concrete tile routinely last four to five decades and often far longer; the felt beneath it does not, and in this climate it goes sooner, because heat is what ages it. So a tile roof that starts leaking at twenty-odd years old is usually not a tile problem at all. Anybody who looks at a leaking tile roof and immediately quotes you a full tile replacement is either not looking properly or is selling you the expensive version of a cheaper job.",
+        html: 'This is the single most useful thing to understand about a tile roof, and it is the reason tile quotes vary so wildly. The tile is not the waterproofing. The tile is a rain screen and a wear surface — it breaks up the water and takes the sun. The actual waterproof layer is the underlayment underneath it. Clay and concrete tile routinely last four to five decades and often far longer; the felt beneath it does not, and in this climate it goes sooner, because heat is what ages it. So a tile roof that starts leaking at twenty-odd years old is usually not a tile problem at all. Anybody who looks at a leaking tile roof and immediately quotes you a full tile replacement is either not looking properly or is selling you the expensive version of a cheaper job. Finding out which you have starts with a <a href="/services/roof-inspection">free roof inspection</a>.',
       },
       {
         heading: "Lift and relay — what the job actually is",
@@ -828,7 +839,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       },
       {
         heading: "Broken tile, and tile you cannot buy any more",
-        body: "Individual cracked or slipped tiles are a repair, not a project — the common causes are foot traffic from someone servicing an HVAC unit or a satellite dish, and limbs coming down. The complication is matching. Tile profiles and colour blends get discontinued, and a patch in the wrong profile is visible from the street forever. Where a profile is still made we match it. Where it is not, the options are salvage stock, pulling tile from an inconspicuous elevation (a rear slope, under a dormer) to patch the visible one and putting the mismatched tile where nobody looks, or accepting a near-match. We will tell you which of those we are proposing and show you where it lands before we do it.",
+        html: 'Individual cracked or slipped tiles are a repair, not a project — the common causes are foot traffic from someone servicing an HVAC unit or a satellite dish, and limbs coming down. The complication is matching. Tile profiles and colour blends get discontinued, and a patch in the wrong profile is visible from the street forever. Where a profile is still made we match it. Where it is not, the options are salvage stock, pulling tile from an inconspicuous elevation (a rear slope, under a dormer) to patch the visible one and putting the mismatched tile where nobody looks, or accepting a near-match. We will tell you which of those we are proposing and show you where it lands before we do it. Broken-tile work is scheduled the same way as any other <a href="/services/roof-repair">roof repair</a>.',
       },
       {
         heading: "When a tile roof genuinely does need replacing",
@@ -903,7 +914,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       },
       {
         heading: "The residential flat section nobody wants to touch",
-        body: "Plenty of otherwise conventional houses have a flat piece: an addition, a porch or patio cover, a section behind a parapet, the roof over a bay. They leak more often than the main roof because they are low-slope details built by shingle crews, and they are awkward to price, so a lot of roofers would rather not. We will. It is the same membrane work as a commercial roof on a much smaller scale, and it is frequently the actual source of a leak that has been blamed on the shingles for years.",
+        html: 'Plenty of otherwise conventional houses have a flat piece: an addition, a porch or patio cover, a section behind a parapet, the roof over a bay. They leak more often than the main roof because they are low-slope details built by shingle crews, and they are awkward to price, so a lot of roofers would rather not. We will. It is the same membrane work as a commercial roof on a much smaller scale, and it is frequently the actual source of a leak that has been blamed on the shingles for years. If you have a leak and nobody has found it yet, that is what our <a href="/services/roof-inspection">free inspection</a> and <a href="/services/roof-repair">repair</a> work is for.',
       },
     ],
     faqs: [
