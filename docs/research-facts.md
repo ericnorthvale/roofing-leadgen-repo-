@@ -2089,3 +2089,52 @@ This verifies a URL-prefix property for `https://northvaleroofing.com/`. A
 Domain property (DNS TXT at the registrar) would additionally cover `www.` and
 `http://` — worth adding later, but it needs the owner at the registrar, and
 DNS is off-limits per Hard Rule #6.
+
+---
+
+### Addendum — sitemap/canonical mismatch (2026-11-12)
+
+**Symptom.** Search Console: 53 pages indexed, 59 not, with **52 in
+"Discovered - currently not indexed"**. Looked like Google rationing crawl
+budget on a young site.
+
+**Actual cause.** Every one of those 52 URLs ended in a trailing slash, and the
+version Google had indexed and ranked ended without one:
+
+| In the un-indexed list             | What actually ranks                               |
+| ---------------------------------- | ------------------------------------------------- |
+| `/about/`                          | `/about` — 7 clicks, 35% CTR                      |
+| `/the-woodlands/`                  | `/the-woodlands` — position 2.79                  |
+| `/the-woodlands/insurance-claims/` | `/the-woodlands/insurance-claims` — position 10.6 |
+
+Measured against the build:
+
+|                | Trailing slash | No trailing slash |
+| -------------- | -------------- | ----------------- |
+| Sitemap        | 68 of 68       | 0                 |
+| Canonical tags | 17             | 52                |
+| Internal links | 0              | all               |
+
+The sitemap (Astro's `directory` build format) was submitting 50 addresses that
+the pages disowned via canonical. Google crawled a few — the 5 "Alternate page
+with proper canonical tag" — and declined the rest. **Nothing was missing from
+the index**; the 52 were duplicate addresses of pages already indexed. The real
+cost was a sitemap 72% wrong, which buries any genuine indexing gap in noise.
+
+**Fix.** `canonicalPath()` in `src/lib/routes.ts` is now the single rule, used
+by `buildSeo` (the canonical tag) and by the sitemap's `serialize` hook. They
+cannot disagree by construction.
+
+**Deliberately NOT done:** standardizing trailing slashes site-wide. Either
+direction relocates indexed URLs — ~52 ordinary pages one way, or 17 blog and
+project pages the other, including `/blog/iko-dynasty-vs-nordic/` (583 of ~989
+site impressions in 28 days). Mixed conventions are harmless once canonical,
+sitemap and internal links agree per page. `tests/unit/canonical-urls.test.ts`
+pins the rule against a well-meaning tidy-up.
+
+**Verified:** 0 canonicals changed, 50 sitemap entries corrected, 0 sitemap
+entries left that are not some page's canonical.
+
+**Open follow-up.** The sitemap sets `lastmod: new Date()` on every URL at every
+build, so each deploy tells Google all 68 pages changed. That makes `lastmod`
+useless as a crawl-priority hint. Worth replacing with a real per-page date.

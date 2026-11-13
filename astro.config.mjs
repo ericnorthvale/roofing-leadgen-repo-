@@ -6,7 +6,7 @@ import react from "@astrojs/react";
 import keystatic from "@keystatic/astro";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
-import { isAllowedInSitemap } from "./src/lib/routes";
+import { isAllowedInSitemap, canonicalPath } from "./src/lib/routes";
 
 // Keep SITE in one place. Eric will set PUBLIC_SITE_URL in Vercel env after domain purchase.
 const SITE = process.env.PUBLIC_SITE_URL || "https://northvaleroofing.com";
@@ -84,6 +84,14 @@ export default defineConfig({
     sitemap({
       // Quality gate: pages failing the gate (noindex) are auto-excluded.
       filter: (page) => isAllowedInSitemap(page),
+      // Astro emits every URL in `directory` form (trailing slash). Most pages
+      // canonicalize without one, so left alone the sitemap submits addresses
+      // the pages disown — see canonicalPath() in src/lib/routes.ts.
+      serialize: (item) => {
+        const url = new URL(item.url);
+        url.pathname = canonicalPath(url.pathname);
+        return { ...item, url: url.href };
+      },
       changefreq: "weekly",
       priority: 0.7,
       lastmod: new Date(),
