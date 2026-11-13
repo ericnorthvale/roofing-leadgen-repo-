@@ -2187,3 +2187,45 @@ number Google has learned to distrust.
 | Internal links to non-canonical URLs | 15     | 0                    |
 | `noindex` pages in the sitemap       | 1      | 0                    |
 | Entries claiming "changed today"     | 68     | 0                    |
+
+---
+
+### Sheet 11 — material service pages: metal, tile, flat (2026-11-13)
+
+**Why these exist.** The site described an asphalt-only company. The owner
+confirmed (2026-11-13) that Northvale installs and services metal, tile and
+flat/low-slope. Search Console shows demand with nothing answering it:
+`metal roofing the woodlands` at position 19–26, `clay tile roof replacement
+the woodlands` at **14**, `flat roofing the woodlands` at 32, `pvc roofing the
+woodlands tx` at 37 — all ranking off incidental mentions in other pages.
+
+**Capability claims on these three pages rest on the owner's confirmation**, not
+on documented jobs. No Northvale-specific warranty, brand, crew, volume or
+project claim appears on any of them, because none has been supplied. If any
+capability is overstated, correct the record — not just the page.
+
+**Sourced facts used:**
+
+| Claim                                                                                                                                                 | Source                                                                                                                                                   |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Texas adopted an optional cosmetic-damage endorsement — HO-145 (homeowners), TDP-022 (dwelling) — tied to a premium credit for impact-resistant roofs | [TDI Commissioner's Bulletin B-0030-98](https://www.tdi.texas.gov/bulletins/1998/b-0030-8.html) — **primary**                                            |
+| Carriers have since filed their own cosmetic-damage variations beyond HO-145                                                                          | [Latent Insure](https://www.latentinsure.com/blog/texas-hail-damage-home-insurance) — secondary                                                          |
+| Clay/concrete tile commonly 40–50+ yrs; felt underlayment generally a 20–25 yr component, shorter in heat                                             | [Green Builder Media](https://www.greenbuildermedia.com/blog/tile-roofs-can-last-300-years.-what-about-the-underlayment) — secondary, industry consensus |
+
+**Deliberately NOT claimed**, because nothing authoritative was found: specific
+metal wind-uplift ratings (UL 580 / FM class — these are per-panel, read the
+manufacturer's listing), cool-roof reflectance figures (CRRC listings vary by
+colour and coating), any national average metal roof price, and any IRC code
+section for low-slope minimums. Most search results on these topics were
+contractor marketing pages, which do not clear this project's sourcing bar.
+
+**No heroPhoto on any of the three.** Every work photo Northvale has is an
+asphalt job; using one would imply work the photo does not show (Hard Rule #2).
+They use `RoofSystemDiagram.astro` instead — a labelled cross-section, which is
+honest (it depicts the system, it does not claim to be our roof) and makes each
+page's core argument visible. Replace with real photos when they exist.
+
+**Bug found while building:** the "at a glance" chips rendered ONLY on the
+photo-header variant of `ServiceLayout`, so any service page without a hero
+photo silently dropped them. Now rendered in both, using Gold Deep
+(`gold-600`) on the ivory band — brand gold `#C9A26C` fails WCAG there.

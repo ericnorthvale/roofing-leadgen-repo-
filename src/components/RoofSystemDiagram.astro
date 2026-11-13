@@ -1,0 +1,158 @@
+---
+/**
+ * Cross-section of a roof system, drawn rather than photographed.
+ *
+ * WHY A DIAGRAM AND NOT A PHOTO: every work photo Northvale has is an asphalt
+ * job. Putting one on the metal, tile or flat page would imply work the photo
+ * doesn't show (Hard Rule #2), and these pages have no real photos of their own
+ * yet. A labelled cross-section is honest — it depicts the system, it doesn't
+ * claim to be one of our roofs — and it does something a photo can't: it makes
+ * the page's actual argument visible.
+ *
+ * On the tile page that argument is the whole point. The tile is a rain screen;
+ * the underlayment beneath it is the waterproofing, and it is what ages out
+ * first. Highlighting that one layer says it faster than the paragraph does.
+ *
+ * Inline SVG, no dependencies, scales to any width, and the layer names are
+ * real text so they're readable to a screen reader and indexable.
+ */
+interface Layer {
+  /** Layer name shown in the key. */
+  label: string;
+  /** Thickness in SVG units. */
+  h: number;
+  fill: string;
+  /** The layer the page is actually about — drawn in gold with a thicker rule. */
+  key?: boolean;
+  /** Draw the top edge as a tile/panel profile rather than a flat line. */
+  profile?: "tile" | "seam" | "flat";
+}
+
+interface Props {
+  system: "metal" | "tile" | "flat";
+  class?: string;
+}
+const { system, class: className } = Astro.props;
+
+const SYSTEMS: Record<Props["system"], { caption: string; layers: Layer[] }> = {
+  tile: {
+    caption: "The tile sheds water. The underlayment is what keeps it out.",
+    layers: [
+      { label: "Roof deck", h: 26, fill: "var(--color-navy-100)" },
+      { label: "Underlayment — the waterproof layer", h: 12, fill: "transparent", key: true },
+      { label: "Battens", h: 16, fill: "var(--color-navy-200)" },
+      { label: "Clay or concrete tile", h: 30, fill: "var(--color-navy-300)", profile: "tile" },
+    ],
+  },
+  metal: {
+    caption: "Standing seam hides every fastener under the seam.",
+    layers: [
+      { label: "Roof deck", h: 26, fill: "var(--color-navy-100)" },
+      { label: "Underlayment", h: 12, fill: "var(--color-navy-200)" },
+      { label: "Concealed clips", h: 14, fill: "transparent", key: true },
+      { label: "Standing seam panel", h: 26, fill: "var(--color-navy-300)", profile: "seam" },
+    ],
+  },
+  flat: {
+    caption: "Slope and drainage decide how long the membrane lasts.",
+    layers: [
+      { label: "Roof deck", h: 26, fill: "var(--color-navy-100)" },
+      { label: "Tapered insulation — builds the fall", h: 22, fill: "transparent", key: true },
+      { label: "Single-ply membrane", h: 14, fill: "var(--color-navy-300)", profile: "flat" },
+    ],
+  },
+};
+
+const { caption, layers } = SYSTEMS[system];
+
+// Stack from the bottom up so the deck sits at the base of the drawing.
+const W = 300;
+const GAP = 7;
+const total = layers.reduce((n, l) => n + l.h, 0) + GAP * (layers.length - 1);
+const H = total + 16;
+let y = H - 8;
+const placed = layers.map((l) => {
+  y -= l.h;
+  const top = y;
+  y -= GAP;
+  return { ...l, top };
+});
+---
+
+<figure class:list={["not-prose", className]}>
+  <svg
+    viewBox={`0 0 ${W} ${H}`}
+    class="block h-auto w-full"
+    role="img"
+    aria-label={`Cross-section of a ${system === "flat" ? "low-slope" : system} roof system, from the deck upward: ${layers.map((l) => l.label).join(", ")}.`}
+  >
+    {
+      placed.map((l) => (
+        <g>
+          <rect
+            x="8"
+            y={l.top}
+            width={W - 16}
+            height={l.h}
+            rx="2"
+            fill={l.key ? "var(--color-gold-100)" : l.fill}
+            stroke={l.key ? "var(--color-gold-600)" : "var(--color-navy-300)"}
+            stroke-width={l.key ? 2 : 1}
+          />
+          {l.profile === "tile" && (
+            /* Stroke-only so it reads as a profile on the top edge; a filled
+               path auto-closes back to the start and leaves a sliver. */
+            <path
+              d={`M8 ${l.top} ${Array.from({ length: Math.ceil((W - 16) / 20) }, () => "q 10 -11 20 0").join(" ")}`}
+              fill="none"
+              stroke="var(--color-navy-400)"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
+          )}
+          {l.profile === "seam" &&
+            [60, 150, 240].map((x) => (
+              <rect
+                x={x}
+                y={l.top - 16}
+                width="7"
+                height="18"
+                rx="2"
+                fill="var(--color-navy-400)"
+              />
+            ))}
+        </g>
+      ))
+    }
+  </svg>
+
+  <ul class="mt-5 grid gap-2">
+    {
+      placed
+        .slice()
+        .reverse()
+        .map((l) => (
+          <li class="flex items-center gap-2.5 text-[13px] leading-snug">
+            <span
+              class="inline-block h-3 w-3 shrink-0 rounded-[2px] border"
+              style={`background:${l.key ? "var(--color-gold-100)" : l.fill};border-color:${l.key ? "var(--color-gold-600)" : "var(--color-navy-300)"};`}
+              aria-hidden="true"
+            />
+            <span
+              class:list={[
+                l.key
+                  ? "font-semibold text-[color:var(--color-gold-900)]"
+                  : "text-[color:var(--color-ink-700)]",
+              ]}
+            >
+              {l.label}
+            </span>
+          </li>
+        ))
+    }
+  </ul>
+
+  <figcaption class="mt-4 text-[13px] leading-snug text-[color:var(--color-ink-500)] italic">
+    {caption}
+  </figcaption>
+</figure>
