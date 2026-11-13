@@ -2412,3 +2412,40 @@ sequence without asserting a timetable.
 ("woodlands roof claim", "the woodlands roof insurance") belong to
 `/the-woodlands/insurance-claims` under keyword-map rule 1. This post takes the
 informational phrasing and links up to that page.
+
+---
+
+### Sheet 14 — Conroe service spokes (2026-11-13)
+
+`hail or wind storm roof damage repair conroe tx insurance claim` is the single
+biggest local query in Search Console — **19 impressions at position 3.4** —
+and it was ranking off the `/conroe` hub page with no spoke behind it.
+
+**Why these are not Woodlands pages with the name swapped (Hard Rule #1).**
+Conroe differs in two ways that drive the entire content, both already sourced
+on the hub page:
+
+1. **It is an incorporated city with a building department.** The City of
+   Conroe requires a building permit for a residential re-roof inside the city
+   limits (Building Inspections & Permits, applications via the city's OpenGov
+   portal). Everywhere else Northvale works is unincorporated Montgomery
+   County, which requires no re-roof permit. A Conroe mailing address does not
+   mean a Conroe city address — which jurisdiction applies is the first thing
+   to confirm.
+2. **Lake Conroe changes how roofs fail.** Open-water wind hits edges, rakes
+   and ridge caps harder than on a sheltered inland lot, and lake humidity
+   keeps roofs damp, accelerating algae streaking and sealant/fastener wear.
+   That drives both the storm page (damage concentrates at the perimeter) and
+   the insurance page (carriers reach for "wear and tear" on waterfront roofs,
+   so documentation has to separate storm damage from ordinary ageing).
+
+Plus the three-market structure already documented: gated Lake Conroe
+communities (April Sound, Bentwater), newer master-planned neighbourhoods
+(Grand Central Park), and older inland Conroe (Graystone Hills, Longmire).
+
+Appraisal/SB 458 facts reuse Sheet 13. Texas statute cites reuse Sheet 4.
+
+**Test generalised.** `seo-content.test.ts` asserted every city-service title
+contains "the woodlands" — correct only while every record was a Woodlands one.
+The rule was always "a city-service title names ITS OWN city", so it now checks
+against the record's `citySlug`. That widens the guard rather than relaxing it.

@@ -73,9 +73,15 @@ describe("keyword-map anti-cannibalization rules", () => {
     }
   });
 
+  /**
+   * Was hardcoded to "the woodlands", which was fine while every city-service
+   * record was a Woodlands one. Conroe spokes landed 2026-11-13; the rule was
+   * always "a city-service title must name ITS OWN city", so check that.
+   */
   it("every city-service title names its city context", () => {
     for (const cs of cityServices) {
-      expect(cs.seoTitle.toLowerCase()).toContain("the woodlands");
+      const city = SERVICE_AREAS[cs.citySlug].name.toLowerCase();
+      expect(cs.seoTitle.toLowerCase(), `"${cs.seoTitle}" does not name ${city}`).toContain(city);
     }
   });
 

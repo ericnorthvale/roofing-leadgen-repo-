@@ -580,6 +580,158 @@ export const CITY_SERVICES: Record<string, CityService> = {
     ],
     dataCompleteness: "complete",
   },
+  /**
+   * CONROE (added 2026-11-13). Search Console: "hail or wind storm roof damage
+   * repair conroe tx insurance claim" is the single biggest local query on the
+   * site — 19 impressions at position 3.4 — and it was ranking off the /conroe
+   * hub page with no spoke behind it at all.
+   *
+   * These are NOT the Woodlands pages with the city swapped (Hard Rule #1).
+   * Conroe differs in two ways that drive the whole content: it is an
+   * INCORPORATED CITY with a building department, so a re-roof inside the
+   * limits is permitted work — the opposite of unincorporated Montgomery
+   * County — and Lake Conroe gives waterfront roofs open-water wind exposure
+   * inland lots do not have. Facts sourced in research-facts Sheet 14.
+   */
+  "conroe/storm-damage": {
+    citySlug: "conroe",
+    serviceTag: "storm",
+    slug: "storm-damage",
+    seoTitle: "Storm & Hail Roof Damage, Conroe TX",
+    seoDescription:
+      "Hail and wind roof damage in Conroe — documented for your claim, with the city permit pulled if you are inside the limits. Lake Conroe roofs included.",
+    title: "Storm and hail roof damage in Conroe",
+    summary:
+      "Same-day inspection, a forty-photo packet built for your claim, and the City of Conroe permit pulled if your address sits inside the limits. Free emergency tarping if it is leaking now.",
+    glance: [
+      { value: "Same-day", label: "inspection after a storm, free" },
+      { value: "40 photos", label: "documented before anything is touched" },
+      { value: "Permit", label: "pulled and managed inside Conroe city limits" },
+    ],
+    sections: [
+      {
+        heading: "Conroe is three different storm markets",
+        html: "What a storm does to a roof here depends on which Conroe you live in. On <strong>Lake Conroe</strong> — April Sound, Bentwater and the other waterfront communities — wind arrives off open water with nothing to break it, so damage concentrates at edges, rakes and ridge caps rather than in the field. In the <strong>newer master-planned neighborhoods</strong> around I-45 and the Grand Parkway, like Grand Central Park, roofs are builder-grade and close in age, so a hail event tends to hit a whole street at the same stage of life. Across <strong>older inland Conroe</strong> — Graystone Hills, Longmire, the neighborhoods near downtown — roofs are of every era, and a storm a ten-year-old roof shrugs off will finish a twenty-five-year-old one. We inspect for what your part of Conroe actually suffers from, not a generic hail checklist.",
+      },
+      {
+        heading: "The permit question, which Conroe gets backwards from everywhere else",
+        html: "Almost everywhere else we work is unincorporated Montgomery County, where a residential re-roof needs no county permit. <strong>Conroe is the exception.</strong> Inside the city limits the City of Conroe requires a building permit for a re-roof, administered by its Building Inspections &amp; Permits Department, with applications running through the city OpenGov portal. We pull and manage it as part of the job. The catch is that plenty of homes with a Conroe mailing address are not inside the city limits at all — they are unincorporated county, where there is no re-roof permit and your HOA governs instead. Confirming which jurisdiction your address sits in is the first thing we do, because a storm job that starts on the wrong assumption stalls.",
+      },
+      {
+        heading: "What we document, and why the order matters",
+        kind: "steps",
+        ordered: true,
+        bullets: [
+          {
+            text: "Photograph the roof before anything is touched — including before an emergency tarp goes on. Once a tarp is down, what your adjuster needs to see is underneath it.",
+          },
+          {
+            text: "Work the slopes by exposure. On a lakefront roof that means edges, rakes and ridge first; inland it means the windward slopes and the soft metals that show hail earliest.",
+          },
+          {
+            text: "Record hail strike size and density per slope rather than one verdict for the whole roof. Carriers scope by slope.",
+          },
+          {
+            text: "Note the collateral — gutters, screens, vents, soft metals. It is often what establishes that hail of a given size actually fell at your address.",
+          },
+          {
+            text: "Hand you the packet whether or not you file. It is yours either way, and it is the baseline if a later storm raises the question again.",
+          },
+        ],
+      },
+      {
+        heading: "If your roof is leaking right now",
+        html: 'Emergency tarping and temporary dry-in are free, with no commitment to use us for the repair — <a href="/storm-response">storm response</a> covers how that works and when a tarp is not the right answer. Active leaks jump the queue ahead of scheduled inspections.',
+      },
+    ],
+    faqs: [
+      {
+        q: "Do I need a permit to replace a storm-damaged roof in Conroe?",
+        a: "Inside the City of Conroe limits, yes — the city requires a building permit for a re-roof and we pull and manage it. If your Conroe-addressed home is actually in unincorporated Montgomery County there is no county re-roof permit, and your HOA or community architectural review governs instead. We confirm which applies before work is scheduled.",
+      },
+      {
+        q: "Does a Lake Conroe waterfront roof get damaged differently?",
+        a: "Yes. Open-water wind hits edges, rakes and ridge caps harder than on a sheltered inland lot, so waterfront storm damage concentrates at the perimeter rather than mid-slope. Lake humidity also keeps roofs damp, accelerating algae streaking and sealant and fastener wear — so a waterfront roof can be nearer the end of its life than its age suggests when a storm arrives.",
+      },
+      {
+        q: "How soon can you inspect after a storm?",
+        a: "Same day in most cases, and active leaks jump the queue. We do not door-knock after storms, so you will not find a crew on your porch — you call us, or you do not.",
+      },
+      {
+        q: "Do I have to file a claim to get the inspection?",
+        a: "No. The inspection and the forty-photo packet are free and yours regardless. If what we find is not worth filing against your deductible we will say so — that is a common and perfectly good outcome.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
+
+  "conroe/insurance-claims": {
+    citySlug: "conroe",
+    serviceTag: "insurance",
+    slug: "insurance-claims",
+    seoTitle: "Roof Insurance Claims in Conroe, TX",
+    seoDescription:
+      "Roof insurance claim help in Conroe — documentation your adjuster can scope from, the Texas rules that apply, and the city permit handled if you need one.",
+    title: "Roof insurance claims in Conroe",
+    summary:
+      "We document the damage, meet your adjuster on the roof, and handle the City of Conroe permit if your address needs one. We are not a public adjuster, and we will not touch your deductible.",
+    glance: [
+      { value: "On the roof", label: "we meet your adjuster — you need not be there" },
+      { value: "Per slope", label: "scoped the way carriers actually scope" },
+      { value: "2026 rule", label: "appraisal provision now required on Texas policies" },
+    ],
+    sections: [
+      {
+        heading: "What a Conroe claim runs into that others do not",
+        html: "Two things shape a roof claim here. First, if your home is inside the City of Conroe limits the replacement is <strong>permitted work</strong> — the city requires a building permit for a re-roof, which the rest of unincorporated Montgomery County does not. That is a step in the schedule and a document in the file, and we handle it. Second, <strong>Lake Conroe waterfront roofs age differently</strong>: open-water wind and lake humidity work on edges, sealant and fasteners faster than on a sheltered inland lot. That matters in a claim, because a carrier looking at a waterfront roof will often reach for wear and tear as the explanation. Documentation that separates storm damage from ordinary ageing is the whole game on those addresses.",
+      },
+      {
+        heading: "What appraisal can and cannot fix",
+        html: 'If your claim is denied or underpaid, the first question is which kind of disagreement you are in. A dispute about <strong>how much</strong> is what the appraisal provision is for — and Texas Senate Bill 458 now requires residential property policies issued or renewed on or after 1 January 2026 to include one. A dispute about <strong>whether it is covered at all</strong> is a different fight: the Insurance Code describes appraisal as a process solely to determine the amount of loss. We have reopened denied claims both ways — once through a reinspection with the adjuster on the roof, once through appraisal. <a href="/blog/roof-claim-denied-texas-appraisal/">The full walkthrough is here</a>.',
+      },
+      {
+        heading: "The Texas rules that apply to your claim",
+        kind: "cards",
+        bullets: [
+          {
+            lead: "Your insurer is on a clock",
+            text: "acknowledge within 15 days of notice, accept or reject within 15 business days of receiving everything requested (one 45-day extension with written reasons), pay within 5 business days of accepting — with extensions in a declared catastrophe and penalties past 60 days.",
+          },
+          {
+            lead: "We are not a public adjuster",
+            text: "Texas Insurance Code §4102.163 prohibits a roofer from adjusting a claim on the same property. We document; a separately licensed public adjuster, if you hire one, negotiates.",
+          },
+          {
+            lead: "Nobody can touch your deductible",
+            text: "§707.002 requires you to pay it, and Business & Commerce Code §27.02 makes it an offence for a contractor to waive, rebate or absorb it. An offer to 'eat' it is not a discount.",
+          },
+          {
+            lead: "Two checks is normal",
+            text: "replacement-cost policies pay actual cash value first and release the recoverable depreciation once you prove the work was done. Our closeout packet is built to be that proof.",
+          },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Does the City of Conroe permit affect my claim?",
+        a: "It affects the job, not the coverage. Inside the city limits a re-roof is permitted work, so there is a permit to pull and an inspection to pass — we handle both, and they become part of the closeout documentation. If your Conroe-addressed home is in unincorporated Montgomery County there is no county re-roof permit and the HOA governs instead.",
+      },
+      {
+        q: "My carrier says my Lake Conroe roof is just worn out. Is that the end of it?",
+        a: "Not necessarily, but it is a coverage dispute rather than an amount dispute, which changes what comes next. Waterfront roofs genuinely do age faster — open-water wind and lake humidity see to that — so the work is documenting what is storm damage as distinct from ordinary ageing, slope by slope. Texas courts have held that appraisers may apportion damage between hail and wear and tear, because that question goes to the amount of loss.",
+      },
+      {
+        q: "Will you meet my adjuster?",
+        a: "Yes, on the roof, and you do not need to be there. One Woodlands claim we took on had already been denied because the previous contractor missed the adjuster meeting entirely — nobody was there to point the damage out. We re-inspected, met the adjuster, and it was approved for a full replacement.",
+      },
+      {
+        q: "Should I file at all?",
+        a: "Sometimes no. If the damage is modest against your deductible, filing can cost more than it returns. We document first and tell you honestly which side of that line you are on before you commit to anything.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
 };
 
 export const CITY_SERVICE_KEYS = Object.keys(CITY_SERVICES);
