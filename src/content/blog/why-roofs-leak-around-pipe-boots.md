@@ -103,7 +103,7 @@ someone to look. Every Northvale inspection photographs **every penetration
 individually**, boots included, as part of our forty-photo packet, and the
 written findings tell you plainly: this boot is fine, this one is checking
 out, this one is letting water in today. (Curious what else that inspection
-covers? [Here's the full walkthrough](/blog/what-happens-during-a-roof-inspection).)
+covers? [Here's the full walkthrough](/blog/what-happens-during-a-roof-inspection/).)
 
 If your home went up in the late 2000s or early 2010s — much of Creekside
 Park and the newer sections out west — and nobody has looked at your boots

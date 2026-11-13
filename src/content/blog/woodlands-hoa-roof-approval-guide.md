@@ -113,7 +113,7 @@ Homes in **Grogan's Forest Sections 5, 6 and 7** submit roof applications to
 the **City of Shenandoah**, not the Township — a genuine quirk documented on
 the Township's permitting-process page, and Shenandoah runs a full municipal
 permit program with its own material and inspection rules. If that's your
-section, our [Montgomery County permit guide](/blog/montgomery-county-roofing-permit-guide)
+section, our [Montgomery County permit guide](/blog/montgomery-county-roofing-permit-guide/)
 covers the Shenandoah side in detail.
 
 ## After approval: the covenant keeps running

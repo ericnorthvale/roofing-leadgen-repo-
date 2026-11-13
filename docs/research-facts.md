@@ -2138,3 +2138,52 @@ entries left that are not some page's canonical.
 **Open follow-up.** The sitemap sets `lastmod: new Date()` on every URL at every
 build, so each deploy tells Google all 68 pages changed. That makes `lastmod`
 useless as a crawl-priority hint. Worth replacing with a real per-page date.
+
+---
+
+### Addendum — URL consistency gate (2026-11-13)
+
+Follow-up to the sitemap/canonical fix. That change made the two things Astro
+_generates_ agree. This one stops the drift that is hand-written, which is the
+kind that returns as the site grows.
+
+**`scripts/check-urls.mjs` runs inside `pnpm build` and fails the build on:**
+
+1. a sitemap URL that is not some page's canonical
+2. an internal link that is not the canonical form — a redirecting variant, or
+   a 404
+3. a `noindex` page present in the sitemap
+4. a canonical pointing at a page that does not exist in the build
+
+It reads the built HTML, not the source, so it sees what actually ships. A
+false positive costs a failed build; a miss costs months of quiet misindexing.
+Verified by injecting a bad link into the build output: exit code 1.
+
+**Bugs it found immediately, which nothing else had:**
+
+- **`/team` was `noindex` AND in the sitemap** — the page said "don't index me"
+  while the sitemap said "index me". Its gate flag now lives in `routes.ts` as
+  `HAS_REAL_TEAM`, read by both the page and the sitemap filter, so they cannot
+  drift apart again. Sitemap: 68 → 67 entries.
+- **15 internal links pointed at non-canonical URLs** — 12 hand-written
+  cross-links in blog markdown (`/blog/x` where the canonical is `/blog/x/`),
+  plus three in `services.ts` and `HoaApprovals.astro`. All generated links were
+  already correct; every wrong one was typed by hand. That is exactly the class
+  of error a build gate exists for.
+
+**`lastmod` is now honest.** It was `new Date()` on all 68 URLs at every build,
+which told Google the whole site changed on every deploy. Google leans on
+`lastmod` only where a site is consistently accurate, so that trains it to
+ignore the field — and the bill arrives later, when a genuinely new post has no
+credible "this is new" signal. Now: a real date from the content for the 17 blog
+and project pages, and NO date for the 50 rendered from data files with no
+honest per-page date. `lastmod` is optional in the protocol; silence beats a
+number Google has learned to distrust.
+
+|                                      | Before | After                |
+| ------------------------------------ | ------ | -------------------- |
+| Sitemap entries                      | 68     | 67 (`/team` removed) |
+| Entries that aren't a canonical      | 50     | 0                    |
+| Internal links to non-canonical URLs | 15     | 0                    |
+| `noindex` pages in the sitemap       | 1      | 0                    |
+| Entries claiming "changed today"     | 68     | 0                    |

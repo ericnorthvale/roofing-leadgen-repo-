@@ -110,7 +110,7 @@ Not every hailstorm is a claim. If an honest inspection finds cosmetic scuffs
 or normal wear rather than functional damage, filing can be worse than not
 filing — a denied claim sits in your history without buying you anything.
 That's why the inspection comes first, the claim second. Our
-[storm damage checklist](/blog/storm-damage-what-to-do) walks through how to
+[storm damage checklist](/blog/storm-damage-what-to-do/) walks through how to
 tell the difference from the ground, and our
 [Woodlands storm damage page](/the-woodlands/storm-damage) shows what a
 documented, slope-by-slope inspection looks like.

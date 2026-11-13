@@ -75,7 +75,7 @@ Standards-friendly.
 1. **Do the insurance math first.** Call your carrier and ask what a Class 4 roof
    credits you per year. If the annual discount is meaningful, Nordic often pays
    for its upgrade over the life of the roof — see
-   [our Class 4 breakdown](/blog/class-4-impact-resistant-shingles-texas).
+   [our Class 4 breakdown](/blog/class-4-impact-resistant-shingles-texas/).
 2. **Weigh your hail exposure.** Heavily hail-hit stretch of Montgomery County?
    Nordic's shock-absorbing mat is built for it.
 3. **Then look at color.** If a specific shade matters most and hail/insurance are

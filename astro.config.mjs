@@ -7,9 +7,13 @@ import keystatic from "@keystatic/astro";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 import { isAllowedInSitemap, canonicalPath } from "./src/lib/routes";
+import { contentLastmod } from "./scripts/sitemap-lastmod.mjs";
 
 // Keep SITE in one place. Eric will set PUBLIC_SITE_URL in Vercel env after domain purchase.
 const SITE = process.env.PUBLIC_SITE_URL || "https://northvaleroofing.com";
+
+/** Real content dates for the sitemap; built once at config load. */
+const LASTMOD = contentLastmod();
 
 /**
  * Keystatic, but WITHOUT its injected `/api/keystatic/[...params]` route — we
@@ -90,11 +94,15 @@ export default defineConfig({
       serialize: (item) => {
         const url = new URL(item.url);
         url.pathname = canonicalPath(url.pathname);
-        return { ...item, url: url.href };
+        // A real date where the content carries one, and NO date otherwise.
+        // Stamping today on all 68 URLs every deploy (which is what this used
+        // to do) teaches Google the field is noise — see scripts/sitemap-lastmod.mjs.
+        const lastmod = LASTMOD.get(url.pathname);
+        const { lastmod: _dropped, ...rest } = item;
+        return lastmod ? { ...rest, url: url.href, lastmod } : { ...rest, url: url.href };
       },
       changefreq: "weekly",
       priority: 0.7,
-      lastmod: new Date(),
     }),
   ],
   vite: {

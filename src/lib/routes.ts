@@ -19,8 +19,17 @@ import {
   evaluateCityService,
 } from "./quality-gate";
 
+/**
+ * /team has no real people on it yet, so it renders `noindex` — but it was
+ * still being listed in the sitemap, which tells Google the opposite. Those two
+ * have to move together, so both the page and the sitemap filter read this one
+ * flag. Flip it to true only when real names, roles and photos exist, never to
+ * publish invented people (Hard Rule #2 / FTC).
+ */
+export const HAS_REAL_TEAM = false;
+
 /** Utility pages excluded from search (mirror the Disallow rules in public/robots.txt). */
-const STATIC_EXCLUDED = new Set(["/thank-you"]);
+const STATIC_EXCLUDED = new Set(["/thank-you", ...(HAS_REAL_TEAM ? [] : ["/team"])]);
 
 /**
  * Route prefixes whose DETAIL pages canonicalize WITH a trailing slash.

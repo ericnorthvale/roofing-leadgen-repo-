@@ -6,10 +6,11 @@
   "description": "Website + lead-gen + content engine for Northvale Roofing (The Woodlands, TX).",
   "scripts": {
     "dev": "astro dev",
-    "build": "pnpm run images && astro check && astro build",
+    "build": "pnpm run images && astro check && astro build && pnpm run check:urls",
     "preview": "astro preview",
     "start": "astro dev",
     "images": "node scripts/optimize-images.mjs",
+    "check:urls": "node scripts/check-urls.mjs",
     "typecheck": "astro check",
     "lint": "prettier --check . && astro check",
     "format": "prettier --write .",
