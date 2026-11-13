@@ -121,8 +121,10 @@ booklet, and get the roof documented properly before anything else is touched.
 We will do that part free, and tell you honestly whether what we find is worth
 reopening — including when it isn't. Some denials are correct.
 
-If you want the local detail — Montgomery County's rules, the village design
-committees, and how claims here actually run — that's on our
-[roof insurance claim page for The Woodlands](/the-woodlands/insurance-claims).
-If a storm has just come through, start with
-[storm damage](/the-woodlands/storm-damage) instead.
+If you want the local detail, we have city pages that go deeper:
+[roof insurance claims in The Woodlands](/the-woodlands/insurance-claims) and
+[in Conroe](/conroe/insurance-claims) — the Conroe one covers the city permit
+and what open-water wind on Lake Conroe does to a claim. If a storm has just
+come through, start with storm damage for
+[The Woodlands](/the-woodlands/storm-damage) or
+[Conroe](/conroe/storm-damage) instead.

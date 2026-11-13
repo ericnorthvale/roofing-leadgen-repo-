@@ -38,6 +38,11 @@ installation from roughly **$5.09–$6.66 per square foot**. When three
 independent sources converge like this, you can trust the shape of the range
 even before anyone measures your roof.
 
+Those per-square-foot figures only mean something once you know how many square
+feet of _roof_ you have — which is not your home's floor area. Our
+[roof size calculator](/roof-size-calculator) traces your roof on a satellite
+map and gives you the number in squares, free and with no price attached.
+
 **Per square foot by shingle grade, according to Modernize (2026):**
 
 | Shingle type          | Cost per sq ft |

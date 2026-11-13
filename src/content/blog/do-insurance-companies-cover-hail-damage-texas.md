@@ -134,3 +134,7 @@ your recoverable depreciation. Start with the
 [insurance claims page for The Woodlands](/the-woodlands/insurance-claims), or
 [book a free inspection](/contact) — written findings, no pressure to file
 anything.
+
+And if you have already filed and been told no:
+[a denial is not usually the end of it](/blog/roof-claim-denied-texas-appraisal/).
+Two of the roofs we replaced this year started with a denied claim.

@@ -2449,3 +2449,32 @@ Appraisal/SB 458 facts reuse Sheet 13. Texas statute cites reuse Sheet 4.
 contains "the woodlands" — correct only while every record was a Woodlands one.
 The rule was always "a city-service title names ITS OWN city", so it now checks
 against the record's `citySlug`. That widens the guard rather than relaxing it.
+
+---
+
+### Addendum — internal linking for the Tier 2 pages (2026-11-13)
+
+Same audit as Sheet 11's, run on the new work before publishing. Editorial
+(in-article) links, excluding nav, footer and the "Keep reading" module:
+
+| Page                                      | Links in  | Links out |
+| ----------------------------------------- | --------- | --------- |
+| `/conroe/storm-damage`                    | 0 → **3** | 2         |
+| `/conroe/insurance-claims`                | 0 → **2** | 2         |
+| `/blog/roof-claim-denied-texas-appraisal` | 2 → **3** | 6         |
+| `/roof-size-calculator`                   | 0 → **2** | 0 → **4** |
+| `/storm-response`                         | 1 → **2** | 3         |
+
+The calculator was the worst: isolated in BOTH directions after a 450-word
+expansion — the same dead-end mistake made on the material pages a day earlier.
+
+**City hub prose could not link.** `NeighborhoodLayout` rendered
+`localContext`, `climateNote` and `permitHoaNote` as escaped text, so no city
+hub could link to its own service spokes. Now rendered with `set:html`, same
+trusted-authored-markup pattern as `commonRoofTypes`. That is what gave Conroe
+its first editorial route to its own pages.
+
+Routes were placed where a reader is already asking that question — the cost
+post links to the calculator at the point it quotes per-square-foot figures;
+the hail-damage post links to the denial post at the point it describes being
+told no — rather than bolted on as a "related" list.
