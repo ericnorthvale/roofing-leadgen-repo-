@@ -1,0 +1,112 @@
+---
+title: "Attic ventilation is why Texas roofs die early"
+description: "A roof cooks from underneath as well as on top. The 1-in-300 code rule, why intake matters more than exhaust, and how to check yours from the ground."
+pubDate: 2026-11-13
+author: "Greg Labbe"
+cluster: "maintenance"
+persona: ["homeowner"]
+relatedCity: "the-woodlands"
+heroImage: "/work/completed-roof-ridge-vent-aerial-the-woodlands-tx.webp"
+tags: ["ventilation", "attic", "roof lifespan", "maintenance"]
+status: "published"
+---
+
+Shingles are rated for a lifespan the manufacturer measured in a lab. Yours
+will not get there, and the reason is usually underneath them rather than on
+top.
+
+A roof in this climate is cooked from both sides. Sun on the surface is the
+half everyone thinks about. The other half is an attic that hits well above
+outdoor temperature and stays there, baking the asphalt binder out of the
+shingle from below and driving moisture into the decking. **Ventilation is what
+decides how bad that second half gets**, and it is the most commonly
+under-built part of a roof system.
+
+## The rule, and the number
+
+The International Residential Code sets the requirement
+(**IRC R806.2**): net free ventilating area of not less than **1 to 300** of
+the ventilated space, where the ventilation is balanced between intake and
+exhaust.
+
+"Net free area" is the part that trips people up. It is not the size of the
+hole — it is the actual open area after you subtract the louvres, the insect
+screen and the baffle. A vent's packaging states its NFA in square inches, and
+it's always a lot less than the opening looks.
+
+The arithmetic for a 2,000 square foot attic footprint:
+
+> 2,000 ÷ 300 = 6.67 sq ft of net free area
+> 6.67 × 144 = **960 square inches**, split roughly half intake, half exhaust
+
+Every roof measurement report we produce prints this calculation for your
+specific roof, so you can check what's up there against what the code asks for.
+
+## Intake is the half that's usually missing
+
+Here is the mistake we find most often, and it's worth understanding because it
+makes things _worse_ rather than just not better.
+
+Ventilation works as a loop: cool air in low at the soffits, hot air out high
+at the ridge. Both halves have to be there.
+
+What we find instead is a roof with plenty of exhaust — a long ridge vent, a
+row of turbines, maybe both — and almost no working intake, because the soffit
+vents are painted over, stuffed with insulation, or were never cut in properly.
+With nowhere to draw from, a powerful exhaust vent pulls **conditioned air out
+of your house** through ceiling gaps and recessed lights instead. You get a
+hotter attic _and_ a bigger power bill.
+
+**If you only check one thing, check the soffits.** Stand under the eaves and
+look up. You should see daylight or clear mesh, not paint, not blocked
+insulation, not solid board.
+
+## Mixing exhaust types is its own problem
+
+Two different exhaust systems on the same attic — say a ridge vent and powered
+fans, or turbines plus gable vents — can short-circuit each other. The stronger
+one pulls air from the weaker one instead of from the soffits, so the air cycles
+around the top of the attic and the lower two-thirds never move at all.
+
+More vents is not the same as more ventilation.
+
+## What a badly ventilated attic actually costs you
+
+- **Shingles age faster.** Heat drives the volatile oils out of the asphalt
+  binder; the shingle gets brittle, loses granules and cracks earlier than its
+  rating.
+- **Decking takes moisture.** Warm damp air meeting a cooler surface condenses.
+  Over years that is delamination and rot — and it's hidden under the shingles
+  until tear-off.
+- **Warranties get awkward.** Manufacturer warranties generally assume the roof
+  was installed to a ventilated system. Poor ventilation is a well-worn reason
+  to decline a premature-failure claim.
+- **Your air conditioning works harder** against a superheated space sitting
+  directly above your ceiling.
+
+## How to check yours without a ladder
+
+1. **Look at the soffits.** Vents present, and actually open?
+2. **Look at the ridge.** A continuous ridge vent, or individual box vents? Is
+   there anything up there at all?
+3. **Count your exhaust types.** More than one kind usually means they're
+   fighting.
+4. **Feel the ceiling upstairs on a hot afternoon.** Warm to the touch is a
+   signal.
+5. **Look in the attic with a torch.** Dark staining on the underside of the
+   decking, rusty nail points, or a damp smell all mean moisture isn't leaving.
+
+## When we fix it
+
+Ventilation is the cheapest thing to get right during a
+[roof replacement](/services/roof-replacement), because the roof is already
+open — cutting a proper ridge slot and opening blocked intake costs very little
+when the shingles are off, and a great deal more as a standalone job later.
+
+It is also something we check on every
+[free roof inspection](/services/roof-inspection), whether or not you're
+thinking about a new roof, and we put the calculation in writing.
+
+If your attic is hot and your roof is ten years old, that is worth knowing now
+rather than at year fifteen when the shingles are brittle and nobody can tell
+you why.

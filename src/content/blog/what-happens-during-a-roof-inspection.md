@@ -63,6 +63,9 @@ or a lifted piece of step flashing, not the shingles at all.
 ## In the attic: the half most inspections skip
 
 A roof inspection that never opens the attic hatch is half an inspection.
+It is also where the single biggest cause of early roof failure in this
+climate shows up — see
+[attic ventilation and roof lifespan](/blog/attic-ventilation-texas-roof-lifespan/).
 From below we check:
 
 - **Daylight and water staining** at penetrations and along the decking —

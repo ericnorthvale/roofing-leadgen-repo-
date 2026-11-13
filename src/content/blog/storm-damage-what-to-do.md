@@ -21,6 +21,12 @@ roof-level inspection to someone with fall protection.
 
 ## How to tell if your roof actually took a hit
 
+Two deep-dives if you want the detail:
+[what hail damage actually looks like](/blog/what-hail-damage-looks-like-on-a-roof/)
+covers bruising, granule loss and the pattern that separates hail from ageing,
+and [tropical storm roof damage](/blog/tropical-storm-roof-damage-texas/)
+covers wind uplift, which fails at the edges instead.
+
 Not every storm causes roof damage worth a claim. These are the honest indicators:
 
 - **Gutters and downspouts:** fresh, round dents on the gutter apron or soft metal.
