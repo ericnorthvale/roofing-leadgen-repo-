@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import RoofImage from "@components/RoofImage.astro";
+import RoofSystemDiagram from "@components/RoofSystemDiagram.astro";
 import Breadcrumbs from "@components/Breadcrumbs.astro";
 import CTAButton from "@components/CTAButton.astro";
 import PhoneCTAButton from "@components/PhoneCTAButton.astro";
@@ -26,6 +27,12 @@ interface Props {
   resources?: ResourceLink[];
 }
 const { service, resources = [] } = Astro.props;
+
+// Material pages have no real photo of their own yet, so they get a labelled
+// cross-section instead of an empty half-header. Never a stand-in photo of a
+// different material (Hard Rule #2).
+const DIAGRAMS = { metal: "metal", tile: "tile", flat: "flat" } as const;
+const diagram = DIAGRAMS[service.serviceTag as keyof typeof DIAGRAMS];
 
 const siteUrl = Astro.site?.toString() ?? "https://northvaleroofing.com";
 const verdict = evaluateService(service);
@@ -130,24 +137,56 @@ const toc = [
               { label: service.title },
             ]}
           />
-          <h1 class="mt-6 text-4xl md:text-5xl">{service.title}</h1>
-          <div class="rule-gold mt-6" aria-hidden="true" />
-          <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
-            {service.summary}
-          </p>
-          <div class="mt-6 flex flex-wrap gap-3">
-            <CTAButton
-              href="/contact"
-              label="Book inspection"
-              ctaId={`service-${service.serviceTag}-book`}
-            />
-            <PhoneCTAButton ctaId={`service-${service.serviceTag}-call`} />
-            <CTAButton
-              href="/storm-response"
-              variant="ghost"
-              label="Storm today?"
-              ctaId={`service-${service.serviceTag}-storm`}
-            />
+          <div
+            class:list={[
+              "mt-6",
+              diagram && "grid items-start gap-10 md:grid-cols-[1.35fr_0.65fr] md:gap-14",
+            ]}
+          >
+            <div>
+              <h1 class="text-4xl md:text-5xl">{service.title}</h1>
+              <div class="rule-gold mt-6" aria-hidden="true" />
+              <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[color:var(--color-ink-700)]">
+                {service.summary}
+              </p>
+              <div class="mt-6 flex flex-wrap gap-3">
+                <CTAButton
+                  href="/contact"
+                  label="Book inspection"
+                  ctaId={`service-${service.serviceTag}-book`}
+                />
+                <PhoneCTAButton ctaId={`service-${service.serviceTag}-call`} />
+                <CTAButton
+                  href="/storm-response"
+                  variant="ghost"
+                  label="Storm today?"
+                  ctaId={`service-${service.serviceTag}-storm`}
+                />
+              </div>
+              {/* The chips used to render only on the photo header, so a
+                  photo-less page silently lost them. Gold Deep here, not brand
+                  gold — #C9A26C fails WCAG on this ivory band. */}
+              {service.glance && service.glance.length > 0 && (
+                <ul class="mt-9 flex flex-wrap gap-x-10 gap-y-4 border-t border-[color:var(--color-navy-100)] pt-6">
+                  {service.glance.map((g) => (
+                    <li class="flex items-baseline gap-2.5">
+                      <span class="font-serif text-[28px] leading-none text-[color:var(--color-gold-600)]">
+                        {g.value}
+                      </span>
+                      <span class="max-w-52 text-[13px] leading-snug text-[color:var(--color-ink-700)]">
+                        {g.label}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            {diagram && (
+              <RoofSystemDiagram
+                system={diagram}
+                class="mx-auto w-full max-w-xs md:mx-0 md:max-w-none"
+              />
+            )}
           </div>
         </div>
       </section>

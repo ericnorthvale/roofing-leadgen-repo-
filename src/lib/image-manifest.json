@@ -142,6 +142,105 @@
       800
     ]
   },
+  "/design-center/iko-metals-spanish-tile/bronzed-oak-home.webp": {
+    "w": 2000,
+    "h": 1125,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/iko-metals-spanish-tile/bronzed-oak-swatch.webp": {
+    "w": 1444,
+    "h": 793,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/iko-metals-spanish-tile/canyon-terra-swatch.webp": {
+    "w": 1444,
+    "h": 799,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/iko-metals-spanish-tile/carbon-home.webp": {
+    "w": 1500,
+    "h": 1125,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/iko-metals-spanish-tile/carbon-swatch.webp": {
+    "w": 1444,
+    "h": 814,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/iko-metals-spanish-tile/cathedral-stone-home.webp": {
+    "w": 2000,
+    "h": 1334,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/iko-metals-spanish-tile/cordova-clay-swatch.webp": {
+    "w": 1500,
+    "h": 1047,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/iko-metals-spanish-tile/home-terracotta.webp": {
+    "w": 2000,
+    "h": 1125,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/iko-metals-spanish-tile/sienna-clay-swatch.webp": {
+    "w": 1497,
+    "h": 1049,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/iko-metals-spanish-tile/valencia-sand-swatch.webp": {
+    "w": 1446,
+    "h": 1047,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/design-center/iko-metals-spanish-tile/woodland-pine-swatch.webp": {
+    "w": 1500,
+    "h": 1037,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
   "/design-center/nordic/driftshake-home.webp": {
     "w": 1400,
     "h": 1408,

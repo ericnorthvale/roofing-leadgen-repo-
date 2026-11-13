@@ -19,7 +19,12 @@
  * own guidance (opinion, allowed) — not manufacturer claims.
  */
 
-export type StudioLineKey = "cambridge" | "dynasty" | "nordic" | "armourshake";
+export type StudioLineKey =
+  | "cambridge"
+  | "dynasty"
+  | "nordic"
+  | "armourshake"
+  | "iko-metals-spanish-tile";
 
 export interface StudioColor {
   name: string;
@@ -42,15 +47,31 @@ export interface StudioLine {
   collection: string;
   tagline: string;
   story: string;
+  /**
+   * Asphalt shingle, or stone-coated steel. Every field below marked
+   * asphalt-only is absent on a metal line — Iron Clad and the algae warranty
+   * are terms of IKO's ASPHALT shingle warranty and do not exist on a metal
+   * product. They were required fields until 2026-11-13, which would have
+   * forced a metal line to assert coverage it does not carry.
+   */
+  material?: "asphalt" | "metal";
   /** IKO Limited Warranty (US, eff. 2025-02-01) — exact figures. */
-  productWarranty: "Limited Lifetime";
-  ironCladYears: 10 | 15;
+  productWarranty: "Limited Lifetime" | "Lifetime Limited";
+  /** Asphalt only. */
+  ironCladYears?: 10 | 15;
   /** Homeowner-plain wind warranty wording (exact mph from the warranty). */
   wind: string;
   windShort: string;
-  algaeYears: 10;
-  /** Verified impact rating — Dynasty/Nordic only. */
+  /** Asphalt only. */
+  algaeYears?: 10;
+  /** Verified impact rating — Dynasty/Nordic and the metal line. */
   impactLabel?: string;
+  /** Metal only: ASTM E108 fire classification. */
+  fireLabel?: string;
+  /** Metal only: nominal installed weight. */
+  weightLabel?: string;
+  /** Metal only: published standards, verbatim from the product flyer. */
+  standards?: string[];
   bestFor: string;
   colors: StudioColor[];
   /** Honest note when the folder shows a subset of the line's palette. */
@@ -270,6 +291,113 @@ export const STUDIO_LINES: StudioLine[] = [
     ],
     moreColors:
       "Ask about additional Armourshake blends — we bring physical samples to your free estimate.",
+  },
+
+  /**
+   * IKO Metals — DECRA Spanish Tile (stone-coated steel), added 2026-11-13.
+   *
+   * IKO launched IKO Metals in September 2026, bringing DECRA's stone-coated
+   * steel into its North American range. This is the only line here that is not
+   * an asphalt shingle, so it carries NO Iron Clad term and NO algae warranty —
+   * those are asphalt-warranty concepts. Every figure below is verbatim from
+   * IKO's own product flyer (ML9L300 · 09/2026), archived and logged in
+   * docs/research-facts.md Sheet 12.
+   *
+   * PALETTE: the flyer lists EIGHT colors. Four are shown here because those
+   * are the swatches the owner has supplied so far and that can be matched to a
+   * name with certainty; the other four are named in `moreColors` rather than
+   * guessed at from a photograph. `assetFor()` in ShingleStudio dereferences
+   * `color.swatch!`, so a color without an image would render broken — another
+   * reason not to list one before its image is confirmed.
+   */
+  {
+    key: "iko-metals-spanish-tile",
+    material: "metal",
+    name: "IKO Metals — DECRA Spanish Tile",
+    short: "Spanish Tile",
+    collection: "Stone-coated steel",
+    tagline: "Barrel-tile looks, without the weight of clay.",
+    story:
+      "The shape of an old-world clay barrel tile, pressed into stone-coated steel. Clay is heavy and it breaks — hail, storm debris, and someone walking it to service an HVAC unit all take their toll, and the weight works on the structure underneath for decades. This gets you the same roofline at a fraction of the weight, on a panel that fastens direct to deck. It is also the one product here with a Class 4 impact rating AND a Class A fire rating, which is a combination worth knowing about in a hail market.",
+    productWarranty: "Lifetime Limited",
+    wind: "Warranty coverage up to 120 mph",
+    windShort: "120-mph",
+    impactLabel: "UL 2218 Class 4",
+    fireLabel: "ASTM E108 Class A",
+    weightLabel: "1.6 lbs/sq ft",
+    standards: [
+      "ASTM E108 Class A — fire resistance",
+      "UL 580 Class 90 — wind uplift resistance",
+      "UL 2218 Class 4 — impact resistance",
+      "TAS 125 — HVHZ wind performance",
+    ],
+    bestFor:
+      "Spanish, Mediterranean and hill-country elevations — and any roof where you want the tile look without the structural weight. Worth a conversation if your insurer offers an impact-resistant credit.",
+    colors: [
+      {
+        name: "Carbon",
+        slug: "carbon",
+        chip: "#1c181c",
+        note: "Near-black with the stone-coat texture breaking up the light — the one that reads modern rather than Mediterranean.",
+        home: `${DC}/iko-metals-spanish-tile/carbon-home.webp`,
+        swatch: `${DC}/iko-metals-spanish-tile/carbon-swatch.webp`,
+      },
+      {
+        name: "Canyon Terra",
+        slug: "canyon-terra",
+        chip: "#773b2d",
+        note: "The cleanest, deepest red of the three terracottas — closest to what people picture when they say Spanish tile.",
+        swatch: `${DC}/iko-metals-spanish-tile/canyon-terra-swatch.webp`,
+      },
+      {
+        name: "Bronzed Oak",
+        slug: "bronzed-oak",
+        chip: "#543d2e",
+        note: "Warm mid-brown that sits naturally against limestone and stucco — the color IKO features on the Spanish Tile flyer.",
+        home: `${DC}/iko-metals-spanish-tile/bronzed-oak-home.webp`,
+        swatch: `${DC}/iko-metals-spanish-tile/bronzed-oak-swatch.webp`,
+      },
+      {
+        name: "Cathedral Stone",
+        slug: "cathedral-stone",
+        chip: "#6f7472",
+        note: "Mid grey with the stone-coat texture reading as weathered slate — the quietest color in the range on a big roof.",
+        // No close-up swatch yet: the only one supplied is 164x114, which would
+        // sit next to ~1450px siblings and look broken. The house photo stands
+        // in until a full-size swatch exists.
+        home: `${DC}/iko-metals-spanish-tile/cathedral-stone-home.webp`,
+      },
+      {
+        name: "Woodland Pine",
+        slug: "woodland-pine",
+        chip: "#363b30",
+        note: "Deep muted green. Non-glossy and low in chroma, which is the direction The Woodlands Standards push you anyway.",
+        swatch: `${DC}/iko-metals-spanish-tile/woodland-pine-swatch.webp`,
+      },
+      {
+        name: "Sienna Clay",
+        slug: "sienna-clay",
+        chip: "#7e4934",
+        note: "The warmest and lightest terracotta — more orange in it, and it softens rather than shouts on a big roof.",
+        swatch: `${DC}/iko-metals-spanish-tile/sienna-clay-swatch.webp`,
+      },
+      {
+        name: "Cordova Clay",
+        slug: "cordova-clay",
+        chip: "#653727",
+        note: "Red shot through with dark charcoal blotches, so it reads as aged clay from the street rather than a flat single color.",
+        swatch: `${DC}/iko-metals-spanish-tile/cordova-clay-swatch.webp`,
+      },
+      {
+        name: "Valencia Sand",
+        slug: "valencia-sand",
+        chip: "#8f6f4f",
+        note: "Pale sand-tan — the lightest of the palette, and the one that throws the least heat back into the attic.",
+        swatch: `${DC}/iko-metals-spanish-tile/valencia-sand-swatch.webp`,
+      },
+    ],
+    moreColors:
+      "All eight Spanish Tile colors. We bring physical samples regardless — IKO's own flyer notes the printed colors are digitally enhanced, so never pick a roof color off a screen.",
   },
 ];
 

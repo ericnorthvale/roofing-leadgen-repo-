@@ -137,7 +137,7 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     commonRoofTypes: [
       "Architectural (dimensional) asphalt shingle — the standard across Klein, Champions, and the master-planned communities; our IKO Dynasty line fits here",
       "Class 4 impact-resistant asphalt (IKO Nordic) — worth pricing given the area's hail record and any insurance discount your carrier offers",
-      "Standing-seam or stone-coated metal — chosen on some custom and acreage homes for longevity",
+      '<a href="/services/metal-roofing">Standing-seam or stone-coated metal</a> — chosen on some custom and acreage homes for longevity',
     ],
     faqs: [
       {
@@ -194,7 +194,7 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     commonRoofTypes: [
       "Architectural (dimensional) asphalt shingle — the ARC-approved standard across the master-planned communities; IKO Dynasty in approved colors",
       "Class 4 impact-resistant asphalt (IKO Nordic) — worth pricing for hail exposure and any insurance discount, in the same muted palettes",
-      "Standing-seam or stone-coated metal on select custom homes where the ARC permits it",
+      '<a href="/services/metal-roofing">Standing-seam or stone-coated metal</a> on select custom homes where the ARC permits it',
     ],
     faqs: [
       {
@@ -253,8 +253,8 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
       "Most of The Woodlands is unincorporated Montgomery County, which does not require a building permit for a residential roof replacement — reroof rules are driven instead by covenants. The Woodlands Township administers the community Standards (responsibility moved from the original associations to the Township in 2010), and each village has a Residential Design Review Committee. Re-roofing is exempt from the usual survey/application paperwork, but materials and colors must still comply with the published Standards, which favor muted, non-glossy roofing; the Township keeps an approved materials-and-color compliance list (Covenant Administration, 281-210-3800). We confirm your village's current requirements before ordering material.",
     commonRoofTypes: [
       "Architectural (dimensional) asphalt shingle — the dominant material on local housing stock and permitted as composition shingle under Township Standards",
-      "Standing-seam or stone-coated metal — accepted under Standards (must be non-glossy), chosen for longevity and storm/UV resistance",
-      "Concrete/clay tile or slate — accepted on higher-end and custom homes, common in luxury villages like Carlton Woods",
+      '<a href="/services/metal-roofing">Standing-seam or stone-coated metal</a> — accepted under Standards (must be non-glossy), chosen for longevity and storm/UV resistance',
+      '<a href="/services/tile-roofing">Concrete/clay tile</a> or slate — accepted on higher-end and custom homes, common in luxury villages like Carlton Woods',
     ],
     faqs: [
       {
@@ -317,7 +317,7 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     commonRoofTypes: [
       "Architectural (dimensional) asphalt shingle — the standard across Kingwood's villages; IKO Dynasty in muted, tree-friendly colors",
       "Class 4 impact-resistant asphalt (IKO Nordic) — worth pricing given hail plus the limb-strike risk under the canopy",
-      "Standing-seam or stone-coated metal on some custom homes",
+      '<a href="/services/metal-roofing">Standing-seam or stone-coated metal</a> on some custom homes',
     ],
     faqs: [
       {
@@ -415,7 +415,7 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     commonRoofTypes: [
       "Architectural (dimensional) asphalt shingle — the standard on most Magnolia homes; IKO Dynasty in muted, tree-friendly colors",
       "Class 4 impact-resistant asphalt (IKO Nordic) — a common upgrade on exposed acreage lots given hail and falling-limb risk",
-      "Standing-seam or stone-coated metal, tile, and slate — seen on larger custom and estate homes in the acreage communities",
+      '<a href="/services/metal-roofing">Standing-seam or stone-coated metal</a>, <a href="/services/tile-roofing">tile</a>, and slate — seen on larger custom and estate homes in the acreage communities',
     ],
     faqs: [
       {
@@ -472,7 +472,7 @@ export const SERVICE_AREAS: Record<ServiceAreaSlug, ServiceArea> = {
     commonRoofTypes: [
       "Architectural (dimensional) asphalt shingle — the standard across inland and master-planned Conroe; IKO Dynasty in Standards-friendly colors",
       "Class 4 impact-resistant asphalt (IKO Nordic) — worth pricing for both hail and the sustained wind on exposed lakefront lots",
-      "Standing-seam or stone-coated metal — chosen on some lakefront and custom homes for wind and longevity",
+      '<a href="/services/metal-roofing">Standing-seam or stone-coated metal</a> — chosen on some lakefront and custom homes for wind and longevity',
     ],
     faqs: [
       {

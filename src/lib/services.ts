@@ -1,6 +1,14 @@
 import type { DataCompleteness } from "./quality-gate";
 
-export type ServiceTag = "replacement" | "repair" | "inspection" | "storm" | "insurance";
+export type ServiceTag =
+  | "replacement"
+  | "repair"
+  | "inspection"
+  | "storm"
+  | "insurance"
+  | "metal"
+  | "tile"
+  | "flat";
 
 export interface ServiceBullet {
   /** Bolded lead-in, e.g. "Pipe boot failures". */
@@ -14,6 +22,13 @@ export interface ServiceBullet {
 export interface ServiceSection {
   heading: string;
   body?: string;
+  /**
+   * Trusted authored markup for the section body, used instead of `body` when
+   * the paragraph needs an internal link. Only `body` existed before, so a
+   * section could not link anywhere — which left the material pages with no
+   * outbound links at all (audit, 2026-11-13).
+   */
+  html?: string;
   bullets?: ServiceBullet[];
   /** Render bullets as an ordered list (process steps). */
   ordered?: boolean;
@@ -165,7 +180,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
           },
           {
             lead: "Standing-seam metal",
-            text: "30–50+ year service life per the Metal Roofing Alliance, concealed fasteners, 140-mph wind rating — at roughly two to three times the cost of asphalt.",
+            html: '30–50+ year service life per the Metal Roofing Alliance, concealed fasteners, 140-mph wind rating — at roughly two to three times the cost of asphalt. <a href="/services/metal-roofing">More on metal systems</a>.',
           },
         ],
       },
@@ -308,6 +323,10 @@ export const SERVICES: Record<ServiceTag, Service> = {
           {
             lead: "Granule loss and blistering",
             text: "granules are the shingle's UV armor — IBHS research shows exposed asphalt embrittles and ages faster. Heavy loss usually signals a roof near end-of-life; we'll show you photos and let you decide.",
+          },
+          {
+            lead: "The flat section nobody checked",
+            html: 'plenty of shingled houses have a low-slope piece — an addition, a patio cover, the roof over a bay — and it is a different system with different failure points. It is frequently the real source of a leak that has been blamed on the shingles for years. See <a href="/services/flat-roofing">flat and low-slope roofing</a>.',
           },
         ],
       },
@@ -665,6 +684,267 @@ export const SERVICES: Record<ServiceTag, Service> = {
       {
         q: "How long can my insurer take to decide my claim?",
         a: "Texas prompt-payment law: acknowledge within 15 days of notice, accept or reject within 15 business days of receiving everything requested (one 45-day extension with written reasons), pay within 5 business days of accepting — with 15-day extensions in declared catastrophes and statutory penalties past 60 days.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
+
+  /**
+   * MATERIAL PAGES (metal / tile / flat), added 2026-11-13.
+   *
+   * The site described an asphalt-only company. The owner confirmed Northvale
+   * installs and services all three of these, and Search Console shows the
+   * demand with nothing to answer it: "metal roofing the woodlands" at position
+   * 19-26, "clay tile roof replacement the woodlands" at 14, "flat roofing the
+   * woodlands" at 32 — all ranking off incidental mentions.
+   *
+   * These are METRO-WIDE pages by design. Per docs/keyword-map.md rule 1, the
+   * city-qualified versions of these queries belong to /<city>/* pages, so
+   * nothing here is titled "The Woodlands".
+   *
+   * DELIBERATELY NO heroPhoto. Every work photo Northvale has is an asphalt
+   * job; putting one on a metal or tile page would imply work that photo does
+   * not show (Hard Rule #2). These pages run the classic header until real
+   * photos of each exist.
+   *
+   * Capability claims here rest on the owner's confirmation (2026-11-13);
+   * technical claims are sourced in docs/research-facts.md Sheet 11. No
+   * Northvale-specific warranty, brand, crew or volume claim appears on any of
+   * them, because none has been supplied.
+   */
+  metal: {
+    slug: "metal-roofing",
+    title: "Metal roofing",
+    serviceTag: "metal",
+    seoTitle: "Metal Roofing — NW Houston",
+    seoDescription:
+      "Standing seam, exposed-fastener panel and metal shingle across NW Houston — plus the hail-dent insurance trap specific to metal roofs in Texas.",
+    summary:
+      "Standing seam, exposed-fastener panel, and metal shingle. Installed, repaired, and documented — including the one insurance question every Texas metal roof owner should ask before a storm.",
+    glance: [
+      { value: "3 systems", label: "standing seam, exposed fastener, metal shingle" },
+      { value: "HO-145", label: "the cosmetic-damage endorsement to check on your policy" },
+      { value: "In writing", label: "scope and price before any work starts" },
+    ],
+    sections: [
+      {
+        heading: "The three systems, and where each one belongs",
+        kind: "cards",
+        bullets: [
+          {
+            lead: "Standing seam",
+            text: "panels joined by raised vertical seams, with the fasteners hidden underneath. Nothing penetrates the weather surface, which is why it is the system specified when the roof has to last and look deliberate. It is the most expensive of the three and the least forgiving of a sloppy install — the seams and clips have to allow the panel to move as it heats.",
+          },
+          {
+            lead: "Exposed-fastener panel (R-panel, 5V)",
+            text: "screwed through the face of the panel with a rubber-washered fastener. Far cheaper and faster, and genuinely the right answer on a shop, barn or detached garage. The washers are the maintenance item: they sit in full sun and they are what you will eventually be re-tightening or replacing, not the panel.",
+          },
+          {
+            lead: "Metal shingle and stone-coated steel",
+            text: "pressed panels that read as shake or tile from the street while weighing a fraction of either. The usual reason to choose it is a covenant or design-review committee that will not approve a standing-seam profile.",
+          },
+        ],
+      },
+      {
+        heading: "The hail question nobody tells metal roof owners about",
+        html: 'Hail does something different to metal than it does to asphalt. Asphalt fractures and sheds granules — visible, measurable damage. Metal usually dents. The roof keeps water out perfectly well, and it looks hailed-on. That gap is where Texas metal roof claims get fought. The Texas Department of Insurance adopted an optional cosmetic-damage endorsement decades ago — HO-145 on homeowners forms, TDP-022 on dwelling forms — and carriers have since filed their own variations. Where one applies, damage that is cosmetic rather than a breach of the roof can be excluded, usually in exchange for a premium credit. It is worth knowing which side of that line your policy sits on BEFORE a storm, not after. Our <a href="/services/insurance-claims">insurance claim support</a> page covers the Texas rules that apply once a claim is open, and <a href="/services/storm-damage">storm damage</a> covers what to do in the first 48 hours.',
+      },
+      {
+        heading: "What we do about it",
+        kind: "steps",
+        ordered: true,
+        bullets: [
+          {
+            text: "Read your declarations page with you and find whether a cosmetic-damage endorsement is attached. It will be named on the schedule of endorsements, not buried in the body.",
+          },
+          {
+            text: "Document a baseline. Our forty-photo packet on a metal roof is worth more than on asphalt, because it establishes what the panels looked like before the storm.",
+          },
+          {
+            text: "After a storm, photograph denting against a straightedge and in raking light, where dents actually read. Flat midday photos hide them.",
+          },
+          {
+            text: "Tell you honestly whether what we are looking at is cosmetic, a breach, or a fastener problem — and whether filing is worth your deductible.",
+          },
+        ],
+      },
+      {
+        heading: "IKO Metals DECRA Spanish Tile — the line we carry",
+        html: "IKO launched <strong>IKO Metals</strong> in September 2026, bringing DECRA stone-coated steel into its North American range — which matters here because we already standardize on IKO. Spanish Tile is the barrel profile: the shape of an old-world clay tile pressed into stone-coated steel, fastened direct to deck. Per IKO's own product flyer it carries a Lifetime Limited Warranty, wind warranty coverage up to 120 mph, and a nominal installed weight of 1.6 lbs per square foot — against the weight of real clay, which is the usual reason a tile roof can't simply be replaced like for like. IKO also states the product meets Texas Department of Insurance requirements. Eight colors; see it in the <a href=\"/roof-design-center\">Roof Design Center</a>.",
+      },
+      {
+        heading: "Why a Class 4 rating is worth asking your insurer about",
+        html: "Spanish Tile is rated <strong>UL 2218 Class 4</strong> for impact and <strong>ASTM E108 Class A</strong> for fire, with UL 580 Class 90 wind uplift. The Class 4 part connects directly to the endorsement question above: the Texas Department of Insurance's cosmetic-damage endorsement is offered in exchange for a premium credit on an impact-resistant roof, and Class 4 is the rating that credit is generally written against. Worth being precise about what that rating is, though — IKO says it plainly in the flyer, and so will we: <em>the impact rating is solely for potential insurance premium reductions and is not a performance guarantee</em>. It is a laboratory classification, not a promise that hail will not dent your roof. Whether a credit is actually available is between you and your carrier; we will give you the documentation to ask.",
+      },
+      {
+        heading: "What metal costs, honestly",
+        html: 'Metal costs more than asphalt — meaningfully more for standing seam, modestly more for exposed-fastener panel. Published market figures vary too widely by panel, gauge and roof complexity for any national average to mean much on your specific house, so we do not quote one. What we will do is measure your roof and put both paths in writing side by side, asphalt and metal, so you are comparing real numbers on your own roof instead of ranges from an article. If asphalt turns out to be the right answer, that is a <a href="/services/roof-replacement">roof replacement</a> like any other.',
+      },
+    ],
+    faqs: [
+      {
+        q: "Is a metal roof worth it in the Houston heat?",
+        a: "Metal reflects more solar energy than dark asphalt, and the attic underneath usually runs cooler — but how much cooler depends on the color, the coating and, more than anything, your attic ventilation and insulation. Anyone who quotes you a specific percentage off your power bill without looking in your attic is guessing.",
+      },
+      {
+        q: "Will hail wreck a metal roof?",
+        a: "Usually it dents it rather than breaches it. The roof keeps working. The problem is an insurance one, not a weather one — see the cosmetic-damage endorsement above, which can exclude exactly that kind of damage.",
+      },
+      {
+        q: "Is a metal roof loud in the rain?",
+        a: "Far less than people expect. The noise everyone remembers is metal over open purlins on a barn. Over solid decking with underlayment and an insulated attic beneath, the difference from asphalt is small.",
+      },
+      {
+        q: "Can you put metal over my existing shingles?",
+        a: "Sometimes it is physically possible, and we will usually still recommend a tear-off. Going over the top hides the decking, and the decking is the thing you most want eyes on — it is where rot and prior leaks show up.",
+      },
+      {
+        q: "Will my HOA or design-review committee approve metal?",
+        a: "It depends on the covenant and the profile. Standing seam is the one most often restricted; metal shingle and stone-coated steel clear review more easily because they read as a conventional roof from the street. In The Woodlands this runs through the RDRC — we have written up that process separately.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
+
+  tile: {
+    slug: "tile-roofing",
+    title: "Tile roofing",
+    serviceTag: "tile",
+    seoTitle: "Tile Roof Repair & Underlayment",
+    seoDescription:
+      "Your tile is probably fine — the felt underneath it isn't. Underlayment replacement, broken and discontinued tile matching, honest tile repair near Houston.",
+    summary:
+      "Most leaking tile roofs do not need new tile. They need the underlayment replaced underneath the tile that is already there — and that is a very different job, and a very different price.",
+    glance: [
+      { value: "40–50 yr", label: "typical clay or concrete tile service life" },
+      { value: "20–25 yr", label: "typical felt underlayment life — the mismatch that leaks" },
+      { value: "Relay", label: "your existing tile goes back on, not into a dumpster" },
+    ],
+    sections: [
+      {
+        heading: "Your tile is almost certainly fine. The felt under it isn't.",
+        html: 'This is the single most useful thing to understand about a tile roof, and it is the reason tile quotes vary so wildly. The tile is not the waterproofing. The tile is a rain screen and a wear surface — it breaks up the water and takes the sun. The actual waterproof layer is the underlayment underneath it. Clay and concrete tile routinely last four to five decades and often far longer; the felt beneath it does not, and in this climate it goes sooner, because heat is what ages it. So a tile roof that starts leaking at twenty-odd years old is usually not a tile problem at all. Anybody who looks at a leaking tile roof and immediately quotes you a full tile replacement is either not looking properly or is selling you the expensive version of a cheaper job. Finding out which you have starts with a <a href="/services/roof-inspection">free roof inspection</a>.',
+      },
+      {
+        heading: "Lift and relay — what the job actually is",
+        kind: "steps",
+        ordered: true,
+        bullets: [
+          {
+            text: "The tile comes off in sections and is stacked on the roof, not thrown in a dumpster. Sound tile is reused; we count breakage as we go and tell you the number.",
+          },
+          {
+            text: "The old underlayment comes off down to the deck, and the deck gets inspected properly — this is the one time in forty years anyone will see it.",
+          },
+          {
+            text: "Any rotted or delaminated decking is replaced. Tile hides deck damage for years, so there is usually some.",
+          },
+          {
+            text: "New underlayment goes down, along with the flashings, valley metal and penetration details, which is where tile roofs leak far more often than in the field.",
+          },
+          { text: "Your tile goes back on, with replacement tile blended in where pieces broke." },
+        ],
+      },
+      {
+        heading: "Broken tile, and tile you cannot buy any more",
+        html: 'Individual cracked or slipped tiles are a repair, not a project — the common causes are foot traffic from someone servicing an HVAC unit or a satellite dish, and limbs coming down. The complication is matching. Tile profiles and colour blends get discontinued, and a patch in the wrong profile is visible from the street forever. Where a profile is still made we match it. Where it is not, the options are salvage stock, pulling tile from an inconspicuous elevation (a rear slope, under a dormer) to patch the visible one and putting the mismatched tile where nobody looks, or accepting a near-match. We will tell you which of those we are proposing and show you where it lands before we do it. Broken-tile work is scheduled the same way as any other <a href="/services/roof-repair">roof repair</a>.',
+      },
+      {
+        heading: "When a tile roof genuinely does need replacing",
+        body: "It happens, and we will say so. Widespread tile breakage rather than a handful of pieces; spalling or delamination across concrete tile that has absorbed water through a failed surface; or a structural problem, since tile is heavy and a frame that was marginal to begin with can sag. In those cases the tile really is the problem. That is a much bigger conversation than an underlayment job, and it deserves photographs and a written explanation rather than a verdict shouted down from a ladder.",
+      },
+    ],
+    faqs: [
+      {
+        q: "My tile roof is leaking. Do I need a whole new roof?",
+        a: "Usually not. On most leaking tile roofs the tile is still serviceable and the underlayment beneath it has aged out — the fix is to lift the tile, replace the underlayment and flashings, and relay the same tile. We will show you photos of what is actually failing before recommending anything.",
+      },
+      {
+        q: "How long does the underlayment under tile last?",
+        a: "Far less time than the tile. Tile commonly runs four to five decades or more; conventional felt underlayment is generally considered a twenty-to-twenty-five-year component, and heat shortens that. That mismatch is normal and expected — it is why underlayment replacement is a routine part of owning a tile roof rather than a sign something went wrong.",
+      },
+      {
+        q: "Can you match my tile if some are broken?",
+        a: "Often yes. If the profile is still manufactured we match it directly. If it has been discontinued we look for salvage stock, or relocate tile from a hidden elevation to the visible one and put the near-match where it will not be seen. We show you the plan before we commit to it.",
+      },
+      {
+        q: "Will walking on my tile roof break it?",
+        a: "Some, if it is done carelessly — which is exactly why so much tile breakage traces back to a cable or HVAC tech rather than to weather. Tile is walked in specific places. We count what breaks during our own work and replace it.",
+      },
+      {
+        q: "Is tile too heavy for my house?",
+        a: "If the house was built with tile on it, no — the framing was designed for it. The question only matters when somebody wants to put tile on a house that was built for asphalt, which is a structural question for an engineer, not a roofer.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
+
+  flat: {
+    slug: "flat-roofing",
+    title: "Flat & low-slope roofing",
+    serviceTag: "flat",
+    seoTitle: "Flat & Low-Slope Roofing — Houston",
+    seoDescription:
+      "TPO, PVC and modified bitumen for low-slope residential sections and commercial buildings near Houston. Where flat roofs actually fail: drainage and details.",
+    summary:
+      "TPO, PVC and modified bitumen — on commercial buildings, and on the flat additions, patio covers and porch roofs that shingle contractors tend to avoid.",
+    glance: [
+      { value: "TPO · PVC", label: "plus modified bitumen for detail-heavy sections" },
+      { value: "Drainage", label: "standing water is what ends a flat roof early" },
+      { value: "Any size", label: "commercial buildings and small residential flat sections" },
+    ],
+    sections: [
+      {
+        heading: "The membranes, and what separates them",
+        kind: "cards",
+        bullets: [
+          {
+            lead: "TPO",
+            text: "a single-ply sheet, hot-air welded at the seams, usually white. It is the default on commercial low-slope for good reasons: the welded seam is strong, and a reflective surface on a flat roof in this climate is worth real money in cooling load.",
+          },
+          {
+            lead: "PVC",
+            text: "also single-ply and hot-air welded, with better resistance to grease and chemical exposure. It is what belongs over a restaurant kitchen exhaust, where TPO will not have a good time.",
+          },
+          {
+            lead: "Modified bitumen",
+            text: "asphalt-based sheet in layers, torch- or self-adhered. More forgiving around complicated detail work and penetrations, and often the right answer on a small residential flat section where a single-ply sheet would be mostly seams anyway.",
+          },
+        ],
+      },
+      {
+        heading: "Flat roofs do not fail in the field. They fail at the edges.",
+        body: "A membrane in the middle of a flat roof is rarely the problem. The failures are at terminations, penetrations and drains: where the membrane turns up a parapet, where it wraps a pipe or a curb, where it meets the scupper. That is where the labour and the judgement go, and it is where a cheap bid gets cheap. When we price a low-slope job, the detail work is the line item worth reading.",
+      },
+      {
+        heading: "Standing water is the thing to fix",
+        body: 'A "flat" roof is never actually flat — it is pitched slightly, so water leaves. When it stops leaving you get ponding, and ponding is what turns a roof that had years left into one that does not. It drives UV and freeze-thaw cycling into the same spot, loads the structure, and finds every seam. If we see ponding we will tell you where it is coming from — a clogged or undersized drain, a sagging deck, insulation installed without the taper it needed — because replacing the membrane without fixing the drainage just buys you the same failure again on a newer roof.',
+      },
+      {
+        heading: "The residential flat section nobody wants to touch",
+        html: 'Plenty of otherwise conventional houses have a flat piece: an addition, a porch or patio cover, a section behind a parapet, the roof over a bay. They leak more often than the main roof because they are low-slope details built by shingle crews, and they are awkward to price, so a lot of roofers would rather not. We will. It is the same membrane work as a commercial roof on a much smaller scale, and it is frequently the actual source of a leak that has been blamed on the shingles for years. If you have a leak and nobody has found it yet, that is what our <a href="/services/roof-inspection">free inspection</a> and <a href="/services/roof-repair">repair</a> work is for.',
+      },
+    ],
+    faqs: [
+      {
+        q: "How long does a flat roof last?",
+        a: "It depends more on drainage and detail quality than on which membrane you pick. A well-detailed single-ply roof that drains properly will outlive a better membrane that ponds. If someone gives you a lifespan without looking at where your water goes, they are quoting a brochure.",
+      },
+      {
+        q: "Why does my flat roof hold water after it rains?",
+        a: "Something has changed the slope or blocked the path out — most often a clogged drain or scupper, a sagging deck, or tapered insulation that was never installed to the right fall. It is worth fixing on its own merits, because ponding shortens the life of whatever membrane is under it.",
+      },
+      {
+        q: "Can you do a small flat section on an otherwise shingled house?",
+        a: "Yes, and it is a common call. Flat additions, patio covers and porch roofs are frequently the real source of a leak that has been blamed on the main roof. We handle the low-slope section as its own system and tie it into the shingles properly at the transition.",
+      },
+      {
+        q: "Do you work on commercial buildings?",
+        a: "Yes. Same membranes, same detailing discipline, larger scale — and the same written scope and photo documentation we do on residential work.",
+      },
+      {
+        q: "Can a flat roof be repaired, or does it have to be replaced?",
+        a: "Single-ply membranes repair well when the problem is local — a puncture, a failed seam, a bad penetration detail. What does not repair well is a membrane that has aged out across the whole roof or one sitting in permanent standing water. We will document which of those you have.",
       },
     ],
     dataCompleteness: "complete",

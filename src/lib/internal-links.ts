@@ -93,6 +93,10 @@ export const SERVICE_CLUSTERS: Record<ServiceTag, string[]> = {
   inspection: ["inspection", "buyer-seller"],
   storm: ["storm-damage", "local-weather"],
   insurance: ["insurance-claims", "storm-damage"],
+  // Material pages pull the materials cluster first, then the job they sit in.
+  metal: ["materials", "replacement"],
+  tile: ["materials", "repair"],
+  flat: ["materials", "repair"],
 };
 
 export interface PostLike {

@@ -24,6 +24,7 @@ const { sections } = Astro.props;
     <Fragment>
       <h2 id={headingId(section.heading)}>{section.heading}</h2>
       {section.body && <p>{section.body}</p>}
+      {section.html && <p set:html={section.html} />}
       {section.bullets && section.kind === "steps" ? (
         <ol class="nv-steplist">
           {section.bullets.map((b, i) => (

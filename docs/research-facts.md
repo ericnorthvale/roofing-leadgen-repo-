@@ -2187,3 +2187,197 @@ number Google has learned to distrust.
 | Internal links to non-canonical URLs | 15     | 0                    |
 | `noindex` pages in the sitemap       | 1      | 0                    |
 | Entries claiming "changed today"     | 68     | 0                    |
+
+---
+
+### Sheet 11 — material service pages: metal, tile, flat (2026-11-13)
+
+**Why these exist.** The site described an asphalt-only company. The owner
+confirmed (2026-11-13) that Northvale installs and services metal, tile and
+flat/low-slope. Search Console shows demand with nothing answering it:
+`metal roofing the woodlands` at position 19–26, `clay tile roof replacement
+the woodlands` at **14**, `flat roofing the woodlands` at 32, `pvc roofing the
+woodlands tx` at 37 — all ranking off incidental mentions in other pages.
+
+**Capability claims on these three pages rest on the owner's confirmation**, not
+on documented jobs. No Northvale-specific warranty, brand, crew, volume or
+project claim appears on any of them, because none has been supplied. If any
+capability is overstated, correct the record — not just the page.
+
+**Sourced facts used:**
+
+| Claim                                                                                                                                                 | Source                                                                                                                                                   |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Texas adopted an optional cosmetic-damage endorsement — HO-145 (homeowners), TDP-022 (dwelling) — tied to a premium credit for impact-resistant roofs | [TDI Commissioner's Bulletin B-0030-98](https://www.tdi.texas.gov/bulletins/1998/b-0030-8.html) — **primary**                                            |
+| Carriers have since filed their own cosmetic-damage variations beyond HO-145                                                                          | [Latent Insure](https://www.latentinsure.com/blog/texas-hail-damage-home-insurance) — secondary                                                          |
+| Clay/concrete tile commonly 40–50+ yrs; felt underlayment generally a 20–25 yr component, shorter in heat                                             | [Green Builder Media](https://www.greenbuildermedia.com/blog/tile-roofs-can-last-300-years.-what-about-the-underlayment) — secondary, industry consensus |
+
+**Deliberately NOT claimed**, because nothing authoritative was found: specific
+metal wind-uplift ratings (UL 580 / FM class — these are per-panel, read the
+manufacturer's listing), cool-roof reflectance figures (CRRC listings vary by
+colour and coating), any national average metal roof price, and any IRC code
+section for low-slope minimums. Most search results on these topics were
+contractor marketing pages, which do not clear this project's sourcing bar.
+
+**Diagram style (2026-11-13, owner feedback):** the first version was flat
+stacked rectangles and read as a bar chart. Redrawn as a staggered isometric
+cutaway — each layer a slab with a lit top face, mid-tone front edge and shaded
+side — with real surface geometry: barrel tile as tubes running up-slope with a
+rounded eave cap, standing seam as flat pans separated by raised ribs. Materials
+are drawn in their real colours (terracotta, plywood, charcoal felt) rather than
+the brand palette, because the point is that they look like what they are; the
+legend and caption stay on brand. The flat system's insulation is labelled
+"rigid insulation board", not "tapered", because the drawing shows a uniform
+slab — the taper is explained in the body copy instead.
+
+**No heroPhoto on any of the three.** Every work photo Northvale has is an
+asphalt job; using one would imply work the photo does not show (Hard Rule #2).
+They use `RoofSystemDiagram.astro` instead — a labelled cross-section, which is
+honest (it depicts the system, it does not claim to be our roof) and makes each
+page's core argument visible. Replace with real photos when they exist.
+
+**Bug found while building:** the "at a glance" chips rendered ONLY on the
+photo-header variant of `ServiceLayout`, so any service page without a hero
+photo silently dropped them. Now rendered in both, using Gold Deep
+(`gold-600`) on the ivory band — brand gold `#C9A26C` fails WCAG there.
+
+---
+
+### Addendum — internal linking for the material pages (2026-11-13)
+
+Audit after shipping metal/tile/flat found the pages were isolated: 72 pages
+linked to each, but **all through the nav and footer**, which Google discounts
+as template links. **Editorial in-content links: zero.** Meanwhile five existing
+pages already discussed these materials without linking anywhere.
+
+The new pages were also dead ends — **zero outbound body links** — because
+`ServiceSection` only had a plain-text `body` field. Only bullets could carry a
+link. Added `ServiceSection.html` (same trusted-authored-markup pattern as
+`ServiceBullet.html`); `city-services.ts` shares the type and gets it too.
+
+`NeighborhoodLayout` rendered `commonRoofTypes` as escaped text, so the city
+hubs' own roof-type lists couldn't link either. Now rendered with `set:html`.
+These strings are code-authored, never user-submitted.
+
+|                           | Editorial links in | Body links out |
+| ------------------------- | ------------------ | -------------- |
+| `/services/metal-roofing` | 0 → **8**          | 0 → 3          |
+| `/services/tile-roofing`  | 0 → **3**          | 0 → 2          |
+| `/services/flat-roofing`  | 0 → **1**          | 0 → 2          |
+
+Flat had nothing pointing at it because **nothing on the site mentioned flat
+roofs at all**. Rather than manufacture a link, added a genuine repair bullet to
+`/services/roof-repair` — the low-slope section on an otherwise shingled house,
+which really is a common hidden leak source. Flat remains the thinnest-linked of
+the three; the honest fix is a real low-slope job to write about.
+
+### IKO Metals — confirmed, and new (2026-11-13)
+
+Owner supplied five stone-coated steel swatch photos described as "IKO Spanish
+tile". Verified: **IKO launched IKO Metals in September 2026**, bringing DECRA
+stone-coated steel into its North American portfolio. Three launch profiles —
+Mediterranean Tile, Farmhouse Shake, **Spanish Tile**. Class 4 impact rating,
+Class A fire rating, Lifetime Limited Warranty, manufactured in Ennis, Texas.
+
+Sources: [Roofing Contractor](https://www.roofingcontractor.com/articles/102769-iko-launches-decra-stone-coated-steel-roofing-line),
+[IKO Metals — Spanish Tile](https://www.iko.com/na/metals/product/spanish-tile/),
+[IKO Metals](https://ikometals.com/).
+
+**Why this matters:** it is genuinely IKO, so it reinforces the site's IKO
+positioning rather than tripping the competitor-brand guard; it is Class 4,
+which ties to the existing impact-resistance and insurance-credit content; and
+it is two months old, so almost nobody has content on it.
+
+**Blocked on the owner.** Swatches are held at
+`public/design-center/iko-metals-spanish-tile/swatch-{a..e}.webp` under neutral
+filenames because IKO's official colour names are not known — naming them from
+the photos would be inventing product facts. Also, `StudioLine` requires
+asphalt-specific warranty fields (`ironCladYears`, `algaeYears`, shingle wind
+wording) that do not apply to a metal product, so adding this line to the Design
+Center needs those made optional first. Do not claim an Iron Clad or algae
+warranty on a metal roof.
+
+---
+
+### Sheet 12 — IKO Metals / DECRA Spanish Tile (2026-11-13)
+
+**Source: IKO's own product flyer**, supplied by the owner —
+`IKO_Metals_Decra_Spanish_Tile_Product_Flyer_D9_1.pdf`, document code
+**ML9L300 · 09/2026**, ©2026 IKO Metals USA, Inc. Every figure below is
+verbatim from that flyer. IKO's own site could not be read (iko.com is outside
+this session's allowed network domains), so the flyer is the authority here.
+
+| Fact           | Value                                              |
+| -------------- | -------------------------------------------------- |
+| Warranty       | Lifetime Limited Warranty                          |
+| Impact         | UL 2218 Class 4                                    |
+| Fire           | ASTM E108 Class A                                  |
+| Wind uplift    | UL 580 Class 90                                    |
+| Wind warranty  | coverage up to 120 mph                             |
+| HVHZ           | TAS 125                                            |
+| Nominal weight | 1.6 lbs/sq ft (160 lbs per 100 sq ft installed)    |
+| Product size   | 17" × 44¼"; installed exposure 14½" × 39½"         |
+| Coverage       | 25.2 panels per 100 sq ft                          |
+| Install        | direct to deck                                     |
+| Texas          | "Meets Texas Department of Insurance requirements" |
+
+**The eight colors, exactly as the flyer spells them:** Carbon, Canyon Terra,
+Bronzed Oak, Cathedral Stone, Woodland Pine, Sienna Clay, Cordova Clay,
+Valencia Sand.
+
+**Caveats the flyer states, which the site repeats rather than softens:**
+
+- "Impact rating is solely for potential insurance premium reductions and is
+  not a performance guarantee, implied or express warranty of any kind."
+- "Colors shown are digitally enhanced. Please view physical samples prior to
+  final color selection."
+- The Lifetime Limited Warranty covers the original owner of the single family
+  detached home and is transferable once to a new owner within the first 20
+  years after installation.
+
+**Why this matters commercially:** Class 4 ties directly to the TDI
+cosmetic-damage endorsement already documented in Sheet 11 — that endorsement is
+offered in exchange for a premium credit on an impact-resistant roof. The two
+facts belong together on the metal page, and they now are.
+
+**Image provenance — resolved.** The black-roofed house photo flagged earlier as
+possibly a render appears in IKO's own flyer (page 1). It is IKO marketing
+imagery, the same footing as the rest of the Design Center photography, so it is
+used as `carbon-home.webp`. The flyer cover is captioned "Color Featured:
+Bronzed Oak" and is the same house as the brown photo, confirming
+`bronzed-oak-home.webp`.
+
+**The three reds, resolved (2026-11-13).** Rather than guess, page 2 of the
+flyer was rasterised and IKO's own printed swatches sampled, then compared to
+the owner's swatches by average colour distance:
+
+| Owner's file | Match            | Δ   | Runner-up         |
+| ------------ | ---------------- | --- | ----------------- |
+| `swatch-a`   | **Sienna Clay**  | 7   | Canyon Terra (14) |
+| `swatch-d`   | **Cordova Clay** | 6   | Canyon Terra (22) |
+| `swatch-g`   | **Canyon Terra** | 3   | Cordova Clay (15) |
+
+What makes this trustworthy is not any single distance but that all three map
+one-to-one with a clear winner each — a mix-up would show two swatches
+competing for the same name. Cordova Clay is independently confirmed by its
+distinctive dark charcoal blotching, which the owner's swatch reproduces
+exactly. Owner confirmed the pairings.
+
+**All eight colors are now live.** Cathedral Stone was added last, with its
+installed-roof photo only — the close-up swatch supplied for it is **164×114**,
+against ~1450px for every sibling. Upscaling it roughly 9× would look visibly
+broken beside them, so the house photo stands in until a full-size swatch
+exists. `assetFor()` falls back to `home` when `swatch` is absent, so this
+renders correctly.
+
+**Still open.** `home-terracotta.webp` is NOT attached to a color. Sampling its
+roof gave Sienna Clay Δ21 against Canyon Terra Δ28 — too close to call on a
+sunlit roof photographed at an angle, and a wrong attribution would be a false
+product claim. It stays unused until the owner says which color it is.
+
+**Model change this forced.** `StudioLine` required `ironCladYears` and
+`algaeYears` — terms of IKO's ASPHALT shingle warranty that do not exist on a
+metal product. They are now optional, and a metal line shows fire rating and
+weight in those spec slots instead. `ShingleStudio` and `RoofConfigurator`
+rendered them unconditionally, which would have printed "-yr Iron Clad" with an
+empty number; both are now guarded.

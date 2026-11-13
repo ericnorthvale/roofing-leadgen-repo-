@@ -27,6 +27,9 @@ sitewide (enforced by tests/unit/seo-content.test.ts).
 | `/services/roof-inspection`  | free roof inspection                                      |                                                                       |
 | `/services/storm-damage`     | storm damage roofing Houston                              | Educational guide                                                     |
 | `/services/insurance-claims` | roof insurance claim support                              | TX process guide                                                      |
+| `/services/metal-roofing`    | metal roofing / standing seam                             | Never city-qualified — `/the-woodlands/*` owns those                  |
+| `/services/tile-roofing`     | tile roof repair / tile underlayment replacement          | Primary angle is underlayment, not tile replacement                   |
+| `/services/flat-roofing`     | flat roofing / low-slope / TPO / PVC                      | Residential low-slope AND commercial                                  |
 | `/storm-response`            | emergency roof tarping / storm response                   | ACTIVE-STORM landing page only; guides live at /services/storm-damage |
 
 ## Trust / EEAT pages

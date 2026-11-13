@@ -131,7 +131,10 @@ const relatedServices = spokes.length > 0 ? spokes : serviceLinks();
             <h2>Roof types we see in {area.name}</h2>
             <ul>
               {area.commonRoofTypes.map((t) => (
-                <li>{t}</li>
+                /* Authored markup, same trusted-content pattern as
+                   ServiceBullet.html — these strings carry the links out to
+                   the material service pages. Never user-submitted. */
+                <li set:html={t} />
               ))}
             </ul>
           </Fragment>

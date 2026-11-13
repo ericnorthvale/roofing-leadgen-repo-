@@ -1,4 +1,5 @@
 ---
+import type { ServiceTag } from "~/lib/services";
 import { LEGAL } from "~/lib/legal";
 
 interface Props {
@@ -6,7 +7,7 @@ interface Props {
   source: string;
   /** Optional city/service pre-selection. */
   defaultCity?: string;
-  defaultService?: "inspection" | "repair" | "replacement" | "storm" | "insurance";
+  defaultService?: ServiceTag;
   /** Submit button label; defaults to the direct, imperative form. */
   submitLabel?: string;
 }
@@ -146,6 +147,9 @@ const ZIP_PATTERN = "\\d{5}(-\\d{4})?";
       <option value="insurance" selected={defaultService === "insurance"}
         >Insurance claim help</option
       >
+      <option value="metal" selected={defaultService === "metal"}>Metal roofing</option>
+      <option value="tile" selected={defaultService === "tile"}>Tile roofing</option>
+      <option value="flat" selected={defaultService === "flat"}>Flat / low-slope</option>
     </select>
   </label>
 
