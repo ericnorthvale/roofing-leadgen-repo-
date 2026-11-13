@@ -1,0 +1,315 @@
+---
+/**
+ * Why a plumbing vent leaks: the neoprene collar, new and at fifteen years.
+ *
+ * WHY THIS EXISTS: pipe boots are one of the most common causes of roof leaks
+ * we get called to, and the post explaining them ran as pure text. The failure
+ * is small, specific and completely invisible from inside the house — the
+ * ceiling stain shows up feet away from the actual hole, which is why people
+ * assume the shingles failed.
+ *
+ * The drawing earns its place by showing the water path. A photograph of a
+ * split boot shows the crack; only a section shows where the water goes after
+ * it gets in, and therefore why the stain appears where it does.
+ *
+ * DRAWN AS A TRUE SECTION. The flange is a flat plate lying on the deck with a
+ * short sleeve rising around the pipe, so in section you see the sleeve wall
+ * on BOTH sides of the pipe — not a plate in front of it. The shingles sit on
+ * the deck and lap over the plate's edges, which is how the real detail works
+ * and why the flange goes on under the course above.
+ *
+ * FACT (docs/research-facts.md Sheet 1): neoprene collars degrade under UV and
+ * commonly fail within roughly 10–15 years, and are "one of the most common
+ * causes of roof leaks". NOT the stronger claim that they cause more leak
+ * calls than every other component combined — that is a single-contractor
+ * figure on the Sheet 1 UNVERIFIED list (#7) and stays off the site.
+ *
+ * Colour discipline: gold marks the split, blue is water, everything else is
+ * the real colour of the material.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+
+const GRANULE = "#6f6659";
+const GRANULE_DARK = "#4e473d";
+const DECK = "#c2a477";
+const DECK_EDGE = "#a88865";
+const ATTIC = "#f4f1ec";
+const RAFTER = "#d9cdb5";
+const PIPE = "#b9bec4";
+const PIPE_SHADE = "#8d949b";
+const NEOPRENE = "#36363a";
+const NEOPRENE_OLD = "#5f5b54";
+const FLASHING = "#949ca5";
+const FLASHING_DARK = "#767e87";
+const WATER = "#3f7fb0";
+const GOLD = "var(--color-gold-600)";
+
+const W = 240;
+const H = 178;
+
+const CX = 120;
+const PW = 12; // pipe half-width
+const SLEEVE = 5; // flange sleeve wall thickness
+const SLEEVE_TOP = 68;
+const COLLAR_GRIP = 52; // where a healthy collar meets the pipe
+
+const SHINGLE_Y = 104;
+const DECK_Y = 114;
+const DECK_T = 12;
+const DECK_B = DECK_Y + DECK_T;
+const PLATE_L = 58;
+const PLATE_R = 182;
+
+const PANELS = [
+  {
+    title: "Newly installed",
+    caption:
+      "The flange lies on the deck under the course above, and the neoprene collar grips the pipe tight. Water running down the pipe is thrown clear onto the shingles.",
+  },
+  {
+    title: "Ten to fifteen years of Texas sun",
+    caption:
+      "UV hardens the neoprene until it splits and curls off the pipe. Water now runs down the outside of the pipe, straight through the deck, and along the first rafter it meets.",
+  },
+];
+
+const LEGEND = [
+  { c: NEOPRENE, label: "Neoprene collar — the part that fails" },
+  { c: FLASHING, label: "Metal flange, lapped under the course above" },
+  { c: WATER, label: "Water path" },
+  { c: DECK, label: "Roof deck" },
+];
+---
+
+<figure class:list={["not-prose", className]}>
+  <ol class="grid list-none grid-cols-1 gap-x-6 gap-y-7 p-0 sm:grid-cols-2">
+    {
+      PANELS.map((p, i) => {
+        const old = i === 1;
+        return (
+          <li class="m-0 p-0">
+            <h4 class="m-0 flex items-baseline gap-2 text-[13px] leading-tight font-bold text-[color:var(--color-navy-900,#1b2437)]">
+              <span class="text-[color:var(--color-gold-600)]">{i + 1}</span>
+              {p.title}
+            </h4>
+
+            <svg
+              viewBox={`0 0 ${W} ${H}`}
+              class="mx-auto mt-2 block h-auto w-full max-w-[22rem] sm:max-w-none"
+              role="img"
+              aria-label={
+                old
+                  ? "The same section after ten to fifteen years. The neoprene collar has split and curled away from the pipe, leaving a gap. Water runs down the outside of the pipe, through the deck, and along a rafter below, so the ceiling stain appears away from the hole."
+                  : "Cross-section through a plumbing vent pipe passing through a roof. A metal flange lies on the deck beneath the shingle course above, with a sleeve rising around the pipe, and a neoprene collar grips the pipe so water is shed onto the shingles."
+              }
+            >
+              <defs>
+                <marker
+                  id={`pb-w-${i}`}
+                  markerUnits="userSpaceOnUse"
+                  markerWidth="8"
+                  markerHeight="8"
+                  refX="6.5"
+                  refY="4"
+                  orient="auto"
+                >
+                  <path d="M0 0.7 L8 4 L0 7.3 Z" fill={WATER} />
+                </marker>
+              </defs>
+
+              {/* attic side + a rafter for the water to find */}
+              <rect x="0" y={DECK_B} width={W} height={H - DECK_B} fill={ATTIC} />
+              <rect x={CX + 26} y={DECK_B} width="13" height={H - DECK_B - 12} fill={RAFTER} />
+
+              {/* deck, with the hole the pipe passes through */}
+              <rect x="0" y={DECK_Y} width={W} height={DECK_T} fill={DECK} />
+              <rect x="0" y={DECK_Y} width={W} height="2" fill={DECK_EDGE} />
+              <rect
+                x={CX - PW - SLEEVE}
+                y={DECK_Y}
+                width={(PW + SLEEVE) * 2}
+                height={DECK_T}
+                fill={ATTIC}
+              />
+
+              {/* flange plate on the deck */}
+              <rect
+                x={PLATE_L}
+                y={SHINGLE_Y + 5}
+                width={PLATE_R - PLATE_L}
+                height="5"
+                fill={FLASHING}
+              />
+              <rect
+                x={PLATE_L}
+                y={SHINGLE_Y + 5}
+                width={PLATE_R - PLATE_L}
+                height="1.4"
+                fill={FLASHING_DARK}
+              />
+
+              {/* shingles sit ON the deck and lap over the plate edges */}
+              <rect
+                x="0"
+                y={SHINGLE_Y}
+                width={PLATE_L + 20}
+                height={DECK_Y - SHINGLE_Y}
+                rx="1"
+                fill={GRANULE}
+                stroke={GRANULE_DARK}
+                stroke-width="0.8"
+              />
+              <rect
+                x={PLATE_R - 20}
+                y={SHINGLE_Y}
+                width={W - PLATE_R + 20}
+                height={DECK_Y - SHINGLE_Y}
+                rx="1"
+                fill={GRANULE}
+                stroke={GRANULE_DARK}
+                stroke-width="0.8"
+              />
+
+              {/* the pipe */}
+              <rect x={CX - PW} y="18" width={PW * 2} height={DECK_B + 22 - 18} fill={PIPE} />
+              <rect
+                x={CX - PW}
+                y="18"
+                width="3.5"
+                height={DECK_B + 22 - 18}
+                fill={PIPE_SHADE}
+                opacity="0.55"
+              />
+              <ellipse
+                cx={CX}
+                cy="18"
+                rx={PW}
+                ry="3.6"
+                fill="#e2e6ea"
+                stroke={PIPE_SHADE}
+                stroke-width="1"
+              />
+
+              {/* flange sleeve — a wall each side of the pipe, as a section shows it */}
+              {[CX - PW - SLEEVE, CX + PW].map((x) => (
+                <rect
+                  x={x}
+                  y={SLEEVE_TOP}
+                  width={SLEEVE}
+                  height={SHINGLE_Y + 5 - SLEEVE_TOP}
+                  fill={FLASHING}
+                />
+              ))}
+
+              {/* the neoprene collar */}
+              {!old ? (
+                <g fill={NEOPRENE}>
+                  <path
+                    d={`M${CX - PW - SLEEVE} ${SLEEVE_TOP + 2} L${CX - PW - SLEEVE} ${SLEEVE_TOP - 4} L${CX - PW} ${COLLAR_GRIP} L${CX - PW} ${SLEEVE_TOP + 2} Z`}
+                  />
+                  <path
+                    d={`M${CX + PW + SLEEVE} ${SLEEVE_TOP + 2} L${CX + PW + SLEEVE} ${SLEEVE_TOP - 4} L${CX + PW} ${COLLAR_GRIP} L${CX + PW} ${SLEEVE_TOP + 2} Z`}
+                  />
+                </g>
+              ) : (
+                <g>
+                  {/* curled outward, leaving a gap at the pipe */}
+                  <path
+                    d={`M${CX - PW - SLEEVE} ${SLEEVE_TOP + 2} L${CX - PW - SLEEVE} ${SLEEVE_TOP - 4} q-9 -7 -5 -14 l6 3 q-2 6 4 11 L${CX - PW} ${SLEEVE_TOP + 2} Z`}
+                    fill={NEOPRENE_OLD}
+                  />
+                  <path
+                    d={`M${CX + PW + SLEEVE} ${SLEEVE_TOP + 2} L${CX + PW + SLEEVE} ${SLEEVE_TOP - 4} q9 -7 5 -14 l-6 3 q2 6 -4 11 L${CX + PW} ${SLEEVE_TOP + 2} Z`}
+                    fill={NEOPRENE_OLD}
+                  />
+                  {/* the split */}
+                  <path
+                    d={`M${CX - PW - 11} ${SLEEVE_TOP - 19} l-5 5 l4 5`}
+                    fill="none"
+                    stroke={GOLD}
+                    stroke-width="2.3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d={`M${CX + PW + 11} ${SLEEVE_TOP - 19} l5 5 l-4 5`}
+                    fill="none"
+                    stroke={GOLD}
+                    stroke-width="2.3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </g>
+              )}
+
+              {/* water */}
+              {!old ? (
+                <g stroke={WATER} stroke-width="2.3" fill="none" stroke-linecap="round">
+                  <path d={`M${CX + 5} 26 L${CX + PW - 1} ${COLLAR_GRIP - 2}`} />
+                  <path
+                    d={`M${CX + PW + 2} ${SLEEVE_TOP - 6} q10 6 14 16 L${CX + 46} ${SHINGLE_Y - 6}`}
+                    marker-end={`url(#pb-w-${i})`}
+                  />
+                </g>
+              ) : (
+                <g stroke={WATER} stroke-width="2.3" fill="none" stroke-linecap="round">
+                  <path d={`M${CX + 5} 26 L${CX + PW - 2} ${SLEEVE_TOP - 16}`} />
+                  <path d={`M${CX + PW - 2} ${SLEEVE_TOP - 16} V${DECK_B + 6}`} />
+                  <path
+                    d={`M${CX + PW - 2} ${DECK_B + 6} q3 11 20 14 L${CX + 33} ${H - 16}`}
+                    marker-end={`url(#pb-w-${i})`}
+                  />
+                </g>
+              )}
+
+              {/* labels */}
+              <text
+                x={CX - PW - SLEEVE - 24}
+                y={COLLAR_GRIP + 6}
+                text-anchor="end"
+                font-size="9"
+                fill="#5b616a"
+              >
+                neoprene collar
+              </text>
+              <text x="4" y={SHINGLE_Y - 6} font-size="9" fill="#5b616a">
+                shingles
+              </text>
+              <text x="4" y={H - 8} font-size="9" fill={old ? "#a8532a" : "#5b616a"}>
+                {old ? "…and the stain lands over here" : "attic side"}
+              </text>
+            </svg>
+
+            <p class="mt-2 mb-0 text-[13px] leading-snug text-[color:var(--color-ink-600,#4a4f57)]">
+              {p.caption}
+            </p>
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  <ul class="mt-6 flex list-none flex-wrap gap-x-6 gap-y-2 p-0">
+    {
+      LEGEND.map((l) => (
+        <li class="m-0 flex items-center gap-2 p-0 text-[13px] leading-snug text-[color:var(--color-ink-700)]">
+          <span
+            class="inline-block h-3 w-3 shrink-0 rounded-[2px]"
+            style={`background:${l.c};box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)`}
+            aria-hidden="true"
+          />
+          {l.label}
+        </li>
+      ))
+    }
+  </ul>
+
+  <figcaption class="mt-3 text-[13px] leading-snug text-[color:var(--color-ink-500)] italic">
+    The collar is a rubber part on a roof that outlives it. It is one of the most common causes of
+    roof leaks we are called to, it is cheap to replace on its own, and putting a fifteen-year-old
+    one back on a brand-new roof builds the next leak in on day one.
+  </figcaption>
+</figure>

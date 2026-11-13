@@ -6,6 +6,7 @@ import PhoneCTAButton from "@components/PhoneCTAButton.astro";
 import LeadForm from "@components/LeadForm.astro";
 import TrustBar from "@components/TrustBar.astro";
 import RelatedLinks from "@components/RelatedLinks.astro";
+import ServiceAreaMap from "@components/ServiceAreaMap.astro";
 import Resources from "@components/Resources.astro";
 import Faq from "@components/Faq.astro";
 import { buildSeo, faqPageJsonLd } from "~/lib/seo";
@@ -86,6 +87,13 @@ const relatedServices = spokes.length > 0 ? spokes : serviceLinks();
   <section class="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-[1fr_400px]">
     <article class="prose-northvale">
       <p set:html={area.localContext} />
+
+      {
+        /* Every city hub ran 1,100–1,900 words with no content visual at all
+          (audit, 2026-11-13). The map orients the reader and carries eight
+          internal links out to the other hubs. */
+      }
+      <ServiceAreaMap activeCity={area.slug} class="my-9" />
 
       <h2>{area.name} neighborhoods we serve</h2>
       {
