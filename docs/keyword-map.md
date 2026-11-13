@@ -49,21 +49,22 @@ sitewide (enforced by tests/unit/seo-content.test.ts).
 
 ## Blog (informational long-tail; each links up to its money page)
 
-| Post                                               | Query family                                                                                      |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| best-roofing-shingles-the-woodlands-climate        | best shingles for Texas/Woodlands climate                                                         |
-| iko-dynasty-vs-nordic                              | IKO Dynasty vs Nordic / Class 3 vs Class 4 (301 from tamko-titan-xt-vs-gaf-timberline-hdz)        |
-| roof-replacement-cost-the-woodlands                | roof replacement cost The Woodlands (informational; the money page holds the transactional query) |
-| what-wind-rating-should-i-buy-near-houston         | shingle wind ratings Houston                                                                      |
-| should-i-replace-my-roof-before-selling            | replace roof before selling                                                                       |
-| do-insurance-companies-cover-hail-damage-texas     | does insurance cover hail damage Texas                                                            |
-| montgomery-county-roofing-permit-guide             | Montgomery County roofing permit                                                                  |
-| what-happens-during-a-roof-inspection              | what happens during a roof inspection                                                             |
-| why-roofs-leak-around-pipe-boots                   | roof leak pipe boot                                                                               |
-| woodlands-hoa-roof-approval-guide                  | The Woodlands HOA roof approval / RDRC                                                            |
-| best-iko-roof-colors-the-woodlands                 | best IKO roof colors / Woodlands roof color                                                       |
-| class-4-impact-resistant-shingles-texas (existing) | Class 4 shingles Texas                                                                            |
-| storm-damage-what-to-do (existing)                 | what to do after storm damage                                                                     |
+| Post                                               | Query family                                                                                            |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| best-roofing-shingles-the-woodlands-climate        | best shingles for Texas/Woodlands climate                                                               |
+| iko-dynasty-vs-nordic                              | IKO Dynasty vs Nordic / Class 3 vs Class 4 (301 from tamko-titan-xt-vs-gaf-timberline-hdz)              |
+| roof-replacement-cost-the-woodlands                | roof replacement cost The Woodlands (informational; the money page holds the transactional query)       |
+| what-wind-rating-should-i-buy-near-houston         | shingle wind ratings Houston                                                                            |
+| should-i-replace-my-roof-before-selling            | replace roof before selling                                                                             |
+| do-insurance-companies-cover-hail-damage-texas     | does insurance cover hail damage Texas                                                                  |
+| montgomery-county-roofing-permit-guide             | Montgomery County roofing permit                                                                        |
+| what-happens-during-a-roof-inspection              | what happens during a roof inspection                                                                   |
+| why-roofs-leak-around-pipe-boots                   | roof leak pipe boot                                                                                     |
+| woodlands-hoa-roof-approval-guide                  | The Woodlands HOA roof approval / RDRC                                                                  |
+| roof-claim-denied-texas-appraisal                  | roof claim denied Texas / appraisal clause (city claim queries stay on /the-woodlands/insurance-claims) |
+| best-iko-roof-colors-the-woodlands                 | best IKO roof colors / Woodlands roof color                                                             |
+| class-4-impact-resistant-shingles-texas (existing) | Class 4 shingles Texas                                                                                  |
+| storm-damage-what-to-do (existing)                 | what to do after storm damage                                                                           |
 
 ## Rules
 

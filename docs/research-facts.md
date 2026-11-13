@@ -2381,3 +2381,34 @@ metal product. They are now optional, and a metal line shows fire rating and
 weight in those spec slots instead. `ShingleStudio` and `RoofConfigurator`
 rendered them unconditionally, which would have printed "-yr Iron Clad" with an
 empty number; both are now guarded.
+
+---
+
+### Sheet 13 — Texas roof claim denial & appraisal (2026-11-13)
+
+For `/blog/roof-claim-denied-texas-appraisal`. The commercial point is that
+Northvale has **two real jobs** that began as denied claims and ended in
+approved full replacements — first-hand experience, which is what the blog had
+none of before.
+
+| Claim                                                                                                                                        | Source                                                                                                                                                                                                   |
+| -------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Appraisal determines the **amount of loss**, not coverage                                                                                    | Tex. Ins. Code **§1813.003(b)** — "solely to determine the amount of loss"                                                                                                                               |
+| Texas residential property policies issued or renewed on/after **1 Jan 2026** must include an appraisal provision                            | **Senate Bill 458** ([Insurance Journal](https://www.insurancejournal.com/magazines/mag-features/2025/11/03/845626.htm), [HMF Law](https://www.hmf-law.com/news/texas-hail-claim-appraisal-law-sb-458/)) |
+| TDI rules implementing SB 458                                                                                                                | **28 TAC §§5.9800–5.9806**                                                                                                                                                                               |
+| Award binding as to amount, barring fraud, accident or material mistake                                                                      | SB 458 / policy appraisal provision                                                                                                                                                                      |
+| Appraisers select an umpire; a county or district court may appoint one if they cannot agree                                                 | SB 458 ([Donegan](https://donegan.com/blog/texas-insurance-appraisal-rules-sb-458-home-auto-claims/))                                                                                                    |
+| Appraisers **may** apportion damage between hail and wear/tear, because that goes to amount of loss                                          | _State Farm Lloyds v. Johnson_, 290 S.W.3d 886 (Tex. 2009)                                                                                                                                               |
+| Prompt-payment deadlines (15 days acknowledge / 15 business days accept-reject / 45-day extension / 5 business days pay / penalties past 60) | Already on the site, Sheet 4                                                                                                                                                                             |
+| §4102.163 public adjuster prohibition; §707.002 + Bus. & Com. §27.02 deductible                                                              | Already on the site                                                                                                                                                                                      |
+
+**DELIBERATELY NOT PUBLISHED:** the specific appraisal deadlines. Sources
+disagree badly — one says appraisers must agree within 40 days of demand,
+another 180 days, another 15 days to select an umpire. Until the adopted rule
+text is read directly, no number goes on the page. The post describes the
+sequence without asserting a timetable.
+
+**Why this post and not a city page:** the city-qualified claim queries
+("woodlands roof claim", "the woodlands roof insurance") belong to
+`/the-woodlands/insurance-claims` under keyword-map rule 1. This post takes the
+informational phrasing and links up to that page.
