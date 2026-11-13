@@ -2,7 +2,7 @@
 title: "Do Insurance Companies Cover Hail Damage in Texas?"
 description: "Yes, usually — here's how ACV vs. replacement cost, recoverable depreciation, deductible law, and Texas claim deadlines actually work after hail."
 pubDate: 2026-07-03
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "insurance-claims"
 persona: ["homeowner", "storm"]
 tags: ["hail", "insurance", "texas-law", "claims", "montgomery-county"]

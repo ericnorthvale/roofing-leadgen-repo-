@@ -2,7 +2,7 @@
 title: "What Happens During a Roof Inspection?"
 description: "Slope by slope, boot by boot: the 40-photo inspection process, what the attic reveals, what inspections cost per Angi — and why ours is free."
 pubDate: 2026-07-03
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "inspection"
 persona: ["homeowner", "agent"]
 tags: ["inspection", "documentation", "hail", "wind", "attic", "the-woodlands"]

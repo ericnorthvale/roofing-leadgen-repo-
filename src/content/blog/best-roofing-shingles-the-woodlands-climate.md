@@ -2,7 +2,7 @@
 title: "The Best Roofing Shingles for The Woodlands Climate"
 description: "How heat, humidity, algae, and hail wear out roofs in The Woodlands — and how IKO Dynasty, the Class 4 IKO Nordic, and metal options hold up."
 pubDate: 2026-07-03
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "materials"
 persona: ["homeowner"]
 relatedCity: "the-woodlands"

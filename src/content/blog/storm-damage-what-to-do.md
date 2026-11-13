@@ -2,7 +2,7 @@
 title: "Hail or wind hit your roof? A Houston homeowner's next steps"
 description: "After a Houston storm: how to spot real roof damage, document it properly, and handle the insurance claim the right way — without the common mistakes."
 pubDate: 2026-06-28
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "storm-damage"
 persona: ["homeowner"]
 tags: ["storm", "hail", "insurance", "houston"]

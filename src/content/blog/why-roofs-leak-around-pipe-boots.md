@@ -2,7 +2,7 @@
 title: "Why Roofs Leak Around Pipe Boots"
 description: "That mystery ceiling stain is often a $10 rubber collar. Why pipe boots fail in 10-15 years, how the leak shows up, and what a fix costs."
 pubDate: 2026-07-03
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "repair"
 persona: ["homeowner"]
 tags: ["pipe-boots", "roof-leaks", "repair", "the-woodlands", "creekside-park"]

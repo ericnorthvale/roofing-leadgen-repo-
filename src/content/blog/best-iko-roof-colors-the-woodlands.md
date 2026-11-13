@@ -2,7 +2,7 @@
 title: "The Best IKO Roof Colors for The Woodlands"
 description: "How to pick an IKO Dynasty or Nordic color that flatters your home and clears The Woodlands design-review — the most popular shades and what they pair with."
 pubDate: 2026-07-04
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "materials"
 persona: ["homeowner"]
 relatedCity: "the-woodlands"

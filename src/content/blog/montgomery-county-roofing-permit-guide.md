@@ -2,7 +2,7 @@
 title: "Montgomery County Roofing Permit Guide"
 description: "Who needs a roofing permit around The Woodlands? County, Township RDRC, Shenandoah, and Oak Ridge North rules — mapped street by street."
 pubDate: 2026-07-03
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "hoa"
 persona: ["homeowner"]
 relatedCity: "the-woodlands"

@@ -2,7 +2,7 @@
 title: "How Much Does Roof Replacement Cost in The Woodlands?"
 description: "What roof replacement really costs: attributed national data from Angi, Modernize, and This Old House, the cost drivers, and Township approval rules."
 pubDate: 2026-07-03
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "replacement"
 persona: ["homeowner"]
 relatedCity: "the-woodlands"

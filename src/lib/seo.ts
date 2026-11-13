@@ -178,6 +178,10 @@ export function blogPostingJsonLd(
     authorName: string;
     /** "Organization" when the byline is the company itself, not a person. */
     authorType?: "Person" | "Organization";
+    /** Absolute path to the author's page — lets Google resolve the byline. */
+    authorUrl?: string;
+    /** Absolute path to the author's photo. */
+    authorImage?: string;
     /** Absolute path or URL to the hero image, if any. */
     image?: string;
   },
@@ -193,7 +197,12 @@ export function blogPostingJsonLd(
     mainEntityOfPage: url,
     datePublished: post.datePublished.toISOString(),
     dateModified: (post.dateModified ?? post.datePublished).toISOString(),
-    author: { "@type": post.authorType ?? "Person", name: post.authorName },
+    author: {
+      "@type": post.authorType ?? "Person",
+      name: post.authorName,
+      ...(post.authorUrl ? { url: `${base}${post.authorUrl}` } : {}),
+      ...(post.authorImage ? { image: `${base}${post.authorImage}` } : {}),
+    },
     publisher: { "@id": `${base}#business` },
     ...(post.image
       ? { image: post.image.startsWith("http") ? post.image : `${base}${post.image}` }
