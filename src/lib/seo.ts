@@ -1,5 +1,6 @@
 import { BRAND } from "./brand";
 import { SERVICE_AREAS, SERVICE_AREA_SLUGS } from "./service-areas";
+import { canonicalPath } from "./routes";
 
 export interface SeoInput {
   title: string;
@@ -56,7 +57,9 @@ export function titleWithBrand(title: string): string {
 export function buildSeo(input: SeoInput, siteUrl: string): SeoOutput {
   const base = siteUrl.replace(/\/+$/, "");
   const path = input.pathname ?? "/";
-  const canonical = path.startsWith("http") ? path : `${base}${path}`;
+  // Normalized through the SAME function the sitemap uses, so a page's canonical
+  // and its sitemap entry are structurally incapable of disagreeing.
+  const canonical = path.startsWith("http") ? path : `${base}${canonicalPath(path)}`;
   const ogInput = input.ogImage ?? DEFAULT_OG;
   const ogImageAbsolute = ogInput.startsWith("http") ? ogInput : `${base}${ogInput}`;
   return {

@@ -22,6 +22,48 @@ import {
 /** Utility pages excluded from search (mirror the Disallow rules in public/robots.txt). */
 const STATIC_EXCLUDED = new Set(["/thank-you"]);
 
+/**
+ * Route prefixes whose DETAIL pages canonicalize WITH a trailing slash.
+ * `/blog` and `/projects` (the index pages) do not — only `/blog/<post>/` and
+ * `/projects/<slug>/` do.
+ */
+const TRAILING_SLASH_PREFIXES = ["/blog/", "/projects/"];
+
+/**
+ * The one true URL for a path — what goes in `<link rel="canonical">` AND in
+ * the sitemap, so the two can never disagree.
+ *
+ * WHY THIS EXISTS (audit, 2026-11-12). The sitemap emitted every URL with a
+ * trailing slash (Astro's `directory` build format), while 52 of 69 pages
+ * declared a canonical WITHOUT one, and every internal link on the site used
+ * the no-slash form. So the sitemap was advertising 52 addresses that the pages
+ * themselves disowned. Google crawled a handful, saw the canonical pointing
+ * elsewhere, filed them under "Alternate page with proper canonical tag", and
+ * declined to crawl the rest — 52 URLs stuck in "Discovered - currently not
+ * indexed", which buried any real indexing problem in noise.
+ *
+ * The rule below reproduces the EXISTING canonical of every page exactly, so
+ * nothing that currently ranks moves. It is deliberately not a cleanup: making
+ * the whole site consistent either way would relocate ~52 indexed URLs
+ * (including /about and /the-woodlands/insurance-claims) for tidiness alone.
+ * Mixed conventions are harmless once canonical, sitemap and links agree.
+ */
+export function canonicalPath(pathnameOrUrl: string): string {
+  let path = pathnameOrUrl;
+  try {
+    path = new URL(pathnameOrUrl).pathname;
+  } catch {
+    // already a path
+  }
+  if (!path.startsWith("/")) path = `/${path}`;
+  const bare = path.replace(/\/+$/, "");
+  if (bare === "") return "/";
+  const wantsSlash = TRAILING_SLASH_PREFIXES.some(
+    (p) => bare.startsWith(p) && bare.length > p.length,
+  );
+  return wantsSlash ? `${bare}/` : bare;
+}
+
 export interface RouteStatus {
   path: string;
   indexable: boolean;
