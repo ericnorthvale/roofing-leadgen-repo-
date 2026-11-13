@@ -2296,3 +2296,68 @@ asphalt-specific warranty fields (`ironCladYears`, `algaeYears`, shingle wind
 wording) that do not apply to a metal product, so adding this line to the Design
 Center needs those made optional first. Do not claim an Iron Clad or algae
 warranty on a metal roof.
+
+---
+
+### Sheet 12 — IKO Metals / DECRA Spanish Tile (2026-11-13)
+
+**Source: IKO's own product flyer**, supplied by the owner —
+`IKO_Metals_Decra_Spanish_Tile_Product_Flyer_D9_1.pdf`, document code
+**ML9L300 · 09/2026**, ©2026 IKO Metals USA, Inc. Every figure below is
+verbatim from that flyer. IKO's own site could not be read (iko.com is outside
+this session's allowed network domains), so the flyer is the authority here.
+
+| Fact           | Value                                              |
+| -------------- | -------------------------------------------------- |
+| Warranty       | Lifetime Limited Warranty                          |
+| Impact         | UL 2218 Class 4                                    |
+| Fire           | ASTM E108 Class A                                  |
+| Wind uplift    | UL 580 Class 90                                    |
+| Wind warranty  | coverage up to 120 mph                             |
+| HVHZ           | TAS 125                                            |
+| Nominal weight | 1.6 lbs/sq ft (160 lbs per 100 sq ft installed)    |
+| Product size   | 17" × 44¼"; installed exposure 14½" × 39½"         |
+| Coverage       | 25.2 panels per 100 sq ft                          |
+| Install        | direct to deck                                     |
+| Texas          | "Meets Texas Department of Insurance requirements" |
+
+**The eight colors, exactly as the flyer spells them:** Carbon, Canyon Terra,
+Bronzed Oak, Cathedral Stone, Woodland Pine, Sienna Clay, Cordova Clay,
+Valencia Sand.
+
+**Caveats the flyer states, which the site repeats rather than softens:**
+
+- "Impact rating is solely for potential insurance premium reductions and is
+  not a performance guarantee, implied or express warranty of any kind."
+- "Colors shown are digitally enhanced. Please view physical samples prior to
+  final color selection."
+- The Lifetime Limited Warranty covers the original owner of the single family
+  detached home and is transferable once to a new owner within the first 20
+  years after installation.
+
+**Why this matters commercially:** Class 4 ties directly to the TDI
+cosmetic-damage endorsement already documented in Sheet 11 — that endorsement is
+offered in exchange for a premium credit on an impact-resistant roof. The two
+facts belong together on the metal page, and they now are.
+
+**Image provenance — resolved.** The black-roofed house photo flagged earlier as
+possibly a render appears in IKO's own flyer (page 1). It is IKO marketing
+imagery, the same footing as the rest of the Design Center photography, so it is
+used as `carbon-home.webp`. The flyer cover is captioned "Color Featured:
+Bronzed Oak" and is the same house as the brown photo, confirming
+`bronzed-oak-home.webp`.
+
+**Still open.** Only four of the eight colors are in the Design Center: Carbon,
+Bronzed Oak, Woodland Pine and Valencia Sand — the swatches that can be matched
+to a flyer name with certainty. Three red/terracotta swatches (`swatch-a`,
+`swatch-d`, `swatch-g`) are held unnamed because Canyon Terra, Sienna Clay and
+Cordova Clay cannot be told apart from photographs with confidence, and naming
+one wrongly would publish a false product fact. Cathedral Stone has no swatch
+image yet. `moreColors` names all four missing colors honestly in the meantime.
+
+**Model change this forced.** `StudioLine` required `ironCladYears` and
+`algaeYears` — terms of IKO's ASPHALT shingle warranty that do not exist on a
+metal product. They are now optional, and a metal line shows fire rating and
+weight in those spec slots instead. `ShingleStudio` and `RoofConfigurator`
+rendered them unconditionally, which would have printed "-yr Iron Clad" with an
+empty number; both are now guarded.

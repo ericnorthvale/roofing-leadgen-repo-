@@ -116,7 +116,8 @@ export default function ShingleStudio() {
                 lineKey === l.key ? "text-white/75" : "text-[color:var(--color-ink-500)]"
               }`}
             >
-              {l.windShort} wind · {l.ironCladYears}-yr Iron Clad
+              {l.windShort} wind
+              {l.ironCladYears ? ` · ${l.ironCladYears}-yr Iron Clad` : ""}
               {l.impactLabel ? ` · ${l.impactLabel.replace("FM 4473 / ", "")}` : ""}
             </span>
           </button>
@@ -191,12 +192,22 @@ export default function ShingleStudio() {
 
           {/* Specs */}
           <dl className="mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-card)] border border-[color:var(--color-navy-100)] bg-[color:var(--color-navy-100)] text-center">
-            {[
-              ["Warranty", line.productWarranty],
-              ["Full coverage", `${line.ironCladYears}-yr Iron Clad`],
-              ["Wind", line.windShort],
-              ["Algae", `${line.algaeYears}-yr warranty`],
-            ].map(([label, value]) => (
+            {(
+              [
+                ["Warranty", line.productWarranty],
+                line.ironCladYears
+                  ? ["Full coverage", `${line.ironCladYears}-yr Iron Clad`]
+                  : line.fireLabel
+                    ? ["Fire", line.fireLabel]
+                    : null,
+                ["Wind", line.windShort],
+                line.algaeYears
+                  ? ["Algae", `${line.algaeYears}-yr warranty`]
+                  : line.weightLabel
+                    ? ["Weight", line.weightLabel]
+                    : null,
+              ].filter(Boolean) as [string, string][]
+            ).map(([label, value]) => (
               <div key={label} className="bg-white px-2 py-3">
                 <dt className="text-[10px] font-semibold tracking-wide text-[color:var(--color-ink-500)] uppercase">
                   {label}
@@ -212,6 +223,13 @@ export default function ShingleStudio() {
               Impact rating: <strong>{line.impactLabel}</strong> — a lab classification for
               insurance-discount purposes, not a hail guarantee.
             </p>
+          )}
+          {line.standards && line.standards.length > 0 && (
+            <ul className="mt-2 grid gap-1 text-xs text-[color:var(--color-ink-500)]">
+              {line.standards.map((std) => (
+                <li key={std}>{std}</li>
+              ))}
+            </ul>
           )}
 
           <div className="mt-auto pt-5">

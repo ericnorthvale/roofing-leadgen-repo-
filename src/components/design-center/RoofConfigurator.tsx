@@ -102,7 +102,8 @@ export default function RoofConfigurator() {
                   </span>
                   <span className="mt-0.5 block font-semibold">{s.name}</span>
                   <span className="mt-1 block text-sm text-[color:var(--color-ink-500)]">
-                    {s.windShort} wind · {s.ironCladYears}-yr Iron Clad
+                    {s.windShort} wind
+                    {s.ironCladYears ? ` · ${s.ironCladYears}-yr Iron Clad` : ""}
                     {s.impactLabel ? ` · ${s.impactLabel}` : ""}
                   </span>
                   <span className="mt-2 block text-sm text-[color:var(--color-ink-800)]">

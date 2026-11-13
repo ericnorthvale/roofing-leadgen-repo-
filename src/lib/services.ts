@@ -769,6 +769,14 @@ export const SERVICES: Record<ServiceTag, Service> = {
         ],
       },
       {
+        heading: "IKO Metals DECRA Spanish Tile — the line we carry",
+        html: "IKO launched <strong>IKO Metals</strong> in September 2026, bringing DECRA stone-coated steel into its North American range — which matters here because we already standardize on IKO. Spanish Tile is the barrel profile: the shape of an old-world clay tile pressed into stone-coated steel, fastened direct to deck. Per IKO's own product flyer it carries a Lifetime Limited Warranty, wind warranty coverage up to 120 mph, and a nominal installed weight of 1.6 lbs per square foot — against the weight of real clay, which is the usual reason a tile roof can't simply be replaced like for like. IKO also states the product meets Texas Department of Insurance requirements. Eight colors; see it in the <a href=\"/roof-design-center\">Roof Design Center</a>.",
+      },
+      {
+        heading: "Why a Class 4 rating is worth asking your insurer about",
+        html: "Spanish Tile is rated <strong>UL 2218 Class 4</strong> for impact and <strong>ASTM E108 Class A</strong> for fire, with UL 580 Class 90 wind uplift. The Class 4 part connects directly to the endorsement question above: the Texas Department of Insurance's cosmetic-damage endorsement is offered in exchange for a premium credit on an impact-resistant roof, and Class 4 is the rating that credit is generally written against. Worth being precise about what that rating is, though — IKO says it plainly in the flyer, and so will we: <em>the impact rating is solely for potential insurance premium reductions and is not a performance guarantee</em>. It is a laboratory classification, not a promise that hail will not dent your roof. Whether a credit is actually available is between you and your carrier; we will give you the documentation to ask.",
+      },
+      {
         heading: "What metal costs, honestly",
         html: 'Metal costs more than asphalt — meaningfully more for standing seam, modestly more for exposed-fastener panel. Published market figures vary too widely by panel, gauge and roof complexity for any national average to mean much on your specific house, so we do not quote one. What we will do is measure your roof and put both paths in writing side by side, asphalt and metal, so you are comparing real numbers on your own roof instead of ranges from an article. If asphalt turns out to be the right answer, that is a <a href="/services/roof-replacement">roof replacement</a> like any other.',
       },
