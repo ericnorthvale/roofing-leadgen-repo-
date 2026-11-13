@@ -151,3 +151,18 @@ We handle the paperwork on every Northvale job — RDRC application, Shenandoah
 cut sheets, inspection scheduling, all of it. If you'd rather not learn four
 jurisdictions' rules yourself, [tell us where the house is](/contact) and we'll
 tell you exactly what applies, in writing, with the inspection.
+
+## If your house is actually in Harris County
+
+Plenty of homes with a Spring address sit south of the county line, and the
+rules change with it. Unincorporated **Harris** County doesn't run a general
+residential building-permit programme either — its Office of the County
+Engineer handles septic, driveway culverts and floodplain work — so there, too,
+your HOA or deed restrictions govern the re-roof rather than a county
+inspector. [Roof replacement in Spring](/spring/roof-replacement) covers that
+side, including why so much of the Klein and Champions housing stock is coming
+due at once. Cypress is the same county rule with much stricter architectural
+review — see [storm damage in Cypress](/cypress/storm-damage).
+
+Northern Spring extends into Montgomery County, so this is one of the few
+places where the honest answer really is "confirm the address first."

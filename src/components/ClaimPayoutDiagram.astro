@@ -1,0 +1,153 @@
+---
+/**
+ * Where a roof claim's money actually goes, and why the first cheque is small.
+ *
+ * WHY THIS EXISTS: "my insurance only paid half" is almost never a short
+ * payment — it is a replacement-cost policy paying actual cash value first and
+ * holding the rest back until the work is done, minus a deductible the
+ * homeowner always owes. Explained in prose it stays abstract. Drawn to scale,
+ * the three slices answer the question in about two seconds.
+ *
+ * THE NUMBERS ARE NOT OURS AND ARE NOT INVENTED. They are the Texas Department
+ * of Insurance's own published illustration of replacement cost vs. actual
+ * cash value: a $10,000 roof pays $8,500 at five years, $7,000 at ten and
+ * $4,000 at twenty, before the deductible. We add only a labelled EXAMPLE
+ * deductible to show where it lands in the split, and the caption says so.
+ * Source: tdi.texas.gov — "Home insurance policies: replacement cost or actual
+ * cash value", recorded in docs/research-facts.md Sheet 4.
+ *
+ * Bars are drawn to scale from those figures, so the picture cannot drift from
+ * the data: change AGES and every width, label and total follows.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+
+const RCV = 10_000; // TDI's illustrative roof value
+const DEDUCTIBLE = 2_000; // EXAMPLE only — labelled as such everywhere
+
+/** TDI's published ACV figures for the same roof at three ages. */
+const AGES = [
+  { years: 5, acv: 8_500 },
+  { years: 10, acv: 7_000 },
+  { years: 20, acv: 4_000 },
+];
+
+const fmt = (n: number) => `$${n.toLocaleString("en-US")}`;
+
+const rows = AGES.map(({ years, acv }) => {
+  const depreciation = RCV - acv; // held back, recoverable once work is done
+  const firstCheque = acv - DEDUCTIBLE; // what actually arrives up front
+  return {
+    years,
+    acv,
+    depreciation,
+    firstCheque,
+    pct: {
+      first: (firstCheque / RCV) * 100,
+      ded: (DEDUCTIBLE / RCV) * 100,
+      dep: (depreciation / RCV) * 100,
+    },
+  };
+});
+
+const KEY = [
+  {
+    c: "var(--color-gold-600)",
+    label: "The first cheque",
+    note: "arrives soon after the claim is approved",
+  },
+  { c: "#8a9099", label: "Your deductible", note: "you always pay this — see below" },
+  {
+    c: "#c9ccd1",
+    label: "Recoverable depreciation",
+    note: "held back until the work is finished",
+  },
+];
+---
+
+<figure class:list={["not-prose", className]}>
+  <div
+    class="rounded-2xl border border-[color:var(--color-ink-200,#e4e6e9)] bg-[color:var(--color-sand-50,#faf8f5)] p-5 sm:p-7"
+  >
+    <p
+      class="m-0 text-[13px] leading-snug font-semibold tracking-wide text-[color:var(--color-ink-500)] uppercase"
+    >
+      A {fmt(RCV)} roof, same damage, three different roof ages
+    </p>
+
+    <ol class="mt-5 mb-0 list-none space-y-6 p-0">
+      {
+        rows.map((r) => (
+          <li class="m-0 p-0">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+              <span class="text-[15px] font-bold text-[color:var(--color-navy-900,#1b2437)]">
+                {r.years}-year-old roof
+              </span>
+              <span class="text-[13px] text-[color:var(--color-ink-600,#4a4f57)]">
+                first cheque{" "}
+                <strong class="text-[color:var(--color-gold-600)]">{fmt(r.firstCheque)}</strong>
+              </span>
+            </div>
+
+            <div
+              class="mt-2 flex h-9 w-full overflow-hidden rounded-md"
+              role="img"
+              aria-label={`A ${r.years}-year-old roof: of the ${fmt(RCV)} replacement cost, the first cheque is ${fmt(r.firstCheque)}, your deductible is ${fmt(DEDUCTIBLE)}, and ${fmt(r.depreciation)} is recoverable depreciation held back until the work is finished.`}
+            >
+              <span
+                class="flex items-center justify-center text-[12px] font-semibold text-white"
+                style={`width:${r.pct.first}%;background:var(--color-gold-600)`}
+              >
+                {r.pct.first > 14 ? fmt(r.firstCheque) : ""}
+              </span>
+              <span
+                class="flex items-center justify-center text-[12px] font-semibold text-white"
+                style={`width:${r.pct.ded}%;background:#8a9099`}
+              >
+                {r.pct.ded > 14 ? fmt(DEDUCTIBLE) : ""}
+              </span>
+              <span
+                class="flex items-center justify-center text-[12px] font-semibold text-[color:var(--color-ink-700,#3c4148)]"
+                style={`width:${r.pct.dep}%;background:#c9ccd1`}
+              >
+                {r.pct.dep > 14 ? fmt(r.depreciation) : ""}
+              </span>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <ul class="mt-6 mb-0 flex list-none flex-col gap-2 p-0 sm:flex-row sm:flex-wrap sm:gap-x-6">
+      {
+        KEY.map((k) => (
+          <li class="m-0 flex items-start gap-2 p-0 text-[13px] leading-snug text-[color:var(--color-ink-700)]">
+            <span
+              class="mt-[3px] inline-block h-3 w-3 shrink-0 rounded-[2px]"
+              style={`background:${k.c};box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)`}
+              aria-hidden="true"
+            />
+            <span>
+              <strong>{k.label}</strong>
+              <span class="text-[color:var(--color-ink-500)]"> — {k.note}</span>
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <figcaption class="mt-3 text-[13px] leading-snug text-[color:var(--color-ink-500)]">
+    Replacement-cost figures are the Texas Department of Insurance's own published illustration of
+    replacement cost versus actual cash value. The {fmt(DEDUCTIBLE)} deductible is an example to show
+    where yours lands in the split — use your own policy's figure. None of these are Northvale quotes.
+    <a
+      class="underline"
+      href="https://www.tdi.texas.gov/tips/home-insurance-policies-replacement-cost-or-actual-cash-value.html"
+      rel="nofollow noopener"
+      target="_blank">TDI source</a
+    >.
+  </figcaption>
+</figure>

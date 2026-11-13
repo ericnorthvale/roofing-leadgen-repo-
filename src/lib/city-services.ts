@@ -157,7 +157,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
       },
       {
         heading: "What a replacement costs in this market",
-        body: "Every roof is priced from its own measurements, pitch, material, and decking condition — which is why our estimate is written, itemized, and delivered before we leave your driveway. For orientation, attributed market data: Angi's 2026 figures put the national average roof replacement at $9,602, with most projects between $5,900 and $46,000 depending on size and material ($4–$11 per square foot); Modernize (2026) lists architectural shingle at roughly $4.11–$5.57 per square foot installed; and This Old House (2026) reports about $15,439 average for a 2,000-square-foot asphalt roof. Larger Woodlands homes with complex rooflines trend above national averages; metal runs roughly two to three times asphalt per the Metal Roofing Alliance. Those are market numbers, not our quote — the only number that matters is the one we put in writing for your specific roof.",
+        html: 'Every roof is priced from its own measurements, pitch, material, and decking condition — which is why our estimate is written, itemized, and delivered before we leave your driveway. For orientation, attributed market data: Angi\'s 2026 figures put the national average roof replacement at $9,602, with most projects between $5,900 and $46,000 depending on size and material ($4–$11 per square foot); Modernize (2026) lists architectural shingle at roughly $4.11–$5.57 per square foot installed; and This Old House (2026) reports about $15,439 average for a 2,000-square-foot asphalt roof. Larger Woodlands homes with complex rooflines trend above national averages; metal runs roughly two to three times asphalt per the Metal Roofing Alliance. Those are market numbers, not our quote — the only number that matters is the one we put in writing for your specific roof. Comparing us against other bids? <a href="/blog/what-should-a-roofing-estimate-include/">What a roofing estimate should include</a> is the line-by-line checklist that makes three quotes actually comparable, and <a href="/blog/how-to-pay-for-a-new-roof-texas/">how people pay for a new roof</a> covers the funding routes.',
       },
     ],
     faqs: [
@@ -507,7 +507,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
     sections: [
       {
         heading: "How a Texas roof claim actually pays",
-        body: "The single most useful thing a Woodlands homeowner can know before filing: how your policy pays. Per the Texas Department of Insurance, replacement-cost policies pay to rebuild at current prices, while actual-cash-value policies deduct depreciation — TDI's own example shows a $10,000 roof paying just $4,000 at 20 years old under ACV, before your deductible. Replacement-cost claims typically pay in two parts: the first check is the depreciated value, and the recoverable depreciation follows once you show proof repairs were done. That's also why the deductible law has teeth — your insurer can require proof you paid your deductible (a canceled check, financing agreement, or receipt) before releasing that final money.",
+        html: "The single most useful thing a Woodlands homeowner can know before filing: how your policy pays. Per the Texas Department of Insurance, replacement-cost policies pay to rebuild at current prices, while actual-cash-value policies deduct depreciation — TDI's own example shows a $10,000 roof paying just $4,000 at 20 years old under ACV, before your deductible. Replacement-cost claims typically pay in two parts: the first check is the depreciated value, and the recoverable depreciation follows once you show proof repairs were done. That's also why the deductible law has teeth — your insurer can require proof you paid your deductible (a canceled check, financing agreement, or receipt) before releasing that final money. If your first check has already landed and looks nowhere near enough, <a href=\"/blog/insurance-wont-cover-entire-roof/\">we have drawn that split to scale</a> — it is usually the sequence rather than a short payment.",
       },
       {
         heading: "The deadlines your insurer must hit",
@@ -707,7 +707,7 @@ export const CITY_SERVICES: Record<string, CityService> = {
           },
           {
             lead: "Two checks is normal",
-            text: "replacement-cost policies pay actual cash value first and release the recoverable depreciation once you prove the work was done. Our closeout packet is built to be that proof.",
+            html: 'replacement-cost policies pay actual cash value first and release the recoverable depreciation once you prove the work was done. Our closeout packet is built to be that proof — and if the first one looked alarmingly small, <a href="/blog/insurance-wont-cover-entire-roof/">here is where the rest of the money is</a>.',
           },
         ],
       },
@@ -728,6 +728,239 @@ export const CITY_SERVICES: Record<string, CityService> = {
       {
         q: "Should I file at all?",
         a: "Sometimes no. If the damage is modest against your deductible, filing can cost more than it returns. We document first and tell you honestly which side of that line you are on before you commit to anything.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
+
+  /**
+   * Spring — our home base. Local facts sourced in docs/research-facts.md:
+   * Harris County OCE permit FAQ (Sheet 5, which resolves Sheet 4 UNVERIFIED
+   * #1 for the no-general-re-roof-permit point), Spring neighbourhood build
+   * eras (Sheet 5), Harvey rainfall totals and regional storm record
+   * (Sheet 3), attributed cost data (Sheet 1).
+   *
+   * This page carries BOTH the "what does it cost" and the "is my roof due"
+   * intents, because in Spring they are the same conversation: the Klein and
+   * Champions housing stock is old enough that most callers are asking when,
+   * not whether. Splitting them would have produced two thin pages competing
+   * for one query family.
+   */
+  "spring/roof-replacement": {
+    citySlug: "spring",
+    serviceTag: "replacement",
+    slug: "roof-replacement",
+    seoTitle: "Roof Replacement in Spring, TX — Cost & When It's Due",
+    seoDescription:
+      "Roof replacement in Spring, TX from a company based here. What it costs, how to tell your Klein or Champions roof is due, and who approves it. Written price.",
+    title: "Roof replacement in Spring, TX",
+    summary:
+      "Spring is home base — off I-45 near Klein, Gleannloch Farms and Champions Forest. We are a short drive from most of these roofs, and we already know which subdivisions are coming due. Tear-off to deck, HOA submittal handled, written price before we leave the driveway.",
+    // A genuinely local photo: this is a real Northvale job IN Spring, so the
+    // alt can name the city honestly (Hard Rule #2).
+    heroPhoto: {
+      src: "/projects/iko-insurance-claim-roof-replacement-spring-tx.webp",
+      alt: "Aerial view of a completed charcoal IKO architectural shingle roof replacement by Northvale Roofing on a two-story Spring, TX home",
+    },
+    glance: [
+      { value: "Home base", label: "we are based in Spring, not driving in" },
+      { value: "1 day", label: "most installations finish in one" },
+      { value: "In writing", label: "your exact price before we leave the driveway" },
+    ],
+    sections: [
+      {
+        heading: "Why so many Spring roofs are due at once",
+        html: 'Spring was not built in one go, and that is the whole story of roofing here. <strong>Klein and Champions Forest</strong> went up largely through the 1970s and \'80s, which puts those original and first-replacement roofs well into — or past — the life an asphalt shingle gets in this climate. <strong>Gleannloch Farms, Augusta Pines and Harmony</strong> are 1990s-through-2010s master-planned builds, so their builder-grade roofs are aging out in waves, street by street, rather than one house at a time. <strong>Old Town Spring</strong> anchors the historic railroad district with housing stock of every era. The practical effect: if three neighbours have replaced recently, that is not a coincidence or a sales pitch — it is a subdivision reaching the same birthday together. What it does not tell you is whether <em>your</em> roof is due, which is what <a href="/blog/repair-or-replace-your-roof/">the repair-or-replace questions</a> actually settle.',
+      },
+      {
+        heading: "How to tell your roof is genuinely due",
+        kind: "cards",
+        bullets: [
+          {
+            lead: "Age against this climate, not the wrapper",
+            text: "Sustained heat, intense UV and humidity dry out the asphalt binder, so a Houston-area roof rarely reaches the number printed on the packaging. Past about twenty years, a repair is often money spent on a roof you will replace anyway.",
+          },
+          {
+            lead: "Granules in the gutters and bare patches",
+            html: 'Granules are the shingle\'s UV armour. General thinning across a whole slope is a roof getting old; a coin-sized bare patch with a dent in it is <a href="/blog/what-hail-damage-looks-like-on-a-roof/">hail damage</a>, and those are different conversations with different people paying.',
+          },
+          {
+            lead: "Field failure rather than detail failure",
+            text: "A cracked pipe boot or failed step flashing is a repair. Widespread cracking, curling, brittleness or wind creasing across whole slopes is a field failure — no amount of patching catches up, because the material itself is finished.",
+          },
+          {
+            lead: "What the decking looks like underneath",
+            text: "Nobody can answer this from the ground. A roof can look serviceable and sit on plywood that has been quietly rotting around a long-term leak. It is also why a replacement quote that never mentions decking is incomplete.",
+          },
+          {
+            lead: "A roof that aged faster than it should have",
+            html: 'Often the attic, not the shingles. A poorly ventilated attic cooks the roof from underneath — <a href="/blog/attic-ventilation-texas-roof-lifespan/">ventilation is why Texas roofs die early</a>, and replacing shingles without fixing it buys you the same early failure again.',
+          },
+        ],
+      },
+      {
+        heading: "What it costs, and what actually moves the number",
+        html: 'We are not going to invent a Spring average, because the honest answer is that square footage, pitch, layers to tear off and decking condition move the price more than your zip code does. For market context rather than our quote, Angi (2026) puts the national average roof replacement around <strong>$9,602</strong>, across a full span of roughly $5,900 to $46,000 — <a href="/blog/roof-replacement-cost-the-woodlands/">what a replacement costs here</a> breaks the drivers down with the sources attached. Two things matter more than the headline figure. First, <strong>decking is the variable nobody can price from the driveway</strong>, so an honest estimate gives you the per-sheet price up front instead of surprising you with it on day two. Second, a quote is only comparable to another quote if both list the same work — <a href="/blog/what-should-a-roofing-estimate-include/">what a roofing estimate should include</a> is the checklist we would want you to hold us to as well. If paying for it in one go is the obstacle, <a href="/financing">financing options</a> sets out the routes without us pretending to be your lender.',
+      },
+      {
+        heading: "Who approves it in Spring — usually not the county",
+        html: "Most of Spring is unincorporated Harris County, and the county's Office of the County Engineer permits septic systems, driveway culverts and floodplain work rather than running a general residential building-permit programme. In practice that means a straightforward re-roof here is typically governed by your <strong>HOA or deed restrictions</strong>, not a county building permit. Plenty of Spring subdivisions — Gleannloch Farms and Augusta Pines among them — do have architectural guidelines on shingle colour, and we prepare that submittal as part of the job. Two caveats we take seriously rather than gloss over: northern Spring extends into <strong>Montgomery County</strong>, and a few incorporated pockets follow different rules entirely. We confirm your specific address before assuming anything, because a job that starts on the wrong jurisdiction stalls.",
+      },
+      {
+        heading: "What a Northvale replacement actually involves",
+        kind: "steps",
+        ordered: true,
+        bullets: [
+          {
+            text: "A free documented inspection first — every slope photographed, the attic checked, written findings within 24 hours. If the roof has life left, that is what the report says.",
+          },
+          {
+            text: "A written price before we leave the driveway, including the per-sheet decking rate, so nothing about the number changes once the work starts.",
+          },
+          {
+            text: "Your HOA submittal prepared and filed with compliant colour samples, before material is ordered rather than after.",
+          },
+          {
+            text: "Tear-off to bare deck. We do not roof over an existing layer — it hides the decking, which is the one thing worth seeing.",
+          },
+          {
+            text: "Decking inspected and any rotted sheets replaced at the quoted rate, photographed before they are covered.",
+          },
+          {
+            text: "The full system installed — underlayment, valleys, flashing, ventilation, edge detail — and the site magnet-swept before we leave. Most installations finish in a day.",
+          },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "Do I need a permit to replace my roof in Spring?",
+        a: "For most Spring homes — which sit in unincorporated Harris County — there is no county building permit for a re-roof. The county's permitting focuses on septic, driveways and floodplain work rather than residential roofs, so your HOA or deed restrictions usually govern instead, and we handle that paperwork. Because northern Spring reaches into Montgomery County and a few areas are incorporated, we confirm your exact address first rather than assuming.",
+      },
+      {
+        q: "My Klein or Champions Forest roof is original. Is it time?",
+        a: "Quite possibly. Much of Klein and Champions Forest was built in the 1970s and '80s, so a lot of those roofs are at or past the end of architectural-shingle life for this climate. But age alone does not settle it — we document the actual condition with photos and give you an honest remaining-life estimate. If it has years left, we will tell you that and you can plan for it rather than be ambushed by it.",
+      },
+      {
+        q: "How much does a new roof cost in Spring?",
+        a: "Honestly, not something anyone can quote from a zip code. Square footage, pitch, how many layers come off and what the decking looks like underneath move the price far more than which part of Spring you live in. For national context, Angi (2026) puts the average replacement around $9,602 with a span of roughly $5,900 to $46,000. We measure, photograph and give you a written price — including the per-sheet decking rate — before we leave your driveway.",
+      },
+      {
+        q: "Will my HOA need to approve the shingle colour?",
+        a: "In most of the master-planned Spring communities, yes. Gleannloch Farms, Augusta Pines and others have architectural guidelines covering shingle colour, and getting the submittal right the first time avoids an expensive re-do. We bring compliant colour samples, file the paperwork for you, and do not order material until it clears.",
+      },
+      {
+        q: "Are you actually based in Spring, or just advertising here?",
+        a: "Based here, off I-45 near Klein. It matters in two practical ways: we are usually a short drive from the job rather than dispatching across the metro, and we already know the covenant expectations street to street. It also means we are not going anywhere after the storm season ends.",
+      },
+      {
+        q: "Can you work with my insurance if the roof was storm-damaged?",
+        a: "Yes, and it is worth establishing before you commit to paying out of pocket. If a covered peril caused the damage, your policy may cover a replacement you would otherwise fund yourself. We document the damage properly, meet your adjuster on the roof, and tell you honestly whether what we found is worth filing against your deductible.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
+
+  /**
+   * Cypress / Cy-Fair. The anchor fact is primary and genuinely local: NCEI's
+   * Storm Events entries for the 16 May 2024 Houston derecho include an
+   * estimated ~104 mph gust AT CYPRESS — the highest in the Harris County
+   * entries for that day (Sheet 3). That is a storm record for this address,
+   * not a regional generality, which is exactly what keeps this page from
+   * being the storm page with a city name swapped in.
+   *
+   * Jurisdiction + MUD/ARC facts: Sheet 5. Wind mechanics: Sheet 3 (IBHS /
+   * IIBEC). Do NOT extend the 104 mph figure to any other city.
+   */
+  "cypress/storm-damage": {
+    citySlug: "cypress",
+    serviceTag: "storm",
+    slug: "storm-damage",
+    seoTitle: "Storm & Hail Roof Damage in Cypress, TX (Cy-Fair)",
+    seoDescription:
+      "Hail and wind roof damage in Cypress, TX — documented for your claim, ARC submittal handled for Bridgeland, Towne Lake and Fairfield. Free emergency tarping.",
+    title: "Storm and hail roof damage in Cypress",
+    summary:
+      "The 2024 derecho was clocked at an estimated 104 mph here — the hardest-hit point in Harris County's storm record that day. We inspect same-day, document every slope for your claim, and handle the architectural-review submittal your community will require before the repair.",
+    // We hold no confirmed Cypress photo, so this real Northvale job carries a
+    // location-NEUTRAL alt rather than claiming an address we cannot stand
+    // behind (Hard Rule #2). Swap for a Cypress job photo when we have one.
+    heroPhoto: {
+      src: "/work/completed-roof-two-story-oak-houston.webp",
+      alt: "Completed Northvale Roofing shingle roof on a two-story Houston-area home framed by oak branches",
+    },
+    glance: [
+      { value: "104 mph", label: "estimated gust at Cypress, 2024 derecho (NCEI)" },
+      { value: "Same-day", label: "inspection after a storm, free" },
+      { value: "ARC filed", label: "your community's submittal handled, not left to you" },
+    ],
+    sections: [
+      {
+        heading: "Cypress has the storm record to prove it",
+        html: "This is not a general Gulf Coast warning. When the <strong>16 May 2024 derecho</strong> crossed the Houston metro, NOAA's National Centers for Environmental Information logged an estimated <strong>104 mph gust at Cypress</strong> — the highest of the Harris County entries for that event, against roughly 92 mph at Englewood and 71 mph measured in Houston. More than a million customers lost power across the metro. A gust in that range is hurricane-force wind arriving without a hurricane's warning, and it is the kind of event that strips ridge caps, peels perimeter courses and breaks sealant bonds across whole elevations. If your roof came through 2024 and has not been looked at since, it is worth knowing what it is carrying.",
+      },
+      {
+        heading: "Why Cypress roofs fail at the edges",
+        html: 'Cy-Fair is open country by roofing standards. The master-planned communities — <strong>Bridgeland, Towne Lake, Fairfield, Cypress Creek Lakes, Blackhorse Ranch</strong> — are newer, laid out wide, and built around a lot of man-made water. There is very little upwind to break a gust before it reaches your roof. That matters because wind does not attack the middle of a roof; it attacks the perimeter, where uplift is strongest. Research from the Insurance Institute for Business &amp; Home Safety finds that what actually fails in wind is the <strong>sealant bond between shingle courses</strong>, and that bond weakens as a roof ages. So on a Cypress roof we start at the eaves, rakes and ridge rather than the field — and we look hard for <a href="/blog/tropical-storm-roof-damage-texas/">creasing, the damage almost everybody misses</a>, because a creased shingle that stayed on the roof is one that leaves in the next storm.',
+      },
+      {
+        heading: "The part that catches Cypress homeowners out: the ARC",
+        html: "Cypress is unincorporated Harris County, sitting inside the City of Houston's extraterritorial jurisdiction rather than its city limits — so there is <strong>no city building permit</strong> for a re-roof here. What governs instead is your community's architectural-review committee, and in master-planned Cypress those are strict. Nearly every neighbourhood here was built on Municipal Utility District land with an ARC that approves specific shingle lines and specific colours. After a storm this trips people up badly: the claim gets approved, the homeowner wants the work done immediately, and the submittal has not been filed. We prepare and file the ARC paperwork with compliant colour samples as part of the job, and we confirm your community's current requirements before material is ordered — not after it arrives in the wrong colour.",
+      },
+      {
+        heading: "What we document, and why the order matters",
+        kind: "steps",
+        ordered: true,
+        bullets: [
+          {
+            text: "Photograph the roof before anything is touched — including before an emergency tarp goes on. Once a tarp is down, what your adjuster needs to see is underneath it.",
+          },
+          {
+            text: "Start at the perimeter. On these open Cypress lots the eaves, rakes, ridge caps and corners are where uplift concentrates, so that is where the evidence is.",
+          },
+          {
+            text: "Hand-check the seal on edge and ridge courses. A broken bond and a crease are wind damage even when nothing is missing — and nothing missing is what makes homeowners assume they were fine.",
+          },
+          {
+            text: "Record hail strike size and density slope by slope rather than one verdict for the whole roof. Carriers scope by slope, so your documentation has to line up with their paperwork.",
+          },
+          {
+            text: "Photograph the collateral — gutters, screens, vents, soft metals. It is often what establishes that hail of a given size actually fell at your address rather than three miles away.",
+          },
+          {
+            text: "Hand you the packet whether or not you file. It is yours either way, and a documented 'no damage' is the baseline for the next storm.",
+          },
+        ],
+      },
+      {
+        heading: "If your roof is leaking right now",
+        html: 'Emergency tarping and temporary dry-in are free, with no obligation to use us for the repair — <a href="/storm-response">storm response</a> covers how that works and when a tarp is not the right answer. Active leaks jump the queue ahead of scheduled inspections. And if what you are looking at is round and scattered rather than lifted at the edges, <a href="/blog/what-hail-damage-looks-like-on-a-roof/">what hail damage actually looks like</a> will tell you which storm you are dealing with.',
+      },
+    ],
+    faqs: [
+      {
+        q: "Do I need a permit to repair storm damage in Cypress?",
+        a: "No city building permit, no. Cypress is unincorporated Harris County inside Houston's extraterritorial jurisdiction rather than its city limits, so there is typically no city re-roof permit. What you do need is your community's architectural-review approval — and in Bridgeland, Towne Lake, Fairfield and the rest, those committees are strict about shingle line and colour. We file that submittal for you.",
+      },
+      {
+        q: "Was Cypress really hit harder than the rest of Houston in 2024?",
+        a: "In that particular event, by the official record, yes. NCEI's Storm Events entries for the 16 May 2024 derecho include an estimated 104 mph gust at Cypress, the highest of the Harris County entries for that day. That does not mean every Cypress roof was damaged — but it does mean a roof here that has not been inspected since 2024 is worth a look.",
+      },
+      {
+        q: "My shingles are all still there. Can I still have wind damage?",
+        a: "Yes, and this is the single most common misconception we meet. What fails in wind is the factory sealant bond between courses, not usually the nails. A shingle can be lifted, have its bond broken, and drop back down looking almost normal — with a permanent crease across it. It is still on your roof and it is still damaged, and it will be the first thing to leave in the next storm.",
+      },
+      {
+        q: "Will my Bridgeland or Towne Lake ARC approve the replacement shingle?",
+        a: "That is exactly what the submittal decides, and it is the step most often got wrong after a storm. We bring IKO colour samples that fit your community's approved palette, file the paperwork for you, and do not order material before it clears review — so the claim timeline and the approval timeline do not collide.",
+      },
+      {
+        q: "How soon can you inspect after a storm?",
+        a: "Same day in most cases, and active leaks jump the queue. We do not door-knock after storms, so you will not find one of our crews on your porch — you call us, or you do not.",
+      },
+      {
+        q: "Do I have to file a claim to get the inspection?",
+        a: "No. The inspection and the photo packet are free and yours regardless. If what we find will not clear your deductible, we will say so — that is a common and perfectly good outcome, and filing a claim you cannot win is not free.",
       },
     ],
     dataCompleteness: "complete",

@@ -126,5 +126,11 @@ If you want the local detail, we have city pages that go deeper:
 [in Conroe](/conroe/insurance-claims) — the Conroe one covers the city permit
 and what open-water wind on Lake Conroe does to a claim. If a storm has just
 come through, start with storm damage for
-[The Woodlands](/the-woodlands/storm-damage) or
-[Conroe](/conroe/storm-damage) instead.
+[The Woodlands](/the-woodlands/storm-damage),
+[Conroe](/conroe/storm-damage) or
+[Cypress](/cypress/storm-damage) instead.
+
+And a denial is not the only way a claim disappoints. If yours was approved but
+only partly — two slopes and not the other two, or a repair where the roof
+needs replacing — that is a different problem with different answers:
+[what to do when insurance won't cover your entire roof](/blog/insurance-wont-cover-entire-roof/).

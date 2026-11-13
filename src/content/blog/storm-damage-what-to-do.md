@@ -74,3 +74,17 @@ heavy roofer earns their keep on a storm job.
 Get a documented inspection, file your own claim, keep every photo, and steer clear
 of anyone promising to game your deductible. If you'd like a no-pressure look after a
 storm, [book a free inspection](/contact) — written findings, no obligation.
+
+## Where to go next
+
+- **Approved, but the cheque won't cover the roof?** That's usually the two-part
+  payout rather than a short payment —
+  [here's where the rest of it is](/blog/insurance-wont-cover-entire-roof/).
+- **Not sure what you're looking at?**
+  [What hail damage actually looks like](/blog/what-hail-damage-looks-like-on-a-roof/),
+  and [how wind damage differs](/blog/tropical-storm-roof-damage-texas/).
+- **Local detail:** storm damage in
+  [The Woodlands](/the-woodlands/storm-damage),
+  [Conroe](/conroe/storm-damage) and
+  [Cypress](/cypress/storm-damage), where NCEI clocked an estimated 104 mph gust
+  in the 2024 derecho.

@@ -112,3 +112,13 @@ you already know which way you're going:
 [roof replacement](/services/roof-replacement). Not sure how big the job is?
 The [roof size calculator](/roof-size-calculator) will give you the squares in
 a couple of minutes.
+
+One last thing worth knowing: if several neighbours have replaced recently,
+that isn't a sales pattern, it's a subdivision reaching the same birthday
+together. Whole streets of Klein and Champions Forest are at that point now —
+[roof replacement in Spring](/spring/roof-replacement) explains why, and what
+it does and doesn't tell you about your own roof.
+
+And when you do get quotes,
+[what a roofing estimate should include](/blog/what-should-a-roofing-estimate-include/)
+is the checklist that makes them comparable.

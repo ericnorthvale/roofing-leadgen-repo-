@@ -138,3 +138,7 @@ anything.
 And if you have already filed and been told no:
 [a denial is not usually the end of it](/blog/roof-claim-denied-texas-appraisal/).
 Two of the roofs we replaced this year started with a denied claim.
+
+If instead you were approved and the cheque simply isn't enough — which is far
+more common, and usually isn't a short payment at all —
+[here's where the rest of the money is](/blog/insurance-wont-cover-entire-roof/).

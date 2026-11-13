@@ -158,6 +158,24 @@ const villages = neighborhoodLinks(cs.citySlug);
           <PhoneCTAButton ctaId={`cs-${cs.citySlug}-${cs.serviceTag}-call`} />
           <CTAButton href="/storm-response" variant="ghost" label="Storm today?" />
         </div>
+        {/* The glance chips used to render only in the heroPhoto branch above,
+             so a record WITH glance data but WITHOUT a photo silently dropped
+             them — which cost the Cypress page its best hook (audit,
+             2026-11-13). Same data, light-background treatment. */}
+        {cs.glance && cs.glance.length > 0 && (
+          <ul class="mt-9 flex flex-wrap gap-x-10 gap-y-4 border-t border-[color:var(--color-ink-200,#e4e6e9)] pt-6">
+            {cs.glance.map((g) => (
+              <li class="flex items-baseline gap-2.5">
+                <span class="font-serif text-[28px] leading-none text-[color:var(--color-gold-600)]">
+                  {g.value}
+                </span>
+                <span class="max-w-52 text-[13px] leading-snug text-[color:var(--color-ink-600,#4a4f57)]">
+                  {g.label}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     )
   }
