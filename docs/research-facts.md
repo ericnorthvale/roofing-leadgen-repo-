@@ -2347,13 +2347,28 @@ used as `carbon-home.webp`. The flyer cover is captioned "Color Featured:
 Bronzed Oak" and is the same house as the brown photo, confirming
 `bronzed-oak-home.webp`.
 
-**Still open.** Only four of the eight colors are in the Design Center: Carbon,
-Bronzed Oak, Woodland Pine and Valencia Sand — the swatches that can be matched
-to a flyer name with certainty. Three red/terracotta swatches (`swatch-a`,
-`swatch-d`, `swatch-g`) are held unnamed because Canyon Terra, Sienna Clay and
-Cordova Clay cannot be told apart from photographs with confidence, and naming
-one wrongly would publish a false product fact. Cathedral Stone has no swatch
-image yet. `moreColors` names all four missing colors honestly in the meantime.
+**The three reds, resolved (2026-11-13).** Rather than guess, page 2 of the
+flyer was rasterised and IKO's own printed swatches sampled, then compared to
+the owner's swatches by average colour distance:
+
+| Owner's file | Match            | Δ   | Runner-up         |
+| ------------ | ---------------- | --- | ----------------- |
+| `swatch-a`   | **Sienna Clay**  | 7   | Canyon Terra (14) |
+| `swatch-d`   | **Cordova Clay** | 6   | Canyon Terra (22) |
+| `swatch-g`   | **Canyon Terra** | 3   | Cordova Clay (15) |
+
+What makes this trustworthy is not any single distance but that all three map
+one-to-one with a clear winner each — a mix-up would show two swatches
+competing for the same name. Cordova Clay is independently confirmed by its
+distinctive dark charcoal blotching, which the owner's swatch reproduces
+exactly. Owner confirmed the pairings.
+
+**Still open.** Seven of eight colors are live. **Cathedral Stone** (mid grey)
+has no swatch image yet; `moreColors` names it honestly. The remaining
+`home-terracotta.webp` house photo is NOT attached to a color: sampling its roof
+gave Sienna Clay Δ21 against Canyon Terra Δ28, which is too close to call on a
+sunlit roof photographed at an angle, and a wrong attribution would be a false
+product claim.
 
 **Model change this forced.** `StudioLine` required `ironCladYears` and
 `algaeYears` — terms of IKO's ASPHALT shingle warranty that do not exist on a

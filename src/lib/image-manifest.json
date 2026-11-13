@@ -160,6 +160,15 @@
       1200
     ]
   },
+  "/design-center/iko-metals-spanish-tile/canyon-terra-swatch.webp": {
+    "w": 1444,
+    "h": 799,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
   "/design-center/iko-metals-spanish-tile/carbon-home.webp": {
     "w": 1500,
     "h": 1125,
@@ -178,6 +187,15 @@
       1200
     ]
   },
+  "/design-center/iko-metals-spanish-tile/cordova-clay-swatch.webp": {
+    "w": 1500,
+    "h": 1047,
+    "v": [
+      400,
+      800,
+      1200
+    ]
+  },
   "/design-center/iko-metals-spanish-tile/home-terracotta.webp": {
     "w": 2000,
     "h": 1125,
@@ -187,27 +205,9 @@
       1200
     ]
   },
-  "/design-center/iko-metals-spanish-tile/swatch-a.webp": {
+  "/design-center/iko-metals-spanish-tile/sienna-clay-swatch.webp": {
     "w": 1497,
     "h": 1049,
-    "v": [
-      400,
-      800,
-      1200
-    ]
-  },
-  "/design-center/iko-metals-spanish-tile/swatch-d.webp": {
-    "w": 1500,
-    "h": 1047,
-    "v": [
-      400,
-      800,
-      1200
-    ]
-  },
-  "/design-center/iko-metals-spanish-tile/swatch-g.webp": {
-    "w": 1444,
-    "h": 799,
     "v": [
       400,
       800,

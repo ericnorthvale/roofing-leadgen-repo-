@@ -343,6 +343,13 @@ export const STUDIO_LINES: StudioLine[] = [
         swatch: `${DC}/iko-metals-spanish-tile/carbon-swatch.webp`,
       },
       {
+        name: "Canyon Terra",
+        slug: "canyon-terra",
+        chip: "#773b2d",
+        note: "The cleanest, deepest red of the three terracottas — closest to what people picture when they say Spanish tile.",
+        swatch: `${DC}/iko-metals-spanish-tile/canyon-terra-swatch.webp`,
+      },
+      {
         name: "Bronzed Oak",
         slug: "bronzed-oak",
         chip: "#543d2e",
@@ -358,6 +365,20 @@ export const STUDIO_LINES: StudioLine[] = [
         swatch: `${DC}/iko-metals-spanish-tile/woodland-pine-swatch.webp`,
       },
       {
+        name: "Sienna Clay",
+        slug: "sienna-clay",
+        chip: "#7e4934",
+        note: "The warmest and lightest terracotta — more orange in it, and it softens rather than shouts on a big roof.",
+        swatch: `${DC}/iko-metals-spanish-tile/sienna-clay-swatch.webp`,
+      },
+      {
+        name: "Cordova Clay",
+        slug: "cordova-clay",
+        chip: "#653727",
+        note: "Red shot through with dark charcoal blotches, so it reads as aged clay from the street rather than a flat single color.",
+        swatch: `${DC}/iko-metals-spanish-tile/cordova-clay-swatch.webp`,
+      },
+      {
         name: "Valencia Sand",
         slug: "valencia-sand",
         chip: "#8f6f4f",
@@ -366,7 +387,7 @@ export const STUDIO_LINES: StudioLine[] = [
       },
     ],
     moreColors:
-      "The full Spanish Tile palette is eight colors. Also available: Canyon Terra, Cathedral Stone, Sienna Clay and Cordova Clay. We bring physical samples — IKO's own flyer notes the printed colors are digitally enhanced, so never pick a roof color off a screen.",
+      "Seven of the eight Spanish Tile colors are shown here. Cathedral Stone, a mid grey, is also available. We bring physical samples either way — IKO's own flyer notes the printed colors are digitally enhanced, so never pick a roof color off a screen.",
   },
 ];
 
