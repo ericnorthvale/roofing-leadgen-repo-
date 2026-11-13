@@ -1,0 +1,421 @@
+---
+/**
+ * Three-stage cutaway of what storm damage does to an asphalt shingle.
+ *
+ * WHY THIS EXISTS: the hail post has no photographs, because every work photo
+ * Northvale owns is a tear-off or install shot — none shows hail damage, and
+ * illustrating a hail-identification article with stock would be the exact
+ * Hard Rule #2 violation the gallery rules prevent. A drawing is honest here in
+ * a way a borrowed photo is not: it depicts the mechanism and claims to be
+ * nothing else.
+ *
+ * It also does something a photograph genuinely cannot. The thing that matters
+ * most about hail damage — a fractured mat under an intact-looking surface —
+ * is invisible from above. Only a cross-section shows it.
+ *
+ * TWO DIFFERENT DRAWINGS, deliberately:
+ *   hail — a magnified slice through ONE shingle, layer by layer, drawn flat
+ *          because the subject is the stack of materials.
+ *   wind — a slice through several lapped courses on a SLOPED deck, because
+ *          the subject is the bond between courses and where uplift gets in.
+ *
+ * Each stage is its OWN svg in a CSS grid, three across on desktop and stacked
+ * on a phone. One wide three-panel svg scales its own text down with it, so by
+ * 360px the captions were about 4px tall; this way the drawing shrinks and the
+ * text stays real HTML at a real size. It also keeps the headings and captions
+ * in the document rather than inside <foreignObject>.
+ *
+ * Colour discipline matches RoofSystemDiagram: real material colours for
+ * material, the sealant colour for the sealant, and gold-600 reserved strictly
+ * for annotation — the one thing each panel is asking you to look at.
+ */
+interface Props {
+  mode: "hail" | "wind";
+  class?: string;
+}
+const { mode, class: className } = Astro.props;
+
+const GRANULE = "#6f6659";
+const GRANULE_DARK = "#4e473d";
+const ASPHALT = "#2b2825";
+const MAT = "#ded8c9";
+const BACKING = "#3a3631";
+const DECK = "#c2a477";
+const DECK_EDGE = "#a88865";
+const SEALANT = "#b08d4e";
+const GOLD = "var(--color-gold-600)";
+
+const W = 210; // panel coordinate width
+const H = 122;
+const CX = W / 2;
+/* All three stages of a mode share one viewBox so their captions line up in the
+   desktop grid. The top is cropped to whichever stage reaches highest — the
+   falling stone for hail, the peeled course for wind — rather than left at the
+   full height, which stacked up as dead space on a phone. */
+const MIN_Y = { hail: 14, wind: 34 }[mode as "hail" | "wind"];
+
+/* ---- hail: layer geometry (flat cross-section through one shingle) ---- */
+const TOP = 58;
+const G = 9; // granules
+const A = 18; // asphalt coating
+const M = 7; // fibreglass mat
+const B = 11; // asphalt backing
+const MAT_TOP = TOP + G + A;
+const DECK_Y = MAT_TOP + M + B;
+
+/* ---- wind: lapped courses on a sloped deck ----
+   Each course lies on the deck, rides over the head of the course below it for
+   the width of the lap, then ramps back down. That ramp is why a shingle roof
+   is a staircase in section, and why uplift has an edge to get under. */
+const D = 96; // deck top, inside the sloped group
+const DECK_T = 9;
+const T = 7; // course thickness
+const CL = 100; // course length
+const STEP = 46; // exposure — how far up-slope the next course starts
+const LAP = CL - STEP;
+const RAMP = 20;
+const SEAM = D - T; // the bond line between two courses
+const xs = (k: number) => 2 + k * STEP;
+const ACT = xs(2); // the course that moves
+
+const stages =
+  mode === "hail"
+    ? [
+        {
+          title: "The strike",
+          caption:
+            "A stone hits hard enough to blast granules off and flex the shingle beneath it.",
+        },
+        {
+          title: "What it leaves",
+          caption:
+            "Bare asphalt in a rough circle — and the part you cannot see from a ladder: the mat fractured underneath.",
+        },
+        {
+          title: "What it becomes",
+          caption:
+            "Unprotected asphalt oxidises in the sun, the fracture opens to the surface, and the shingle fails years early.",
+        },
+      ]
+    : [
+        {
+          title: "Sealed",
+          caption:
+            "A factory sealant strip bonds each course to the one below it. That bond is the wind rating.",
+        },
+        {
+          title: "The bond breaks",
+          caption:
+            "Uplift gets under the butt edge and peels it. The nails still hold — the seal does not.",
+        },
+        {
+          title: "Creased",
+          caption:
+            "It drops back looking almost normal. But the seal is gone and the crease is permanent.",
+        },
+      ];
+
+const LEGEND =
+  mode === "hail"
+    ? [
+        { c: GRANULE, label: "Granules — the shingle's UV armour" },
+        { c: ASPHALT, label: "Asphalt coating" },
+        { c: MAT, label: "Fibreglass mat — the structure" },
+        { c: DECK, label: "Roof deck" },
+      ]
+    : [
+        { c: GRANULE, label: "Shingle courses" },
+        { c: SEALANT, label: "Factory sealant bond" },
+        { c: DECK, label: "Roof deck" },
+      ];
+
+const CAPTION =
+  mode === "hail"
+    ? "Hail lands at random and leaves roughly circular marks. Ordinary ageing is even across a whole slope — that difference is the test."
+    : "Wind fails at eaves, rakes and ridges, not mid-slope. A creased shingle that stayed on the roof is the one most people miss.";
+
+const ARIA = [
+  mode === "hail"
+    ? "Cross-section through an asphalt shingle. A hailstone falls toward an intact surface of granules over asphalt, fibreglass mat and backing, on a roof deck."
+    : "Cross-section through lapped shingle courses on a sloped roof deck. A factory sealant strip bonds each course to the one below it.",
+  mode === "hail"
+    ? "The same cross-section after the impact. Granules have been knocked out of a rough circle down to bare asphalt, and the fibreglass mat below the crater is fractured — damage that cannot be seen from above."
+    : "The same courses after wind uplift. The top course has peeled upward from its butt edge and the sealant bond has pulled apart, though the nails at its head still hold it.",
+  mode === "hail"
+    ? "The same cross-section years later. The bare patch is wider, the exposed asphalt has cracked, and the mat fracture has opened through to the surface."
+    : "The same course after it drops back down. It lies almost flat again with a permanent crease across it, and the sealant bond is gone.",
+];
+
+/** One shingle course lying on the course below it, then ramping to the deck. */
+function coursePath(x0: number, first: boolean): string {
+  if (first) return `M${x0} ${SEAM} H${x0 + CL} V${D} H${x0} Z`;
+  return [
+    `M${x0} ${SEAM}`, // butt, resting on the course below
+    `L${x0 + LAP - RAMP} ${SEAM}`,
+    `L${x0 + LAP} ${D}`, // ramp down onto the deck
+    `L${x0 + CL} ${D}`,
+    `L${x0 + CL} ${SEAM}`, // head end, one thickness up
+    `L${x0 + LAP} ${SEAM}`,
+    `L${x0 + LAP - RAMP} ${SEAM - T}`,
+    `L${x0} ${SEAM - T}`,
+    "Z",
+  ].join(" ");
+}
+/** The sealant strip sits a little above the butt edge, inside the lap. */
+function seamPath(x0: number): string {
+  return `M${x0 + 8} ${SEAM} H${x0 + LAP - RAMP - 4}`;
+}
+---
+
+<figure class:list={["not-prose", className]}>
+  <ol class="grid list-none grid-cols-1 gap-x-5 gap-y-7 p-0 sm:grid-cols-3">
+    {
+      stages.map((s, i) => {
+        const w = i === 1 ? 20 : 32; // crater half-width
+        return (
+          <li class="m-0 p-0">
+            <h4 class="m-0 flex items-baseline gap-2 text-[13px] leading-tight font-bold text-[color:var(--color-navy-900,#1b2437)]">
+              <span class="text-[color:var(--color-gold-600)]">{i + 1}</span>
+              {s.title}
+            </h4>
+
+            <svg
+              viewBox={`0 ${MIN_Y} ${W} ${H - MIN_Y}`}
+              class="mx-auto mt-2 block h-auto w-full max-w-[22rem] sm:max-w-none"
+              role="img"
+              aria-label={ARIA[i]}
+            >
+              <defs>
+                <marker
+                  id={`dd-${mode}-${i}`}
+                  markerUnits="userSpaceOnUse"
+                  markerWidth="9"
+                  markerHeight="9"
+                  refX="7.5"
+                  refY="4.5"
+                  orient="auto"
+                >
+                  <path d="M0 0.8 L9 4.5 L0 8.2 Z" fill="var(--color-gold-600)" />
+                </marker>
+              </defs>
+
+              {mode === "hail" ? (
+                <g>
+                  <rect x="6" y={DECK_Y} width={W - 12} height="13" fill={DECK} />
+                  <rect x="6" y={DECK_Y} width={W - 12} height="2" fill={DECK_EDGE} />
+                  <rect x="6" y={MAT_TOP + M} width={W - 12} height={B} fill={BACKING} />
+                  <rect x="6" y={MAT_TOP} width={W - 12} height={M} fill={MAT} />
+                  <rect x="6" y={TOP + G} width={W - 12} height={A} fill={ASPHALT} />
+
+                  {/* Granule layer. On stages 2 and 3 the top surface DIPS to
+                      the asphalt, so the crater is a hollow in the roof surface
+                      and the dark at the bottom of it is bare asphalt. */}
+                  <path
+                    d={
+                      i === 0
+                        ? `M6 ${TOP} H${W - 6} V${TOP + G} H6 Z`
+                        : `M6 ${TOP} L${CX - w} ${TOP} C${CX - w * 0.42} ${TOP + G / 0.75}, ${CX + w * 0.42} ${TOP + G / 0.75}, ${CX + w} ${TOP} L${W - 6} ${TOP} V${TOP + G} H6 Z`
+                    }
+                    fill={GRANULE}
+                  />
+                  {[...Array(17)].map((_, k) => {
+                    const px = 13 + k * 11.5;
+                    return (
+                      <circle
+                        cx={px}
+                        cy={TOP + 2.6 + ((k * 7) % 4)}
+                        r="1.15"
+                        fill={GRANULE_DARK}
+                        opacity={i > 0 && Math.abs(px - CX) < w + 2 ? 0 : 0.9}
+                      />
+                    );
+                  })}
+
+                  {/* 1 — the stone and its path */}
+                  {i === 0 && (
+                    <g>
+                      <path
+                        d={`M${CX + 20} 31 q1 -11 12 -12.5 q12 -1.5 14 9.5 q2 12 -9 14 q-14 2.5 -17 -11 Z`}
+                        fill="#d7e1e9"
+                        stroke="#8fa2b0"
+                        stroke-width="1.4"
+                        stroke-linejoin="round"
+                      />
+                      <ellipse
+                        cx={CX + 29.5}
+                        cy="24"
+                        rx="4.2"
+                        ry="2.6"
+                        fill="#f4f8fb"
+                        opacity="0.9"
+                      />
+                      <path
+                        d={`M${CX + 27} 37 L${CX + 4} ${TOP - 4}`}
+                        stroke={GOLD}
+                        stroke-width="2.2"
+                        marker-end={`url(#dd-${mode}-${i})`}
+                      />
+                    </g>
+                  )}
+
+                  {/* 2 and 3 — the mat fracture, crossing the pale band */}
+                  {i > 0 && (
+                    <path
+                      d={
+                        i === 1
+                          ? `M${CX - 9} ${MAT_TOP - 5} l7 5 l-6 6 l7 6`
+                          : `M${CX + 1} ${TOP + G} l-6 7 l6 7 l-7 7 l6 8`
+                      }
+                      fill="none"
+                      stroke={GOLD}
+                      stroke-width="2.3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  )}
+                  {/* 3 — the asphalt crazing either side of it */}
+                  {i === 2 &&
+                    [-20, 15].map((dx) => (
+                      <path
+                        d={`M${CX + dx} ${TOP + G - 1} l3 7 l-2 7`}
+                        stroke="#080707"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        fill="none"
+                      />
+                    ))}
+                </g>
+              ) : (
+                <g transform={`rotate(-7 ${CX} ${D})`}>
+                  <rect x="2" y={D} width={W - 4} height={DECK_T} fill={DECK} />
+                  <rect x="2" y={D} width={W - 4} height="2" fill={DECK_EDGE} />
+
+                  {/* the two courses below, which stay put */}
+                  {[0, 1].map((k) => (
+                    <path
+                      d={coursePath(xs(k), k === 0)}
+                      fill={GRANULE}
+                      stroke={GRANULE_DARK}
+                      stroke-width="0.8"
+                    />
+                  ))}
+                  <path
+                    d={seamPath(xs(1))}
+                    stroke={SEALANT}
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
+
+                  {i === 0 && (
+                    <g>
+                      <path
+                        d={coursePath(ACT, false)}
+                        fill={GRANULE}
+                        stroke={GRANULE_DARK}
+                        stroke-width="0.8"
+                      />
+                      <path
+                        d={seamPath(ACT)}
+                        stroke={SEALANT}
+                        stroke-width="3"
+                        stroke-linecap="round"
+                      />
+                    </g>
+                  )}
+
+                  {i === 1 && (
+                    <g>
+                      {/* half the bond stays behind on the course below */}
+                      <path
+                        d={seamPath(ACT)}
+                        stroke={SEALANT}
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-dasharray="4 5"
+                      />
+                      {/* peeled, so it no longer steps over anything — a
+                          straight slab hinged at the nail line */}
+                      <g transform={`rotate(26 ${ACT + CL - 6} ${SEAM - T / 2})`}>
+                        <rect
+                          x={ACT}
+                          y={SEAM - T}
+                          width={CL}
+                          height={T}
+                          fill={GRANULE}
+                          stroke={GRANULE_DARK}
+                          stroke-width="0.8"
+                        />
+                        <path
+                          d={seamPath(ACT)}
+                          stroke={SEALANT}
+                          stroke-width="3"
+                          stroke-linecap="round"
+                          stroke-dasharray="4 5"
+                        />
+                      </g>
+                      {/* uplift coming up the slope and getting under the butt */}
+                      <path
+                        d={`M${ACT - 40} ${D + 15} Q${ACT - 14} ${SEAM - 4} ${ACT + 8} ${SEAM - 30}`}
+                        stroke={GOLD}
+                        stroke-width="2.2"
+                        fill="none"
+                        marker-end={`url(#dd-${mode}-${i})`}
+                      />
+                    </g>
+                  )}
+
+                  {i === 2 && (
+                    <g>
+                      <path
+                        d={seamPath(ACT)}
+                        stroke={SEALANT}
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-dasharray="4 5"
+                      />
+                      <path
+                        d={`M${ACT} ${SEAM - T} L${ACT + 42} ${SEAM - T - 10} L${ACT + CL} ${SEAM} L${ACT + CL} ${D} L${ACT + 42} ${SEAM - 10} L${ACT} ${SEAM} Z`}
+                        fill={GRANULE}
+                        stroke={GRANULE_DARK}
+                        stroke-width="0.8"
+                      />
+                      <path
+                        d={`M${ACT + 42} ${SEAM - T - 10} L${ACT + 42} ${SEAM - 10}`}
+                        stroke={GOLD}
+                        stroke-width="2.6"
+                        stroke-linecap="round"
+                      />
+                    </g>
+                  )}
+                </g>
+              )}
+            </svg>
+
+            <p class="mt-2 mb-0 text-[13px] leading-snug text-[color:var(--color-ink-600,#4a4f57)]">
+              {s.caption}
+            </p>
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  <ul class="mt-6 flex list-none flex-wrap gap-x-6 gap-y-2 p-0">
+    {
+      LEGEND.map((l) => (
+        <li class="m-0 flex items-center gap-2 p-0 text-[13px] leading-snug text-[color:var(--color-ink-700)]">
+          <span
+            class="inline-block h-3 w-3 shrink-0 rounded-[2px]"
+            style={`background:${l.c};box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)`}
+            aria-hidden="true"
+          />
+          {l.label}
+        </li>
+      ))
+    }
+  </ul>
+
+  <figcaption class="mt-3 text-[13px] leading-snug text-[color:var(--color-ink-500)] italic">
+    {CAPTION}
+  </figcaption>
+</figure>
