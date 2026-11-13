@@ -79,8 +79,8 @@ is covered at all — the Texas Insurance Code is explicit that it is a process
 So if your carrier's position is "this is wear and tear, not hail," you are in a
 coverage fight, and invoking appraisal does not resolve it on its own.
 
-There is one important wrinkle in your favour, though. In *State Farm Lloyds v.
-Johnson* (Tex. 2009), the Texas Supreme Court held that appraisers **may**
+There is one important wrinkle in your favour, though. In _State Farm Lloyds v.
+Johnson_ (Tex. 2009), the Texas Supreme Court held that appraisers **may**
 decide how much of the roof damage was caused by hail versus wear and tear,
 because that question goes to the amount of loss. The line between the two
 disputes is blurrier than carriers sometimes suggest.
