@@ -7,6 +7,18 @@ import LeadForm from "@components/LeadForm.astro";
 import TrustBar from "@components/TrustBar.astro";
 import Faq from "@components/Faq.astro";
 import { faqPageJsonLd } from "~/lib/seo";
+import { slopeFactor, COMMON_SLOPE_FACTORS } from "~/lib/roof-report";
+
+/**
+ * Slope reference table, generated from the SAME function the measurement
+ * engine and the PDF report use — so the published numbers can never drift
+ * from the ones the tool actually calculates with.
+ */
+const SLOPE_ROWS = COMMON_SLOPE_FACTORS.map((rise) => ({
+  pitch: `${rise}/12`,
+  factor: slopeFactor(rise),
+  example: Math.round((2000 * slopeFactor(rise)) / 10) * 10,
+}));
 
 /**
  * Roof size calculator — measurement only, deliberately NO pricing (owner,
@@ -339,13 +351,94 @@ const seo = {
         pitch, the more roof sits over the same footprint. You trace the outline and pick the steepness,
         and we do the geometry from there — the same slope math a roofer uses.
       </p>
+      <h3>Why your roof is bigger than your floor plan</h3>
+      <p>
+        This is the part that surprises people. A 2,000 square foot footprint is never 2,000 square
+        feet of roof, because the roof is the sloped surface over that footprint — and the steeper
+        it gets, the more material it takes to cover the same ground. The multiplier is pure
+        geometry, not a contractor's padding:
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Pitch</th>
+            <th>Multiplier</th>
+            <th>A 2,000 sq ft footprint becomes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            SLOPE_ROWS.map((r) => (
+              <tr>
+                <td>{r.pitch}</td>
+                <td>×{r.factor.toFixed(3)}</td>
+                <td>{r.example.toLocaleString()} sq ft</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+      <p>
+        A 6/12 pitch — the most common roof around here — adds about 12%. A 12/12 adds 41%. If
+        somebody quotes you a roof in "squares" and the number looks suspiciously close to your
+        home's square footage, they have probably measured the footprint and skipped the slope.
+      </p>
+
+      <h3>How to measure your own roof with a tape measure</h3>
+      <p>
+        You do not need a satellite, and you should not need to get on the roof. From the ground:
+      </p>
+      <ol>
+        <li>
+          <strong>Measure the footprint.</strong> Walk the outside of the house and measure length × width
+          of each rectangle that makes up the building, including the garage and any additions. Add them
+          together. Overhangs count — measure to the drip edge, not the wall.
+        </li>
+        <li>
+          <strong>Work out the pitch.</strong> From inside the attic, hold a level against a rafter, mark
+          12 inches along it, and measure straight down from that mark to the rafter. That drop in inches
+          is your rise — a 6-inch drop is a 6/12 pitch.
+        </li>
+        <li>
+          <strong>Multiply.</strong> Footprint × the multiplier in the table above = roof surface area.
+        </li>
+        <li>
+          <strong>Divide by 100.</strong> That is your number of squares.
+        </li>
+      </ol>
+      <p>
+        That will land you within a few percent on a simple roof. It gets less reliable the more
+        dormers, valleys and changes of pitch you have — which is exactly when the trace tool above
+        is easier than arithmetic. Cut-up roofs are also where
+        <a href="/services/roof-repair">repairs</a> hide: valleys and transitions are where water goes
+        first.
+      </p>
+
+      <h3>Why a roofer orders more squares than they measure</h3>
+      <p>
+        Nobody orders exactly the measured number. Shingles get cut to fit at hips, valleys, rakes
+        and penetrations, and the offcuts are waste — so an order carries a waste allowance on top
+        of the measurement, usually in the region of 10–15% on a simple roof and more on a cut-up
+        one. Starter course, and hip and ridge cap, are counted on top of that again, because on a
+        laminated shingle they are separate products sold by the linear foot rather than cut from
+        field shingles.
+      </p>
+      <p>
+        So "how many squares is my roof" and "how many squares am I buying" are two different
+        numbers, and the second is always larger. A written estimate should show you both — ours
+        does, as part of every <a href="/services/roof-replacement">roof replacement</a>.
+      </p>
+
       <h2>Why we stop at size</h2>
       <p>
         Plenty of tools convert a satellite guess straight into a dollar figure. We don't, on
         purpose. The real price of a roof depends on things no satellite can see — how many layers
         come off, what the decking looks like underneath, flashing details, access, and the material
-        you choose. Size is the honest half of the answer; the other half is a free inspection and
-        an exact price in writing before we leave the driveway.
+        you choose. Size is the honest half of the answer; the other half is a
+        <a href="/services/roof-inspection">free roof inspection</a> and an exact price in writing before
+        we leave the driveway. If you are working out a budget, our write-up on
+        <a href="/blog/roof-replacement-cost-the-woodlands/">what a roof replacement costs here</a>
+        uses published market data with the sources attached.
       </p>
     </article>
     <aside id="roof-lead" class="scroll-mt-24 md:sticky md:top-10 md:self-start">

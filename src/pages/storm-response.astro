@@ -7,9 +7,9 @@ import { telHref, smsHref, formatPhoneDisplay } from "~/lib/phone";
 
 <BaseLayout
   seo={{
-    title: "Storm response — same-day inspection",
+    title: "Emergency Roof Tarping & Storm Response",
     description:
-      "Same-day roof inspection after a Houston storm, with a forty-photo packet for your claim and free tarping if it's actively leaking. No deductible games.",
+      "Free emergency roof tarping if your roof is leaking right now, plus a same-day inspection and a forty-photo packet for your insurance claim. No deductible games.",
     pathname: "/storm-response",
   }}
 >
@@ -18,11 +18,12 @@ import { telHref, smsHref, formatPhoneDisplay } from "~/lib/phone";
       <p class="text-sm font-semibold tracking-widest text-[color:var(--color-gold-300)] uppercase">
         Storm response
       </p>
-      <h1 class="mt-3 text-4xl text-white md:text-6xl">We move when the storm moves.</h1>
+      <h1 class="mt-3 text-4xl text-white md:text-6xl">Roof leaking right now? We tarp it free.</h1>
       <div class="rule-gold mt-6" aria-hidden="true"></div>
       <p class="mt-4 text-lg">
-        Same-day inspection. Forty-photo documentation packet for your insurance claim. No pressure,
-        no door-knocking, no deductible games.
+        Emergency tarping and temporary dry-in at no charge, with no commitment to anything else.
+        Then a same-day inspection and a forty-photo documentation packet for your insurance claim.
+        No pressure, no door-knocking, no deductible games.
       </p>
       <div class="mt-8 flex flex-wrap gap-3">
         <a class="btn btn-primary" href={telHref(BRAND.phoneE164)} data-cta-id="storm-call"
@@ -57,6 +58,42 @@ import { telHref, smsHref, formatPhoneDisplay } from "~/lib/phone";
           <strong>Written estimate + scope</strong> — matches the insurance carrier's Xactimate line items.
         </li>
       </ol>
+      <h2>Emergency tarping, and what it actually does</h2>
+      <p>
+        A tarp is not a repair. It is a controlled way to stop water entering the house while
+        everything else — the inspection, the claim, the scheduling of real work — happens on a sane
+        timeline instead of at 11pm in the rain. We fasten it so it stays on through the next
+        system, rather than draping a sheet over the ridge and weighting it with bricks, which is
+        what most of the tarps we get called out to re-do look like.
+      </p>
+      <p>
+        <strong>We photograph the damage before the tarp goes on.</strong> This is the part people get
+        wrong, and it matters: once a tarp is down, the thing your adjuster needs to see is underneath
+        it. Every homeowner policy carries a <em>Duties After Loss</em> section asking you to take reasonable
+        steps to protect the property from further damage — read yours, it is a short numbered list in
+        the policy booklet — and documenting what was there beforehand is what keeps a mitigation step
+        from being mistaken for the loss itself.
+      </p>
+      <p>
+        Tarping is free and carries no obligation to use us for the repair. If you call at midnight,
+        get a tarp, and hire somebody else in the morning, that is a perfectly fine outcome. We
+        would rather your house stayed dry.
+      </p>
+      <h3>When a tarp is not the answer</h3>
+      <ul>
+        <li>
+          <strong>Structural damage.</strong> A limb through the decking, or rafters that have moved,
+          is a dry-in and shoring problem, not a tarp problem.
+        </li>
+        <li>
+          <strong>Active high wind.</strong> We will not put a crew on a roof mid-event. We come when
+          it is survivable, which is usually sooner than you think.
+        </li>
+        <li>
+          <strong>Water already in the ceiling.</strong> Stopping the roof leak does not dry the structure.
+          That is a restoration trade, and we will say so rather than pretend a tarp finished the job.
+        </li>
+      </ul>
       <h2>What we will not do</h2>
       <ul>
         <li>

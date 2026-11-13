@@ -2,7 +2,7 @@
 title: "The Woodlands HOA Roof Approval Guide (RDRC, Step by Step)"
 description: "How roof approval really works in The Woodlands: RDRC application, materials and color rules, the 45-day clock, appeals, and who to call."
 pubDate: 2026-07-03
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "hoa"
 persona: ["homeowner", "hoa"]
 relatedCity: "the-woodlands"

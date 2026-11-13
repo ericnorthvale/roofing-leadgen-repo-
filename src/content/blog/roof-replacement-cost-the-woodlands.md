@@ -2,7 +2,7 @@
 title: "How Much Does Roof Replacement Cost in The Woodlands?"
 description: "What roof replacement really costs: attributed national data from Angi, Modernize, and This Old House, the cost drivers, and Township approval rules."
 pubDate: 2026-07-03
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "replacement"
 persona: ["homeowner"]
 relatedCity: "the-woodlands"
@@ -37,6 +37,11 @@ mid-five-figure zone is a realistic mental anchor for a lot of The Woodlands.
 installation from roughly **$5.09–$6.66 per square foot**. When three
 independent sources converge like this, you can trust the shape of the range
 even before anyone measures your roof.
+
+Those per-square-foot figures only mean something once you know how many square
+feet of _roof_ you have — which is not your home's floor area. Our
+[roof size calculator](/roof-size-calculator) traces your roof on a satellite
+map and gives you the number in squares, free and with no price attached.
 
 **Per square foot by shingle grade, according to Modernize (2026):**
 

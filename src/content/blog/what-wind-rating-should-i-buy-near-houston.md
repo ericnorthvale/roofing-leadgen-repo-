@@ -2,7 +2,7 @@
 title: "What Wind Rating Should I Buy Near Houston?"
 description: "Decoding ASTM D3161 and D7158 wind classes, what Houston-area storms actually deliver, and which shingle wind warranties are worth specifying."
 pubDate: 2026-07-03
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "materials"
 persona: ["homeowner"]
 tags: ["materials", "wind", "storm", "ratings", "warranties"]

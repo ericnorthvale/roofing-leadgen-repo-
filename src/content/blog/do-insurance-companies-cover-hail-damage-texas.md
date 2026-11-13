@@ -2,7 +2,7 @@
 title: "Do Insurance Companies Cover Hail Damage in Texas?"
 description: "Yes, usually — here's how ACV vs. replacement cost, recoverable depreciation, deductible law, and Texas claim deadlines actually work after hail."
 pubDate: 2026-07-03
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "insurance-claims"
 persona: ["homeowner", "storm"]
 tags: ["hail", "insurance", "texas-law", "claims", "montgomery-county"]
@@ -134,3 +134,7 @@ your recoverable depreciation. Start with the
 [insurance claims page for The Woodlands](/the-woodlands/insurance-claims), or
 [book a free inspection](/contact) — written findings, no pressure to file
 anything.
+
+And if you have already filed and been told no:
+[a denial is not usually the end of it](/blog/roof-claim-denied-texas-appraisal/).
+Two of the roofs we replaced this year started with a denied claim.

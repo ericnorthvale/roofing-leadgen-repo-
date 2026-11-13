@@ -2,7 +2,7 @@
 title: "Should I Replace My Roof Before Selling My House?"
 description: "How buyers and inspectors judge your roof, what the cost-recoup data really says, repair vs. replace before listing, and the pre-listing inspection move."
 pubDate: 2026-07-03
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "buyer-seller"
 persona: ["homeowner", "agent"]
 relatedCity: "the-woodlands"

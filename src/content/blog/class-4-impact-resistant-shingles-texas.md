@@ -2,7 +2,7 @@
 title: "Are Class 4 impact-resistant shingles worth it in Texas?"
 description: "What Class 4 (UL 2218) impact-resistant shingles actually do, the insurance angle for Houston-area homeowners, and when the upgrade is worth paying for."
 pubDate: 2026-06-28
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "materials"
 persona: ["homeowner"]
 tags: ["materials", "hail", "insurance", "class-4"]

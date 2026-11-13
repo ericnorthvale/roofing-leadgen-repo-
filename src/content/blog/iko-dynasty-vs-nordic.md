@@ -2,7 +2,7 @@
 title: "IKO Dynasty vs. IKO Nordic: Class 3 or Class 4?"
 description: "A spec-by-spec comparison of IKO Dynasty and IKO Nordic: impact class, wind and algae warranties, the ArmourZone, colors, and which one is right for your roof."
 pubDate: 2026-07-04
-author: "Northvale Roofing"
+author: "Greg Labbe"
 cluster: "materials"
 persona: ["homeowner"]
 tags: ["materials", "shingles", "iko", "dynasty", "nordic", "comparison"]

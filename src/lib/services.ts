@@ -180,7 +180,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
           },
           {
             lead: "Standing-seam metal",
-            html: '30–50+ year service life per the Metal Roofing Alliance, concealed fasteners, 140-mph wind rating — at roughly two to three times the cost of asphalt. <a href="/services/metal-roofing">More on metal systems</a>.',
+            html: '30–50+ year service life per the Metal Roofing Alliance, concealed fasteners, 140-mph wind rating — at roughly two to three times the cost of asphalt. <a href="/services/metal-roofing">More on metal systems</a>. Not sure how big your roof is? <a href="/roof-size-calculator">Measure it free</a>.',
           },
         ],
       },
@@ -332,7 +332,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       },
       {
         heading: "Emergency repairs and storm triage",
-        body: "Active leaks jump the queue. When storms move through — and the National Weather Service counts 50–60 thunderstorm days a year in southeast Texas — we run triage: emergency tarping first to stop the water, then a documented assessment of whether you're looking at a repair, a replacement, or an insurance claim. If a storm just hit, start with our storm-response page; if the damage looks claim-worthy, our storm damage and insurance claims guides walk the Texas rules.",
+        html: 'Active leaks jump the queue. When storms move through — and the National Weather Service counts 50–60 thunderstorm days a year in southeast Texas — we run triage: emergency tarping first to stop the water, then a documented assessment of whether you are looking at a repair, a replacement, or an insurance claim. If a storm just hit, start with <a href="/storm-response">storm response</a>. For local detail, we have city pages for <a href="/the-woodlands/storm-damage">The Woodlands</a> and <a href="/conroe/storm-damage">Conroe</a> — the Conroe one matters because a re-roof inside those city limits is permitted work, which the rest of the county is not.',
       },
       {
         heading: 'When we say "just repair it"',
@@ -676,6 +676,10 @@ export const SERVICES: Record<ServiceTag, Service> = {
       {
         q: "Can you waive my deductible?",
         a: "No. Texas Insurance Code §707.002 requires policyholders to pay their deductible, and Business & Commerce Code §27.02 makes waiving or absorbing it an offense — TDI warns of fines up to $2,000 and jail time. Insurers can also require proof of payment before releasing recoverable depreciation.",
+      },
+      {
+        q: "My claim was denied. Is that final?",
+        a: "Often not. A denial over how MUCH damage there is can go to appraisal — Texas Senate Bill 458 requires residential policies issued or renewed on or after 1 January 2026 to include an appraisal provision. A denial over whether it is covered at all is a different fight. We have reopened claims both ways; the full walkthrough is on our blog under 'Your roof claim was denied'.",
       },
       {
         q: "Why did my insurance check come in two parts?",
