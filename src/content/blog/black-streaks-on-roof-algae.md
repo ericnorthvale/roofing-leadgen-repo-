@@ -107,3 +107,13 @@ mean the roof is ageing out, and it's one of the things we check on a
 If you're not sure which you're looking at, that's a sensible reason to have
 somebody up there. We'll photograph it and tell you plainly — including when
 the answer is "it's just algae, leave it alone."
+
+## Where this shows up worst around here
+
+Shade is the variable, so the heavily wooded parts of our area streak years
+earlier than open subdivisions do. On the one-acre-plus wooded lots around
+Magnolia it's a given rather than a surprise —
+[roof replacement in Magnolia](/magnolia/roof-replacement) covers what deep
+canopy does to a roof over time. Under the pines in
+[Kingwood](/kingwood/roof-repair) it arrives alongside the debris load, which
+is the bigger problem of the two.

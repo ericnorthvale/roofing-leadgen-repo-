@@ -965,6 +965,378 @@ export const CITY_SERVICES: Record<string, CityService> = {
     ],
     dataCompleteness: "complete",
   },
+
+  /**
+   * Houston — the permit page. Deliberately NOT a general "roofing Houston"
+   * page: that head term is unwinnable against national aggregators, while
+   * "do I need a permit to replace my roof in Houston" is a real, local,
+   * high-intent question almost nobody answers properly. Facts: Houston
+   * Permitting Center Residential Roofing Permit (Sheet 16), jurisdiction
+   * split (Sheet 5).
+   */
+  "houston/roof-replacement": {
+    citySlug: "houston",
+    serviceTag: "replacement",
+    slug: "roof-replacement",
+    seoTitle: "Roof Replacement in Houston — Permits, Code & Cost",
+    seoDescription:
+      "Roof replacement inside Houston city limits needs a permit, and we pull it. What the permit is for, what it covers, and why your address decides everything.",
+    title: "Roof replacement in Houston",
+    summary:
+      "Inside the city limits a re-roof is permitted work, and that permit exists to confirm your new roof meets current wind-resistance code. We pull it, manage the inspection, and tell you first whether your address is even in the city — because a great many Houston-addressed homes are not.",
+    glance: [
+      { value: "Permit pulled", label: "and the inspection managed, inside city limits" },
+      { value: "6 months", label: "how long a Houston roofing permit stays valid" },
+      {
+        value: "First check",
+        label: "city limits or unincorporated county — it changes everything",
+      },
+    ],
+    sections: [
+      {
+        heading: "The first question is not about your roof. It is about your address.",
+        html: 'Greater Houston is two different regulatory worlds sharing one mailing address, and almost every roofing problem we untangle here starts with someone assuming they are in the wrong one. <strong>Inside the City of Houston limits</strong>, replacing a roof is permitted work through the Houston Permitting Center. <strong>In unincorporated Harris County</strong> — which surrounds the city on every side and covers a huge share of "Houston" addresses — there is no general residential building permit for a re-roof at all, and your deed restrictions or HOA govern instead. A Houston mailing address, a Houston zip code and a Houston school district tell you nothing definitive about which applies. We confirm the jurisdiction before we quote, because a job that starts on the wrong assumption either stalls at inspection or skips a permit it legally needed.',
+      },
+      {
+        heading: "What the permit is actually for — and it is not revenue",
+        html: "This is the part worth understanding, because it changes how you read a cheap bid. The permit exists to confirm the new roof meets <strong>current wind-resistance code</strong>. Houston builds to the 2021 International Residential Code, adopted effective 1 January 2024, and the fastening and edge-detail requirements in it are not optional opinions — they are what keeps the roof on in a named storm. The city issues a <strong>Residential Roofing Permit</strong> for a re-roof or overlay on a house, applied for with its Residential Re-Roofing Only Worksheet. The permit is valid for <strong>six months</strong>, requires an inspection and cannot be renewed, so it is not something to pull and sit on. Re-roofs also go through structural and floodplain review — unsurprising in this city. Plans are generally not required for a straightforward re-roof, though replacing rafters or joists changes that.",
+      },
+      {
+        heading: "Why a roofer who skips the permit is telling you something",
+        html: 'A permit costs a little money and some scheduling. Skipping it saves a contractor both, and it is invisible to you until it is not — at resale, at a future claim, or when the city finds out. More to the point: a roofer avoiding an inspection is a roofer who would rather nobody looked at the work. We pull it and manage the inspection as part of the job, and the permit number goes in your file with the rest of the paperwork. If a bid you are comparing is silent on permits, that is a question worth asking before price — <a href="/blog/what-should-a-roofing-estimate-include/">what a roofing estimate should include</a> has the rest of the list.',
+      },
+      {
+        heading: "Houston has no typical roof, and that is the pricing problem",
+        html: 'Most cities we work in have a recognisable housing stock. Houston does not. Inside the Loop there are early and mid-century bungalows with steep simple roofs, small footprints and decades of layered repairs. Further out there are sprawling suburban builds with complex rooflines, multiple valleys and far more penetrations to flash. Those two jobs share a name and almost nothing else, which is exactly why a per-square-foot number from the internet is useless here. What moves your price is square footage, pitch, how many layers come off, the number of valleys and penetrations, and what the decking looks like once it is bare. For market context rather than our quote, <a href="/blog/roof-replacement-cost-the-woodlands/">national cost data is here with sources attached</a>, and <a href="/roof-size-calculator">the roof size calculator</a> will get you the squares in a couple of minutes.',
+      },
+      {
+        heading: "Full Gulf Coast exposure, with nothing in the way",
+        html: 'Houston carries the whole regional threat list — tropical systems and hurricanes, spring and early-summer hail, and the 60-to-100-mph thunderstorm downbursts the National Weather Service documents across south-east Texas — plus relentless heat, UV and humidity that shorten asphalt shingle life and feed algae streaking. The May 2024 derecho put an estimated 100 mph through parts of the metro. That exposure is the reason the wind-resistance code exists, and the reason we specify to it rather than to the minimum. If a storm is what brought you here, start with <a href="/services/storm-damage">storm damage</a>, or <a href="/blog/what-hail-damage-looks-like-on-a-roof/">what hail damage actually looks like</a> if you are trying to work out whether you have any.',
+      },
+    ],
+    faqs: [
+      {
+        q: "Do I need a permit to replace my roof in Houston?",
+        a: "Inside the City of Houston limits, yes — the city issues a Residential Roofing Permit for a re-roof, applied for with its Residential Re-Roofing Only Worksheet, and we pull and manage it. If your Houston-addressed home is actually in unincorporated Harris County, there is no general county building permit for a re-roof and your deed restrictions or HOA govern instead. Confirming which applies to your address is the first thing we do.",
+      },
+      {
+        q: "How long is a Houston roofing permit good for?",
+        a: "Six months, with an inspection required and no renewal available. That is why we do not pull it until the job is genuinely scheduled — a permit that expires unused has to be started again.",
+      },
+      {
+        q: "What is the permit actually checking?",
+        a: "Principally that the new roof meets current wind-resistance code. Houston builds to the 2021 International Residential Code, adopted effective 1 January 2024. Re-roofs also go through structural and floodplain review. It is not a formality in a coastal wind zone — it is the difference between a roof that stays on and one that does not.",
+      },
+      {
+        q: "My neighbour's roofer did not pull a permit. Does it matter?",
+        a: "It can, in three places: at resale when a buyer's inspector asks, at a future insurance claim, and if the city finds out. The more useful way to read it, though, is as information about the contractor. Someone avoiding an inspection would rather nobody looked at the work closely.",
+      },
+      {
+        q: "Can you tell me if I am inside the city limits?",
+        a: "Yes, and we check before quoting rather than assuming. It is genuinely not obvious — plenty of homes with a Houston address, zip code and school district sit in unincorporated Harris County, and a few areas belong to other incorporated cities entirely.",
+      },
+      {
+        q: "Do you work across all of Houston?",
+        a: "We are based in Spring, north of the city off I-45, and work the north and north-west metro as our core area. Tell us the address and we will say plainly whether you are in our patch rather than driving an hour to quote a job we would struggle to service well.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
+
+  /**
+   * Kingwood — the tree page. Kingwood's jurisdiction story is the same as
+   * Houston's (annexed into the city in 1996), so leaning on permits here
+   * would have produced a near-duplicate of /houston/roof-replacement. The
+   * genuinely distinct thing about roofing in Kingwood is the canopy, so the
+   * page is REPAIR and the canopy is the whole argument. Facts: Sheet 5
+   * (annexation, Livable Forest) + Sheet 16 (Beryl/Imelda tree damage,
+   * canopy loss, pine beetle), all attributed.
+   */
+  "kingwood/roof-repair": {
+    citySlug: "kingwood",
+    serviceTag: "repair",
+    slug: "roof-repair",
+    seoTitle: "Roof Repair in Kingwood, TX — Tree & Storm Damage",
+    seoDescription:
+      "Roof repair in Kingwood, where the trees are the main threat. Limb strikes, debris-packed valleys, shaded-slope algae — and what a canopy roof needs.",
+    title: "Roof repair in Kingwood",
+    summary:
+      "Kingwood calls itself the Livable Forest and the roofs pay for it. Here the biggest threat to a roof is not hail — it is what is growing over it. Limb strikes, needle-packed valleys, permanently shaded slopes and the occasional whole pine coming down.",
+    glance: [
+      { value: "The canopy", label: "the main threat to a Kingwood roof, not hail" },
+      { value: "Valleys first", label: "where debris load does its damage here" },
+      { value: "Free", label: "documented inspection, with the photos yours either way" },
+    ],
+    sections: [
+      {
+        heading: "In Kingwood the trees are the weather",
+        html: "Most of our service area worries about hail. Kingwood's roofs have a more constant adversary growing directly above them. This is a master-planned community built deliberately into dense pine and hardwood forest — the Livable Forest is not marketing, it is the design brief — and that canopy changes what goes wrong with a roof and in what order. Storms here are not primarily an impact event. They are a <em>debris</em> event. When Hurricane Beryl came through in 2024, regional tree damage was severe enough that a local replanting nonprofit, Trees for Kingwood, has been working to restore canopy lost to storms, disease and drought over decades; local news documented trees coming down onto Kingwood homes during both Beryl and, earlier, Imelda. Drought-weakened pines are the particular worry, because pine bark beetles move into stressed trees and a dead pine is a very different object falling than a live one.",
+      },
+      {
+        heading: "What we actually find on a Kingwood roof",
+        kind: "cards",
+        bullets: [
+          {
+            lead: "Limb strikes, usually not where you'd look",
+            text: "A branch does not have to puncture to matter. A limb that scrapes across a slope removes granules in a line and ages that strip of roof years in one afternoon. The damage reads as a scuff rather than a hole, which is why it gets missed from the ground.",
+          },
+          {
+            lead: "Valleys packed with needles",
+            text: "Valleys already carry the most water on a roof. Fill them with pine needles and leaf litter and they hold that water instead of moving it, backing it up under the shingle edges. This is the single most common repair we do under heavy canopy, and it is maintenance rather than failure.",
+          },
+          {
+            lead: "Gutters that stopped being gutters",
+            text: "A gutter packed solid with needles is a planter. Water overshoots the fascia, runs behind the gutter, and rots the board and the deck edge — damage that starts outside the roof and works inward.",
+          },
+          {
+            lead: "Algae on the slopes that never see sun",
+            html: 'Heavy shade keeps a roof damp, and damp is what <em>Gloeocapsa magma</em> wants. North-facing and tree-shaded slopes streak black here far faster than the sunny sides — <a href="/blog/black-streaks-on-roof-algae/">what that is, and what you must never do about it</a>.',
+          },
+          {
+            lead: "Whole trees, occasionally",
+            html: 'The rare one, and the one that is not a repair conversation. A pine through the roof is a structural job and an insurance job on the same day — start with <a href="/storm-response">emergency tarping</a>, which is free and carries no obligation.',
+          },
+        ],
+      },
+      {
+        heading: "Repairs here are a maintenance rhythm, not an emergency",
+        html: 'The useful mental shift for a canopy roof: most of what it needs is removal rather than replacement. Clear the valleys, clear the gutters, cut back what overhangs, and a Kingwood roof will reach a normal lifespan. Leave the debris and the same roof fails early for reasons that have nothing to do with the shingles. Extension guidance on home maintenance is consistent about this — trim overhanging branches, keep gutters clear — and in this community it is not generic advice, it is the main thing. If what you are weighing is whether the roof has gone past repairing, <a href="/blog/repair-or-replace-your-roof/">the four questions that settle it</a> are here.',
+      },
+      {
+        heading: "The jurisdiction wrinkle people forget",
+        html: 'Kingwood was annexed into the City of Houston at the end of 1996, so despite feeling like its own town it sits inside the city limits — which means City of Houston permitting applies. For a repair that is usually irrelevant. It matters the moment a repair becomes a replacement, because that is permitted work: <a href="/houston/roof-replacement">roof replacement in Houston</a> covers the permit, what it checks and why. Worth knowing before a contractor tells you no permit is needed because "this is Kingwood".',
+      },
+    ],
+    faqs: [
+      {
+        q: "A branch hit my roof but nothing is leaking. Does it need looking at?",
+        a: "Usually yes, and quickly. A limb strike frequently removes granules or fractures the shingle mat without breaking the surface, so there is nothing to see and nothing to leak — yet. That spot is now the weakest part of your roof, and it fails in the next storm rather than this one. We photograph it so you have a dated record either way.",
+      },
+      {
+        q: "How often should a Kingwood roof be cleared?",
+        a: "More often than roofs elsewhere, and the honest answer depends on what is overhanging. A heavily shaded lot under mature pines can pack its valleys and gutters in a single season; an open corner lot may go years. We tell you what yours actually needs rather than selling a schedule.",
+      },
+      {
+        q: "Will my insurance cover a tree falling on my roof?",
+        a: "Usually yes — a falling tree or limb is a covered peril under most policies, unlike ordinary wear. What matters is documenting the event properly before anything is moved or tarped. We photograph first, tarp second, and the packet is yours whether or not you file.",
+      },
+      {
+        q: "Should I just cut the trees down?",
+        a: "No, and we would not advise it. The canopy is why people live here, and a healthy tree is not the problem. What is worth doing is having an arborist look at dead or beetle-stressed pines and anything directly overhanging the roof. We will point out what is leaning over your roof; we are not qualified to tell you which tree is sick, and we will not pretend to be.",
+      },
+      {
+        q: "Do I need a permit for a roof repair in Kingwood?",
+        a: "Kingwood was annexed into the City of Houston in 1996, so City of Houston rules apply here. A minor repair generally is not permitted work, but a full replacement is — and plenty of people are surprised by that because Kingwood does not feel like Houston. We confirm what applies before any work is scheduled.",
+      },
+      {
+        q: "Is algae on my shaded slope damaging the roof?",
+        a: "The staining itself is mostly cosmetic, but the conditions causing it are not harmless, and the cleaning method matters enormously. Never let anyone pressure-wash an asphalt roof — it strips granules and will shorten the roof's life far more than the algae would.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
+
+  /**
+   * Tomball — deliberately an INSPECTION page, not another permit page.
+   * Tomball is incorporated and does require a roofing permit, but Houston
+   * already owns the permit argument on this site; repeating it here would
+   * have produced the duplication the uniqueness gate exists to catch. The
+   * distinct thing about Tomball is that one small city contains two
+   * completely different housing stocks. Facts: Sheet 5 + Sheet 16.
+   */
+  "tomball/roof-inspection": {
+    citySlug: "tomball",
+    serviceTag: "inspection",
+    slug: "roof-inspection",
+    seoTitle: "Roof Inspection in Tomball, TX — Free, 40 Photos",
+    seoDescription:
+      "Free documented roof inspection in Tomball. Historic Old Town or a new-build on the fringe, the roof tells a different story — and we check for both.",
+    title: "Roof inspection in Tomball",
+    summary:
+      "Tomball is two housing markets inside one small city, and a roof inspection means something different in each. Forty photographs, the attic opened, written findings within 24 hours — and the report says what we found whether or not it sells us any work.",
+    glance: [
+      { value: "40 photos", label: "every slope, every penetration, labelled" },
+      { value: "24 hours", label: "written findings in your inbox" },
+      { value: "Two markets", label: "historic Old Town and the new-build fringe" },
+    ],
+    sections: [
+      {
+        heading: "One small city, two completely different roofs",
+        html: "Tomball is unusual among the places we work: it packs two housing stocks with almost nothing in common into a few square miles. <strong>Historic Old Town</strong> is the original railroad and German-heritage district, with older houses, steeper and simpler roof geometry, decades of accumulated repairs by different hands, and framing that predates any modern code. <strong>The master-planned fringe</strong> — Amira, Rosehill Reserve and the newer developments pushing out into the surrounding unincorporated land — is builder-grade and new, where whole streets were roofed in the same month with the same material by the same crew. An inspection in Old Town is archaeology: establishing what was done, when, and by whom. An inspection on the fringe is quality control: checking whether what the builder's roofer did in a hurry was done properly. Same service, genuinely different job.",
+      },
+      {
+        heading: "What we check on an older Tomball roof",
+        kind: "cards",
+        bullets: [
+          {
+            lead: "Layers, and how many",
+            text: "Older houses accumulate roofs. Two or three layers changes the tear-off cost, loads the structure, and hides decking nobody has seen in thirty years. We establish this early because it changes every number that follows.",
+          },
+          {
+            lead: "Previous repairs, and whether they were any good",
+            text: "A long-lived roof carries a history of patches. Some are sound. Some are caulk over a problem. Telling them apart is most of the value of inspecting an older house.",
+          },
+          {
+            lead: "Flashing at everything that was added later",
+            text: "Chimneys, additions, porch tie-ins. On older homes the leak is usually where two eras of construction meet, not in the field of the roof.",
+          },
+          {
+            lead: "What the framing and decking are doing",
+            text: "Opening the attic matters more on an older house than anywhere else. Daylight, staining, sag and soft decking tell a story the shingles do not.",
+          },
+        ],
+      },
+      {
+        heading: "And what we check on a new one",
+        kind: "cards",
+        bullets: [
+          {
+            lead: "Whether the builder's roofer rushed it",
+            text: "Nail placement, starter course, ridge detail, valley method. Production roofing is fast by design, and fast is where shortcuts live. Most of it is fine. The parts that are not tend to be consistent across the street.",
+          },
+          {
+            lead: "Ventilation that was sized to pass, not to work",
+            html: 'A new roof over an under-vented attic fails early and the warranty may not care. We measure against the 1-in-300 benchmark — <a href="/blog/attic-ventilation-texas-roof-lifespan/">why that matters so much in this climate</a>.',
+          },
+          {
+            lead: "Pipe boots, already",
+            html: 'The one component that reliably fails long before the shingles around it — <a href="/blog/why-roofs-leak-around-pipe-boots/">and why the ceiling stain shows up nowhere near the hole</a>.',
+          },
+          {
+            lead: "Whether your warranty is what you think it is",
+            html: 'New-build roofs come with warranty paperwork most owners have never read. <a href="/warranty">How the tiers actually work</a> is worth ten minutes before you need to rely on it.',
+          },
+        ],
+      },
+      {
+        heading: "Buying or selling in a market moving this fast",
+        html: "Tomball is growing quickly, which means a lot of these inspections are transactional rather than maintenance. A general home inspection gives the roof a paragraph; a roof-specific inspection tells you what the next decade costs. For a buyer in an option period, a 24-hour written report with labelled photographs either clears the roof or produces a concrete repair number to negotiate against — far stronger than \"the roof looks older\". For a seller, a clean pre-listing roof report removes the scariest unknown from a buyer's inspection response before it becomes a price reduction. We are happy to be the second opinion on someone else's report, and we will tell you if we think they got it right.",
+      },
+      {
+        heading: "If the inspection turns into work, Tomball has a step most of our area does not",
+        html: 'Worth knowing before you plan around it. Tomball is an <strong>incorporated city with its own building department</strong>, and it requires a permit for residential roofing — currently a $50 residential roofing permit, applied for through the city\'s SmartGov online portal, with the Building Division on James Street. That is a genuine difference from most of our service area, where unincorporated county addresses need no re-roof permit at all. The catch is the same one as everywhere: a Tomball mailing address does not guarantee a Tomball city address, because the city is ringed by unincorporated Harris County where the county rule applies instead. We confirm which you are before scheduling, and we pull the permit when it is needed. The <a href="/blog/montgomery-county-roofing-permit-guide/">permit guide</a> covers how this varies across the region.',
+      },
+    ],
+    faqs: [
+      {
+        q: "Is the inspection really free?",
+        a: "Yes, and the forty-photo packet with written findings is yours whether you hire us or not. The honest reason it is free: an inspection is how we earn the work when work is warranted, and the documentation is how we prove it is. You are welcome to take the report and get other bids with it.",
+      },
+      {
+        q: "My house is in Old Town and nobody knows when the roof was done. Can you tell?",
+        a: "Usually, within a few years. Layer count, material type, the style of the flashing and the condition of the components date a roof reasonably well, and the attic adds a lot. We will give you a range and say how confident we are rather than inventing a date.",
+      },
+      {
+        q: "My house is three years old. Is an inspection premature?",
+        a: "Not at all, and it is often the most useful time. Builder roofs are installed fast, and the things that go wrong — nail placement, ventilation sizing, flashing detail — are cheap to fix at three years and expensive at fifteen. If we find nothing, that is a documented baseline for every future storm claim.",
+      },
+      {
+        q: "Do you check the attic?",
+        a: "Always. A roof inspection that never opens the attic hatch is half an inspection. Daylight at penetrations, water staining, decking condition and ventilation are all things you simply cannot see from on top.",
+      },
+      {
+        q: "Will I need a permit if I go ahead with a replacement?",
+        a: "Inside the Tomball city limits, yes — the city requires a residential roofing permit through its SmartGov portal, and we handle it. If your Tomball-addressed home is in the surrounding unincorporated Harris County, there is typically no re-roof permit and deed restrictions govern instead. We confirm which applies to your address first.",
+      },
+      {
+        q: "Can you look at another roofer's inspection report?",
+        a: "Yes, and we are glad to. Bring it. If they got it right we will say so — that is useful information for you and costs us nothing but an hour.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
+
+  /**
+   * Magnolia — the acreage page. Nothing else on this site addresses a roof
+   * on a one-acre-plus wooded homesite, which brings genuinely different
+   * problems: bigger and more complex roofs, site access and staging,
+   * no city inspector, and metal as a realistic choice rather than an
+   * upgrade. Facts: Sheet 5 (rural southern Montgomery County, named
+   * communities, jurisdiction) + Sheet 1 (materials).
+   */
+  "magnolia/roof-replacement": {
+    citySlug: "magnolia",
+    serviceTag: "replacement",
+    slug: "roof-replacement",
+    seoTitle: "Roof Replacement in Magnolia, TX — Acreage & Custom",
+    seoDescription:
+      "Roof replacement on Magnolia acreage. Bigger roofs, wooded lots, long drives and no county permit — what changes when the house sits on its own land.",
+    title: "Roof replacement in Magnolia",
+    summary:
+      "Magnolia is acreage country — one-acre-plus wooded homesites in High Meadow Ranch, Mostyn Manor, Sendera Ranch and Magnolia Reserve. Bigger, more complicated roofs on lots a truck has to get down. That changes the job, the material conversation and the schedule.",
+    glance: [
+      { value: "Acreage", label: "one-acre-plus wooded lots, not subdivision roofs" },
+      { value: "No permit", label: "unincorporated southern Montgomery County" },
+      { value: "Metal priced", label: "a real option here, not just an upsell" },
+    ],
+    sections: [
+      {
+        heading: "An acreage roof is not a subdivision roof",
+        html: "Almost everything else we replace sits on a quarter-acre with a driveway, a street and a neighbour twenty feet away. Magnolia mostly does not. Southern Montgomery County here is rural and wooded — gated acreage communities like <strong>High Meadow Ranch and High Meadow Estates</strong> with one-acre-plus homesites, <strong>Sendera Ranch</strong> on one-to-five-acre tracts with bridle trails, <strong>Mostyn Manor</strong>, <strong>Magnolia Reserve</strong> and the newer <strong>Audubon</strong> development. The houses are custom more often than builder-spec, which means roofs with more planes, more valleys, dormers, porches and outbuildings that nobody counted in the original estimate. The practical consequence is that a per-square-foot figure from a subdivision job misprices an acreage roof badly, usually downward, and the gap turns up as a change order. We measure the whole property, including the detached garage and the barn if they are part of the job, before we give you a number.",
+      },
+      {
+        heading: "Getting to the roof is part of the job here",
+        kind: "steps",
+        ordered: true,
+        bullets: [
+          {
+            text: "We walk the access before scheduling. A long gravel drive, a tight gate, a cattle guard or a low branch over the approach decides what equipment can reach the house and how material gets staged.",
+          },
+          {
+            text: "Material is dropped where it will not kill your lawn, your septic field or your drive. On acreage there is usually a right answer and several expensive wrong ones.",
+          },
+          {
+            text: "Tear-off debris is contained, not scattered. Open land and wind are a bad combination, and a roof produces a startling amount of debris.",
+          },
+          {
+            text: "Everything is magnet-swept before we leave — drive, paths, and the grass where anyone walks barefoot or a horse might. Nails in pasture are a genuine problem, not a tidiness point.",
+          },
+          {
+            text: "If the property is gated or you are not home, we agree access in advance rather than calling you from the gate.",
+          },
+        ],
+      },
+      {
+        heading: "Metal is a real conversation here, not an upsell",
+        html: 'On a quarter-acre subdivision roof governed by an architectural committee, metal is usually ruled out before anyone prices it. On Magnolia acreage it is a legitimate option and frequently the right one: custom homes, long sightlines, no committee telling you what colour your roof may be, and owners who intend to be there in thirty years. It costs meaningfully more than asphalt up front and lasts far longer, so the maths depends almost entirely on how long you are staying. We will price both honestly and tell you which we would choose in your position — <a href="/services/metal-roofing">standing seam and stone-coated metal</a> covers what the difference actually buys. For most houses here architectural asphalt is still the sensible answer, and we will say so rather than steering you up.',
+      },
+      {
+        heading: "Trees are the other half of the Magnolia story",
+        html: 'These are wooded lots, and mature oaks and pines over a roof bring three things with them. <strong>Falling limbs</strong> in wind — the most common storm damage we see on acreage, and more consequential than hail on these properties. <strong>Debris load</strong> in valleys and gutters, which is where a roof actually starts to fail when nobody clears it. And <strong>deep shade</strong>, which keeps slopes damp and streaks them with algae years earlier than a sunny roof — <a href="/blog/black-streaks-on-roof-algae/">what that is and what not to do about it</a>. None of it means cutting your trees down. It means the roof needs a different maintenance rhythm, and it means we check valleys and shaded elevations hard rather than treating them as an afterthought.',
+      },
+      {
+        heading: "Nobody is coming to inspect it, which raises the stakes",
+        html: 'Most Magnolia-addressed property sits in <strong>unincorporated Montgomery County</strong>, where there is no county building permit for a re-roof. The small City of Magnolia itself is incorporated, so addresses genuinely inside the city limits are a different matter and we confirm before assuming. For most of our customers here that means no permit, no city inspector and no mandated inspection of the finished roof — which sounds like convenience and is really the opposite. Where nobody checks the work, the only thing standing between you and a bad roof is the contractor\'s own standards and what you can see in the photographs. That is why we document the decking before it is covered, not after, and why the written scope names the per-sheet decking rate up front. <a href="/blog/what-should-a-roofing-estimate-include/">What a roofing estimate should include</a> is the checklist we would want you holding us to.',
+      },
+    ],
+    faqs: [
+      {
+        q: "Do I need a permit to replace my roof in Magnolia?",
+        a: "For most Magnolia-addressed homes — which are in unincorporated Montgomery County — no county building permit is required for a re-roof. The City of Magnolia itself is incorporated, so if your address is genuinely inside the city limits the answer may differ, and we confirm that before scheduling rather than assuming. Deed restrictions or a community's architectural guidelines may still apply either way.",
+      },
+      {
+        q: "Will you quote the barn and the detached garage too?",
+        a: "Yes, and we would rather measure them up front than discover them on day one. Outbuildings are a common reason an acreage quote from elsewhere comes in low and then grows. Tell us what you want included and the written price covers it.",
+      },
+      {
+        q: "Is metal worth it on an acreage home?",
+        a: "Sometimes genuinely yes, which is not something every roofer will tell you honestly in either direction. It costs meaningfully more up front and lasts far longer, so it turns almost entirely on how long you plan to stay. Without a committee dictating materials, you actually have the choice here. We price both and tell you which we would pick in your position.",
+      },
+      {
+        q: "Can your trucks get down my drive?",
+        a: "Usually, but we walk it before scheduling rather than finding out on the morning. Long gravel drives, gates, cattle guards and low branches all change how we stage material and what equipment comes. It is a five-minute conversation that prevents a wasted day.",
+      },
+      {
+        q: "What about nails in the pasture?",
+        a: "Taken seriously. We contain tear-off debris as we go rather than at the end, and magnet-sweep the drive, the paths and the grass before leaving. On a property with animals or bare feet this matters more than it does on a subdivision lot, and we treat it that way.",
+      },
+      {
+        q: "How long does an acreage roof take?",
+        a: "Longer than the one-day subdivision job, usually, because the roofs are bigger and more complex and access takes time. We give you a realistic schedule with the written estimate rather than an optimistic one, including what happens if the decking turns out worse than it looks.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
 };
 
 export const CITY_SERVICE_KEYS = Object.keys(CITY_SERVICES);

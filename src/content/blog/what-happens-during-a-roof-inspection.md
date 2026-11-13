@@ -130,3 +130,10 @@ Do you check the attic? Is the report written?_
 
 Ours: forty, always, and yes — within 24 hours.
 [Book a free inspection](/contact) and see the difference on paper.
+
+Local detail, if you want it: the
+[Woodlands roof inspection page](/the-woodlands/roof-inspection) covers RDRC
+prep, and [roof inspection in Tomball](/tomball/roof-inspection) covers what
+changes between a historic Old Town house and a three-year-old build on the
+fringe — because in one the inspection is archaeology, and in the other it is
+quality control on a roof somebody installed in a hurry.

@@ -166,3 +166,25 @@ review — see [storm damage in Cypress](/cypress/storm-damage).
 
 Northern Spring extends into Montgomery County, so this is one of the few
 places where the honest answer really is "confirm the address first."
+
+## The cities that do require a permit
+
+Unincorporated is the norm around here, not the rule. Three places in our area
+flip it:
+
+- **Inside the City of Houston limits**, a re-roof is permitted work — and the
+  permit exists to confirm the new roof meets current wind-resistance code.
+  [Roof replacement in Houston](/houston/roof-replacement) covers what it
+  checks and how long it lasts. Kingwood counts, since it was annexed into
+  Houston in 1996.
+- **Inside the City of Conroe limits**, the city's Building Inspections &
+  Permits department requires one — see
+  [storm damage in Conroe](/conroe/storm-damage).
+- **Inside the City of Tomball limits**, the city requires a residential
+  roofing permit through its own portal —
+  [roof inspection in Tomball](/tomball/roof-inspection) explains where that
+  lands in the process.
+
+In every one of those three, a matching mailing address does not guarantee a
+city address. The surrounding unincorporated county usually starts a street or
+two away.
