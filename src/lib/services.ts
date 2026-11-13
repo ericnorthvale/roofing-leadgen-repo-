@@ -336,7 +336,7 @@ export const SERVICES: Record<ServiceTag, Service> = {
       },
       {
         heading: 'When we say "just repair it"',
-        body: "We're happy to repair. We won't upsell a replacement when a sound repair will give you several more good years. The forty-photo packet we leave shows the rest of the roof too, so you know what to watch. For market context, Angi (2026) puts typical roof repairs at $400–$2,000 — and our diagnosis and price come in writing before any work starts.",
+        html: 'We are happy to repair. We will not upsell a replacement when a sound repair will give you several more good years. <a href="/blog/repair-or-replace-your-roof/">The four questions that decide it</a> are written up separately. The forty-photo packet we leave shows the rest of the roof too, so you know what to watch. For market context, Angi (2026) puts typical roof repairs at $400-$2,000 — and our diagnosis and price come in writing before any work starts.',
       },
       {
         heading: 'When we say "it\'s time to replace"',

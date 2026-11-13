@@ -2478,3 +2478,75 @@ Routes were placed where a reader is already asking that question — the cost
 post links to the calculator at the point it quotes per-square-foot figures;
 the hail-damage post links to the denial post at the point it describes being
 told no — rather than bolted on as a "related" list.
+
+---
+
+### Sheet 15 — five content-gap posts (2026-11-13)
+
+Built from an AnswerThePublic cluster export the owner supplied, filtered
+against what the site actually covers rather than the tool's "coverage" labels.
+
+**The finding the tool did not flag:** a grep of the built site found **zero
+pages** describing what hail damage looks like. A storm-and-insurance roofer in
+a hail market, whose biggest local query is a hail insurance claim, had nothing
+answering the first question every one of those people asks.
+
+| Topic                      | Pages mentioning it before | Dedicated page before |
+| -------------------------- | -------------------------- | --------------------- |
+| Hail damage signs          | **0**                      | none                  |
+| Attic ventilation          | 5 (passing)                | none                  |
+| Algae / black streaks      | 16 (passing)               | none                  |
+| Repair vs replace          | 4                          | none                  |
+| Tropical storm / hurricane | 7                          | none                  |
+
+#### Sources
+
+**Hail** — [IBHS Impact Resistance Test Protocol for Asphalt
+Shingles](https://ibhs.org/wp-content/uploads/2019/06/ibhs-impact-resistance-test-protocol-for-asphalt-shingles.pdf):
+tests at 1.5" and 2.0", scores dents, tears and granule loss; states there are
+**no set criteria** for how much granule loss counts as damage.
+[Haag Engineering](https://haagglobal.com/wp-content/uploads/2022/06/hail-damage-to-asphalt-shingles.pdf):
+treats granule scuffing that exposes substantial bitumen as hail damage.
+Sub-severe hail (~0.7–1") plus weathering leaves shingles more vulnerable to a
+later severe event — [Frontiers in Materials, 2025](https://www.propertyinsurancecoveragelaw.com/wp-content/uploads/2025/09/Sub-severe-hail-the-missing-piece-in-assessing-asphalt-shingle-risk-in-North-America-Front-Mater.-Vol.-12-20251.pdf).
+
+**Algae** — [ARMA, Algae & Moss Prevention and Cleaning for Asphalt Roofing
+Systems](https://www.asphaltroofing.org/algae-moss-prevention-cleaning-asphalt-roofing-systems/):
+_Gloeocapsa magma_ protects itself with a dark pigmented sheath; pressure
+washing causes granule loss and probable early failure; 50/50 household-strength
+sodium hypochlorite and water, no mechanical cleaning equipment. **Crucially,
+ARMA frames zinc/copper strips as a measure at REPLACEMENT, not a retrofit** —
+retrofitting needs exposed nails (leak risk) or breaking the sealant bond (wind
+risk). The algae post says so plainly, which cuts against what most roofers
+sell as an add-on.
+
+**Ventilation** — IRC R806.2, 1-in-300 balanced ratio (already Sheet 8, reused).
+Net free area definition and the worked arithmetic match the roof report PDF.
+
+**Repair vs replace** — InterNACHI lifespans and Angi 2026 cost ranges, both
+already sourced on the site.
+
+**Wind** — IBHS: what fails in wind is the sealant bond between shingles, and it
+weakens with age (already sourced). Named-storm/percentage deductibles are
+described generically and the reader is told to check their declarations page;
+no specific percentage is asserted.
+
+#### Deliberately not written
+
+- `architectural shingles vs 3-tab` — the biggest volume in the export (3.3K)
+  and still skipped. National informational query, dominated by large domains,
+  3-tab nearly obsolete in new installs, and the tool itself rates it Low
+  opportunity. Traffic that would not become a local lead.
+- `best roofing company the woodlands` — cannot be won with on-site content.
+  That is Google Business Profile and reviews.
+- `iko dynasty shingles review` — marked "not covered" only because the word
+  _review_ is absent. The site ranks position 1–2 for IKO Dynasty queries; it is
+  the best-covered topic on the site.
+
+#### No photographs on the hail post
+
+Northvale's work photos are tear-off and install shots; none shows hail damage.
+Illustrating a hail-identification article with stock imagery would be exactly
+the Hard Rule #2 violation the gallery rules exist to prevent. The post ships
+without images; the ventilation and repair-vs-replace posts use real Woodlands
+job photos (ridge vent, rotted decking) as their social preview images.

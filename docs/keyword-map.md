@@ -62,6 +62,11 @@ sitewide (enforced by tests/unit/seo-content.test.ts).
 | why-roofs-leak-around-pipe-boots                   | roof leak pipe boot                                                                                     |
 | woodlands-hoa-roof-approval-guide                  | The Woodlands HOA roof approval / RDRC                                                                  |
 | roof-claim-denied-texas-appraisal                  | roof claim denied Texas / appraisal clause (city claim queries stay on /the-woodlands/insurance-claims) |
+| what-hail-damage-looks-like-on-a-roof              | what hail damage looks like / roof hail damage signs                                                    |
+| repair-or-replace-your-roof                        | roof repair vs replacement / when to replace roof Texas                                                 |
+| attic-ventilation-texas-roof-lifespan              | attic ventilation Texas / roof lifespan Texas climate                                                   |
+| black-streaks-on-roof-algae                        | roof algae removal / black streaks on roof / gloeocapsa magma                                           |
+| tropical-storm-roof-damage-texas                   | tropical storm roof damage Texas / hurricane wind roof damage                                           |
 | best-iko-roof-colors-the-woodlands                 | best IKO roof colors / Woodlands roof color                                                             |
 | class-4-impact-resistant-shingles-texas (existing) | Class 4 shingles Texas                                                                                  |
 | storm-damage-what-to-do (existing)                 | what to do after storm damage                                                                           |

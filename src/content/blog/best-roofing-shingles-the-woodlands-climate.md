@@ -101,6 +101,12 @@ finish isn't glossy and the color is muted. Our
 [metal roofing page](/services/metal-roofing) covers the three systems and the
 hail-dent insurance question that comes with all of them.
 
+Two things shorten a shingle's life here faster than the shingle choice does:
+[attic ventilation](/blog/attic-ventilation-texas-roof-lifespan/), which cooks a
+roof from underneath, and the
+[algae streaking](/blog/black-streaks-on-roof-algae/) our humidity guarantees
+eventually.
+
 ## Our honest take
 
 For most homes in The Woodlands, a modern architectural shingle with a strong
