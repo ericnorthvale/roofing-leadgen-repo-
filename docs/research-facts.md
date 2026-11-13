@@ -2363,12 +2363,17 @@ competing for the same name. Cordova Clay is independently confirmed by its
 distinctive dark charcoal blotching, which the owner's swatch reproduces
 exactly. Owner confirmed the pairings.
 
-**Still open.** Seven of eight colors are live. **Cathedral Stone** (mid grey)
-has no swatch image yet; `moreColors` names it honestly. The remaining
-`home-terracotta.webp` house photo is NOT attached to a color: sampling its roof
-gave Sienna Clay Δ21 against Canyon Terra Δ28, which is too close to call on a
+**All eight colors are now live.** Cathedral Stone was added last, with its
+installed-roof photo only — the close-up swatch supplied for it is **164×114**,
+against ~1450px for every sibling. Upscaling it roughly 9× would look visibly
+broken beside them, so the house photo stands in until a full-size swatch
+exists. `assetFor()` falls back to `home` when `swatch` is absent, so this
+renders correctly.
+
+**Still open.** `home-terracotta.webp` is NOT attached to a color. Sampling its
+roof gave Sienna Clay Δ21 against Canyon Terra Δ28 — too close to call on a
 sunlit roof photographed at an angle, and a wrong attribution would be a false
-product claim.
+product claim. It stays unused until the owner says which color it is.
 
 **Model change this forced.** `StudioLine` required `ironCladYears` and
 `algaeYears` — terms of IKO's ASPHALT shingle warranty that do not exist on a

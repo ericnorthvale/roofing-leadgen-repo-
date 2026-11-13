@@ -358,6 +358,16 @@ export const STUDIO_LINES: StudioLine[] = [
         swatch: `${DC}/iko-metals-spanish-tile/bronzed-oak-swatch.webp`,
       },
       {
+        name: "Cathedral Stone",
+        slug: "cathedral-stone",
+        chip: "#6f7472",
+        note: "Mid grey with the stone-coat texture reading as weathered slate — the quietest color in the range on a big roof.",
+        // No close-up swatch yet: the only one supplied is 164x114, which would
+        // sit next to ~1450px siblings and look broken. The house photo stands
+        // in until a full-size swatch exists.
+        home: `${DC}/iko-metals-spanish-tile/cathedral-stone-home.webp`,
+      },
+      {
         name: "Woodland Pine",
         slug: "woodland-pine",
         chip: "#363b30",
@@ -387,7 +397,7 @@ export const STUDIO_LINES: StudioLine[] = [
       },
     ],
     moreColors:
-      "Seven of the eight Spanish Tile colors are shown here. Cathedral Stone, a mid grey, is also available. We bring physical samples either way — IKO's own flyer notes the printed colors are digitally enhanced, so never pick a roof color off a screen.",
+      "All eight Spanish Tile colors. We bring physical samples regardless — IKO's own flyer notes the printed colors are digitally enhanced, so never pick a roof color off a screen.",
   },
 ];
 
