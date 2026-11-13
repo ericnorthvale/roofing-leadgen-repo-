@@ -133,3 +133,10 @@ estimate before we leave the driveway** — line-itemed, with the shingle spec
 and warranty named, and the decking price stated up front. Same day. In
 writing. [Book a free inspection](/the-woodlands/roof-inspection) or
 [text us](/contact) — you'll hear back in under 60 seconds.
+
+Two things worth reading before you compare quotes.
+[What a roofing estimate should include](/blog/what-should-a-roofing-estimate-include/)
+is the line-by-line checklist that makes three bids actually comparable — hold
+us to it as well. And if the obstacle is how to fund it rather than what it
+costs, [how people actually pay for a new roof](/blog/how-to-pay-for-a-new-roof-texas/)
+covers the five routes, including the Texas homestead rules on home equity.
