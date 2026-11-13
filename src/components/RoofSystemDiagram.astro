@@ -1,31 +1,44 @@
 ---
 /**
- * Cross-section of a roof system, drawn rather than photographed.
+ * Isometric cutaway of a roof system, drawn rather than photographed.
  *
- * WHY A DIAGRAM AND NOT A PHOTO: every work photo Northvale has is an asphalt
+ * WHY A DRAWING AND NOT A PHOTO: every work photo Northvale has is an asphalt
  * job. Putting one on the metal, tile or flat page would imply work the photo
- * doesn't show (Hard Rule #2), and these pages have no real photos of their own
- * yet. A labelled cross-section is honest — it depicts the system, it doesn't
- * claim to be one of our roofs — and it does something a photo can't: it makes
- * the page's actual argument visible.
+ * doesn't show (Hard Rule #2), and those pages have no real photos of their own
+ * yet. A cutaway is honest — it depicts the system, it doesn't claim to be one
+ * of our roofs — and it does something a photo can't: it shows the layers a
+ * finished roof hides, which is the whole point of all three pages.
  *
- * On the tile page that argument is the whole point. The tile is a rain screen;
- * the underlayment beneath it is the waterproofing, and it is what ages out
- * first. Highlighting that one layer says it faster than the paragraph does.
+ * On the tile page especially: the tile is a rain screen, the underlayment
+ * beneath it is the waterproofing, and it is what ages out first. Seeing that
+ * layer picked out lands faster than the paragraph does.
  *
- * Inline SVG, no dependencies, scales to any width, and the layer names are
- * real text so they're readable to a screen reader and indexable.
+ * Built as a staggered isometric stack: each layer is a slab with a visible top
+ * face, front edge and side edge, and each upper layer starts further right so
+ * the one beneath stays readable. Three tones per slab (lit top, mid front,
+ * shaded side) is what makes it read as solid rather than as a bar chart.
+ *
+ * Materials are drawn in their real colours — terracotta, plywood, charcoal
+ * felt — not in brand palette, because the point is that they look like what
+ * they are. The surrounding UI (legend, caption) stays on brand.
+ *
+ * Inline SVG, no dependencies, and the layer names are real text, so the legend
+ * is readable to a screen reader and indexable.
  */
 interface Layer {
-  /** Layer name shown in the key. */
   label: string;
-  /** Thickness in SVG units. */
-  h: number;
-  fill: string;
-  /** The layer the page is actually about — drawn in gold with a thicker rule. */
+  /** Slab thickness in SVG units. */
+  t: number;
+  /** [top face, front face, side face] — lit, mid, shaded. */
+  tone: [string, string, string];
+  /** The layer the page is actually about: outlined in gold in the legend. */
   key?: boolean;
-  /** Draw the top edge as a tile/panel profile rather than a flat line. */
-  profile?: "tile" | "seam" | "flat";
+  /** Surface treatment drawn on the top face of the uppermost layer. */
+  surface?: "tile" | "seam" | "membrane";
+  /** Draw the slab as separate slats with gaps (battens). */
+  slats?: boolean;
+  /** Draw ply/OSB edge grain on the front face. */
+  grain?: boolean;
 }
 
 interface Props {
@@ -36,106 +49,234 @@ const { system, class: className } = Astro.props;
 
 const SYSTEMS: Record<Props["system"], { caption: string; layers: Layer[] }> = {
   tile: {
-    caption: "The tile sheds water. The underlayment is what keeps it out.",
+    caption: "The tile sheds water. The underlayment is what actually keeps it out.",
     layers: [
-      { label: "Roof deck", h: 26, fill: "var(--color-navy-100)" },
-      { label: "Underlayment — the waterproof layer", h: 12, fill: "transparent", key: true },
-      { label: "Battens", h: 16, fill: "var(--color-navy-200)" },
-      { label: "Clay or concrete tile", h: 30, fill: "var(--color-navy-300)", profile: "tile" },
+      { label: "Roof deck", t: 17, tone: ["#d9bd93", "#c2a477", "#a68a60"], grain: true },
+      {
+        label: "Underlayment — the waterproof layer",
+        t: 8,
+        tone: ["#4a4f57", "#3a3e45", "#2b2e34"],
+        key: true,
+      },
+      { label: "Battens", t: 10, tone: ["#cdb088", "#b6986f", "#9b8059"], slats: true },
+      {
+        label: "Clay or concrete tile",
+        t: 13,
+        tone: ["#c4663f", "#aa5433", "#8d4228"],
+        surface: "tile",
+      },
     ],
   },
   metal: {
-    caption: "Standing seam hides every fastener under the seam.",
+    caption: "Standing seam hides every fastener under the raised seam.",
     layers: [
-      { label: "Roof deck", h: 26, fill: "var(--color-navy-100)" },
-      { label: "Underlayment", h: 12, fill: "var(--color-navy-200)" },
-      { label: "Concealed clips", h: 14, fill: "transparent", key: true },
-      { label: "Standing seam panel", h: 26, fill: "var(--color-navy-300)", profile: "seam" },
+      { label: "Roof deck", t: 17, tone: ["#d9bd93", "#c2a477", "#a68a60"], grain: true },
+      { label: "Underlayment", t: 8, tone: ["#4a4f57", "#3a3e45", "#2b2e34"] },
+      {
+        label: "Concealed clips — no fastener through the panel",
+        t: 7,
+        tone: ["#9aa3ad", "#7d8690", "#646c75"],
+        key: true,
+      },
+      {
+        label: "Standing seam panel",
+        t: 10,
+        tone: ["#b9c3cd", "#9aa5b1", "#7d8894"],
+        surface: "seam",
+      },
     ],
   },
   flat: {
     caption: "Slope and drainage decide how long the membrane lasts.",
     layers: [
-      { label: "Roof deck", h: 26, fill: "var(--color-navy-100)" },
-      { label: "Tapered insulation — builds the fall", h: 22, fill: "transparent", key: true },
-      { label: "Single-ply membrane", h: 14, fill: "var(--color-navy-300)", profile: "flat" },
+      { label: "Roof deck", t: 17, tone: ["#d9bd93", "#c2a477", "#a68a60"], grain: true },
+      {
+        label: "Rigid insulation board",
+        t: 20,
+        tone: ["#eee4c9", "#ddd1b0", "#c6b995"],
+        key: true,
+      },
+      {
+        label: "Single-ply membrane",
+        t: 7,
+        tone: ["#f1f3f5", "#dfe3e8", "#c5cbd2"],
+        surface: "membrane",
+      },
     ],
   },
 };
 
 const { caption, layers } = SYSTEMS[system];
 
-// Stack from the bottom up so the deck sits at the base of the drawing.
+/* Isometric parameters. DX/DY is the up-slope depth vector. */
+const X0 = 20;
 const W = 300;
-const GAP = 7;
-const total = layers.reduce((n, l) => n + l.h, 0) + GAP * (layers.length - 1);
-const H = total + 16;
-let y = H - 8;
-const placed = layers.map((l) => {
-  y -= l.h;
-  const top = y;
-  y -= GAP;
-  return { ...l, top };
+const DX = 54;
+const DY = 31;
+const STEP = 24;
+const Y0 = 236;
+
+let y = Y0;
+const slabs = layers.map((l, i) => {
+  const top = y - l.t;
+  y = top;
+  return { ...l, top, xl: X0 + i * STEP, xr: X0 + W, i };
 });
+
+/* Crop to the drawing. Left uncropped, more than half the box was empty sky
+   above the roof and the whole thing rendered small in its column. */
+const HEADROOM = 16; // raised seams and barrel tile sit above their slab's top
+const TOP_Y = Math.min(...slabs.map((s) => s.top)) - DY - HEADROOM;
+const VB_W = X0 + W + DX + 16;
+const VB_H = Y0 + 20 - TOP_Y;
+const uid = `rsd-${system}`;
 ---
 
 <figure class:list={["not-prose", className]}>
   <svg
-    viewBox={`0 0 ${W} ${H}`}
+    viewBox={`0 ${TOP_Y} ${VB_W} ${VB_H}`}
     class="block h-auto w-full"
     role="img"
-    aria-label={`Cross-section of a ${system === "flat" ? "low-slope" : system} roof system, from the deck upward: ${layers.map((l) => l.label).join(", ")}.`}
+    aria-label={`Cutaway of a ${system === "flat" ? "low-slope" : system} roof system, from the deck upward: ${layers.map((l) => l.label).join(", ")}.`}
   >
+    <defs>
+      <linearGradient id={`${uid}-barrel`} x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#8d4228"></stop>
+        <stop offset="0.35" stop-color="#d2764d"></stop>
+        <stop offset="0.7" stop-color="#b85a35"></stop>
+        <stop offset="1" stop-color="#7d3a23"></stop>
+      </linearGradient>
+      <linearGradient id={`${uid}-pan`} x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#8d98a4"></stop>
+        <stop offset="0.45" stop-color="#cdd6df"></stop>
+        <stop offset="1" stop-color="#939ea9"></stop>
+      </linearGradient>
+    </defs>
+
     {
-      placed.map((l) => (
-        <g>
-          <rect
-            x="8"
-            y={l.top}
-            width={W - 16}
-            height={l.h}
-            rx="2"
-            fill={l.key ? "var(--color-gold-100)" : l.fill}
-            stroke={l.key ? "var(--color-gold-600)" : "var(--color-navy-300)"}
-            stroke-width={l.key ? 2 : 1}
-          />
-          {l.profile === "tile" && (
-            /* Stroke-only so it reads as a profile on the top edge; a filled
-               path auto-closes back to the start and leaves a sliver. */
+      slabs.map((s) => {
+        const { xl, xr, top, t, tone } = s;
+        // Fit a whole number of tiles/ribs across the slab: a fixed pitch left
+        // a part-tile hanging off the right edge.
+        const span = xr - xl;
+        const n = Math.max(3, Math.round(span / 26));
+        const pitch = span / n;
+        return (
+          <g>
+            {/* top face */}
             <path
-              d={`M8 ${l.top} ${Array.from({ length: Math.ceil((W - 16) / 20) }, () => "q 10 -11 20 0").join(" ")}`}
-              fill="none"
-              stroke="var(--color-navy-400)"
-              stroke-width="1.5"
-              stroke-linecap="round"
+              d={`M${xl} ${top} L${xr} ${top} L${xr + DX} ${top - DY} L${xl + DX} ${top - DY} Z`}
+              fill={tone[0]}
             />
-          )}
-          {l.profile === "seam" &&
-            [60, 150, 240].map((x) => (
-              <rect
-                x={x}
-                y={l.top - 16}
-                width="7"
-                height="18"
-                rx="2"
-                fill="var(--color-navy-400)"
+            {/* front edge */}
+            <path
+              d={`M${xl} ${top} L${xr} ${top} L${xr} ${top + t} L${xl} ${top + t} Z`}
+              fill={tone[1]}
+            />
+            {/* side edge */}
+            <path
+              d={`M${xr} ${top} L${xr + DX} ${top - DY} L${xr + DX} ${top - DY + t} L${xr} ${top + t} Z`}
+              fill={tone[2]}
+            />
+
+            {/* plywood edge grain */}
+            {s.grain &&
+              [0.32, 0.62].map((f) => (
+                <line
+                  x1={xl}
+                  y1={top + t * f}
+                  x2={xr}
+                  y2={top + t * f}
+                  stroke="#a3875c"
+                  stroke-width="0.8"
+                  opacity="0.75"
+                />
+              ))}
+
+            {/* battens: gaps between slats, drawn on the exposed top face */}
+            {s.slats &&
+              Array.from({ length: n }, (_, k) => xl + pitch * 0.28 + k * pitch).map((x) => (
+                <path
+                  d={`M${x} ${top} L${x + pitch * 0.42} ${top} L${x + pitch * 0.42 + DX} ${top - DY} L${x + DX} ${top - DY} Z`}
+                  fill="#8a6f4b"
+                  opacity="0.5"
+                />
+              ))}
+
+            {/* barrel tile: tubes running up-slope, rounded at the eave */}
+            {s.surface === "tile" &&
+              Array.from({ length: n }, (_, k) => xl + k * pitch).map((x) => (
+                <g>
+                  <path
+                    d={`M${x} ${top} L${x + pitch - 2} ${top} L${x + pitch - 2 + DX} ${top - DY} L${x + DX} ${top - DY} Z`}
+                    fill={`url(#${uid}-barrel)`}
+                  />
+                  <path
+                    d={`M${x} ${top} q ${(pitch - 2) / 2} -11 ${pitch - 2} 0 L${x + pitch - 2} ${top + 7} q ${-(pitch - 2) / 2} 5 ${-(pitch - 2)} 0 Z`}
+                    fill={`url(#${uid}-barrel)`}
+                    stroke="#6f3420"
+                    stroke-width="0.7"
+                  />
+                </g>
+              ))}
+
+            {/* standing seam: flat pans separated by raised ribs */}
+            {s.surface === "seam" && (
+              <>
+                <path
+                  d={`M${xl} ${top} L${xr} ${top} L${xr + DX} ${top - DY} L${xl + DX} ${top - DY} Z`}
+                  fill={`url(#${uid}-pan)`}
+                />
+                {Array.from({ length: n }, (_, k) => xl + pitch * 0.5 + k * pitch).map((x) => (
+                  <g>
+                    <path
+                      d={`M${x} ${top} L${x + 5} ${top} L${x + 5 + DX} ${top - DY} L${x + DX} ${top - DY} Z`}
+                      fill="#eef2f6"
+                    />
+                    <path
+                      d={`M${x} ${top} L${x} ${top - 9} L${x + DX} ${top - DY - 9} L${x + DX} ${top - DY} Z`}
+                      fill="#aab4bf"
+                    />
+                    <path
+                      d={`M${x} ${top - 9} L${x + 5} ${top - 9} L${x + 5 + DX} ${top - DY - 9} L${x + DX} ${top - DY - 9} Z`}
+                      fill="#dde4ea"
+                    />
+                    <path
+                      d={`M${x + 5} ${top} L${x + 5} ${top - 9} L${x + 5 + DX} ${top - DY - 9} L${x + 5 + DX} ${top - DY} Z`}
+                      fill="#7f8b96"
+                    />
+                  </g>
+                ))}
+              </>
+            )}
+
+            {/* membrane: a hot-air welded seam across the sheet */}
+            {s.surface === "membrane" && (
+              <line
+                x1={xl + (xr - xl) * 0.42}
+                y1={top}
+                x2={xl + (xr - xl) * 0.42 + DX}
+                y2={top - DY}
+                stroke="#aeb6bf"
+                stroke-width="2"
               />
-            ))}
-        </g>
-      ))
+            )}
+          </g>
+        );
+      })
     }
   </svg>
 
   <ul class="mt-5 grid gap-2">
     {
-      placed
+      slabs
         .slice()
         .reverse()
         .map((l) => (
           <li class="flex items-center gap-2.5 text-[13px] leading-snug">
             <span
-              class="inline-block h-3 w-3 shrink-0 rounded-[2px] border"
-              style={`background:${l.key ? "var(--color-gold-100)" : l.fill};border-color:${l.key ? "var(--color-gold-600)" : "var(--color-navy-300)"};`}
+              class="inline-block h-3.5 w-3.5 shrink-0 rounded-[2px]"
+              style={`background:${l.tone[0]};box-shadow:inset 0 0 0 1px rgba(0,0,0,.18)${l.key ? ",0 0 0 2px var(--color-gold-600)" : ""};`}
               aria-hidden="true"
             />
             <span

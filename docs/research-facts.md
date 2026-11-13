@@ -2219,6 +2219,17 @@ colour and coating), any national average metal roof price, and any IRC code
 section for low-slope minimums. Most search results on these topics were
 contractor marketing pages, which do not clear this project's sourcing bar.
 
+**Diagram style (2026-11-13, owner feedback):** the first version was flat
+stacked rectangles and read as a bar chart. Redrawn as a staggered isometric
+cutaway — each layer a slab with a lit top face, mid-tone front edge and shaded
+side — with real surface geometry: barrel tile as tubes running up-slope with a
+rounded eave cap, standing seam as flat pans separated by raised ribs. Materials
+are drawn in their real colours (terracotta, plywood, charcoal felt) rather than
+the brand palette, because the point is that they look like what they are; the
+legend and caption stay on brand. The flat system's insulation is labelled
+"rigid insulation board", not "tapered", because the drawing shows a uniform
+slab — the taper is explained in the body copy instead.
+
 **No heroPhoto on any of the three.** Every work photo Northvale has is an
 asphalt job; using one would imply work the photo does not show (Hard Rule #2).
 They use `RoofSystemDiagram.astro` instead — a labelled cross-section, which is
