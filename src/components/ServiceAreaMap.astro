@@ -1,0 +1,201 @@
+---
+/**
+ * Schematic map of the eight cities Northvale serves, with the current one
+ * highlighted.
+ *
+ * WHY THIS EXISTS: every city hub page carried 1,100–1,900 words and not one
+ * content visual (audit, 2026-11-13). A map is the one picture those pages
+ * genuinely want — it answers "do you actually cover me, and where am I in
+ * this?" faster than any list of town names can.
+ *
+ * HONESTY ABOUT THE GEOGRAPHY. City positions are PROJECTED FROM APPROXIMATE
+ * TOWN-CENTRE COORDINATES rather than eyeballed, so the relative layout is
+ * real: north is up, and the distances between pins are proportional. Those
+ * coordinates were sanity-checked against independently sourced distances —
+ * The Woodlands ~28 mi north of Houston, Conroe ~11 mi north of The Woodlands,
+ * Cypress ~24–27 mi NW of downtown, Cypress ~13 mi SW of Tomball, Kingwood
+ * north-east (Sheet 5) — and the projection reproduces all of them. It is
+ * still a SCHEMATIC, not a survey: the caption says so, and no coordinate is
+ * printed as a fact anywhere on the page.
+ *
+ * THE COUNTY LINE EARNS ITS PLACE. It is drawn approximate and labelled as
+ * such, but it is the single most practically useful thing on the map: which
+ * county you are in decides whether a re-roof needs a permit at all. The line
+ * sits where it correctly separates all eight cities by their real county —
+ * Conroe, The Woodlands and Magnolia in Montgomery; Houston, Spring, Tomball,
+ * Cypress and Kingwood in Harris — and the note flags that Spring straddles
+ * it, which it genuinely does.
+ *
+ * Every pin is a link, so this is also eight internal links from each hub.
+ */
+import { SERVICE_AREAS, SERVICE_AREA_SLUGS, type ServiceAreaSlug } from "~/lib/service-areas";
+import { evaluateArea } from "~/lib/quality-gate";
+
+interface Props {
+  /** Highlighted city. Omit on the homepage to show all eight evenly. */
+  activeCity?: ServiceAreaSlug;
+  /** Optional heading above the map. */
+  heading?: string;
+  class?: string;
+}
+const { activeCity, heading, class: className } = Astro.props;
+
+/** Approximate town-centre coordinates — layout only, never printed as fact. */
+const COORDS: Record<ServiceAreaSlug, { lat: number; lon: number }> = {
+  conroe: { lat: 30.31, lon: -95.46 },
+  magnolia: { lat: 30.21, lon: -95.75 },
+  "the-woodlands": { lat: 30.16, lon: -95.46 },
+  tomball: { lat: 30.1, lon: -95.62 },
+  spring: { lat: 30.08, lon: -95.42 },
+  kingwood: { lat: 30.05, lon: -95.18 },
+  cypress: { lat: 29.97, lon: -95.69 },
+  houston: { lat: 29.76, lon: -95.37 },
+};
+
+/** Which side of its pin a label sits on, to stop them colliding. */
+const LABEL_SIDE: Record<ServiceAreaSlug, "left" | "right"> = {
+  conroe: "right",
+  magnolia: "left",
+  "the-woodlands": "right",
+  // right, so it clears the "Harris County" caption on the left edge
+  tomball: "right",
+  spring: "right",
+  kingwood: "right",
+  cypress: "left",
+  houston: "right",
+};
+
+const W = 540;
+const H = 400;
+const LAT_TOP = 30.38;
+const LON_LEFT = -95.82;
+const K = 500; // px per degree of latitude
+const LON_K = K * Math.cos((30.1 * Math.PI) / 180); // keep east–west true at this latitude
+const OX = 112;
+const OY = 42;
+
+const px = (lon: number) => OX + (lon - LON_LEFT) * LON_K;
+const py = (lat: number) => OY + (LAT_TOP - lat) * K;
+
+const COUNTY_LAT = 30.125; // approximate; separates all eight correctly
+const countyY = py(COUNTY_LAT);
+
+/** I-45 runs north out of Houston through Spring and The Woodlands to Conroe. */
+const I45 = (["houston", "spring", "the-woodlands", "conroe"] as ServiceAreaSlug[]).map((s) => ({
+  x: px(COORDS[s].lon),
+  y: py(COORDS[s].lat),
+}));
+
+const cities = SERVICE_AREA_SLUGS.filter((s) => evaluateArea(SERVICE_AREAS[s]).indexable).map(
+  (slug) => ({
+    slug,
+    name: SERVICE_AREAS[slug].name,
+    county: SERVICE_AREAS[slug].county,
+    x: px(COORDS[slug].lon),
+    y: py(COORDS[slug].lat),
+    side: LABEL_SIDE[slug],
+    active: slug === activeCity,
+  }),
+);
+
+const activeName = activeCity ? SERVICE_AREAS[activeCity].name : null;
+const aria = activeName
+  ? `Schematic map of the Houston-area cities Northvale Roofing serves, with ${activeName} highlighted. North is up. Clockwise from the north: Conroe, The Woodlands, Kingwood, Houston, Cypress, Tomball, Magnolia, and Spring on the Interstate 45 corridor. An approximate county line separates Montgomery County to the north from Harris County to the south.`
+  : "Schematic map of the eight Houston-area cities Northvale Roofing serves: Conroe, Magnolia, The Woodlands, Tomball, Spring, Kingwood, Cypress and Houston. North is up, and an approximate county line separates Montgomery County to the north from Harris County to the south.";
+---
+
+<figure class:list={["not-prose", className]}>
+  {
+    heading && (
+      <h2 class="mt-0 mb-5 font-serif text-2xl text-[color:var(--color-navy-900,#1b2437)] md:text-3xl">
+        {heading}
+      </h2>
+    )
+  }
+
+  <div
+    class="overflow-hidden rounded-2xl border border-[color:var(--color-ink-200,#e4e6e9)] bg-[color:var(--color-sand-50,#faf8f5)] p-3 sm:p-5"
+  >
+    <svg viewBox={`0 0 ${W} ${H}`} class="block h-auto w-full" role="img" aria-label={aria}>
+      <defs>
+        <radialGradient id="sam-glow">
+          <stop offset="0%" stop-color="var(--color-gold-400, #d8b981)" stop-opacity="0.38"></stop>
+          <stop offset="100%" stop-color="var(--color-gold-400, #d8b981)" stop-opacity="0"></stop>
+        </radialGradient>
+      </defs>
+
+      {/* county band + line */}
+      <rect x="0" y="0" width={W} height={countyY} fill="#e9eef3" opacity="0.5"></rect>
+      <line
+        x1="18"
+        y1={countyY}
+        x2={W - 18}
+        y2={countyY}
+        stroke="#9aa5b1"
+        stroke-width="1.4"
+        stroke-dasharray="7 6"></line>
+      <text x="24" y={countyY - 10} font-size="11.5" font-weight="600" fill="#6b7682">
+        MONTGOMERY COUNTY
+      </text>
+      <text x="24" y={countyY + 20} font-size="11.5" font-weight="600" fill="#6b7682">
+        HARRIS COUNTY
+      </text>
+
+      {/* I-45 corridor */}
+      <polyline
+        points={I45.map((p) => `${p.x},${p.y}`).join(" ")}
+        fill="none"
+        stroke="#b9a98f"
+        stroke-width="3.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        opacity="0.75"></polyline>
+      {/* label the quiet stretch between Houston and Spring, never across a pin */}
+      <text
+        x={(I45[0].x + I45[1].x) / 2 - 12}
+        y={(I45[0].y + I45[1].y) / 2}
+        text-anchor="end"
+        font-size="11.5"
+        font-weight="700"
+        fill="#9c8a6c"
+      >
+        I-45
+      </text>
+
+      {/* cities */}
+      {
+        cities.map((c) => (
+          <a href={`/${c.slug}`} aria-label={`Roofing in ${c.name}`}>
+            {c.active && <circle cx={c.x} cy={c.y} r="34" fill="url(#sam-glow)" />}
+            <circle
+              cx={c.x}
+              cy={c.y}
+              r={c.active ? 9 : 5.5}
+              fill={c.active ? "var(--color-gold-600, #956E37)" : "#2c3950"}
+              stroke="#fff"
+              stroke-width={c.active ? 3 : 2}
+            />
+            <text
+              x={c.side === "right" ? c.x + 15 : c.x - 15}
+              y={c.y + 4.5}
+              text-anchor={c.side === "right" ? "start" : "end"}
+              font-size={c.active ? "15.5" : "13.5"}
+              font-weight={c.active ? "700" : "600"}
+              fill={c.active ? "var(--color-gold-600, #956E37)" : "#2c3950"}
+            >
+              {c.name}
+            </text>
+          </a>
+        ))
+      }
+    </svg>
+  </div>
+
+  <figcaption class="mt-3 text-[13px] leading-snug text-[color:var(--color-ink-500)]">
+    Schematic — north is up and the cities sit in their real positions relative to one another, but
+    this is not a survey map. The county line is approximate and shown because it decides the
+    paperwork: a re-roof in unincorporated Harris or Montgomery County generally needs no building
+    permit, while the cities of Houston, Conroe and Tomball do require one. Spring straddles the
+    line, so we confirm your address before assuming either.
+  </figcaption>
+</figure>

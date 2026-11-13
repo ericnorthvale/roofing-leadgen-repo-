@@ -1,0 +1,331 @@
+---
+/**
+ * Attic ventilation: the working case, and the way it actually fails.
+ *
+ * WHY THIS EXISTS: ventilation is the most misunderstood thing on a roof and
+ * it is inherently spatial — cool air in low at the soffits, hot air out high
+ * at the ridge, continuously. A paragraph has to describe a flow; a drawing
+ * just shows it.
+ *
+ * The second panel is the point of the component. Almost every failed attic we
+ * open has vents at both ends and no airflow, because insulation has been
+ * pushed out over the top plate and sealed the intake. From the ground the
+ * roof looks correctly vented. That is exactly the kind of thing a photograph
+ * cannot show and prose struggles to make vivid.
+ *
+ * FACTS (docs/research-facts.md): 1-in-300 net free ventilating area with the
+ * 1/150 base ratio, 40–50% exhaust high with the balance as soffit intake, and
+ * intake at least equal to exhaust — Asphalt Roofing Manufacturers Association
+ * (Sheet 1) and IRC R806 (Sheet 4). The 140°F-on-a-90°F-day figure is ARMA's
+ * (Sheet 3) and is quoted as theirs, not measured by us.
+ *
+ * Colour discipline: blue is air, gold is the thing each panel is about — the
+ * vent openings when they work, the blockage when they do not.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+
+const ROOF = "#6f6659";
+const ROOF_DARK = "#4e473d";
+const STRUCT = "#cfc7b8";
+const STRUCT_DARK = "#a79d8c";
+const INSUL = "#e6dcc6";
+const AIR = "#4f80a6";
+const GOLD = "var(--color-gold-600)";
+
+const W = 244;
+const H = 150;
+
+/* House section — a stroked polyline is the roof slab; walls hang off it. */
+const RIDGE_X = 122;
+const RIDGE_Y = 30;
+const EAVE_Y = 96;
+const ROOF_L = 14;
+const ROOF_R = 230;
+const WALL_L = 38;
+const WALL_R = 206;
+const CEIL_Y = 98;
+const FLOOR_Y = 124;
+
+const roofLine = `M${ROOF_L} ${EAVE_Y + 4} L${RIDGE_X} ${RIDGE_Y} L${ROOF_R} ${EAVE_Y + 4}`;
+
+const PANELS = [
+  {
+    title: "Working",
+    caption:
+      "Cool air enters low at the soffits, sweeps the underside of the deck and leaves hot through the ridge. It only works if the intake is at least equal to the exhaust.",
+  },
+  {
+    title: "Blocked intake — the common failure",
+    caption:
+      "Insulation pushed out over the top plate seals the soffits. Both vents still exist, the roof looks correctly vented from the ground, and nothing moves.",
+  },
+];
+
+const LEGEND = [
+  { c: AIR, label: "Airflow" },
+  { c: "var(--color-gold-400, #d8b981)", label: "Vent openings — intake and exhaust" },
+  { c: INSUL, label: "Attic insulation" },
+];
+---
+
+<figure class:list={["not-prose", className]}>
+  <ol class="grid list-none grid-cols-1 gap-x-6 gap-y-7 p-0 sm:grid-cols-2">
+    {
+      PANELS.map((p, i) => {
+        const blocked = i === 1;
+        return (
+          <li class="m-0 p-0">
+            <h4 class="m-0 flex items-baseline gap-2 text-[13px] leading-tight font-bold text-[color:var(--color-navy-900,#1b2437)]">
+              <span class="text-[color:var(--color-gold-600)]">{i + 1}</span>
+              {p.title}
+            </h4>
+
+            <svg
+              viewBox={`0 0 ${W} ${H}`}
+              class="mx-auto mt-2 block h-auto w-full max-w-[22rem] sm:max-w-none"
+              role="img"
+              aria-label={
+                blocked
+                  ? "Cross-section of the same attic with the soffit intakes buried under insulation. The ridge vent is still open but no air can enter at the eaves, so the air in the attic is trapped and heats up."
+                  : "Cross-section of a house attic. Cool air enters through soffit vents at both eaves, rises through the attic along the underside of the roof deck, and leaves through a vent at the ridge."
+              }
+            >
+              <defs>
+                <marker
+                  id={`vd-air-${i}`}
+                  markerUnits="userSpaceOnUse"
+                  markerWidth="8"
+                  markerHeight="8"
+                  refX="6.5"
+                  refY="4"
+                  orient="auto"
+                >
+                  <path d="M0 0.7 L8 4 L0 7.3 Z" fill={AIR} />
+                </marker>
+                <pattern
+                  id={`vd-insul-${i}`}
+                  width="7"
+                  height="7"
+                  patternUnits="userSpaceOnUse"
+                  patternTransform="rotate(35)"
+                >
+                  <rect width="7" height="7" fill={INSUL} />
+                  <line x1="0" y1="0" x2="0" y2="7" stroke="#cbbf9f" stroke-width="2" />
+                </pattern>
+              </defs>
+
+              {/* trapped heat, second panel only */}
+              {blocked && (
+                <path
+                  d={`M${WALL_L} ${CEIL_Y} L${RIDGE_X} ${RIDGE_Y + 10} L${WALL_R} ${CEIL_Y} Z`}
+                  fill="#c4703a"
+                  opacity="0.16"
+                />
+              )}
+
+              {/* walls + ceiling */}
+              <rect
+                x={WALL_L}
+                y={CEIL_Y}
+                width={WALL_R - WALL_L}
+                height={FLOOR_Y - CEIL_Y}
+                fill="#fff"
+              />
+              <line
+                x1={WALL_L}
+                y1={CEIL_Y}
+                x2={WALL_L}
+                y2={FLOOR_Y}
+                stroke={STRUCT_DARK}
+                stroke-width="2.5"
+              />
+              <line
+                x1={WALL_R}
+                y1={CEIL_Y}
+                x2={WALL_R}
+                y2={FLOOR_Y}
+                stroke={STRUCT_DARK}
+                stroke-width="2.5"
+              />
+              <rect x={WALL_L} y={CEIL_Y} width={WALL_R - WALL_L} height="4" fill={STRUCT} />
+
+              {/* insulation — in panel 2 it runs out over the top plate and plugs the soffits */}
+              <rect
+                x={blocked ? ROOF_L + 4 : WALL_L + 4}
+                y={CEIL_Y - 7}
+                width={blocked ? ROOF_R - ROOF_L - 8 : WALL_R - WALL_L - 8}
+                height="7"
+                fill={`url(#vd-insul-${i})`}
+              />
+
+              {/* roof slab */}
+              <path
+                d={roofLine}
+                fill="none"
+                stroke={ROOF}
+                stroke-width="9"
+                stroke-linejoin="round"
+                stroke-linecap="round"
+              />
+              <path
+                d={roofLine}
+                fill="none"
+                stroke={ROOF_DARK}
+                stroke-width="1"
+                stroke-linejoin="round"
+                stroke-linecap="round"
+                opacity="0.5"
+              />
+
+              {/* ridge vent */}
+              <rect
+                x={RIDGE_X - 15}
+                y={RIDGE_Y - 11}
+                width="30"
+                height="7"
+                rx="1.5"
+                fill={blocked ? "#c9b48c" : "var(--color-gold-400, #d8b981)"}
+                stroke={GOLD}
+                stroke-width="1.4"
+              />
+
+              {/* soffit vents */}
+              {[
+                { x: ROOF_L + 5, anchor: "l" },
+                { x: ROOF_R - 23, anchor: "r" },
+              ].map((s) => (
+                <rect
+                  x={s.x}
+                  y={EAVE_Y - 1}
+                  width="18"
+                  height="5"
+                  rx="1"
+                  fill={blocked ? "#c9b48c" : "var(--color-gold-400, #d8b981)"}
+                  stroke={GOLD}
+                  stroke-width="1.3"
+                />
+              ))}
+
+              {!blocked ? (
+                <g stroke={AIR} stroke-width="2.2" fill="none" stroke-linecap="round">
+                  {/* intake at both eaves */}
+                  <path
+                    d={`M${ROOF_L - 6} ${EAVE_Y + 14} q14 2 22 -10`}
+                    marker-end={`url(#vd-air-${i})`}
+                  />
+                  <path
+                    d={`M${ROOF_R + 6} ${EAVE_Y + 14} q-14 2 -22 -10`}
+                    marker-end={`url(#vd-air-${i})`}
+                  />
+                  {/* up the underside of the deck */}
+                  <path
+                    d={`M${WALL_L + 14} ${EAVE_Y - 12} L${RIDGE_X - 20} ${RIDGE_Y + 22}`}
+                    marker-end={`url(#vd-air-${i})`}
+                  />
+                  <path
+                    d={`M${WALL_R - 14} ${EAVE_Y - 12} L${RIDGE_X + 20} ${RIDGE_Y + 22}`}
+                    marker-end={`url(#vd-air-${i})`}
+                  />
+                  {/* out through the ridge */}
+                  <path
+                    d={`M${RIDGE_X} ${RIDGE_Y + 14} V${RIDGE_Y - 22}`}
+                    marker-end={`url(#vd-air-${i})`}
+                  />
+                </g>
+              ) : (
+                <g>
+                  {/* air arrives and stops */}
+                  <path
+                    d={`M${ROOF_L - 6} ${EAVE_Y + 14} q12 1 18 -7`}
+                    stroke={AIR}
+                    stroke-width="2.2"
+                    fill="none"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d={`M${ROOF_R + 6} ${EAVE_Y + 14} q-12 1 -18 -7`}
+                    stroke={AIR}
+                    stroke-width="2.2"
+                    fill="none"
+                    stroke-linecap="round"
+                  />
+                  {/* the blockage, marked */}
+                  {[ROOF_L + 14, ROOF_R - 14].map((cx) => (
+                    <g stroke={GOLD} stroke-width="2.4" stroke-linecap="round">
+                      <line x1={cx - 7} y1={EAVE_Y - 8} x2={cx + 7} y2={EAVE_Y + 6} />
+                      <line x1={cx + 7} y1={EAVE_Y - 8} x2={cx - 7} y2={EAVE_Y + 6} />
+                    </g>
+                  ))}
+                  <text
+                    x={RIDGE_X}
+                    y={RIDGE_Y + 42}
+                    text-anchor="middle"
+                    font-size="15"
+                    font-weight="700"
+                    fill="#a8532a"
+                  >
+                    140°F
+                  </text>
+                  <text
+                    x={RIDGE_X}
+                    y={RIDGE_Y + 55}
+                    text-anchor="middle"
+                    font-size="8.5"
+                    fill="#a8532a"
+                  >
+                    on a 90°F day (ARMA)
+                  </text>
+                </g>
+              )}
+
+              {/* Labels sit clear of the airflow: the ridge caption to the
+                  left of the exhaust arrow, the soffit caption below the wall
+                  line rather than across it. */}
+              <text
+                x={RIDGE_X - 20}
+                y={RIDGE_Y - 13}
+                text-anchor="end"
+                font-size="9"
+                fill="#5b616a"
+              >
+                ridge vent — exhaust
+              </text>
+              <text x={2} y={FLOOR_Y + 18} font-size="9" fill="#5b616a">
+                soffit — intake
+              </text>
+            </svg>
+
+            <p class="mt-2 mb-0 text-[13px] leading-snug text-[color:var(--color-ink-600,#4a4f57)]">
+              {p.caption}
+            </p>
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  <ul class="mt-6 flex list-none flex-wrap gap-x-6 gap-y-2 p-0">
+    {
+      LEGEND.map((l) => (
+        <li class="m-0 flex items-center gap-2 p-0 text-[13px] leading-snug text-[color:var(--color-ink-700)]">
+          <span
+            class="inline-block h-3 w-3 shrink-0 rounded-[2px]"
+            style={`background:${l.c};box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)`}
+            aria-hidden="true"
+          />
+          {l.label}
+        </li>
+      ))
+    }
+  </ul>
+
+  <figcaption class="mt-3 text-[13px] leading-snug text-[color:var(--color-ink-500)]">
+    The benchmark is one square foot of net free ventilating area per 300 square feet of attic floor
+    — roughly 40–50% of it high as exhaust and the balance low as soffit intake, with intake at
+    least equal to exhaust. Adding more exhaust without matching intake does not fix a blocked
+    attic; it just pulls air from wherever it can find it.
+  </figcaption>
+</figure>
