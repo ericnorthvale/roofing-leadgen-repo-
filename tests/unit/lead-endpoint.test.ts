@@ -39,6 +39,92 @@ const validLead = {
 beforeEach(() => _resetRateLimit());
 afterEach(() => vi.unstubAllGlobals());
 
+/**
+ * REGRESSION, 2026-11-16. The live form answered "cross-site submissions not
+ * allowed" and rejected every genuine lead.
+ *
+ * Cause: Astro's `security.checkOrigin` compares the Origin header against the
+ * origin of `request.url`, and on Vercel's serverless runtime `request.url` is
+ * the function's internal `https://localhost/…` address — never the visitor's
+ * host. So the check compared the real origin against localhost, which cannot
+ * match, and rejected everything while stopping nothing.
+ *
+ * The first test below reproduces exactly that shape: a request whose URL is
+ * localhost, carrying x-forwarded-host for the real site. It MUST be accepted.
+ */
+describe("POST /api/lead — origin check (CSRF)", () => {
+  /** A request as the Vercel runtime actually presents it. */
+  function vercelCtx(headers: Record<string, string>) {
+    const request = new Request("https://localhost/api/lead", {
+      method: "POST",
+      headers: { "content-type": "application/json", ...headers },
+      body: JSON.stringify(validLead),
+    });
+    const redirect = (url: string, status = 302) =>
+      new Response(null, { status, headers: { location: url } });
+    return { request, redirect, locals: {} } as unknown as Parameters<typeof POST>[0];
+  }
+
+  it("accepts a same-origin post even though request.url says localhost", async () => {
+    const res = await POST(
+      vercelCtx({
+        origin: "https://northvaleroofing.com",
+        "x-forwarded-host": "northvaleroofing.com",
+        "x-forwarded-proto": "https",
+        "x-forwarded-for": "2.2.2.2",
+      }),
+    );
+    expect(res.status).toBe(303);
+  });
+
+  it("accepts the www host too, checking against the host used", async () => {
+    const res = await POST(
+      vercelCtx({
+        origin: "https://www.northvaleroofing.com",
+        "x-forwarded-host": "www.northvaleroofing.com",
+        "x-forwarded-proto": "https",
+        "x-forwarded-for": "2.2.2.3",
+      }),
+    );
+    expect(res.status).toBe(303);
+  });
+
+  it("accepts a Vercel preview deployment", async () => {
+    const res = await POST(
+      vercelCtx({
+        origin: "https://roofing-leadgen-repo-xvp3-git-abc.vercel.app",
+        "x-forwarded-host": "roofing-leadgen-repo-xvp3-git-abc.vercel.app",
+        "x-forwarded-proto": "https",
+        "x-forwarded-for": "2.2.2.4",
+      }),
+    );
+    expect(res.status).toBe(303);
+  });
+
+  it("still rejects a genuinely cross-site post", async () => {
+    const res = await POST(
+      vercelCtx({
+        origin: "https://evil.example.com",
+        "x-forwarded-host": "northvaleroofing.com",
+        "x-forwarded-proto": "https",
+        "x-forwarded-for": "2.2.2.5",
+      }),
+    );
+    expect(res.status).toBe(403);
+  });
+
+  it("allows a missing Origin header (some browsers omit it same-origin)", async () => {
+    const res = await POST(
+      vercelCtx({
+        "x-forwarded-host": "northvaleroofing.com",
+        "x-forwarded-proto": "https",
+        "x-forwarded-for": "2.2.2.6",
+      }),
+    );
+    expect(res.status).toBe(303);
+  });
+});
+
 describe("POST /api/lead", () => {
   it("redirects to /thank-you (303) on a valid submission", async () => {
     const res = await POST(ctx(validLead, { "x-forwarded-for": "1.1.1.1" }));

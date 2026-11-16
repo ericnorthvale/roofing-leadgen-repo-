@@ -45,6 +45,22 @@ export interface NotifyResult {
   errors: string[];
 }
 
+/**
+ * Built-in alert defaults, so standing the email channel up needs ONE secret in
+ * the hosting environment instead of three settings (owner request,
+ * 2026-11-16). Neither of these is a secret: the owner's address is published
+ * on the site anyway, and resend.dev is Resend's shared sender, usable before
+ * any domain is verified.
+ *
+ * An environment value ALWAYS WINS over these. That matters: if alerts are
+ * already routed somewhere, deploying this must not silently steal them. The
+ * cost is that a stale LEAD_ALERT_EMAIL_TO pointing at the wrong inbox still
+ * takes precedence — which is why logAlertRouting() below prints where mail is
+ * actually going on every lead, rather than leaving it to be guessed at.
+ */
+export const DEFAULT_LEAD_ALERT_EMAIL_TO = "greg@northvaleroofing.com";
+export const DEFAULT_LEAD_ALERT_EMAIL_FROM = "leads@resend.dev";
+
 const has = (v?: string) => !!v && v.trim().length > 0;
 const fullName = (l: LeadAlert) => [l.firstName, l.lastName].filter(Boolean).join(" ").trim();
 const splitList = (v: string) =>
@@ -135,13 +151,13 @@ async function sendEmail(
   env: NotifyEnv,
   errors: string[],
 ): Promise<ChannelStatus> {
-  if (
-    !has(env.RESEND_API_KEY) ||
-    !has(env.LEAD_ALERT_EMAIL_TO) ||
-    !has(env.LEAD_ALERT_EMAIL_FROM)
-  ) {
-    return "skipped";
-  }
+  // The key is the only thing that genuinely cannot be defaulted — it is a
+  // secret, and a secret in the repository is a secret published.
+  if (!has(env.RESEND_API_KEY)) return "skipped";
+  const to = has(env.LEAD_ALERT_EMAIL_TO) ? env.LEAD_ALERT_EMAIL_TO! : DEFAULT_LEAD_ALERT_EMAIL_TO;
+  const from = has(env.LEAD_ALERT_EMAIL_FROM)
+    ? env.LEAD_ALERT_EMAIL_FROM!
+    : DEFAULT_LEAD_ALERT_EMAIL_FROM;
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -150,8 +166,8 @@ async function sendEmail(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: env.LEAD_ALERT_EMAIL_FROM,
-        to: splitList(env.LEAD_ALERT_EMAIL_TO!),
+        from,
+        to: splitList(to),
         subject: `New lead: ${fullName(lead)} — ${lead.service ?? "roofing"}`,
         html: buildEmailHtml(lead),
         reply_to: lead.email,
@@ -172,6 +188,29 @@ async function sendEmail(
  * Fire SMS + email alerts. Never throws. Returns per-channel status so the
  * caller can log it. Channels with missing keys are "skipped".
  */
+/**
+ * Say out loud where alerts are going, once per lead.
+ *
+ * Every channel here is env-gated and skips cleanly when unconfigured, which
+ * is right — a dead provider must never block a customer submitting a form.
+ * The side effect is that a completely unconfigured site accepts leads, shows
+ * the thank-you page and tells nobody, in total silence. That is the failure
+ * mode most likely to cost real money, and until now nothing in the logs
+ * distinguished it from a healthy deployment.
+ *
+ * Addresses are printed because they are the owner's own published contact
+ * details and the whole point is to make misrouting obvious. The API key is
+ * never printed, only whether one is present.
+ */
+export function describeAlertRouting(env: NotifyEnv): string {
+  const emailTo = has(env.LEAD_ALERT_EMAIL_TO)
+    ? `${env.LEAD_ALERT_EMAIL_TO} (from env)`
+    : `${DEFAULT_LEAD_ALERT_EMAIL_TO} (built-in default)`;
+  return has(env.RESEND_API_KEY)
+    ? `email → ${emailTo}`
+    : "email → NOT SENDING (no RESEND_API_KEY set)";
+}
+
 export async function notifyNewLead(lead: LeadAlert, env: NotifyEnv): Promise<NotifyResult> {
   const errors: string[] = [];
   const [sms, email] = await Promise.all([

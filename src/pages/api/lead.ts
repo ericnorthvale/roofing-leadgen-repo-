@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { pushLeadToHighLevel } from "~/lib/highlevel";
-import { notifyNewLead } from "~/lib/notify";
+import { notifyNewLead, describeAlertRouting } from "~/lib/notify";
 import { sendMetaLeadEvent } from "~/lib/meta-capi";
 import { rateLimit, clientKey } from "~/lib/rate-limit";
 import { canonicalLeadSource } from "~/lib/lead-source";
@@ -8,6 +8,7 @@ import { deserializeUtm } from "~/lib/utm";
 import { validateLead, isValidEventId } from "~/lib/lead-validation";
 import { CONSENT_TEXT_VERSION } from "~/lib/legal";
 import { persistLead } from "~/lib/lead-store";
+import { publicOrigin } from "~/lib/site-url";
 
 export const prerender = false;
 
@@ -45,6 +46,30 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   // Best-effort rate limit (lightweight; honeypot is the primary spam defense).
   if (!rateLimit(clientKey(h)).allowed) {
     return new Response("Too many requests", { status: 429 });
+  }
+
+  /**
+   * CSRF origin check — replaces Astro's `security.checkOrigin`, which cannot
+   * work on this runtime. See the note in astro.config.mjs: Astro compares the
+   * Origin header against `request.url`, and on Vercel that is the function's
+   * internal `https://localhost/…` address rather than the visitor's host, so
+   * it rejected every genuine submission (reported live, 2026-11-16).
+   *
+   * `publicOrigin()` rebuilds the real origin from `x-forwarded-host`, so the
+   * comparison is against the host the request actually arrived on — which
+   * also means apex, www and preview URLs each validate correctly instead of
+   * one of them being locked out.
+   *
+   * A missing Origin header is allowed through: some browsers omit it on
+   * same-origin form posts, and this endpoint carries no session or cookie
+   * auth, so the realistic abuse is spam rather than CSRF — already covered by
+   * the rate limit above and the honeypot below. Rejecting on absence would
+   * cost real leads to protect against nothing.
+   */
+  const origin = h.get("origin");
+  if (origin && origin !== publicOrigin(request)) {
+    console.warn(`[lead] rejected cross-site POST from origin: ${origin}`);
+    return new Response("Cross-site form submissions are not allowed.", { status: 403 });
   }
 
   const geo = {
@@ -188,6 +213,17 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
     console.error("[lead] HighLevel push failed:", hl.error);
   }
 
+  const notifyEnv = {
+    TWILIO_ACCOUNT_SID: import.meta.env.TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN: import.meta.env.TWILIO_AUTH_TOKEN,
+    TWILIO_FROM: import.meta.env.TWILIO_FROM,
+    LEAD_ALERT_SMS_TO: import.meta.env.LEAD_ALERT_SMS_TO,
+    RESEND_API_KEY: import.meta.env.RESEND_API_KEY,
+    LEAD_ALERT_EMAIL_TO: import.meta.env.LEAD_ALERT_EMAIL_TO,
+    LEAD_ALERT_EMAIL_FROM: import.meta.env.LEAD_ALERT_EMAIL_FROM,
+  };
+  const alertRouting = describeAlertRouting(notifyEnv);
+
   // Instant owner alert + safety net (SMS/email). Best-effort; never blocks the
   // redirect. Works even when HighLevel isn't configured, so no lead is ever lost.
   const notify = await notifyNewLead(
@@ -204,18 +240,55 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
       source: lead.source ?? "website",
       utmSource: utm.source ?? "direct",
     },
-    {
-      TWILIO_ACCOUNT_SID: import.meta.env.TWILIO_ACCOUNT_SID,
-      TWILIO_AUTH_TOKEN: import.meta.env.TWILIO_AUTH_TOKEN,
-      TWILIO_FROM: import.meta.env.TWILIO_FROM,
-      LEAD_ALERT_SMS_TO: import.meta.env.LEAD_ALERT_SMS_TO,
-      RESEND_API_KEY: import.meta.env.RESEND_API_KEY,
-      LEAD_ALERT_EMAIL_TO: import.meta.env.LEAD_ALERT_EMAIL_TO,
-      LEAD_ALERT_EMAIL_FROM: import.meta.env.LEAD_ALERT_EMAIL_FROM,
-    },
+    notifyEnv,
   );
   if (notify.errors.length > 0) {
     console.error("[lead] alert errors:", notify.errors.join("; "));
+  }
+
+  /**
+   * NEVER FAIL QUIETLY (2026-11-16).
+   *
+   * Storage, CRM, email and SMS are each env-gated and each skips in silence
+   * when unconfigured. Individually that is correct — no single broken
+   * provider should stop a customer submitting. Collectively it means a site
+   * with nothing configured accepts the lead, thanks the customer, and
+   * delivers it precisely nowhere, with the logs looking exactly like a
+   * healthy deployment.
+   *
+   * So: say where this lead went, every time. And if it reached NO
+   * destination at all, log the lead itself at error level — a server log is
+   * a poor CRM, but it is infinitely better than a lost customer, and it
+   * makes the problem impossible to miss in Vercel's dashboard.
+   */
+  const delivered = {
+    storage: stored.status === "saved",
+    crm: hl.ok,
+    email: notify.email === "sent",
+    sms: notify.sms === "sent",
+  };
+  const reached = Object.entries(delivered)
+    .filter(([, ok]) => ok)
+    .map(([k]) => k);
+
+  if (reached.length > 0) {
+    console.log(`[lead] delivered to: ${reached.join(", ")} | ${alertRouting}`);
+  } else {
+    console.error(
+      "[lead] ⚠ CRITICAL: this lead reached NO destination — no storage, no CRM, " +
+        "no email, no SMS. Nothing is configured, so the only record of it is " +
+        `this log line. ${alertRouting}`,
+      JSON.stringify({
+        receivedAt,
+        name: [lead.firstName, lead.lastName].filter(Boolean).join(" "),
+        phone: lead.phone,
+        email: lead.email,
+        address: [lead.address, lead.city, lead.zip].filter(Boolean).join(", "),
+        service: lead.service,
+        notes: lead.notes,
+        source: lead.source ?? "website",
+      }),
+    );
   }
 
   // Server-side Meta conversion (best-effort; env-gated). Gives Meta ad

@@ -23,17 +23,40 @@ Vercel. **Claude never touches secrets, billing, or DNS** — these are your ste
 
 ## 2. Email alerts (Resend) — free to start
 
+**You only need to set ONE value in Vercel.** As of 2026-11-16 the recipient
+and sender both have built-in defaults in `src/lib/notify.ts`
+(`greg@northvaleroofing.com` and Resend's shared `leads@resend.dev`), because
+neither is a secret. The API key is the only thing that genuinely cannot live
+in the repository.
+
 1. Sign up at https://resend.com (free tier covers plenty of lead emails).
-2. Easiest start: send from Resend's shared domain — set the "from" to
-   `leads@resend.dev`. (Better deliverability later: add `northvaleroofing.com`
-   under **Domains** and verify it — that step needs DNS, which is **your** action,
-   not Claude's.)
-3. **API Keys → Create API Key**, copy it (starts `re_...`).
-4. In **Vercel → Settings → Environment Variables**, add:
+2. **API Keys → Create API Key**, copy it (starts `re_...`).
+3. In **Vercel → Settings → Environment Variables**, add just:
    - `RESEND_API_KEY` = the key
-   - `LEAD_ALERT_EMAIL_TO` = your email(s), comma-separated (e.g. `eric@…,greg@…`)
-   - `LEAD_ALERT_EMAIL_FROM` = `leads@resend.dev` (or your verified domain sender)
-5. Redeploy.
+4. Redeploy. Emails now go to `greg@northvaleroofing.com`.
+
+Optional, only if you want to change the defaults:
+
+- `LEAD_ALERT_EMAIL_TO` = a different address, or several comma-separated
+  (e.g. `greg@…,eric@…`). **An env value always wins over the default**, so if
+  this is already set somewhere, that is where mail is going — check it before
+  assuming the default applies.
+- `LEAD_ALERT_EMAIL_FROM` = your own verified sender. Better deliverability,
+  but it needs `northvaleroofing.com` added under **Domains** in Resend and
+  verified with DNS records — **your** action, not Claude's.
+
+### Where is it actually sending?
+
+Every lead now logs its routing, so you never have to guess. In
+**Vercel → your project → Logs**, each submission prints one of:
+
+```
+[lead] delivered to: storage, email | email → greg@northvaleroofing.com (built-in default)
+[lead] ⚠ CRITICAL: this lead reached NO destination … email → NOT SENDING (no RESEND_API_KEY set)
+```
+
+The second line also prints the full lead, so even a completely unconfigured
+site leaves a recoverable record rather than losing the customer silently.
 
 ## 3. Never-lose-a-lead storage (Vercel Blob) — free tier, 2 minutes
 
