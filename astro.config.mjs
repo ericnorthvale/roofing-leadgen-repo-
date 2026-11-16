@@ -50,6 +50,32 @@ function keystaticWithHostFix() {
 export default defineConfig({
   site: SITE,
   output: "static",
+  /**
+   * CSRF: Astro's built-in origin check is replaced by an equivalent one in
+   * src/pages/api/lead.ts — it is NOT simply switched off.
+   *
+   * WHY (reported live, 2026-11-16: the contact form answered "cross-site
+   * submissions not allowed" and every submission was rejected). Astro's
+   * `security.checkOrigin` compares the browser's `Origin` header against the
+   * origin of `request.url`. On Vercel's serverless runtime `request.url` is
+   * the function's INTERNAL address — `https://localhost/…` — not the host the
+   * visitor is on. src/lib/site-url.ts already documents this quirk, because
+   * the Google OAuth redirect hit the same thing.
+   *
+   * So the comparison was Origin `https://northvaleroofing.com` against
+   * `https://localhost`, which can never match: the check rejected every real
+   * submission while stopping nothing. Leads were being lost at the door.
+   *
+   * The replacement compares `Origin` against `publicOrigin(request)`, which
+   * derives the true public host from `x-forwarded-host`. That restores the
+   * protection, correctly, and additionally tolerates the site being reached
+   * on more than one valid host (apex, www, Vercel preview URLs) — each
+   * request is checked against the host it actually arrived on.
+   *
+   * /api/lead is the ONLY endpoint that accepts form-encoded POSTs, which is
+   * all `checkOrigin` ever applied to; the JSON webhooks were never in scope.
+   */
+  security: { checkOrigin: false },
   // Permanent redirects for renamed content (preserve link equity + avoid 404s).
   redirects: {
     // Renamed when the site standardized on IKO (was a TAMKO-vs-GAF comparison).

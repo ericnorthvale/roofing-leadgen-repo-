@@ -8,6 +8,7 @@ import { deserializeUtm } from "~/lib/utm";
 import { validateLead, isValidEventId } from "~/lib/lead-validation";
 import { CONSENT_TEXT_VERSION } from "~/lib/legal";
 import { persistLead } from "~/lib/lead-store";
+import { publicOrigin } from "~/lib/site-url";
 
 export const prerender = false;
 
@@ -45,6 +46,30 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   // Best-effort rate limit (lightweight; honeypot is the primary spam defense).
   if (!rateLimit(clientKey(h)).allowed) {
     return new Response("Too many requests", { status: 429 });
+  }
+
+  /**
+   * CSRF origin check — replaces Astro's `security.checkOrigin`, which cannot
+   * work on this runtime. See the note in astro.config.mjs: Astro compares the
+   * Origin header against `request.url`, and on Vercel that is the function's
+   * internal `https://localhost/…` address rather than the visitor's host, so
+   * it rejected every genuine submission (reported live, 2026-11-16).
+   *
+   * `publicOrigin()` rebuilds the real origin from `x-forwarded-host`, so the
+   * comparison is against the host the request actually arrived on — which
+   * also means apex, www and preview URLs each validate correctly instead of
+   * one of them being locked out.
+   *
+   * A missing Origin header is allowed through: some browsers omit it on
+   * same-origin form posts, and this endpoint carries no session or cookie
+   * auth, so the realistic abuse is spam rather than CSRF — already covered by
+   * the rate limit above and the honeypot below. Rejecting on absence would
+   * cost real leads to protect against nothing.
+   */
+  const origin = h.get("origin");
+  if (origin && origin !== publicOrigin(request)) {
+    console.warn(`[lead] rejected cross-site POST from origin: ${origin}`);
+    return new Response("Cross-site form submissions are not allowed.", { status: 403 });
   }
 
   const geo = {
