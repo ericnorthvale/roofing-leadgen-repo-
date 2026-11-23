@@ -9,6 +9,7 @@ import { validateLead, isValidEventId } from "~/lib/lead-validation";
 import { CONSENT_TEXT_VERSION } from "~/lib/legal";
 import { persistLead } from "~/lib/lead-store";
 import { publicOrigin } from "~/lib/site-url";
+import { appendLeadToSheet, describeSheetRouting } from "~/lib/sheets";
 
 export const prerender = false;
 
@@ -224,6 +225,35 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
   };
   const alertRouting = describeAlertRouting(notifyEnv);
 
+  const sheetsEnv = { LEADS_SHEET_WEBHOOK_URL: import.meta.env.LEADS_SHEET_WEBHOOK_URL };
+
+  // The readable running log the owner actually works from. Same best-effort
+  // contract as everything else here: env-gated, never throws, and a failed
+  // row can never cost a lead. Deliberately NOT the safety net — that is the
+  // blob store above.
+  const sheet = await appendLeadToSheet(
+    {
+      receivedAt,
+      channel: "form",
+      firstName: lead.firstName,
+      lastName: lead.lastName,
+      phone: lead.phone,
+      email: lead.email,
+      address: lead.address,
+      city: lead.city,
+      zip: lead.zip,
+      service: lead.service,
+      notes: lead.notes,
+      source: lead.source ?? "website",
+      utmSource: utm.source ?? "direct",
+      landingPath: utm.landingPath,
+    },
+    sheetsEnv,
+  );
+  if (sheet.status === "error") {
+    console.error("[lead] sheet append failed:", sheet.error);
+  }
+
   // Instant owner alert + safety net (SMS/email). Best-effort; never blocks the
   // redirect. Works even when HighLevel isn't configured, so no lead is ever lost.
   const notify = await notifyNewLead(
@@ -266,18 +296,21 @@ export const POST: APIRoute = async ({ request, redirect, locals }) => {
     crm: hl.ok,
     email: notify.email === "sent",
     sms: notify.sms === "sent",
+    sheet: sheet.status === "sent",
   };
   const reached = Object.entries(delivered)
     .filter(([, ok]) => ok)
     .map(([k]) => k);
 
   if (reached.length > 0) {
-    console.log(`[lead] delivered to: ${reached.join(", ")} | ${alertRouting}`);
+    console.log(
+      `[lead] delivered to: ${reached.join(", ")} | ${alertRouting} | ${describeSheetRouting(sheetsEnv)}`,
+    );
   } else {
     console.error(
       "[lead] ⚠ CRITICAL: this lead reached NO destination — no storage, no CRM, " +
-        "no email, no SMS. Nothing is configured, so the only record of it is " +
-        `this log line. ${alertRouting}`,
+        "no email, no SMS, no sheet. Nothing is configured, so the only record of " +
+        `it is this log line. ${alertRouting} | ${describeSheetRouting(sheetsEnv)}`,
       JSON.stringify({
         receivedAt,
         name: [lead.firstName, lead.lastName].filter(Boolean).join(" "),
