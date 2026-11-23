@@ -48,18 +48,34 @@ export interface NotifyResult {
 /**
  * Built-in alert defaults, so standing the email channel up needs ONE secret in
  * the hosting environment instead of three settings (owner request,
- * 2026-11-16). Neither of these is a secret: the owner's address is published
- * on the site anyway, and resend.dev is Resend's shared sender, usable before
- * any domain is verified.
+ * 2026-11-16). Neither is a secret: the owner's address is published on the
+ * site anyway, and the sender below is Resend's public sandbox address.
+ *
+ * CORRECTED 2026-11-23. The sender was first written as "leads@resend.dev",
+ * which does not work. resend.dev is not a domain you may send arbitrary
+ * addresses from — `onboarding@resend.dev` is a specific sandbox sender, and
+ * anything else on that domain is rejected.
+ *
+ * TWO LIMITS COME WITH THE SANDBOX, both from Resend's own docs:
+ *   1. The from address must be exactly onboarding@resend.dev.
+ *   2. It will ONLY deliver to the email address the Resend account is
+ *      registered under. Mail to anyone else is refused.
+ *
+ * So the account must be registered as greg@northvaleroofing.com for the
+ * default pairing below to deliver. That is fine as a starting point — it gets
+ * alerts working with one key and no DNS — but it is explicitly a stepping
+ * stone. Verifying northvaleroofing.com in Resend (DNS records, the owner's
+ * action) lifts both limits and improves deliverability; set
+ * LEAD_ALERT_EMAIL_FROM to the verified sender at that point.
  *
  * An environment value ALWAYS WINS over these. That matters: if alerts are
  * already routed somewhere, deploying this must not silently steal them. The
  * cost is that a stale LEAD_ALERT_EMAIL_TO pointing at the wrong inbox still
- * takes precedence — which is why logAlertRouting() below prints where mail is
- * actually going on every lead, rather than leaving it to be guessed at.
+ * takes precedence — which is why describeAlertRouting() below prints where
+ * mail is actually going on every lead, rather than leaving it to be guessed.
  */
 export const DEFAULT_LEAD_ALERT_EMAIL_TO = "greg@northvaleroofing.com";
-export const DEFAULT_LEAD_ALERT_EMAIL_FROM = "leads@resend.dev";
+export const DEFAULT_LEAD_ALERT_EMAIL_FROM = "onboarding@resend.dev";
 
 const has = (v?: string) => !!v && v.trim().length > 0;
 const fullName = (l: LeadAlert) => [l.firstName, l.lastName].filter(Boolean).join(" ").trim();

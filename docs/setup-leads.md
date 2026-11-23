@@ -23,17 +23,38 @@ Vercel. **Claude never touches secrets, billing, or DNS** — these are your ste
 
 ## 2. Email alerts (Resend) — free to start
 
-**You only need to set ONE value in Vercel.** As of 2026-11-16 the recipient
-and sender both have built-in defaults in `src/lib/notify.ts`
-(`greg@northvaleroofing.com` and Resend's shared `leads@resend.dev`), because
-neither is a secret. The API key is the only thing that genuinely cannot live
-in the repository.
+**You only need to set ONE value in Vercel.** The recipient and sender both
+have built-in defaults in `src/lib/notify.ts` (`greg@northvaleroofing.com` and
+Resend's sandbox sender `onboarding@resend.dev`), because neither is a secret.
+The API key is the only thing that genuinely cannot live in the repository.
 
-1. Sign up at https://resend.com (free tier covers plenty of lead emails).
+> ⚠️ **Sign up to Resend with `greg@northvaleroofing.com`.** Resend's sandbox
+> sender only delivers to the address the account is registered under. Register
+> with a different address and the alerts will be rejected rather than
+> delivered — and the rejection is quiet. This limit disappears once a domain
+> is verified (below).
+
+1. Sign up at https://resend.com with `greg@northvaleroofing.com` (the free
+   tier covers plenty of lead emails).
 2. **API Keys → Create API Key**, copy it (starts `re_...`).
 3. In **Vercel → Settings → Environment Variables**, add just:
    - `RESEND_API_KEY` = the key
 4. Redeploy. Emails now go to `greg@northvaleroofing.com`.
+
+### Then get off the sandbox
+
+The sandbox is a stepping stone, not the finished setup. It can only reach one
+address, and `onboarding@resend.dev` is a shared sender, so mail is more likely
+to land in spam. Once alerts are working:
+
+1. In Resend, **Domains → Add Domain** → `northvaleroofing.com`.
+2. Add the DNS records it gives you at your domain registrar — **the owner's
+   action, not Claude's.**
+3. Once verified, set `LEAD_ALERT_EMAIL_FROM` in Vercel to a sender on that
+   domain, e.g. `leads@northvaleroofing.com`, and redeploy.
+
+That lifts the one-recipient limit (so `LEAD_ALERT_EMAIL_TO` can hold several
+addresses) and improves deliverability.
 
 Optional, only if you want to change the defaults:
 
