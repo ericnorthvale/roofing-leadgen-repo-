@@ -202,6 +202,14 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
+      // Google Apps Script Web App that appends each lead to the owner's
+      // spreadsheet. Secret in the sense that matters: anyone holding the URL
+      // can append rows. See docs/setup-leads.md.
+      LEADS_SHEET_WEBHOOK_URL: envField.string({
+        context: "server",
+        access: "secret",
+        optional: true,
+      }),
       // Admin panel access (in-app Google sign-in) — see docs/setup-admin-panel.md.
       ADMIN_ALLOWED_DOMAINS: envField.string({
         context: "server",
