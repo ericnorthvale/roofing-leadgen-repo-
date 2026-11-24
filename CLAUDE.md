@@ -91,6 +91,14 @@ certs, fake address/GBP. When in doubt, flag it for the owner — don't invent.
   image slots use `src/components/ImagePlaceholder.astro` — pass a real `src` to
   swap a slot's branded placeholder for a photo in one place (zero layout shift;
   the slot reserves its aspect ratio). `RoofImage` is the underlying `<img>`.
+- **Give every fixed-ratio slot its `ratio`** (`ratio="16/9"`, `"3/2"`, …) and a
+  real `sizes`. `ratio` serves a pre-cropped file instead of the whole photo —
+  identical on screen, since `object-cover` was already cropping to exactly that
+  box — and without it a portrait photo in a landscape card ships ~70% of its
+  bytes to be thrown away. Omit `ratio` on full-bleed slots and on any image
+  using a non-centre `object-position`; a centre crop would re-frame those.
+  `scripts/optimize-images.mjs` (`CROP_PLAN`) decides which ratios each photo
+  directory gets — add a ratio there before using a new one.
 - **Demo images:** `src/lib/demo-images.ts` (`USE_DEMO_IMAGES`) fills every slot
   with royalty-free STOCK for preview only. Set it to `false` (or delete
   `public/placeholders/`) and replace with real Northvale photos before the real

@@ -42,7 +42,7 @@ function Stage({ src, alt }: { src: string; alt: string }) {
           key={layer.key}
           src={layer.src}
           alt={i === layers.length - 1 ? layer.alt : ""}
-          {...imageAttrs(layer.src)}
+          {...imageAttrs(layer.src, "4/3")}
           sizes="(min-width: 1024px) 620px, 92vw"
           className="nv-stage-img absolute inset-0 h-full w-full object-cover"
           style={i === layers.length - 1 ? undefined : { animation: "none" }}

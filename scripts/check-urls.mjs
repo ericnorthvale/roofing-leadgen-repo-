@@ -68,6 +68,7 @@ const root = outDir();
 const pages = new Map(); // served path -> { canonical, noindex }
 const sitemapLocs = new Set();
 const links = new Map(); // href -> Set of pages linking to it
+const imageRefs = new Map(); // image path -> Set of pages referencing it
 
 for await (const file of walk(root)) {
   if (file.endsWith(".xml") && path.basename(file).startsWith("sitemap")) {
@@ -99,6 +100,24 @@ for await (const file of walk(root)) {
     if (DYNAMIC_PREFIXES.some((p) => clean.startsWith(p))) continue;
     if (!links.has(clean)) links.set(clean, new Set());
     links.get(clean).add(here);
+  }
+
+  // Every image the page can actually load: the src plus every srcset
+  // candidate. These are build-generated paths, and a missing one is a broken
+  // image that no link check would ever see — the browser does not fall back
+  // to `src` when a chosen srcset candidate 404s, it just renders nothing.
+  const noteImage = (p) => {
+    const clean = p.split("#")[0].split("?")[0];
+    if (!clean.startsWith("/") || !/\.(webp|jpe?g|png|svg|avif)$/i.test(clean)) return;
+    if (!imageRefs.has(clean)) imageRefs.set(clean, new Set());
+    imageRefs.get(clean).add(here);
+  };
+  for (const m of html.matchAll(/<img[^>]*?\ssrc="([^"]+)"/g)) noteImage(m[1]);
+  for (const m of html.matchAll(/\ssrcset="([^"]+)"/g)) {
+    for (const candidate of m[1].split(",")) {
+      const url = candidate.trim().split(/\s+/)[0];
+      if (url) noteImage(url);
+    }
   }
 }
 
@@ -158,6 +177,22 @@ for (const [href, from] of links) {
   }
 }
 
+// 5. Every image a page can load must actually exist in the build.
+//    The responsive pipeline writes these files (name-800.webp, and the
+//    aspect-cropped name-16x9-800.webp), so a plan that names a ratio the
+//    pipeline never generated would ship pages full of blank boxes. Nothing
+//    else in the build would notice.
+for (const [img, from] of imageRefs) {
+  if (existsSync(path.join(root, decodeURIComponent(img)))) continue;
+  failures.push(
+    `missing image: ${img} (referenced by ${[...from].slice(0, 3).join(", ")}) — ` +
+      `the file is not in the build.\n` +
+      `    Responsive variants come from scripts/optimize-images.mjs. If this is a\n` +
+      `    cropped variant (name-16x9-800.webp), CROP_PLAN there does not cover the\n` +
+      `    ratio this slot asks for.`,
+  );
+}
+
 if (failures.length) {
   console.error(`\nURL consistency check FAILED — ${failures.length} problem(s):\n`);
   for (const f of failures) console.error(`  ✗ ${f}\n`);
@@ -169,5 +204,6 @@ if (failures.length) {
 }
 
 console.log(
-  `urls: ${pages.size} pages · ${sitemapLocs.size} sitemap entries · ${links.size} internal link targets · all consistent`,
+  `urls: ${pages.size} pages · ${sitemapLocs.size} sitemap entries · ${links.size} internal link targets · ` +
+    `${imageRefs.size} image files · all consistent`,
 );

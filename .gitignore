@@ -16,8 +16,17 @@ node_modules/
 # build (pnpm run images). Generated from the committed originals, so they are
 # build output, not source — keeping ~9MB of them in git would bloat every clone.
 public/**/*-400.webp
+public/**/*-600.webp
 public/**/*-800.webp
+public/**/*-1000.webp
 public/**/*-1200.webp
+# Aspect-cropped ladders (foo-16x9-800.webp). Same deal: build output.
+public/**/*-16x9-*.webp
+public/**/*-16x10-*.webp
+public/**/*-3x2-*.webp
+public/**/*-4x3-*.webp
+public/**/*-1x1-*.webp
+public/**/*-4x5-*.webp
 
 # test + coverage
 coverage/
