@@ -1337,6 +1337,234 @@ export const CITY_SERVICES: Record<string, CityService> = {
     ],
     dataCompleteness: "complete",
   },
+
+  /**
+   * CLAIM PAGES — one QUESTION each, never one city each.
+   *
+   * Claim-in-city pages are the same-service/different-city pattern Sheet 16
+   * identified as the one that degrades with scale. The mitigation is that no
+   * two of them answer the same question. Before these were written, every
+   * topic below was checked for existing coverage sitewide and returned zero
+   * hits; the angles already in use elsewhere (deductible law §27.02, the
+   * public-adjuster line §4102.163, prompt-pay deadlines Ch. 542, appraisal)
+   * are deliberately NOT the hook of any of them.
+   *
+   *   the-woodlands → how the money actually arrives
+   *   conroe        → when they say it is just worn out
+   *   kingwood      → when a tree does it
+   *   tomball       → when the building code forces extra work
+   *   magnolia      → when there is more than one building
+   *
+   * Facts: docs/research-facts.md Sheet 17 (TDI, fetched 2026-11-24).
+   */
+  "kingwood/insurance-claims": {
+    citySlug: "kingwood",
+    serviceTag: "insurance",
+    slug: "insurance-claims",
+    seoTitle: "Tree on Your Roof in Kingwood? What Insurance Pays",
+    seoDescription:
+      "A tree through the roof in Kingwood: what falling-object coverage pays, who covers removal, and why your neighbour's policy probably will not pay.",
+    title: "A tree came through the roof in Kingwood",
+    summary:
+      "The Livable Forest sends a particular kind of claim: not hail across a whole subdivision, but one oak through one roof. The coverage rules for that are different, and the part about your neighbour's tree is the part almost everyone gets wrong.",
+    glance: [
+      { value: "Photos first", label: "TDI says photograph the damage before the tree is moved" },
+      { value: "Your policy", label: "even when it was the neighbour's tree that fell" },
+      { value: "Removal varies", label: "paid when the tree hit the house or blocked the drive" },
+    ],
+    sections: [
+      {
+        heading: "What a falling tree is, in insurance terms",
+        html: 'A storm claim and a tree claim are not the same animal. Hail is a surface event across every slope at once; a tree is a <strong>falling object</strong> — one impact, often through the deck, sometimes into the room below. The Texas Department of Insurance puts the general position plainly: "Many policies pay for damages from falling objects, like trees." TDI also lists "roof damage from a tree hitting your home during the storm" among the things a homeowners policy may cover. What it does <em>not</em> cover is the tree as an object in its own right — TDI\'s list of typical exclusions includes wind or hail damage to trees and shrubs. The distinction matters on a Kingwood lot where the same storm can take three trees and only one of them touches the house.',
+      },
+      {
+        heading: "Who pays to take the tree away",
+        html: "Removal is where the surprises are, because it is conditional rather than automatic. TDI's wording: many policies provide <em>some</em> coverage to remove trees or limbs that fell due to storm damage <strong>and</strong> damaged your house or blocked your driveway — and trees and limbs that simply fell in your yard usually are not covered at all. Read that as a test with two halves. The pine that came down across the back fence and hit nothing is probably yours to deal with. The one lying across the roof is a different conversation, and so is the one across the driveway. We tell you which half of that test your situation falls on before you start paying anyone to haul anything.",
+      },
+      {
+        heading: "The neighbour's tree — the answer people get wrong",
+        html: "Almost every Kingwood homeowner who rings us about a neighbour's tree expects the neighbour's insurance to pay for it. TDI is direct about this: \"Probably not, unless your neighbor was at fault. Your neighbor isn't responsible for acts of nature. If your neighbor's policy doesn't pay, you can file a claim under your own policy.\" That is worth absorbing before a conversation over the fence turns into a dispute with someone you have to live beside. A healthy tree that came down in a storm is nobody's fault, and the claim is yours to file. Where \"at fault\" can come into it is a tree already visibly dead or dangerous that the owner was told about and did nothing — which is a legal question, not a roofing one, and not something we will advise you on.",
+      },
+      {
+        heading: "Before anything gets moved",
+        body: "The sequence matters more here than on a hail claim, because the evidence is about to be dragged off your roof by someone with a chainsaw.",
+        ordered: true,
+        kind: "steps",
+        bullets: [
+          {
+            text: "Photograph everything before the tree moves. TDI's first instruction is to take photos of the damage before you move the tree, make repairs, or take other steps — once it is cut up and stacked at the kerb, the proof of what hit what is gone.",
+          },
+          {
+            text: "Make temporary repairs to stop further damage, and keep the receipts. TDI expects this and says to save them for reimbursement; a policy will generally not reward you for letting rain in while you wait.",
+          },
+          {
+            text: "Call it in, then let the documentation catch up. We photograph the impact point, the deck beneath it and the path of the limb before anyone starts cutting.",
+          },
+        ],
+      },
+      {
+        heading: "Why this lands on Kingwood more than most places",
+        html: 'Kingwood is called the Livable Forest for a reason, and the canopy is the reason this page exists. It is also a canopy under pressure: Trees for Kingwood, a local replanting nonprofit launched in 2022, has planted roughly 3,000 trees working to restore cover lost to storms, disease and drought, and a nonprofit leader has put the loss at more than 10,000 trees across five decades. Mature trees over mature roofs is the whole character of the place — it is why our <a href="/kingwood/roof-repair">Kingwood repair work</a> is mostly limb strikes and debris rather than hail, and why the claim that follows is usually a single-impact claim rather than a whole-roof one.',
+      },
+    ],
+    faqs: [
+      {
+        q: "A limb hit the roof but I cannot see damage from the ground. Is it worth calling?",
+        a: "Yes, and before you move the limb. Impact damage frequently shows as a cracked or punctured deck under intact-looking shingles, which is invisible from the driveway and very visible from the attic. We inspect free, photograph the impact point and the decking underneath, and tell you honestly whether there is a claim in it. If there is not, we say so.",
+      },
+      {
+        q: "My neighbour's tree fell on my house. Do I claim against them?",
+        a: "Usually not. TDI's position is that your neighbour probably is not liable, because they are not responsible for acts of nature, and that if their policy does not pay you can file under your own. The exception is fault — a tree the owner knew was dead or dangerous and left standing. That is a legal question and we are not the people to answer it; we document the damage, and you take advice on the rest.",
+      },
+      {
+        q: "Will you take the tree away as well?",
+        a: "Tree removal is a different trade and we do not pretend otherwise — we will tarp the opening the same day to stop water, and we work alongside the tree crew rather than in front of them. What we can tell you is whether your situation meets the test TDI describes for removal coverage, so you are not paying for something your policy would have handled.",
+      },
+      {
+        q: "The tree is still on the roof. What happens tonight?",
+        a: "Emergency tarping, before anything else. A tree left in place is usually safer than a tree pulled off badly, so we tarp around it where we have to and let the removal crew do the lifting. Then we photograph what is underneath, which is the part the claim turns on.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
+
+  "tomball/insurance-claims": {
+    citySlug: "tomball",
+    serviceTag: "insurance",
+    slug: "insurance-claims",
+    seoTitle: "Tomball Roof Claims: Who Pays for Code-Required Work",
+    seoDescription:
+      "Your Tomball re-roof has to meet code. Your policy may not pay for that — code-upgrade cost is usually an add-on endorsement, not standard coverage.",
+    title: "When the building code costs more than the claim pays",
+    summary:
+      "There is a gap between what your insurer approved and what the code requires, and most Tomball homeowners meet it for the first time on tear-off day. The coverage that closes it is an optional add-on — which means the honest time to check for it is now, not then.",
+    glance: [
+      { value: "An add-on", label: "TDI lists code-upgrade cost among optional endorsements" },
+      { value: "Permit first", label: "the City of Tomball takes applications through SmartGov" },
+      { value: "Deck-down", label: "a replacement means tear-off to the deck, not a recover" },
+    ],
+    sections: [
+      {
+        heading: "The gap nobody mentions until the tear-off",
+        html: "An insurance scope describes the damage. A building code describes the finished roof — and they are not the same document. A 2021 International Residential Code replacement is a tear-off to the deck rather than another layer over the old one (R908.3), with underlayment (R905.1.1), flashing (R903.2) and a drip edge along eaves and rakes that a 1990s roof very often never had (R905.2.8.5). None of that is a contractor upselling you. It is what the finished roof has to be, and it is why a scope written from photographs of hail bruising can come in under what the job actually costs. We confirm which code edition and local amendments the city is enforcing before we quote, rather than assuming.",
+      },
+      {
+        heading: "Your policy may not pay for it — and that is normal",
+        html: "Here is the part worth checking before you need it. The Texas Department of Insurance lists the extra cost of meeting local building codes under <strong>endorsements</strong> — the optional add-ons that increase or extend a policy — and not among the coverages every home policy includes. In TDI's own list of common endorsements: \"extra construction or repair costs to meet local building codes.\" Sitting beside it is a second one worth knowing about, for extra construction costs when a policy does not pay enough to rebuild. Neither is exotic and neither is automatic. If you have the endorsement, the gap between the scope and the code is largely somebody else's problem. If you do not, it is yours, and finding out on the morning of the tear-off is the worst possible time.",
+      },
+      {
+        heading: "How to find out in five minutes",
+        body: "This is a declarations-page question, not a roofing question, and you can settle it before anyone climbs anything.",
+        ordered: true,
+        kind: "steps",
+        bullets: [
+          {
+            text: "Find your declarations page — the summary pages at the front of your policy, not the booklet behind them.",
+          },
+          {
+            text: "Look for an endorsement mentioning ordinance, law, or building codes. The wording varies by carrier; the concept does not.",
+          },
+          {
+            text: "If you cannot find one, ring the number on the policy and ask directly whether you have coverage for the extra cost of meeting local building codes.",
+          },
+          {
+            text: "Ask what it would cost to add, and when it would take effect. It is generally cheaper to add before a loss than to discover its absence during one.",
+          },
+        ],
+      },
+      {
+        heading: "Tomball requires a permit before the work starts",
+        html: "This is not a formality you can take a view on. The City of Tomball requires permits for construction work, applications now go through the city's SmartGov portal, and inspections are requested the same way — Community Development sits at 501 James St. A permitted job is a job the city can look at, which is precisely why code-required items on a Tomball re-roof are not negotiable between you and your roofer. We pull the permit, and we confirm the current fee from the city's own fee schedule rather than quoting you a figure from an older application form. If a contractor offers to skip the permit to keep your number down, that is the moment to end the conversation — and <a href=\"/blog/what-should-a-roofing-estimate-include/\">the estimate checklist</a> covers the rest of what should be on the page.",
+      },
+    ],
+    faqs: [
+      {
+        q: "My insurer approved the shingles but not the decking. Can they do that?",
+        a: "They can scope what they consider damaged, and decking that is sound is not storm damage. The code question is separate: if the deck has to be replaced to build a compliant roof, that cost exists whether or not the storm caused it. That is exactly the gap a code-upgrade endorsement is designed to cover, which is why we tell you to check for one before the tear-off rather than after.",
+      },
+      {
+        q: "How do I know whether I have this coverage?",
+        a: "Your declarations page will list it as an endorsement, usually worded around ordinance, law or building codes. If it is not there, ring your insurer and ask the question directly. We cannot read your policy for you and we will not guess at what it says — but we will tell you exactly which items on your estimate are code-required rather than discretionary, which is the half of the conversation we can answer.",
+      },
+      {
+        q: "Can we just go over the existing shingles and avoid all this?",
+        a: "Not on a replacement. The residential code requires a roof replacement to come off to the deck, and recovering is specifically ruled out over water-soaked decking or where two layers already exist. There are roofs where a repair is genuinely the right call, and we will say so — but a recover to dodge a code requirement is not a repair, it is a problem deferred onto the next owner.",
+      },
+      {
+        q: "Does Northvale pull the Tomball permit, or do I?",
+        a: "We do. Applications go through the City of Tomball's SmartGov portal and the permit is part of the job, not an extra you chase separately. We confirm the current fee against the city's published schedule when we quote, so the number on your estimate is the number the city is charging now.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
+
+  "magnolia/insurance-claims": {
+    citySlug: "magnolia",
+    serviceTag: "insurance",
+    slug: "insurance-claims",
+    seoTitle: "Magnolia Roof Claims: The Barn, Shop & Detached Garage",
+    seoDescription:
+      "On a Magnolia acreage claim the house is one coverage and the barn is another. What other-structures coverage pays, and why fences settle differently.",
+    title: "The house is one coverage. The barn is another.",
+    summary:
+      "A Magnolia acreage property is rarely one roof. It is a house, a shop, a barn, a detached garage and a run of fence — and your policy treats them as two different pots of money with different rules. Claims out here get underpaid when nobody adds up the second pot.",
+    glance: [
+      { value: "Two pots", label: "dwelling coverage and other-structures coverage are separate" },
+      { value: "Barns count", label: "TDI lists barns among other structures a policy covers" },
+      { value: "Fences differ", label: "usually settled at actual cash value, not replacement" },
+    ],
+    sections: [
+      {
+        heading: "Two kinds of coverage, two different conversations",
+        html: 'Most homeowners think of their policy as covering "the house". A Texas home policy actually splits the buildings in two. Dwelling coverage pays for the house itself. <strong>Other structures coverage</strong>, in the Texas Department of Insurance\'s words, "pays to repair structures on your property that aren\'t attached to your house" — and TDI\'s own examples are worth reading on an acreage lot: detached garage, storage shed, pool or guest house, outdoor kitchen, "barns or chicken coop". Most policies define other structures simply as the ones not attached to the house. On a half-acre in a subdivision that distinction is academic. On five acres off FM 1488 it is most of the claim.',
+      },
+      {
+        heading: "Why acreage claims get settled short",
+        html: "The same storm hits every roof on the property, but the adjuster is scoping an address, and what gets scoped is usually what is visible from the driveway. The shop behind the treeline, the barn at the back of the paddock and the detached garage are separate buildings with separate roofs, and they do not scope themselves. Northern Montgomery County is full of acreage subdivisions where exactly this happens — properties on one to five acres, buildings spread across them, some of them a long way from where an adjuster parks. We walk and photograph every roof on the property, not just the one over the kitchen, and the documentation is per building so each one can be scoped on its own evidence.",
+      },
+      {
+        heading: "Fences are the exception worth knowing about",
+        html: 'Fencing is the one that catches people, because it is covered and still does not pay what they expect. TDI: if your fence was damaged by wind and you have wind coverage, your policy "will probably pay for the damage" — but "policies usually pay actual cash value for fences", which means depreciation comes off based on age and condition before anything reaches you. A twenty-year-old pipe fence along a pasture boundary is not going to settle at the cost of a new one. That is not your insurer being difficult; it is how the coverage is written, and knowing it in advance is the difference between a disappointment and a plan.',
+      },
+      {
+        heading: "What we do differently out here",
+        body: "None of this is exotic work. It is just work that has to be done building by building rather than address by address.",
+        bullets: [
+          {
+            lead: "Every roof, photographed separately",
+            text: "house, shop, barn, detached garage, run-in — each documented as its own structure with its own measurements, so nothing depends on an adjuster remembering what was behind the trees.",
+          },
+          {
+            lead: "Access planned before the day",
+            text: "a long private drive and soft ground decide what equipment can reach which building, and that is a scheduling question we would rather answer before we arrive than in front of you.",
+          },
+          {
+            lead: "The honest conversation about outbuildings",
+            text: "not every barn is worth a claim. Where the damage sits under the deductible or the building is near the end of its life anyway, we will tell you, and you can decide what to file.",
+          },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        q: "The adjuster only looked at the house. What about the shop and the barn?",
+        a: "Ask for them to be scoped, and give your insurer the documentation to do it from. Other structures are a separate coverage in your policy — TDI's examples specifically include barns and detached garages — but they have to be claimed. We photograph and measure every roof on the property, each as its own structure, which is what makes a supplement straightforward rather than an argument.",
+      },
+      {
+        q: "Is my fence covered?",
+        a: "Usually yes if the damage was wind and you carry wind coverage, but TDI notes policies usually pay actual cash value on fences — depreciation is deducted for age and condition, so the cheque will be below the cost of new fencing. Worth knowing before you budget around it. Fencing is not work we do; we flag it so it does not get forgotten in the claim.",
+      },
+      {
+        q: "Does a metal barn roof get treated the same as the house?",
+        a: "Same coverage category, different damage conversation. Hail marks a metal panel differently from an asphalt shingle, and cosmetic denting on a barn is a frequent point of disagreement with carriers. We document it as what it is and we do not inflate it — if the panels are dented but sound, saying so is the honest answer even when it is not the one that sells a job.",
+      },
+      {
+        q: "Is it worth claiming for a single outbuilding?",
+        a: "Often not, and we will say so. Between your deductible and the age of many outbuildings, a small barn roof can cost you more in claim history than it returns in settlement. That calculation is yours to make — our part is giving you real numbers for it rather than encouraging a claim because it would mean work for us.",
+      },
+    ],
+    dataCompleteness: "complete",
+  },
 };
 
 export const CITY_SERVICE_KEYS = Object.keys(CITY_SERVICES);
