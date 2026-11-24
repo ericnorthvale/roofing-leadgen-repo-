@@ -18,7 +18,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "lhci": "lhci autorun"
+    "lhci": "lhci autorun",
+    "check:images": "node scripts/check-image-sizing.mjs"
   },
   "engines": {
     "node": ">=20.18.0",
