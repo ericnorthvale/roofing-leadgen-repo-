@@ -82,7 +82,13 @@
   --color-gold-300: #d9bd97;
   --color-gold-400: #c9a26c;
   --color-gold-500: #ac7e3f;
-  --color-gold-600: #956e37;
+  /* Darkened from #956e37 (2026-11-24). The brand guidelines name Gold Deep
+     as the one gold allowed for text on light backgrounds, and that intent is
+     right — but the value did not achieve it: #956e37 measures 3.94 against
+     the cream surface and 4.60 on white, so small gold text failed WCAG AA
+     wherever cream is used. #85612d keeps the same deep-gold character and
+     measures 4.81 on cream, 5.07 on ivory, 5.61 on white. */
+  --color-gold-600: #85612d;
   --color-gold-700: #654a25;
   --color-gold-800: #47341a;
   --color-gold-900: #2d2110;
@@ -94,7 +100,16 @@
   --color-ink-200: #d6d8db;
   --color-ink-300: #b3b6bc;
   --color-ink-400: #8d919a;
-  --color-ink-500: #6e727c;
+  /* Darkened from #6e727c (2026-11-24). This is the site's muted secondary
+     text — breadcrumbs, captions, bylines, the line under the thank-you
+     heading — and at #6e727c it scored 4.425 against the sand background,
+     just under the 4.5 WCAG AA needs. That single token was why Lighthouse's
+     colour-contrast audit failed on EVERY page it checked.
+     #666a74 clears it against the DARKEST light surface in use, cream
+     (#f2ede3): 4.64 there, 4.98 on ivory, 5.41 on white. Measured, not
+     guessed — the first attempt at #6a6e78 passed on ivory and still failed
+     on cream at 4.37. */
+  --color-ink-500: #666a74;
   --color-ink-700: #414349;
   --color-ink-800: #2e2f33;
   --color-ink-900: #1d1e20;

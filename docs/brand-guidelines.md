@@ -124,11 +124,18 @@ Northvale Gold fails WCAG on light backgrounds (**2.37:1 on white — fail even
 for large text**). Two derived golds fix this; both keep the brand hue
 (34.8°) and saturation (46%):
 
-| Name          | Hex       | On white      | Permitted use                                      |
-| ------------- | --------- | ------------- | -------------------------------------------------- |
-| **Gold**      | `#C9A26C` | 2.37:1 ✗      | Dark backgrounds only; never as text/icon on light |
-| **Gold Mid**  | `#BB8A46` | 3.07:1 (AA-L) | Large display text (≥ 24px / 19px bold) on light   |
-| **Gold Deep** | `#956E37` | 4.60:1 (AA)   | Body-size text, links, icons on white/light        |
+> **Measure against CREAM (`#F2EDE3`), not white.** This table used to record
+> ratios on white only, and that is exactly how a failure shipped: Gold Deep
+> at `#956E37` scored a comfortable 4.60 on white and only **3.94** on the
+> cream surface, so small gold text failed WCAG AA on every page using cream.
+> Cream is the darkest light surface in the system, so it is the one that
+> decides. Checked and corrected 2026-11-24.
+
+| Name          | Hex       | On white / cream     | Permitted use                                      |
+| ------------- | --------- | -------------------- | -------------------------------------------------- |
+| **Gold**      | `#C9A26C` | 2.37:1 ✗             | Dark backgrounds only; never as text/icon on light |
+| **Gold Mid**  | `#BB8A46` | 3.07:1 (AA-L)        | Large display text (≥ 24px / 19px bold) on light   |
+| **Gold Deep** | `#85612D` | 5.61 / **4.81** (AA) | Body-size text, links, icons on white/light        |
 
 ### 3.4 Approved pairings (measured)
 
@@ -165,7 +172,7 @@ Tailwind `@theme` tokens when the site migrates.
 | 300  | `#9CADD3` | `#D9BD97` | `#B3B6BC` |
 | 400  | `#6480C4` | `#C9A26C` | `#8D919A` |
 | 500  | `#4160AA` | `#AC7E3F` | `#6E727C` |
-| 600  | `#29478E` | `#956E37` | `#565A61` |
+| 600  | `#29478E` | `#85612D` | `#565A61` |
 | 700  | `#1F356B` | `#654A25` | `#414349` |
 | 800  | `#16264B` | `#47341A` | `#2E2F33` |
 | 900  | `#0E182F` | `#2D2110` | `#1D1E20` |
@@ -264,8 +271,8 @@ stacks so the identity degrades gracefully if the brand fonts fail to load.
 ### 7.1 Web UI
 
 - **Primary button:** Gold `#C9A26C` fill, **navy** text (8.12:1), pill
-  radius, min-height 48px. Hover: Gold Deep fill `#956E37` with white text
-  (4.60:1).
+  radius, min-height 48px. Hover: Gold Deep fill `#85612D` with white text
+  (5.61:1).
 - **Ghost button (light):** navy text, navy-200 border, navy-50 hover.
 - **Ghost button (on navy):** white text, white 40% border, white 10% hover.
 - **Links (light bg):** navy-700 default, Gold Deep hover.

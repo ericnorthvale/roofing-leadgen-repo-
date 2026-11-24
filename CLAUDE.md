@@ -22,7 +22,7 @@ plus SSR for `/api/*` and the `/keystatic` admin). pnpm + Node 20.
   `business-info.json` → `brand.ts`; edit them there only.
 - Visual identity (colors/type/logo rules): `docs/brand-guidelines.md` — live
   on the site since 2026-07. Key rules: brand gold `#C9A26C` fails WCAG on
-  light backgrounds — use Gold Deep `#956E37` (`gold-600`) for gold text/icons
+  light backgrounds — use Gold Deep `#85612D` (`gold-600`) for gold text/icons
   on light; never set Cormorant Garamond below 28px rendered.
 - Voice: confident, premium, neighborly-expert. See `docs/brand-voice.md`.
   Positioning is "bold & premium" — sound established — but **only with true,
