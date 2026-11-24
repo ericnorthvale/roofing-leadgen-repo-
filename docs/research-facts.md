@@ -2668,3 +2668,123 @@ roof-replacement pages. Enforced from now on by `scripts/check-uniqueness.mjs`.
   because acreage homes are frequently outside architectural-committee control.
   Material facts reuse Sheet 1/1B; no lifespan or cost figure is asserted on
   the page beyond what is already sourced sitewide.
+
+## Sheet 17 — TDI coverage facts for the city claim pages (2026-11-24)
+
+Three new city claim pages needed insurance facts the site had never sourced —
+which is precisely why those topics were still unoccupied. Fetched from TDI
+directly (the container's network had to be opened to tdi.texas.gov first).
+Every quote below is verbatim from the page named.
+
+**The differentiation strategy, continuing Sheet 16.** Claim pages are the
+SAME-SERVICE, different-city pattern Sheet 16 identified as the one that
+degrades with scale. The mitigation is that each claim page owns a DIFFERENT
+QUESTION, not a different city:
+
+| Page                              | The question it owns                                |
+| --------------------------------- | --------------------------------------------------- |
+| `/the-woodlands/insurance-claims` | How the money actually arrives (ACV/RCV, deadlines) |
+| `/conroe/insurance-claims`        | When they say it is just worn out (appraisal)       |
+| `/kingwood/insurance-claims`      | When a tree does it                                 |
+| `/tomball/insurance-claims`       | When the building code forces extra work            |
+| `/magnolia/insurance-claims`      | When there is more than one building                |
+
+Before building, each topic was checked for existing coverage sitewide:
+ordinance/code-upgrade, falling-object/tree, and other-structures all returned
+ZERO hits. Deductible law (§27.02), the public-adjuster line (§4102.163),
+prompt-pay deadlines (Ch. 542) and appraisal are already used elsewhere and are
+therefore deliberately NOT the hook of any new page.
+
+### TDI — Home insurance guide
+
+SOURCE: https://www.tdi.texas.gov/pubs/consumer/cb025.html
+
+- The six standard coverages, incl.: "Other structures coverage pays to repair
+  structures on your property that aren't attached to your house. This includes
+  detached garages, storage sheds, and fences."
+- **Code-upgrade cost is an ENDORSEMENT, not standard.** Listed under
+  "endorsements, or policy add-ons, that let you increase or add coverage":
+  "Extra construction or repair costs to meet local building codes." Also in
+  that list: "Extra construction costs if your policy doesn't pay enough to
+  rebuild your home."
+- The typical exclusions list includes "Wind or hail to trees and shrubs" —
+  i.e. the TREE itself is not the covered item.
+
+### TDI — Home insurance: What structures are covered?
+
+SOURCE: https://www.tdi.texas.gov/tips/home-insurance-structures-covered.html
+
+- "Most policies define 'other structures' as structures not attached to your
+  house. Examples: Detached garage. Storage shed. Pool or guest house. Outdoor
+  kitchen. Barns or chicken coop."
+- Fences: "If your fence was damaged by wind and you have wind coverage, your
+  policy will probably pay for the damage. Policies usually pay actual cash
+  value for fences."
+- **No percentage-of-dwelling limit is stated on this page. Do not publish one.**
+
+### TDI — Does insurance cover fallen tree branches? (dated 24 Jan 2026)
+
+SOURCE: https://www.tdi.texas.gov/blog/fallen-tree-branches-and-insurance.html
+
+- "A tree fell on my house and damaged my roof. Will my homeowners pay for
+  repairs? Many policies pay for damages from falling objects, like trees."
+- Removal is conditional: "Many policies provide some coverage to remove trees
+  or limbs that fell due to storm damage and damage your house or block your
+  driveway. Trees and limbs falling in your yard usually aren't covered."
+- **The neighbour answer most homeowners get wrong**: "My neighbor's tree fell
+  on my house. Will my neighbor's homeowners policy pay for the damage and tree
+  removal? Probably not, unless your neighbor was at fault. Your neighbor isn't
+  responsible for acts of nature. If your neighbor's policy doesn't pay, you
+  can file a claim under your own policy."
+- First step: "Take photos of the damage before you move the tree, make
+  repairs, or take other steps to prevent more damage." Temporary repairs are
+  expected, and "Save your receipts for reimbursement."
+
+### TDI — My home was damaged by a storm (last updated 8 Oct 2025)
+
+SOURCE: https://www.tdi.texas.gov/tips/home-damaged.html
+
+- Lists as covered examples: "Roof damage from a tree hitting your home during
+  the storm. Water damage from rain entering your home if the roof was damaged
+  in the storm... Damage to other structures not attached to your house."
+
+### TDI — roof age cannot be the reason (news release, 29 Sep 2026)
+
+SOURCE: https://tdi.texas.gov/news/2026/tdi09292026.html
+
+- "The Texas Department of Insurance (TDI) is clarifying its rule that insurance
+  companies can't decline or not renew a home insurance policy based on the age
+  of a house or its roof."
+- "Under the rule, insurance companies may base decisions on the physical
+  conditions of the home or its components, such as roofing, wiring, heating,
+  air conditioning, plumbing, or siding. But the rule makes it clear that
+  companies can't deny or not renew a policy simply because the house or any of
+  these materials are older."
+- Commissioner Amanda Crawford, quoted. Developed in response to a directive
+  from Governor Greg Abbott.
+- NOTE: this is CONDITION vs AGE. Never state that an insurer cannot act on a
+  roof's condition — the rule explicitly permits that.
+
+### City of Tomball — permits (re-verified 2026-11-24)
+
+SOURCE: https://www.tomballtx.gov/812/Building-Permits
+
+- "All Permit Applications can now be submitted on-line for processing using
+  the City of Tomball SmartGov Portal." Inspections are also requested through
+  SmartGov.
+- Community Development / Building, **501 James St., Tomball, TX 77375**,
+  Building@tomballtx.gov. Office hours 8–5 Mon–Thu, 7:45–4 Fri.
+- The page links an **FY 2026-2027 Master Fee Schedule**.
+
+### Tomball — UNVERIFIED (do not publish)
+
+1. **The $50.00 roofing permit fee recorded in Sheet 16 is NOT re-confirmed.**
+   It came from the roofing permit application revised February 2023, and the
+   city now publishes an FY 2026-2027 Master Fee Schedule that was not opened.
+   **No Tomball permit fee is published on the site** — the page says we
+   confirm the current fee, exactly as the Houston page does.
+2. The roofing inspection sequence (Sheet 16 UNVERIFIED #1) still stands. The
+   site may say inspections are requested through SmartGov, because the city's
+   own page says so; it may NOT describe a decking/underlayment/final schedule.
+3. The phone-number conflict (Sheet 16 UNVERIFIED #2) stands. No Tomball phone
+   number is published.
