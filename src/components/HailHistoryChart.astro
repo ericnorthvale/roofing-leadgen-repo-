@@ -1,0 +1,181 @@
+---
+/**
+ * Every hail event NCEI recorded in Montgomery County, 2021–2026, drawn to
+ * scale against the stone the Class 4 lab test actually uses.
+ *
+ * WHY THIS EXISTS. "Is a Class 4 roof worth it here?" is really two questions a
+ * homeowner cannot answer from a brochure: does hail actually fall on this
+ * county, and is it the size the rating is about? Both answers are public
+ * record, and both are more honest drawn than described. Plotted together they
+ * show what no roofing sales page will say out loud — hail lands here in most
+ * years, and every stone on the record is well under the 2-inch ball UL 2218
+ * drops to earn the Class 4 rating.
+ *
+ * That is deliberately not an argument against the upgrade. It is the argument
+ * for buying it for the right reason: the premium credit and cumulative wear,
+ * not a promise about any one storm. The page says so in those words.
+ *
+ * THE NUMBERS ARE NOT OURS AND ARE NOT INVENTED. Every event is an entry in
+ * NOAA's NCEI Storm Events Database for Montgomery County, recorded with its
+ * date, place and measured diameter in docs/research-facts.md. The 2-inch
+ * reference is the UL 2218 Class 4 test, also recorded there. Nothing here is
+ * a Northvale observation, a projection, or a claim about your roof.
+ *
+ * Drawn to scale from EVENTS, so the picture cannot drift from the data: the
+ * axis, the dots and the counts all follow the array.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+
+/** NCEI Storm Events, Montgomery County. Diameter in inches, as recorded. */
+const EVENTS = [
+  { date: "2021-04-15", place: "Pinehurst", inches: 1.0 },
+  { date: "2021-04-15", place: "Oak Ridge North", inches: 0.88 },
+  { date: "2021-06-02", place: "New Caney", inches: 1.0 },
+  { date: "2022-05-01", place: "Tamina", inches: 1.0 },
+  { date: "2023-04-05", place: "Willis", inches: 1.0 },
+  { date: "2023-05-23", place: "Montgomery County", inches: 1.0 },
+  { date: "2023-09-24", place: "Cut and Shoot", inches: 1.0 },
+  { date: "2024-05-02", place: "Lake Conroe Dam", inches: 0.75 },
+  { date: "2024-05-30", place: "Montgomery", inches: 1.0 },
+  { date: "2024-05-30", place: "Montgomery", inches: 1.0 },
+  { date: "2025-06-09", place: "Shenandoah", inches: 1.0 },
+  { date: "2025-06-09", place: "Shenandoah", inches: 1.25 },
+  { date: "2026-03-15", place: "Splendora", inches: 1.0 },
+];
+
+/** The stone UL 2218 drops to earn a Class 4 rating. */
+const CLASS_4_BALL = 2.0;
+/** Headroom so the reference marker is not jammed against the frame. */
+const AXIS_MAX = 2.3;
+
+const pct = (inches: number) => (inches / AXIS_MAX) * 100;
+
+const years = [...new Set(EVENTS.map((e) => e.date.slice(0, 4)))].sort();
+
+/**
+ * Two stones of the same size in the same year land on the same coordinate and
+ * hide each other — the first draft showed 9 dots for 13 events, so the picture
+ * disagreed with its own caption. Coincident dots are fanned vertically instead,
+ * which keeps the horizontal position (the measurement) exact.
+ */
+const STACK_STEP = 9; // px between coincident dots
+
+const rows = years.map((y) => {
+  const yearEvents = EVENTS.filter((e) => e.date.startsWith(y)).sort((a, b) => a.inches - b.inches);
+  const sameSize = new Map<number, number>();
+  for (const e of yearEvents) sameSize.set(e.inches, (sameSize.get(e.inches) ?? 0) + 1);
+
+  const placed = new Map<number, number>();
+  return {
+    year: y,
+    events: yearEvents.map((e) => {
+      const n = sameSize.get(e.inches)!;
+      const k = placed.get(e.inches) ?? 0;
+      placed.set(e.inches, k + 1);
+      // Centre the group on the row: one dot sits at 0, two at ±4.5px, etc.
+      return { ...e, dy: (k - (n - 1) / 2) * STACK_STEP };
+    }),
+  };
+});
+
+const biggest = Math.max(...EVENTS.map((e) => e.inches));
+const TICKS = [0.5, 1, 1.5, 2];
+const fmtIn = (n: number) => `${n}"`;
+---
+
+<figure class:list={["not-prose", className]}>
+  <div
+    class="rounded-2xl border border-[color:var(--color-ink-200,#e4e6e9)] bg-[color:var(--color-sand-50,#faf8f5)] p-5 sm:p-7"
+  >
+    <p
+      class="m-0 text-[13px] leading-snug font-semibold tracking-wide text-[color:var(--color-ink-500)] uppercase"
+    >
+      Recorded hail in Montgomery County, {years[0]}–{years[years.length - 1]}
+    </p>
+    <p class="mt-1 mb-0 text-[13px] leading-snug text-[color:var(--color-ink-600,#4a4f57)]">
+      Every event in NOAA's database, by stone diameter — against the 2-inch ball the Class 4 test
+      drops.
+    </p>
+
+    <ol class="mt-6 mb-0 list-none space-y-3 p-0">
+      {
+        rows.map((r) => (
+          <li class="m-0 flex items-center gap-3 p-0">
+            <span class="w-10 shrink-0 text-[13px] font-bold text-[color:var(--color-navy-900,#1b2437)] tabular-nums">
+              {r.year}
+            </span>
+            <div
+              class="relative h-9 grow rounded-md bg-white"
+              style="box-shadow:inset 0 0 0 1px rgba(0,0,0,.07)"
+              role="img"
+              aria-label={`${r.year}: ${r.events.length} recorded hail event${r.events.length === 1 ? "" : "s"} in Montgomery County — ${r.events.map((e) => `${e.inches} inch at ${e.place}`).join(", ")}.`}
+            >
+              {/* The Class 4 reference, same scale as the dots. */}
+              <span
+                class="absolute top-0 bottom-0 w-px"
+                style={`left:${pct(CLASS_4_BALL)}%;background:var(--color-gold-600);opacity:.55`}
+                aria-hidden="true"
+              />
+              {r.events.map((e) => (
+                <span
+                  class="absolute top-1/2 rounded-full"
+                  style={`left:${pct(e.inches)}%;width:${Math.max(9, e.inches * 11)}px;height:${Math.max(9, e.inches * 11)}px;transform:translate(-50%,calc(-50% + ${e.dy}px));background:var(--color-navy-800,#243049);opacity:.82;box-shadow:0 0 0 1.5px var(--color-sand-50,#faf8f5)`}
+                  aria-hidden="true"
+                />
+              ))}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    {/* Axis */}
+    <div class="mt-2 flex items-center gap-3">
+      <span class="w-10 shrink-0" aria-hidden="true"></span>
+      <div class="relative h-5 grow" aria-hidden="true">
+        {
+          TICKS.map((t) => (
+            <span
+              class="absolute top-0 -translate-x-1/2 text-[11px] text-[color:var(--color-ink-500)] tabular-nums"
+              style={`left:${pct(t)}%`}
+            >
+              {fmtIn(t)}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+
+    <p
+      class="mt-5 mb-0 flex items-start gap-2 text-[13px] leading-snug text-[color:var(--color-ink-700)]"
+    >
+      <span
+        class="mt-[6px] inline-block h-3 w-px shrink-0"
+        style="background:var(--color-gold-600)"
+        aria-hidden="true"></span>
+      <span>
+        <strong>The gold line is the Class 4 test</strong>
+        <span class="text-[color:var(--color-ink-500)]">
+          {" "}— a {fmtIn(CLASS_4_BALL)} steel ball. The largest stone on the county record in these six
+          years was {fmtIn(biggest)}.</span
+        >
+      </span>
+    </p>
+  </div>
+
+  <figcaption class="mt-3 text-[13px] leading-snug text-[color:var(--color-ink-500)]">
+    {EVENTS.length} events from NOAA's NCEI Storm Events Database for Montgomery County, {
+      years[0]
+    }–{years[years.length - 1]}. The database records reported hail, so it undercounts stones nobody
+    reported — it is a floor, not a census. Not a forecast, and not a statement about any individual
+    roof. <a
+      class="underline"
+      href="https://www.ncei.noaa.gov/stormevents/"
+      rel="nofollow noopener"
+      target="_blank">NCEI source</a
+    >.
+  </figcaption>
+</figure>
