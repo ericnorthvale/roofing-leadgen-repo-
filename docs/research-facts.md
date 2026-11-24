@@ -2788,3 +2788,43 @@ SOURCE: https://www.tomballtx.gov/812/Building-Permits
    own page says so; it may NOT describe a decking/underlayment/final schedule.
 3. The phone-number conflict (Sheet 16 UNVERIFIED #2) stands. No Tomball phone
    number is published.
+
+### TDI — Why would my home insurance claim be denied or not paid? (last updated 8 Jan 2026)
+
+SOURCE: https://www.tdi.texas.gov/tips/why-would-my-home-insurance-claim-be-denied-or-not-paid.html
+
+- "The most common reason companies deny claims is because the policy doesn't
+  pay for certain types of damage."
+- **A claim can close with nothing paid when the damage is under the
+  deductible.** TDI's illustration: "if the cost to fix your house is $5,000
+  and your deductible is $10,000, your company won't pay your claim." TDI
+  points homeowners to the declarations page for the deductible amount, and
+  says to ask the agent if they cannot find it.
+- "The insurance company must tell you in writing why it denied a claim."
+- Escalation, in TDI's order: tell the company why and send supporting
+  documents "such as a contractor's estimate for the repairs" → ask for an
+  appraisal → file a complaint with TDI.
+
+### TDI — Steps to getting your home or car insurance claim paid (last updated 16 Apr 2025)
+
+SOURCE: https://www.tdi.texas.gov/tips/getting-your-insurance-claim-paid.html
+
+- Step 3 (choosing a contractor): get estimates from more than one contractor,
+  show them the insurance company's estimate, and raise with the insurer "any
+  differences or other damage the contractor or shop found that the adjuster
+  did not."
+- NOTE ON A CONFLICT: this consumer page says the company has "15 business
+  days to say it got your claim," while Tex. Ins. Code §542.055 (already cited
+  sitewide) says 15 days. **The site publishes the statute's wording**, which
+  the city claim pages already do — do not introduce the "business days"
+  variant beside it on the same page.
+
+### Where the two deepened claim pages used these (2026-11-24)
+
+- `/the-woodlands/insurance-claims` gained the declarations-page section: the
+  deductible lives there, a claim can close unpaid under it (TDI's $5,000 vs
+  $10,000), plus the RCV/ACV check and the code-upgrade endorsement check,
+  linking to `/tomball/insurance-claims`.
+- `/conroe/insurance-claims` gained the roof-age rule (Sheet 17, TDI 29 Sep 2026) — and, importantly, the caveat that it governs UNDERWRITING (declining
+  or not renewing) and not whether an individual claim is paid. The page says
+  so explicitly so no reader quotes it at an adjuster expecting it to work.

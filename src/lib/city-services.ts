@@ -510,6 +510,28 @@ export const CITY_SERVICES: Record<string, CityService> = {
         html: "The single most useful thing a Woodlands homeowner can know before filing: how your policy pays. Per the Texas Department of Insurance, replacement-cost policies pay to rebuild at current prices, while actual-cash-value policies deduct depreciation — TDI's own example shows a $10,000 roof paying just $4,000 at 20 years old under ACV, before your deductible. Replacement-cost claims typically pay in two parts: the first check is the depreciated value, and the recoverable depreciation follows once you show proof repairs were done. That's also why the deductible law has teeth — your insurer can require proof you paid your deductible (a canceled check, financing agreement, or receipt) before releasing that final money. If your first check has already landed and looks nowhere near enough, <a href=\"/blog/insurance-wont-cover-entire-roof/\">we have drawn that split to scale</a> — it is usually the sequence rather than a short payment.",
       },
       {
+        heading: "Before you file: the page that decides what you'll get",
+        html: "Almost everything above is settled by two pages at the front of your policy — the <strong>declarations page</strong> — and reading it takes about five minutes. Your deductible is on it; the Texas Department of Insurance points homeowners there for exactly that, and says to ask your agent if you cannot find it. It is worth knowing before you file, because a claim can close with nothing paid at all: TDI's own illustration is a $5,000 repair against a $10,000 deductible, where the company simply will not pay. On a single slope of wind damage in The Woodlands, that is not a hypothetical.",
+      },
+      {
+        heading: "Two things on that page people never check",
+        kind: "cards",
+        bullets: [
+          {
+            lead: "Which kind of policy you have",
+            text: "replacement cost or actual cash value. It decides whether your roof is paid at today's prices or at what a worn roof was worth, and the difference on an older roof is the largest single number in your claim.",
+          },
+          {
+            lead: "Whether you carry code-upgrade coverage",
+            html: 'The extra cost of bringing a roof up to current building code is normally an optional endorsement rather than standard coverage, so most policies do not include it — and the gap shows up on tear-off day. <a href="/tomball/insurance-claims">We have written up how that gap appears and how to check for it</a>.',
+          },
+          {
+            lead: "What to do if you cannot tell",
+            text: "ring the number on the policy and ask the two questions directly. We cannot read your policy for you, and we would rather you had the real answer than our guess at it.",
+          },
+        ],
+      },
+      {
         heading: "The deadlines your insurer must hit",
         body: "Texas prompt-payment law (Insurance Code Chapter 542) puts your claim on a clock:",
         ordered: true,
@@ -688,6 +710,14 @@ export const CITY_SERVICES: Record<string, CityService> = {
       {
         heading: "What appraisal can and cannot fix",
         html: 'If your claim is denied or underpaid, the first question is which kind of disagreement you are in. A dispute about <strong>how much</strong> is what the appraisal provision is for — and Texas Senate Bill 458 now requires residential property policies issued or renewed on or after 1 January 2026 to include one. A dispute about <strong>whether it is covered at all</strong> is a different fight: the Insurance Code describes appraisal as a process solely to determine the amount of loss. We have reopened denied claims both ways — once through a reinspection with the adjuster on the roof, once through appraisal. <a href="/blog/roof-claim-denied-texas-appraisal/">The full walkthrough is here</a>.',
+      },
+      {
+        heading: '"It\'s just an old roof" is not, on its own, a reason',
+        html: 'There is a new rule worth knowing if age keeps coming up in your conversations. On 29 September 2026 the Texas Department of Insurance clarified that insurance companies <strong>"can\'t decline or not renew a home insurance policy based on the age of a house or its roof."</strong> What they may still do is act on <em>condition</em> — TDI is explicit that companies "may base decisions on the physical conditions of the home or its components, such as roofing, wiring, heating, air conditioning, plumbing, or siding" — but the rule makes clear they cannot refuse you simply because those materials are older. The distinction is the whole thing: <strong>age is a number, condition is evidence</strong>, and only one of them is allowed to decide.',
+      },
+      {
+        heading: "The trap in that rule, and how not to fall in it",
+        html: 'Be careful, because this is where it is easy to get your hopes up wrongly. That rule is about <strong>underwriting</strong> — whether a carrier will insure you or renew you. It is not a rule about whether a particular claim gets paid, and quoting it at an adjuster who has denied a storm claim will not move anything. A wear-and-tear denial on a Conroe roof is a dispute about <em>what caused the damage</em>, not about how many birthdays the roof has had. The reason to know the rule anyway is that it names the standard the industry is being held to, and that standard is evidence of condition. Which is exactly what we build: photographs that separate a storm bruise from a decade of lake humidity working on the same slope, so "it is old" has to become a specific, documented claim about condition — or give way.',
       },
       {
         heading: "The Texas rules that apply to your claim",
