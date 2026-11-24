@@ -69,9 +69,18 @@ export function describeSheetRouting(env: SheetsEnv): string {
  * Append one lead. Resolves to a status; never rejects.
  *
  * Apps Script answers a POST with a 302 to googleusercontent.com, which fetch
- * follows, so a success is an ordinary ok response. A non-ok response is
- * recorded and dropped — there is nothing useful to do about it in the request
- * path, and the lead has already been delivered by other channels.
+ * follows. A non-ok response is recorded and dropped — there is nothing useful
+ * to do about it in the request path, and the lead has already been delivered
+ * by other channels.
+ *
+ * WHY THE BODY IS CHECKED AND NOT JUST THE STATUS (2026-11-23). A 200 from
+ * Apps Script does not mean a row was written. If the Web App is deployed with
+ * "Who has access" set to anything other than Anyone, Google answers a
+ * server-to-server POST by redirecting to a SIGN-IN PAGE — which is HTML, and
+ * which returns 200. Trusting res.ok there reports "sent" on every lead while
+ * the sheet stays empty forever, and the logs look perfect. That is the worst
+ * kind of failure, so success now means the script's own {"ok":true} came
+ * back; anything else, HTML included, is an error that says what arrived.
  */
 export async function appendLeadToSheet(
   lead: SheetLead,
@@ -103,7 +112,29 @@ export async function appendLeadToSheet(
         landingPath: lead.landingPath ?? "",
       }),
     });
-    if (!res.ok) return { status: "error", error: `sheet: ${res.status}` };
+    if (!res.ok) return { status: "error", error: `sheet: HTTP ${res.status}` };
+
+    const text = await res.text();
+    let parsed: { ok?: boolean; error?: string } | undefined;
+    try {
+      parsed = JSON.parse(text) as { ok?: boolean; error?: string };
+    } catch {
+      // Not JSON. Overwhelmingly this is Google's sign-in page, which means
+      // the Web App is not deployed with "Who has access: Anyone".
+      const looksLikeLogin = /accounts\.google\.com|sign in|<html/i.test(text);
+      return {
+        status: "error",
+        error: looksLikeLogin
+          ? "sheet: got a Google sign-in page, not the script — redeploy the Web App with 'Who has access: Anyone'"
+          : `sheet: unexpected non-JSON reply (${text.slice(0, 80)})`,
+      };
+    }
+    if (parsed?.ok !== true) {
+      return {
+        status: "error",
+        error: `sheet: script replied ${parsed?.error ?? JSON.stringify(parsed)}`,
+      };
+    }
     return { status: "sent" };
   } catch (err) {
     return { status: "error", error: err instanceof Error ? err.message : "unknown" };

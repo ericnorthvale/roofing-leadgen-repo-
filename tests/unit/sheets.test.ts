@@ -44,11 +44,15 @@ describe("appendLeadToSheet", () => {
     expect(fetchImpl).not.toHaveBeenCalled();
   });
 
+  /** A success reply from the Apps Script. */
+  const okReply = () =>
+    ({ ok: true, status: 200, text: async () => JSON.stringify({ ok: true }) }) as Response;
+
   it("posts every field the sheet has a column for", async () => {
     let body: Record<string, unknown> = {};
     const fetchImpl = vi.fn(async (_u: string, init: { body: string }) => {
       body = JSON.parse(init.body);
-      return { ok: true, status: 200 } as Response;
+      return okReply();
     });
     const res = await appendLeadToSheet(lead, ENV, { fetchImpl: fetchImpl as never });
     expect(res.status).toBe("sent");
@@ -74,7 +78,7 @@ describe("appendLeadToSheet", () => {
     let body: Record<string, unknown> = {};
     const fetchImpl = vi.fn(async (_u: string, init: { body: string }) => {
       body = JSON.parse(init.body);
-      return { ok: true, status: 200 } as Response;
+      return okReply();
     });
     await appendLeadToSheet(
       { receivedAt: "t", channel: "form", firstName: "Jo", phone: "+1", source: "website" },
@@ -92,10 +96,46 @@ describe("appendLeadToSheet", () => {
    * neither a bad response nor a thrown network error may escape.
    */
   it("records a non-ok response as an error and does not throw", async () => {
-    const fetchImpl = vi.fn(async () => ({ ok: false, status: 500 }) as Response);
+    const fetchImpl = vi.fn(
+      async () => ({ ok: false, status: 500, text: async () => "" }) as Response,
+    );
     const res = await appendLeadToSheet(lead, ENV, { fetchImpl: fetchImpl as never });
     expect(res.status).toBe("error");
     expect(res.error).toContain("500");
+  });
+
+  /**
+   * The failure that cost an afternoon. A Web App deployed with anything other
+   * than "Who has access: Anyone" answers a server POST with Google's sign-in
+   * page: HTML, status 200. Checking only res.ok reports "sent" on every lead
+   * while the sheet stays empty and the logs look perfect.
+   */
+  it("treats a 200 sign-in page as an error, not a success", async () => {
+    const fetchImpl = vi.fn(
+      async () =>
+        ({
+          ok: true,
+          status: 200,
+          text: async () => "<html><body>Sign in - accounts.google.com</body></html>",
+        }) as Response,
+    );
+    const res = await appendLeadToSheet(lead, ENV, { fetchImpl: fetchImpl as never });
+    expect(res.status).toBe("error");
+    expect(res.error).toContain("Who has access");
+  });
+
+  it("treats the script's own failure reply as an error", async () => {
+    const fetchImpl = vi.fn(
+      async () =>
+        ({
+          ok: true,
+          status: 200,
+          text: async () => JSON.stringify({ ok: false, error: "no body" }),
+        }) as Response,
+    );
+    const res = await appendLeadToSheet(lead, ENV, { fetchImpl: fetchImpl as never });
+    expect(res.status).toBe("error");
+    expect(res.error).toContain("no body");
   });
 
   it("swallows a thrown network error", async () => {
