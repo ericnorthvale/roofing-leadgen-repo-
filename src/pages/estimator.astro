@@ -12,6 +12,15 @@
  * marketing header, the nav or the footer. They need big targets and a total.
  *
  * SSR, never prerendered — the whole page depends on a per-request cookie.
+ *
+ * THE UNLOCK SCRIPT IS A PLAIN ASTRO <script>, NOT `is:inline` WRAPPING A
+ * TEMPLATE LITERAL. The first version wrapped the code in {`...`}; that wrapper
+ * was emitted VERBATIM into the page, so the browser received a block statement
+ * containing a string — valid JavaScript, no error, and the handler never
+ * attached. The Unlock button silently did nothing. A bundled module script
+ * also defers until the document is parsed, so the form is guaranteed to exist
+ * when this runs. It sits outside the conditional because Astro hoists these;
+ * the `if (form)` guard covers the unlocked render.
  */
 import BaseLayout from "@layouts/BaseLayout.astro";
 import EstimateBuilder from "@components/estimator/EstimateBuilder.tsx";
@@ -91,39 +100,37 @@ const unlocked = Astro.locals.estimatorUnlocked === true;
       )
     }
   </div>
-  {
-    !unlocked && (
-      <script is:inline>
-        {`
-      (function () {
-        var form = document.getElementById("pin-form");
-        if (!form) return;
-        var err = document.getElementById("pin-error");
-        var btn = document.getElementById("pin-submit");
-        form.addEventListener("submit", async function (e) {
-          e.preventDefault();
-          err.textContent = "";
-          btn.disabled = true;
-          try {
-            var res = await fetch("/api/estimator/unlock", {
-              method: "POST",
-              headers: { "content-type": "application/json" },
-              body: JSON.stringify({ pin: document.getElementById("pin").value }),
-            });
-            if (res.ok) { location.reload(); return; }
-            if (res.status === 429) {
-              err.textContent = "Too many tries. Wait 15 minutes.";
-            } else {
-              err.textContent = "That code didn't work.";
-            }
-          } catch (_) {
-            err.textContent = "No connection. Try again.";
-          }
-          btn.disabled = false;
-        });
-      })();
-    `}
-      </script>
-    )
-  }
 </BaseLayout>
+
+<script>
+  const form = document.getElementById("pin-form") as HTMLFormElement | null;
+  if (form) {
+    const err = document.getElementById("pin-error") as HTMLElement;
+    const btn = document.getElementById("pin-submit") as HTMLButtonElement;
+    const pin = document.getElementById("pin") as HTMLInputElement;
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      err.textContent = "";
+      btn.disabled = true;
+      try {
+        const res = await fetch("/api/estimator/unlock", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ pin: pin.value }),
+        });
+        if (res.ok) {
+          // Reload so middleware re-reads the freshly set cookie and renders
+          // the builder instead of this screen.
+          window.location.reload();
+          return;
+        }
+        err.textContent =
+          res.status === 429 ? "Too many tries. Wait 15 minutes." : "That code didn't work.";
+      } catch {
+        err.textContent = "No connection. Try again.";
+      }
+      btn.disabled = false;
+    });
+  }
+</script>
