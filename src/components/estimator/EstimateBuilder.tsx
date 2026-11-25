@@ -1,106 +1,71 @@
 /**
- * The crew estimator — what a rep fills in standing in a driveway.
+ * The crew estimator — what a rep does standing in a driveway.
  *
- * THE DIVISION THAT MAKES THIS SAFE. The rep types every figure; this file
- * supplies the words. Descriptions come from src/lib/estimate-items.ts, money
- * comes from a human, and the only arithmetic here is multiplication and
- * addition of what was typed. Nothing invents a price, and the narrative
- * assistant (phase 2) will not be allowed near these fields either.
+ * THERE IS NO LONGER A FORM TO FILL IN. The owner's call (2026-11-25): the
+ * only things needed are the customer's details and a conversation about the
+ * job. The rep talks; the estimate gets built. An earlier version had the rep
+ * tick items off a list and type a quantity and price into every one, and that
+ * was work the rep was doing on the software's behalf.
  *
- * WHY MONEY IS HELD AS TEXT, NOT AS A NUMBER. A controlled input that reformats
- * while you type fights you on a phone keyboard — it eats the decimal point and
- * reorders digits mid-entry. The raw string is kept exactly as typed and parsed
- * only when totalling, so what the rep sees is what the rep wrote. Totals are
- * computed in whole cents because 0.1 + 0.2 is not 0.3 in floating point and an
- * estimate that is a penny out looks like a company that cannot add up.
+ * WHAT STAYS TYPED, AND WHY. Name, address, phone, email. A misheard price is
+ * visible in the total; a misheard house number is not, and it is the one
+ * mistake that sends a crew to the wrong roof.
  *
- * THE PER-SQUARE READBACK IS A TYPO TRAP, NOT A FEATURE. Replacement prices are
- * usually thought of per square, so showing the implied per-square beside a
- * lump sum catches the fat-fingered zero before the customer sees it. A rep who
- * meant $450 a square sees "$38/square" and stops.
+ * CORRECTIONS ARE SPOKEN, NOT EDITED. "Make the tear-off four seventy-five",
+ * "take the gutters off" — each turn re-derives the whole estimate from the
+ * whole conversation, so removing something is as sayable as adding it, and no
+ * running state accumulates an error quietly between turns.
+ *
+ * THE ESTIMATE IS READ-ONLY ON PURPOSE. Not to stop the rep changing it — they
+ * change it by talking — but because an editable box invites a figure to be
+ * typed in that was never said, which is the one thing this tool must not
+ * make easy. Every number shown traces to a sentence in the conversation
+ * above it, and anything that does not is marked.
+ *
+ * MONEY IS TOTALLED IN WHOLE CENTS. 0.1 + 0.2 is not 0.3 in floating point and
+ * an estimate a penny out looks like a company that cannot add up.
  */
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  BLOCK_LABEL,
-  ESTIMATE_ITEMS,
-  REPLACEMENT_DEFAULTS,
-  type EstimateBlock,
-  type EstimateItem,
-} from "~/lib/estimate-items";
+import { ESTIMATE_ITEMS } from "~/lib/estimate-items";
 import type { EstimateDraft } from "~/lib/estimate-draft";
 
-interface Line {
-  key: string;
-  item: EstimateItem;
-  qty: string;
-  price: string;
-  /** Filled from speech and not yet confirmed by the rep. Cleared on first edit. */
-  fromSpeech?: boolean;
-  /** A figure here could not be found in what the rep said. Worth a second look. */
-  unverified?: boolean;
-}
-
 const ITEM_BY_ID = new Map(ESTIMATE_ITEMS.map((i) => [i.id, i]));
-
-const BLOCKS: EstimateBlock[] = ["replacement", "repair", "gutters", "ventilation", "maintenance"];
-
-/** Parse a typed money string to whole cents. Blank or nonsense → 0. */
-function toCents(raw: string): number {
-  const cleaned = raw.replace(/[^0-9.]/g, "");
-  if (!cleaned) return 0;
-  const n = Number.parseFloat(cleaned);
-  return Number.isFinite(n) ? Math.round(n * 100) : 0;
-}
-
-function toQty(raw: string): number {
-  const n = Number.parseFloat(raw.replace(/[^0-9.]/g, ""));
-  return Number.isFinite(n) && n > 0 ? n : 0;
-}
 
 const money = (cents: number) =>
   (cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" });
 
+const toCents = (dollars: number) => Math.round(dollars * 100);
+
+const EMPTY: EstimateDraft = {
+  lines: [],
+  squares: null,
+  deposit: null,
+  notes: "",
+  unmatched: [],
+};
+
 export default function EstimateBuilder() {
   const [customer, setCustomer] = useState({ name: "", address: "", phone: "", email: "" });
-  const [squares, setSquares] = useState("");
-  const [measuring, setMeasuring] = useState(false);
-  const [measureNote, setMeasureNote] = useState<string | null>(null);
-  const [lines, setLines] = useState<Line[]>(() =>
-    ESTIMATE_ITEMS.filter((i) => REPLACEMENT_DEFAULTS.includes(i.id)).map((item) => ({
-      key: `${item.id}-${Math.random().toString(36).slice(2, 8)}`,
-      item,
-      qty: "",
-      price: "",
-    })),
-  );
-  const [notes, setNotes] = useState("");
-  const [deposit, setDeposit] = useState("");
-  const [picker, setPicker] = useState<EstimateBlock>("replacement");
-  const [transcript, setTranscript] = useState("");
-  const [drafting, setDrafting] = useState(false);
-  const [draftNote, setDraftNote] = useState<string | null>(null);
-  const [unmatched, setUnmatched] = useState<string[]>([]);
+  const [turns, setTurns] = useState<string[]>([]);
+  const [saying, setSaying] = useState("");
+  const [draft, setDraft] = useState<EstimateDraft>(EMPTY);
+  const [working, setWorking] = useState(false);
+  const [note, setNote] = useState<string | null>(null);
 
   /**
    * THE PRE-HYDRATION TRAP.
    *
    * This page is server-rendered and then hydrated, so there is a window in
    * which the boxes are real but React is not yet behind them. Anything typed
-   * in that window lives only in the DOM. Worse than being ignored, it is
-   * actively destroyed: these are controlled inputs, so React's first render
-   * after hydration writes its own (empty) state back over whatever is there.
-   * The rep watches their words vanish, or taps a button gated on state that
-   * never enables and gives no reason.
+   * in that window lives only in the DOM — and worse than being ignored, it is
+   * destroyed, because these are controlled inputs and React's first render
+   * after hydration writes its own empty state over whatever is there. The rep
+   * watches their words vanish.
    *
-   * It is the silent dead button from the unlock screen in a new costume, and
-   * on a cheap phone on bad signal that window is wide. A browser test filling
-   * the boxes faster than the server could hydrate is what caught it.
-   *
-   * THE FIX IS TO ADOPT THE DOM ON MOUNT — before React can overwrite it. That
-   * is what this does, for every field, not just the one that happened to be
-   * under test. Reading the live value at submit time (see buildFromSpeech) is
-   * a second guard, but it is NOT sufficient on its own: proved by removing
-   * this effect and watching the test go red anyway, because by submit time
+   * It is the silent dead button from the unlock screen in another costume,
+   * and on a cheap phone on bad signal the window is wide. Adopting the DOM on
+   * mount — before React can overwrite it — is the fix. Reading the live value
+   * again at send time is a second guard and is NOT a substitute: by then
    * React has already blanked the box.
    */
   const rootRef = useRef<HTMLDivElement>(null);
@@ -110,12 +75,6 @@ export default function EstimateBuilder() {
       rootRef.current
         ?.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="nv-${name}"]`)
         ?.value?.trim() ?? "";
-
-    const said = read("transcript");
-    if (said) setTranscript(said);
-
-    const squaresTyped = read("squares");
-    if (squaresTyped) setSquares(squaresTyped);
 
     const early = {
       name: read("name"),
@@ -132,224 +91,77 @@ export default function EstimateBuilder() {
       }));
     }
 
-    const notesTyped = read("notes");
-    if (notesTyped) setNotes(notesTyped);
+    const said = read("saying");
+    if (said) setSaying(said);
 
     setHydrated(true);
   }, []);
 
+  /** Only priced lines count. A line awaiting a price is not worth zero. */
   const total = useMemo(
-    () => lines.reduce((sum, l) => sum + Math.round(toQty(l.qty) * toCents(l.price)), 0),
-    [lines],
-  );
-
-  /** Replacement subtotal only — the per-square readback must not include gutters. */
-  const replacementCents = useMemo(
     () =>
-      lines
-        .filter((l) => l.item.block === "replacement")
-        .reduce((sum, l) => sum + Math.round(toQty(l.qty) * toCents(l.price)), 0),
-    [lines],
+      draft.lines.reduce(
+        (sum, l) => (l.price === null ? sum : sum + Math.round((l.qty ?? 1) * toCents(l.price))),
+        0,
+      ),
+    [draft],
   );
 
-  const sq = toQty(squares);
-  const perSquare = sq > 0 && replacementCents > 0 ? replacementCents / sq : null;
+  const awaitingPrice = draft.lines.filter((l) => l.price === null).length;
+  const perSquare = draft.squares && total > 0 ? total / draft.squares : null;
 
-  function addLine(item: EstimateItem) {
-    setLines((prev) => [
-      ...prev,
-      { key: `${item.id}-${Math.random().toString(36).slice(2, 8)}`, item, qty: "", price: "" },
-    ]);
-  }
-
-  /** Any edit by the rep means the line has been looked at — drop the flags. */
-  function update(key: string, patch: Partial<Line>) {
-    setLines((prev) =>
-      prev.map((l) =>
-        l.key === key ? { ...l, ...patch, fromSpeech: false, unverified: false } : l,
-      ),
-    );
-  }
-
-  function remove(key: string) {
-    setLines((prev) => prev.filter((l) => l.key !== key));
-  }
-
-  /**
-   * Fold a draft into the form.
-   *
-   * THE RULE IS FILL, NEVER OVERWRITE. Anything the rep has already typed wins
-   * over anything the model heard — so running this twice, or after correcting
-   * a line by hand, cannot undo their work. That also means there is no "are
-   * you sure" dialog to tap through in a driveway: the action is always safe.
-   */
-  function applyDraft(d: EstimateDraft) {
-    if (d.squares !== null && !squares.trim()) setSquares(String(d.squares));
-
-    setLines((prev) => {
-      const next = [...prev];
-      for (const dl of d.lines) {
-        const item = ITEM_BY_ID.get(dl.id);
-        if (!item) continue; // already guaranteed server-side; cheap to re-check
-        const at = next.findIndex((l) => l.item.id === dl.id);
-        const qty = dl.qty !== null ? String(dl.qty) : "";
-        const price = dl.price !== null ? String(dl.price) : "";
-
-        if (at !== -1) {
-          const existing = next[at];
-          const filledQty = existing.qty.trim() ? existing.qty : qty;
-          const filledPrice = existing.price.trim() ? existing.price : price;
-          // Only mark the line as touched by speech if speech actually added
-          // something; otherwise leave the rep's own line completely alone.
-          if (filledQty !== existing.qty || filledPrice !== existing.price) {
-            next[at] = {
-              ...existing,
-              qty: filledQty,
-              price: filledPrice,
-              fromSpeech: true,
-              unverified: dl.unverified === true,
-            };
-          }
-        } else {
-          next.push({
-            key: `${item.id}-${Math.random().toString(36).slice(2, 8)}`,
-            item,
-            qty,
-            price,
-            fromSpeech: true,
-            unverified: dl.unverified === true,
-          });
-        }
-      }
-      return next;
-    });
-
-    if (d.notes) setNotes((prev) => (prev.trim() ? `${prev.trim()}\n\n${d.notes}` : d.notes));
-    setUnmatched(d.unmatched);
-
-    const blanks = d.lines.filter((l) => l.price === null).length;
-    setDraftNote(
-      d.lines.length === 0
-        ? "Nothing picked up from that. Try naming the work — “tear off, thirty squares, four fifty a square”."
-        : blanks > 0
-          ? `Added ${d.lines.length} item${d.lines.length === 1 ? "" : "s"}. ${blanks} still need${blanks === 1 ? "s" : ""} a price.`
-          : `Added ${d.lines.length} item${d.lines.length === 1 ? "" : "s"}. Check every figure before you send.`,
-    );
-  }
-
-  /** Send what the rep said to the draft endpoint. */
-  async function buildFromSpeech() {
-    if (drafting) return;
-    // The box itself is the source of truth, not our copy of it.
+  async function send() {
+    if (working) return;
     const live =
-      rootRef.current?.querySelector<HTMLTextAreaElement>('[name="nv-transcript"]')?.value ?? "";
-    const said = (live || transcript).trim();
-    if (said.length < 3) {
-      setDraftNote("Say what you're quoting first, then tap this again.");
+      rootRef.current?.querySelector<HTMLTextAreaElement>('[name="nv-saying"]')?.value ?? "";
+    const text = (live || saying).trim();
+    if (text.length < 3) {
+      setNote("Say something about the job first.");
       return;
     }
-    setDrafting(true);
-    setDraftNote(null);
+
+    const next = [...turns, text];
+    setTurns(next);
+    setSaying("");
+    setWorking(true);
+    setNote(null);
+
     try {
       const res = await fetch("/api/estimator/draft", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ transcript: said }),
+        body: JSON.stringify({ turns: next, current: draft }),
       });
       const data = await res.json().catch(() => null);
 
       if (res.ok && data?.ok && data.draft) {
-        applyDraft(data.draft as EstimateDraft);
+        setDraft(data.draft as EstimateDraft);
         return;
       }
-      setDraftNote(
+      setNote(
         data?.reason === "unconfigured"
-          ? "The assistant isn't switched on yet. Fill the estimate in below as usual."
+          ? "The assistant isn't switched on yet — nothing can be built until it is."
           : data?.reason === "locked"
             ? "Your session timed out. Reload the page and put the code in again."
-            : "Couldn't read that just now. Fill it in below, or try saying it again.",
+            : "Couldn't take that in. Say it again, or try once you're back on data.",
       );
     } catch {
-      setDraftNote("No signal for that. Fill it in below, or try again once you're back on data.");
+      setNote("No signal. Say it again once you're back on data — nothing is lost.");
     } finally {
-      setDrafting(false);
+      setWorking(false);
     }
   }
 
-  /** Measure the roof from the address, reusing the public calculator's endpoint. */
-  async function measure() {
-    if (!customer.address.trim()) return;
-    setMeasuring(true);
-    setMeasureNote(null);
-    try {
-      const res = await fetch(`/api/roof-measure?address=${encodeURIComponent(customer.address)}`);
-      const data = await res.json();
-      if (data?.available && typeof data.squares === "number") {
-        setSquares(String(Math.round(data.squares * 10) / 10));
-        setMeasureNote("Measured from aerial imagery — check it against the roof.");
-      } else {
-        setMeasureNote("No measurement for this address. Type the squares yourself.");
-      }
-    } catch {
-      setMeasureNote("Could not measure right now. Type the squares yourself.");
-    } finally {
-      setMeasuring(false);
-    }
+  function undoLastTurn() {
+    setTurns((prev) => prev.slice(0, -1));
+    setNote("Taken off the list. Say the correction and it'll rebuild.");
   }
 
   const ready = customer.name.trim() && customer.address.trim() && total > 0;
 
   return (
-    <div ref={rootRef} className="mx-auto max-w-2xl px-4 pb-32">
-      {/* ── Talk it through ──────────────────────────────────────────
-          No speech code here on purpose. Every phone keyboard already has a
-          microphone button that dictates into any box, it works offline-ish on
-          bad signal, it needs no permission prompt we have to design around,
-          and it cannot fail to attach the way a script can. The rep taps the
-          mic they already know; this box just collects the words. */}
-      <section
-        data-hydrated={hydrated ? "true" : "false"}
-        className="mt-6 rounded-xl border border-[color:var(--color-gold-600)]/40 bg-white p-4"
-      >
-        <h2 className="m-0 text-[15px] font-bold text-[color:var(--color-navy-900,#1b2437)]">
-          Talk it through
-        </h2>
-        <p className="mt-1 mb-3 text-[13px] text-[color:var(--color-ink-500)]">
-          Tap the microphone on your keyboard and say what you&rsquo;re doing and what you&rsquo;re
-          charging &mdash; &ldquo;tear off and replace, thirty squares, four fifty a square, two
-          pipe boots at ninety.&rdquo;
-        </p>
-        <textarea
-          name="nv-transcript"
-          value={transcript}
-          onChange={(e) => setTranscript(e.target.value)}
-          rows={4}
-          placeholder="Hold the mic on your keyboard and talk…"
-          aria-label="What you're quoting, in your own words"
-          className="w-full rounded-lg border border-[color:var(--color-ink-200,#e4e6e9)] p-3 text-[15px]"
-        />
-        <button
-          type="button"
-          onClick={buildFromSpeech}
-          disabled={drafting}
-          className="mt-3 w-full rounded-lg bg-[color:var(--color-navy-900,#1b2437)] px-5 py-3 text-[15px] font-bold text-white disabled:opacity-40"
-        >
-          {drafting ? "Building…" : "Build the estimate"}
-        </button>
-        {draftNote && (
-          <p role="status" className="mt-3 mb-0 text-[13px] text-[color:var(--color-ink-700)]">
-            {draftNote}
-          </p>
-        )}
-        {unmatched.length > 0 && (
-          <p className="mt-2 mb-0 text-[13px] text-[#8a5a00]">
-            Not on the list, add it yourself if you need it:{" "}
-            {unmatched.map((u) => u.replace(/-/g, " ")).join(", ")}
-          </p>
-        )}
-      </section>
-
-      {/* ── Customer ─────────────────────────────────────────────── */}
+    <div ref={rootRef} className="mx-auto max-w-2xl px-4 pb-36">
+      {/* ── Customer — the only thing still typed ──────────────────── */}
       <section className="mt-6">
         <h2 className="text-[13px] font-semibold tracking-wide text-[color:var(--color-ink-500)] uppercase">
           Customer
@@ -390,162 +202,154 @@ export default function EstimateBuilder() {
         </div>
       </section>
 
-      {/* ── Roof size ────────────────────────────────────────────── */}
-      <section className="mt-8">
-        <h2 className="text-[13px] font-semibold tracking-wide text-[color:var(--color-ink-500)] uppercase">
-          Roof size
+      {/* ── The conversation ───────────────────────────────────────── */}
+      <section
+        data-hydrated={hydrated ? "true" : "false"}
+        className="mt-8 rounded-xl border border-[color:var(--color-gold-600)]/40 bg-white p-4"
+      >
+        <h2 className="m-0 text-[15px] font-bold text-[color:var(--color-navy-900,#1b2437)]">
+          The job
         </h2>
-        <div className="mt-3 flex items-end gap-3">
-          <div className="w-32">
-            <Field
-              label="Squares"
-              name="nv-squares"
-              type="text"
-              value={squares}
-              onChange={setSquares}
-              inputMode="decimal"
-            />
-          </div>
-          <button
-            type="button"
-            onClick={measure}
-            disabled={measuring || !customer.address.trim()}
-            className="mb-[2px] rounded-lg border border-[color:var(--color-navy-300,#9aa3b5)] px-4 py-2.5 text-sm font-semibold text-[color:var(--color-navy-900,#1b2437)] disabled:opacity-40"
-          >
-            {measuring ? "Measuring…" : "Measure from address"}
-          </button>
-        </div>
-        {measureNote && (
-          <p className="mt-2 text-[13px] text-[color:var(--color-ink-500)]">{measureNote}</p>
-        )}
-      </section>
+        <p className="mt-1 mb-3 text-[13px] text-[color:var(--color-ink-500)]">
+          Tap the microphone on your keyboard and talk &mdash; &ldquo;tear off and replace, thirty
+          squares, four fifty a square, two pipe boots at ninety.&rdquo; Keep going to add to it or
+          change it.
+        </p>
 
-      {/* ── Line items ───────────────────────────────────────────── */}
-      <section className="mt-8">
-        <h2 className="text-[13px] font-semibold tracking-wide text-[color:var(--color-ink-500)] uppercase">
-          What we'll do
-        </h2>
-
-        <ul className="mt-3 list-none space-y-3 p-0">
-          {lines.map((l) => {
-            const lineCents = Math.round(toQty(l.qty) * toCents(l.price));
-            return (
+        {turns.length > 0 && (
+          <ul className="mt-3 mb-3 list-none space-y-2 p-0">
+            {turns.map((t, i) => (
               <li
-                key={l.key}
-                className="rounded-xl border border-[color:var(--color-ink-200,#e4e6e9)] bg-white p-3"
+                key={`${i}-${t.slice(0, 12)}`}
+                className="m-0 flex items-start gap-2 rounded-lg bg-[color:var(--color-sand-50,#faf8f5)] px-3 py-2 text-[14px] text-[color:var(--color-ink-700)]"
               >
-                <div className="flex items-start justify-between gap-2">
-                  <p className="m-0 text-[15px] font-semibold text-[color:var(--color-navy-900,#1b2437)]">
-                    {l.item.label}
-                    {l.unverified ? (
-                      <span className="ml-2 align-middle text-[11px] font-bold text-[#8a5a00]">
-                        CHECK THIS
-                      </span>
-                    ) : l.fromSpeech ? (
-                      <span className="ml-2 align-middle text-[11px] font-bold text-[color:var(--color-ink-500)]">
-                        FROM SPEECH
-                      </span>
-                    ) : null}
-                  </p>
+                <span className="flex-1">{t}</span>
+                {i === turns.length - 1 && !working && (
                   <button
                     type="button"
-                    onClick={() => remove(l.key)}
-                    aria-label={`Remove ${l.item.label}`}
-                    className="shrink-0 rounded px-2 text-[color:var(--color-ink-500)]"
+                    onClick={undoLastTurn}
+                    aria-label="Take back what I just said"
+                    className="shrink-0 text-[12px] font-semibold text-[color:var(--color-ink-500)]"
                   >
-                    ✕
+                    Undo
                   </button>
-                </div>
-                <div className="mt-2 flex items-center gap-2">
-                  <input
-                    value={l.qty}
-                    onChange={(e) => update(l.key, { qty: e.target.value })}
-                    inputMode="decimal"
-                    placeholder="Qty"
-                    aria-label={`Quantity for ${l.item.label}`}
-                    className="w-20 rounded-lg border border-[color:var(--color-ink-200,#e4e6e9)] px-2 py-2 text-[15px]"
-                  />
-                  <span className="text-[13px] text-[color:var(--color-ink-500)]">
-                    {l.item.unit}
-                  </span>
-                  <span className="text-[color:var(--color-ink-500)]">×</span>
-                  <input
-                    value={l.price}
-                    onChange={(e) => update(l.key, { price: e.target.value })}
-                    inputMode="decimal"
-                    placeholder="$ each"
-                    aria-label={`Price for ${l.item.label}`}
-                    className="w-28 rounded-lg border border-[color:var(--color-ink-200,#e4e6e9)] px-2 py-2 text-[15px]"
-                  />
-                  <span className="ml-auto text-[15px] font-bold tabular-nums">
-                    {lineCents > 0 ? money(lineCents) : "—"}
-                  </span>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-
-        {/* Picker */}
-        <div className="mt-5 rounded-xl border border-dashed border-[color:var(--color-ink-200,#e4e6e9)] p-3">
-          <div className="flex flex-wrap gap-1.5">
-            {BLOCKS.map((b) => (
-              <button
-                key={b}
-                type="button"
-                onClick={() => setPicker(b)}
-                className={`rounded-full px-3 py-1.5 text-[13px] font-semibold ${
-                  picker === b
-                    ? "bg-[color:var(--color-navy-900,#1b2437)] text-white"
-                    : "bg-[color:var(--color-sand-100,#f0ece5)] text-[color:var(--color-ink-700)]"
-                }`}
-              >
-                {BLOCK_LABEL[b]}
-              </button>
-            ))}
-          </div>
-          <ul className="mt-3 list-none space-y-1 p-0">
-            {ESTIMATE_ITEMS.filter((i) => i.block === picker).map((item) => (
-              <li key={item.id} className="m-0 p-0">
-                <button
-                  type="button"
-                  onClick={() => addLine(item)}
-                  className="w-full rounded-lg px-2 py-2 text-left text-[14px] hover:bg-[color:var(--color-sand-50,#faf8f5)]"
-                >
-                  <span className="font-semibold text-[color:var(--color-navy-800,#243049)]">
-                    + {item.label}
-                  </span>
-                </button>
+                )}
               </li>
             ))}
           </ul>
-        </div>
+        )}
+
+        <textarea
+          name="nv-saying"
+          value={saying}
+          onChange={(e) => setSaying(e.target.value)}
+          rows={3}
+          placeholder={
+            turns.length === 0
+              ? "Hold the mic on your keyboard and talk…"
+              : "Anything to add or change?"
+          }
+          aria-label="What you're quoting, in your own words"
+          className="w-full rounded-lg border border-[color:var(--color-ink-200,#e4e6e9)] p-3 text-[15px]"
+        />
+        <button
+          type="button"
+          onClick={send}
+          disabled={working}
+          className="mt-3 w-full rounded-lg bg-[color:var(--color-navy-900,#1b2437)] px-5 py-3 text-[15px] font-bold text-white disabled:opacity-40"
+        >
+          {working ? "Building…" : turns.length === 0 ? "Build the estimate" : "Add this"}
+        </button>
+        {note && (
+          <p role="status" className="mt-3 mb-0 text-[13px] text-[color:var(--color-ink-700)]">
+            {note}
+          </p>
+        )}
       </section>
 
-      {/* ── Notes + deposit ──────────────────────────────────────── */}
+      {/* ── The estimate ───────────────────────────────────────────── */}
       <section className="mt-8">
         <h2 className="text-[13px] font-semibold tracking-wide text-[color:var(--color-ink-500)] uppercase">
-          What you found
+          The estimate
         </h2>
-        <textarea
-          name="nv-notes"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          rows={5}
-          placeholder="What you saw on the roof, in your own words. This prints on the estimate."
-          className="mt-3 w-full rounded-lg border border-[color:var(--color-ink-200,#e4e6e9)] p-3 text-[15px]"
-        />
-        <div className="mt-3 w-40">
-          <Field
-            label="Deposit (optional)"
-            value={deposit}
-            onChange={setDeposit}
-            inputMode="decimal"
-          />
-        </div>
+
+        {draft.lines.length === 0 ? (
+          <p className="mt-3 rounded-xl border border-dashed border-[color:var(--color-ink-200,#e4e6e9)] p-5 text-center text-[14px] text-[color:var(--color-ink-500)]">
+            Nothing yet. Talk about the job above and it&rsquo;ll appear here.
+          </p>
+        ) : (
+          <ul className="mt-3 list-none space-y-2 p-0">
+            {draft.lines.map((l) => {
+              const item = ITEM_BY_ID.get(l.id);
+              if (!item) return null;
+              const cents = l.price === null ? null : Math.round((l.qty ?? 1) * toCents(l.price));
+              return (
+                <li
+                  key={l.id}
+                  className="m-0 rounded-xl border border-[color:var(--color-ink-200,#e4e6e9)] bg-white p-3"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="m-0 text-[15px] font-semibold text-[color:var(--color-navy-900,#1b2437)]">
+                      {item.label}
+                      {l.unverified && (
+                        <span className="ml-2 align-middle text-[11px] font-bold text-[#8a5a00]">
+                          CHECK THIS
+                        </span>
+                      )}
+                    </p>
+                    <p className="m-0 shrink-0 text-[15px] font-bold tabular-nums">
+                      {cents === null ? (
+                        <span className="text-[13px] font-semibold text-[#8a5a00]">
+                          needs a price
+                        </span>
+                      ) : (
+                        money(cents)
+                      )}
+                    </p>
+                  </div>
+                  <p className="m-0 mt-1 text-[13px] text-[color:var(--color-ink-500)] tabular-nums">
+                    {l.qty !== null ? `${l.qty} ${item.unit}` : item.unit}
+                    {l.price !== null && ` × ${money(toCents(l.price))}`}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+
+        {awaitingPrice > 0 && (
+          <p className="mt-3 text-[13px] text-[#8a5a00]">
+            {awaitingPrice} {awaitingPrice === 1 ? "line has" : "lines have"} no price. Say what
+            you&rsquo;re charging and it&rsquo;ll fill in.
+          </p>
+        )}
+
+        {draft.unmatched.length > 0 && (
+          <p className="mt-2 text-[13px] text-[#8a5a00]">
+            Not on the list, so not on the estimate:{" "}
+            {draft.unmatched.map((u) => u.replace(/-/g, " ")).join(", ")}
+          </p>
+        )}
+
+        {draft.notes && (
+          <div className="mt-5 rounded-xl border border-[color:var(--color-ink-200,#e4e6e9)] bg-white p-4">
+            <h3 className="m-0 text-[13px] font-semibold tracking-wide text-[color:var(--color-ink-500)] uppercase">
+              What we found
+            </h3>
+            <p className="m-0 mt-2 text-[15px] whitespace-pre-line text-[color:var(--color-ink-700)]">
+              {draft.notes}
+            </p>
+          </div>
+        )}
+
+        {draft.deposit !== null && (
+          <p className="mt-3 text-[14px] text-[color:var(--color-ink-700)]">
+            Deposit: <strong className="tabular-nums">{money(toCents(draft.deposit))}</strong>
+          </p>
+        )}
       </section>
 
-      {/* ── Sticky total ─────────────────────────────────────────── */}
+      {/* ── Sticky total ───────────────────────────────────────────── */}
       <div className="fixed inset-x-0 bottom-0 border-t border-[color:var(--color-ink-200,#e4e6e9)] bg-white/95 p-4 backdrop-blur">
         <div className="mx-auto flex max-w-2xl items-center gap-4">
           <div>
@@ -555,7 +359,7 @@ export default function EstimateBuilder() {
             </p>
             {perSquare !== null && (
               <p className="m-0 text-[12px] text-[color:var(--color-ink-500)]">
-                {money(perSquare)}/square on {sq} squares
+                {money(perSquare)}/square on {draft.squares} squares
               </p>
             )}
           </div>
@@ -581,7 +385,6 @@ function Field(props: {
   name?: string;
   type?: string;
   autoComplete?: string;
-  inputMode?: "decimal" | "text";
 }) {
   return (
     <label className="block">
@@ -593,7 +396,6 @@ function Field(props: {
         name={props.name}
         value={props.value}
         autoComplete={props.autoComplete}
-        inputMode={props.inputMode}
         onChange={(e) => props.onChange(e.target.value)}
         className="mt-1 w-full rounded-lg border border-[color:var(--color-ink-200,#e4e6e9)] px-3 py-2.5 text-[15px]"
       />

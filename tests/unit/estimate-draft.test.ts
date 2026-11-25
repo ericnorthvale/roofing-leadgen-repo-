@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { ESTIMATE_ITEMS } from "~/lib/estimate-items";
 import {
   DRAFT_SCHEMA,
+  buildConversationPrompt,
   buildDraftSystem,
   numbersSpokenIn,
   validateDraft,
@@ -116,6 +117,25 @@ describe("validateDraft — a price nobody said is flagged", () => {
     expect(d.lines[0].unverified).toBeUndefined();
   });
 
+  it("does not flag a lump-sum line just because nobody said 'one'", () => {
+    // Rule 2 of the prompt tells the model to put 1 in qty for a lump sum, so
+    // checking that 1 against the transcript marks an honest line. A flag that
+    // fires on correct lines teaches the rep to ignore it.
+    const d = validateDraft(
+      { lines: [{ id: "gutter-guards", qty: 1, price: 1250 }] },
+      "add gutter guards for twelve fifty",
+    );
+    expect(d.lines[0].unverified).toBeUndefined();
+  });
+
+  it("still flags a quantity nobody said when it is not 1", () => {
+    const d = validateDraft(
+      { lines: [{ id: "pipe-boots", qty: 7, price: 90 }] },
+      "a couple of pipe boots at ninety each",
+    );
+    expect(d.lines[0].unverified).toBe(true);
+  });
+
   it("drops a roof size nobody gave", () => {
     expect(validateDraft({ squares: 28 }, "big two storey in Conroe").squares).toBeNull();
     expect(validateDraft({ squares: 28 }, "about twenty eight squares").squares).toBe(28);
@@ -139,6 +159,53 @@ describe("validateDraft — never throws, never half-fills", () => {
   it("caps a runaway unmatched list", () => {
     const d = validateDraft({ unmatched: Array.from({ length: 500 }, (_, i) => `thing ${i}`) }, "");
     expect(d.unmatched.length).toBeLessThanOrEqual(20);
+  });
+});
+
+describe("deposits", () => {
+  it("keeps a deposit the rep asked for", () => {
+    const d = validateDraft({ deposit: 2000 }, "take a two thousand dollar deposit");
+    expect(d.deposit).toBe(2000);
+  });
+
+  it("drops a deposit nobody mentioned", () => {
+    // Harsher than a line price, and deliberately so: an unspoken deposit is
+    // money demanded up front with no box on screen for the rep to notice it.
+    const d = validateDraft({ deposit: 2000 }, "tear off and replace, thirty squares");
+    expect(d.deposit).toBeNull();
+  });
+});
+
+describe("carrying the conversation", () => {
+  it("puts every turn in the prompt, oldest first", () => {
+    const p = buildConversationPrompt(["thirty squares", "four fifty a square"], null);
+    expect(p).toContain("1. thirty squares");
+    expect(p).toContain("2. four fifty a square");
+    expect(p).toContain("no estimate yet");
+  });
+
+  it("sends the estimate as it stands so a correction has something to correct", () => {
+    const current = {
+      lines: [{ id: "tear-off", qty: 30, price: 450 }],
+      squares: 30,
+      deposit: null,
+      notes: "",
+      unmatched: [],
+    };
+    const p = buildConversationPrompt(["thirty squares"], current);
+    expect(p).toContain("tear-off");
+    expect(p).toContain("450");
+    expect(p).toContain("Return the complete estimate");
+  });
+
+  it("grounds a figure against the whole conversation, not just the last thing said", () => {
+    // The price was spoken three turns ago; it must not start reading as
+    // invented just because the rep has since said other things.
+    const transcript = ["thirty squares at four fifty", "granule loss on the south slope"].join(
+      "\n",
+    );
+    const d = validateDraft({ lines: [{ id: "tear-off", qty: 30, price: 450 }] }, transcript);
+    expect(d.lines[0].unverified).toBeUndefined();
   });
 });
 

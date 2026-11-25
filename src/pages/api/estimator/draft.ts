@@ -1,7 +1,13 @@
 import type { APIRoute } from "astro";
 import Anthropic from "@anthropic-ai/sdk";
 import { ESTIMATOR_COOKIE, isEstimatorEnabled, verifyEstimatorToken } from "~/lib/estimator-auth";
-import { DRAFT_SCHEMA, buildDraftSystem, validateDraft } from "~/lib/estimate-draft";
+import {
+  DRAFT_SCHEMA,
+  buildConversationPrompt,
+  buildDraftSystem,
+  validateDraft,
+  type EstimateDraft,
+} from "~/lib/estimate-draft";
 
 export const prerender = false;
 
@@ -24,6 +30,8 @@ export const prerender = false;
  */
 
 const MAX_TRANSCRIPT = 8_000;
+/** How many things the rep has said we carry back. Plenty for one estimate. */
+const MAX_TURNS = 40;
 
 /**
  * Low effort on purpose. This is extraction against a fixed vocabulary, not a
@@ -51,15 +59,26 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   const apiKey = import.meta.env.ANTHROPIC_API_KEY;
   if (!apiKey) return json({ ok: false, reason: "unconfigured" }, 503);
 
-  let transcript = "";
+  let turns: string[] = [];
+  let current: EstimateDraft | null = null;
   try {
     const body = await request.json();
-    transcript = typeof body?.transcript === "string" ? body.transcript.trim() : "";
+    const raw = Array.isArray(body?.turns) ? body.turns : [];
+    turns = raw
+      .filter((t: unknown): t is string => typeof t === "string")
+      .map((t: string) => t.trim())
+      .filter(Boolean)
+      .slice(-MAX_TURNS);
+    // Re-validated rather than trusted: it came back from a browser, and the
+    // only thing standing between a tampered line and a customer's estimate
+    // is this call.
+    current = body?.current ? validateDraft(body.current, turns.join(" ")) : null;
   } catch {
     return json({ ok: false, reason: "bad-request" }, 400);
   }
+
+  const transcript = turns.join("\n").slice(0, MAX_TRANSCRIPT);
   if (transcript.length < 3) return json({ ok: false, reason: "empty" }, 400);
-  transcript = transcript.slice(0, MAX_TRANSCRIPT);
 
   try {
     const client = new Anthropic({ apiKey });
@@ -80,7 +99,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
           cache_control: { type: "ephemeral" },
         },
       ],
-      messages: [{ role: "user", content: transcript }],
+      messages: [{ role: "user", content: buildConversationPrompt(turns, current) }],
     });
 
     // Guard before reading content: a refusal returns 200 with no usable text.

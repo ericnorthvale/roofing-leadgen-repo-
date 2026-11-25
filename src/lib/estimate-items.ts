@@ -378,11 +378,10 @@ export const ESTIMATE_ITEMS: EstimateItem[] = [
   },
 ];
 
-/** Items pre-ticked when a rep starts a replacement estimate. */
-export const REPLACEMENT_DEFAULTS = ESTIMATE_ITEMS.filter((i) => i.defaultOnReplacement).map(
-  (i) => i.id,
-);
-
+/**
+ * Grouping headings. Not used by the estimator screen, which lists lines in the
+ * order the rep spoke them — kept because the printed estimate groups by block.
+ */
 export const BLOCK_LABEL: Record<EstimateBlock, string> = {
   replacement: "Roof replacement",
   repair: "Roof repair",
@@ -390,7 +389,3 @@ export const BLOCK_LABEL: Record<EstimateBlock, string> = {
   ventilation: "Ventilation",
   maintenance: "Maintenance",
 };
-
-export function itemsForBlock(block: EstimateBlock): EstimateItem[] {
-  return ESTIMATE_ITEMS.filter((i) => i.block === block);
-}

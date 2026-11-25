@@ -39,11 +39,15 @@ on a busy person.
       insurance claim, roof age, timeline (→ different nurture tracks); a no-answer ×3 →
       90-day recycle cadence; a quote-follow-up sequence (20–30% of signable jobs are lost
       to post-estimate silence). Cheap now, expensive to retrofit.
-- [ ] **Switch on the crew estimator's talk-it-through feature.** The estimator at
-      `/estimator` works today: a rep types the figures in by hand. What is switched off
-      is the part where they talk and it fills itself in. Two settings turn it on, both in
-      Vercel, and the whole thing takes about ten minutes. **Steps:
+- [ ] **Switch on the crew estimator.** A rep opens `/estimator`, puts in the crew code,
+      types the customer's details and talks through the job; the estimate builds as they
+      speak. One setting in Vercel turns it on, about ten minutes. **Steps:
       `docs/setup-estimator-ai.md`.**
+
+      **It does not work at all until you do this.** The manual version — ticking items off
+      a list and typing a figure into each — was removed at your request on 2026-11-25, so
+      there is no by-hand fallback behind it any more. Worth knowing before a rep is sent
+      to a roof expecting to use it.
 
       _This is deliberately not the Tier 4 "do not provision `ANTHROPIC_API_KEY` yet"
       decision being reversed by the back door._ That decision was about the automated

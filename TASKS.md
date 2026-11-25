@@ -16,12 +16,14 @@ tests). Still open — tracked in the review doc:
       claim/verify GBP (promote to co-equal workstream with the site)
 - [ ] **Owner:** HighLevel keys + verify v2 payload shapes + build the
       speed-to-lead auto-responder and missed-call text-back workflows
-- [ ] **Owner (blocks the estimator's talk-it-through box only):**
-      `ANTHROPIC_API_KEY` in Vercel, Production + Preview, then redeploy.
-      Steps: `docs/setup-estimator-ai.md`. Until then the estimator works by
-      hand and the box says so; nothing else is affected. Note this is NOT the
-      Tier 4 "don't provision an LLM key yet" call being reversed — that was
-      about the blog-drafting pipeline, which stays off.
+- [ ] **Owner (blocks the whole crew estimator):** `ANTHROPIC_API_KEY` in
+      Vercel, Production + Preview, then redeploy. Steps:
+      `docs/setup-estimator-ai.md`. The manual line-item builder was removed
+      on owner instruction (2026-11-25), so there is no longer a by-hand
+      fallback — without the key the estimator builds nothing. Nothing outside
+      `/estimator` is affected. This is NOT the Tier 4 "don't provision an LLM
+      key yet" call being reversed: that was the blog-drafting pipeline, which
+      stays off.
 - [x] Lead persistence fallback so an unconfigured stack can never silently
       drop a lead — private Vercel Blob store (`src/lib/lead-store.ts`), wired
       into `/api/lead` + the CallRail webhook; owner setup: `docs/setup-leads.md` §3

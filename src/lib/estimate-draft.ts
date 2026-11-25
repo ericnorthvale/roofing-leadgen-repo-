@@ -45,6 +45,8 @@ export interface DraftLine {
 export interface EstimateDraft {
   lines: DraftLine[];
   squares: number | null;
+  /** Optional, and only when the rep says one — deposits are case by case. */
+  deposit: number | null;
   notes: string;
   /** Things the rep mentioned that match no catalogue item. Shown, never dropped. */
   unmatched: string[];
@@ -71,11 +73,16 @@ const VALID_IDS = new Set(ESTIMATE_ITEMS.map((i) => i.id));
 export const DRAFT_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["lines", "squares", "notes", "unmatched"],
+  required: ["lines", "squares", "deposit", "notes", "unmatched"],
   properties: {
     squares: {
       type: ["number", "null"],
       description: "Roof size in squares, ONLY if the rep said a number. Otherwise null.",
+    },
+    deposit: {
+      type: ["number", "null"],
+      description:
+        "Deposit in dollars, ONLY if the rep asked for one and said the amount. Otherwise null.",
     },
     lines: {
       type: "array",
@@ -128,12 +135,36 @@ Rules:
 4. List an item the rep asked for even when they gave no numbers for it. Nulls are expected.
 5. "notes" is what the rep described seeing on the roof, written plainly for a homeowner to read. Use only what the rep said. Add no findings, no causes, no recommendations and no sales language of your own. No prices in the notes. If the rep described nothing, return an empty string.
 6. Never return the customer's name, address, phone number or email anywhere in your answer, even if the rep says them.
+7. You are given everything the rep has said so far and the estimate as it stands. Return the COMPLETE updated estimate every time, not just what changed. Carry forward every line and figure that is still correct. When the rep corrects something, use the new value. When they say to take something off, leave it out. When they say nothing about a line, leave it exactly as it was.
 
 The catalogue:
 `;
 
 export function buildDraftSystem(): string {
   return DRAFT_SYSTEM_PROMPT + buildCatalogue();
+}
+
+/**
+ * The conversation, as one message.
+ *
+ * Every turn re-derives the WHOLE estimate from the WHOLE conversation rather
+ * than applying a patch. It costs a few more tokens and buys two things worth
+ * far more: removing a line is expressible ("take the gutters off" simply
+ * yields an estimate without them), and nothing accumulates silently across
+ * turns, because there is no running state for an error to hide in.
+ */
+export function buildConversationPrompt(turns: string[], current: EstimateDraft | null): string {
+  const said = turns
+    .map((t, i) => `${i + 1}. ${t.trim()}`)
+    .filter((t) => t.length > 3)
+    .join("\n");
+
+  const standing =
+    current && (current.lines.length > 0 || current.notes)
+      ? `\n\nThe estimate as it stands:\n${JSON.stringify(current, null, 1)}`
+      : "\n\nThere is no estimate yet.";
+
+  return `What the rep has said, oldest first:\n${said}${standing}\n\nReturn the complete estimate reflecting everything above.`;
 }
 
 /* ── Grounding: do these figures appear in what the rep said? ─────── */
@@ -256,7 +287,13 @@ function cleanNumber(raw: unknown, max: number): number | null {
  * spoke, which is the correct failure mode for a tool used in a driveway.
  */
 export function validateDraft(raw: unknown, transcript = ""): EstimateDraft {
-  const empty: EstimateDraft = { lines: [], squares: null, notes: "", unmatched: [] };
+  const empty: EstimateDraft = {
+    lines: [],
+    squares: null,
+    deposit: null,
+    notes: "",
+    unmatched: [],
+  };
   if (!raw || typeof raw !== "object") return empty;
 
   const obj = raw as Record<string, unknown>;
@@ -284,8 +321,16 @@ export function validateDraft(raw: unknown, transcript = ""): EstimateDraft {
 
       const qty = cleanNumber(e.qty, MAX_QTY);
       const price = cleanNumber(e.price, MAX_PRICE);
-      const unverified =
-        (qty !== null && !grounded(qty, spoken)) || (price !== null && !grounded(price, spoken));
+
+      // A quantity of 1 is exempt, and it has to be: rule 2 of the prompt
+      // TELLS the model to use 1 for a lump sum ("gutter guards for twelve
+      // fifty" — one of them, $1,250). Nobody says "one", so checking it
+      // against the transcript marks a perfectly honest line. A flag that
+      // cries wolf on correct lines is worse than no flag, because the rep
+      // learns to scroll past it — and then misses the one that matters.
+      const qtyWrong = qty !== null && qty !== 1 && !grounded(qty, spoken);
+      const priceWrong = price !== null && !grounded(price, spoken);
+      const unverified = qtyWrong || priceWrong;
 
       lines.push(unverified ? { id, qty, price, unverified } : { id, qty, price });
     }
@@ -302,7 +347,13 @@ export function validateDraft(raw: unknown, transcript = ""): EstimateDraft {
   const squaresRaw = cleanNumber(obj.squares, MAX_QTY);
   const squares = squaresRaw !== null && grounded(squaresRaw, spoken) ? squaresRaw : null;
 
+  // A deposit is money the customer is asked to hand over. If it cannot be
+  // traced to something the rep said, it does not go on the estimate at all —
+  // unlike a line price, there is no box for them to notice it in.
+  const depositRaw = cleanNumber(obj.deposit, MAX_PRICE);
+  const deposit = depositRaw !== null && grounded(depositRaw, spoken) ? depositRaw : null;
+
   const notes = typeof obj.notes === "string" ? obj.notes.trim().slice(0, MAX_NOTES) : "";
 
-  return { lines, squares, notes, unmatched };
+  return { lines, squares, deposit, notes, unmatched };
 }

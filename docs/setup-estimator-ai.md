@@ -1,15 +1,14 @@
-# Switching on "talk it through" in the crew estimator
+# Switching on the crew estimator
 
 **Time: about 10 minutes, plus a few minutes waiting for a rebuild.**
 **You will need: a credit card, and the login for the Vercel account that hosts the site.**
 
-The estimator at `northvaleroofing.com/estimator` already works. A rep puts in the code,
-picks the work off the list and types the numbers. Nothing below is needed for that.
+The estimator lives at `northvaleroofing.com/estimator`, behind the crew code.
 
-What this turns on is the box at the top that says **Talk it through**. The rep taps the
-microphone on their phone keyboard, says what they're doing and what they're charging, and
-the estimate fills itself in. Until you do this, that box answers "The assistant isn't
-switched on yet" and the rep fills the estimate in by hand as usual. Nothing breaks.
+What this turns on is the estimator itself. The rep types the customer's details, taps the
+microphone on their phone keyboard, and talks through the job; the estimate builds as they
+speak, and they keep talking to change it. Until you do this, it answers "The assistant
+isn't switched on yet" and no estimate can be built.
 
 ---
 
@@ -77,48 +76,55 @@ Vercel is the company that runs the website. This is where the site keeps its pa
 ## Part 3 — Check it worked (1 minute)
 
 1. On your phone, go to **northvaleroofing.com/estimator** and put in the code.
-2. In the **Talk it through** box, tap the microphone on your keyboard and say:
+2. In **The job** box, tap the microphone on your keyboard and say:
 
    > "Tear off and replace, thirty squares, four fifty a square. Two pipe boots at ninety
    > each."
 
 3. Tap **Build the estimate**.
 
-You should see three lines appear with 30 × $450 and 2 × $90 filled in, and a total of
-**$13,680**.
+Under **The estimate** you should see two lines — 30 square × $450.00 and 2 each × $90.00 —
+and a total of **$13,680.00** at the bottom of the screen.
+
+Then say _"add gutter guards for twelve fifty"_ and tap **Add this**. The gutter guards
+should appear and the total should go up, without you touching anything else. That is the
+part worth checking: it changes the estimate rather than starting a new one.
 
 If it says _"The assistant isn't switched on yet"_, the key didn't reach the site — the
-redeploy in step 10 is the usual culprit. If it says _"Couldn't read that just now"_, the
-key arrived but the service rejected it; check in Billing that the payment method went
+redeploy in step 10 is the usual culprit. If it says _"Couldn't take that in"_, the key
+arrived but the service rejected it; check in Billing that the payment method went
 through.
 
 ---
 
 ## What it will and won't do
 
-**It only fills in numbers you actually said.** If you name a job but no price, the price
-box is left empty for you to fill. It does not know Northvale's prices and is not allowed
-to guess one — a made-up price on a document with your name on it is the one thing this
-must never do. Lines where it couldn't match a figure to your words are marked
-**CHECK THIS**.
+**It only uses numbers you actually said.** Name a job without a price and the line says
+**needs a price** until you say one. It does not know Northvale's prices and is not allowed
+to guess — a made-up price on a document with your name on it is the one thing this must
+never do. Anything it couldn't trace back to your words is marked **CHECK THIS**.
 
-**You are still the one quoting.** Every figure lands in a box you can change, the total is
-on screen the whole time, and nothing sends itself. Read it before it goes out, the same as
-if you'd typed it.
+**You change it by talking, not by typing.** "Make the tear-off four seventy-five." "Take
+the gutters off." "Add two more pipe boots." Each time, it rebuilds the whole estimate from
+everything you've said, so taking something off is as easy as putting it on. There's also
+an **Undo** on the last thing you said, if it mishears you.
+
+**You are still the one quoting.** The total is on screen the whole time and nothing sends
+itself. Read it before it goes out, the same as if you'd written it by hand.
 
 **It won't touch customer details.** Name, address, phone and email are typed, always. A
 wrong price is obvious in the total; a wrong house number is not.
-
-**Running it twice is safe.** It fills empty boxes and adds missing lines. It never
-overwrites a number you typed or corrected.
 
 ---
 
 ## Turning it off
 
-Delete the `ANTHROPIC_API_KEY` variable in Vercel and redeploy. The box goes back to saying
-it isn't switched on, and the estimator keeps working by hand. You can also delete the key
-at `https://platform.claude.com/settings/keys`, which stops it immediately everywhere.
+Delete the `ANTHROPIC_API_KEY` variable in Vercel and redeploy, or delete the key at
+`https://platform.claude.com/settings/keys`, which stops it immediately everywhere.
+
+Be aware this switches the estimator **off**, not back to a manual mode — there is no
+longer a by-hand version to fall back on. Reps would be back to whatever they used before
+the estimator existed until you put a key back.
 
 ---
 
