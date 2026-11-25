@@ -31,7 +31,8 @@ const unlocked = Astro.locals.estimatorUnlocked === true;
   }}
   bare
 >
-  <main class="min-h-screen bg-[color:var(--color-sand-50,#faf8f5)]">
+  {/* BaseLayout already provides <main id="main">, so this is a plain wrapper. */}
+  <div class="min-h-screen bg-[color:var(--color-sand-50,#faf8f5)]">
     {
       unlocked ? (
         <>
@@ -89,13 +90,11 @@ const unlocked = Astro.locals.estimatorUnlocked === true;
         </div>
       )
     }
-  </main>
-</BaseLayout>
-
-{
-  !unlocked && (
-    <script is:inline>
-      {`
+  </div>
+  {
+    !unlocked && (
+      <script is:inline>
+        {`
       (function () {
         var form = document.getElementById("pin-form");
         if (!form) return;
@@ -124,6 +123,7 @@ const unlocked = Astro.locals.estimatorUnlocked === true;
         });
       })();
     `}
-    </script>
-  )
-}
+      </script>
+    )
+  }
+</BaseLayout>
