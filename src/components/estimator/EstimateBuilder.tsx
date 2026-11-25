@@ -27,13 +27,20 @@ import {
   type EstimateBlock,
   type EstimateItem,
 } from "~/lib/estimate-items";
+import type { EstimateDraft } from "~/lib/estimate-draft";
 
 interface Line {
   key: string;
   item: EstimateItem;
   qty: string;
   price: string;
+  /** Filled from speech and not yet confirmed by the rep. Cleared on first edit. */
+  fromSpeech?: boolean;
+  /** A figure here could not be found in what the rep said. Worth a second look. */
+  unverified?: boolean;
 }
+
+const ITEM_BY_ID = new Map(ESTIMATE_ITEMS.map((i) => [i.id, i]));
 
 const BLOCKS: EstimateBlock[] = ["replacement", "repair", "gutters", "ventilation", "maintenance"];
 
@@ -69,6 +76,10 @@ export default function EstimateBuilder() {
   const [notes, setNotes] = useState("");
   const [deposit, setDeposit] = useState("");
   const [picker, setPicker] = useState<EstimateBlock>("replacement");
+  const [transcript, setTranscript] = useState("");
+  const [drafting, setDrafting] = useState(false);
+  const [draftNote, setDraftNote] = useState<string | null>(null);
+  const [unmatched, setUnmatched] = useState<string[]>([]);
 
   const total = useMemo(
     () => lines.reduce((sum, l) => sum + Math.round(toQty(l.qty) * toCents(l.price)), 0),
@@ -94,12 +105,110 @@ export default function EstimateBuilder() {
     ]);
   }
 
+  /** Any edit by the rep means the line has been looked at — drop the flags. */
   function update(key: string, patch: Partial<Line>) {
-    setLines((prev) => prev.map((l) => (l.key === key ? { ...l, ...patch } : l)));
+    setLines((prev) =>
+      prev.map((l) =>
+        l.key === key ? { ...l, ...patch, fromSpeech: false, unverified: false } : l,
+      ),
+    );
   }
 
   function remove(key: string) {
     setLines((prev) => prev.filter((l) => l.key !== key));
+  }
+
+  /**
+   * Fold a draft into the form.
+   *
+   * THE RULE IS FILL, NEVER OVERWRITE. Anything the rep has already typed wins
+   * over anything the model heard — so running this twice, or after correcting
+   * a line by hand, cannot undo their work. That also means there is no "are
+   * you sure" dialog to tap through in a driveway: the action is always safe.
+   */
+  function applyDraft(d: EstimateDraft) {
+    if (d.squares !== null && !squares.trim()) setSquares(String(d.squares));
+
+    setLines((prev) => {
+      const next = [...prev];
+      for (const dl of d.lines) {
+        const item = ITEM_BY_ID.get(dl.id);
+        if (!item) continue; // already guaranteed server-side; cheap to re-check
+        const at = next.findIndex((l) => l.item.id === dl.id);
+        const qty = dl.qty !== null ? String(dl.qty) : "";
+        const price = dl.price !== null ? String(dl.price) : "";
+
+        if (at !== -1) {
+          const existing = next[at];
+          const filledQty = existing.qty.trim() ? existing.qty : qty;
+          const filledPrice = existing.price.trim() ? existing.price : price;
+          // Only mark the line as touched by speech if speech actually added
+          // something; otherwise leave the rep's own line completely alone.
+          if (filledQty !== existing.qty || filledPrice !== existing.price) {
+            next[at] = {
+              ...existing,
+              qty: filledQty,
+              price: filledPrice,
+              fromSpeech: true,
+              unverified: dl.unverified === true,
+            };
+          }
+        } else {
+          next.push({
+            key: `${item.id}-${Math.random().toString(36).slice(2, 8)}`,
+            item,
+            qty,
+            price,
+            fromSpeech: true,
+            unverified: dl.unverified === true,
+          });
+        }
+      }
+      return next;
+    });
+
+    if (d.notes) setNotes((prev) => (prev.trim() ? `${prev.trim()}\n\n${d.notes}` : d.notes));
+    setUnmatched(d.unmatched);
+
+    const blanks = d.lines.filter((l) => l.price === null).length;
+    setDraftNote(
+      d.lines.length === 0
+        ? "Nothing picked up from that. Try naming the work — “tear off, thirty squares, four fifty a square”."
+        : blanks > 0
+          ? `Added ${d.lines.length} item${d.lines.length === 1 ? "" : "s"}. ${blanks} still need${blanks === 1 ? "s" : ""} a price — only what you said out loud gets filled in.`
+          : `Added ${d.lines.length} item${d.lines.length === 1 ? "" : "s"}. Check every figure before you send.`,
+    );
+  }
+
+  /** Send what the rep said to the draft endpoint. */
+  async function buildFromSpeech() {
+    if (transcript.trim().length < 3 || drafting) return;
+    setDrafting(true);
+    setDraftNote(null);
+    try {
+      const res = await fetch("/api/estimator/draft", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ transcript }),
+      });
+      const data = await res.json().catch(() => null);
+
+      if (res.ok && data?.ok && data.draft) {
+        applyDraft(data.draft as EstimateDraft);
+        return;
+      }
+      setDraftNote(
+        data?.reason === "unconfigured"
+          ? "The assistant isn't switched on yet. Fill the estimate in below as usual."
+          : data?.reason === "locked"
+            ? "Your session timed out. Reload the page and put the code in again."
+            : "Couldn't read that just now. Fill it in below, or try saying it again.",
+      );
+    } catch {
+      setDraftNote("No signal for that. Fill it in below, or try again once you're back on data.");
+    } finally {
+      setDrafting(false);
+    }
   }
 
   /** Measure the roof from the address, reusing the public calculator's endpoint. */
@@ -127,6 +236,49 @@ export default function EstimateBuilder() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 pb-32">
+      {/* ── Talk it through ──────────────────────────────────────────
+          No speech code here on purpose. Every phone keyboard already has a
+          microphone button that dictates into any box, it works offline-ish on
+          bad signal, it needs no permission prompt we have to design around,
+          and it cannot fail to attach the way a script can. The rep taps the
+          mic they already know; this box just collects the words. */}
+      <section className="mt-6 rounded-xl border border-[color:var(--color-gold-600)]/40 bg-white p-4">
+        <h2 className="m-0 text-[15px] font-bold text-[color:var(--color-navy-900,#1b2437)]">
+          Talk it through
+        </h2>
+        <p className="mt-1 mb-3 text-[13px] text-[color:var(--color-ink-500)]">
+          Tap the microphone on your keyboard and say what you&rsquo;re doing and what you&rsquo;re
+          charging &mdash; &ldquo;tear off and replace, thirty squares, four fifty a square, two
+          pipe boots at ninety.&rdquo; Only numbers you actually say get filled in.
+        </p>
+        <textarea
+          value={transcript}
+          onChange={(e) => setTranscript(e.target.value)}
+          rows={4}
+          placeholder="Hold the mic on your keyboard and talk…"
+          aria-label="What you're quoting, in your own words"
+          className="w-full rounded-lg border border-[color:var(--color-ink-200,#e4e6e9)] p-3 text-[15px]"
+        />
+        <button
+          type="button"
+          onClick={buildFromSpeech}
+          disabled={drafting || transcript.trim().length < 3}
+          className="mt-3 w-full rounded-lg bg-[color:var(--color-navy-900,#1b2437)] px-5 py-3 text-[15px] font-bold text-white disabled:opacity-40"
+        >
+          {drafting ? "Building…" : "Build the estimate"}
+        </button>
+        {draftNote && (
+          <p role="status" className="mt-3 mb-0 text-[13px] text-[color:var(--color-ink-700)]">
+            {draftNote}
+          </p>
+        )}
+        {unmatched.length > 0 && (
+          <p className="mt-2 mb-0 text-[13px] text-[#8a5a00]">
+            Not on the list, add it yourself if you need it: {unmatched.join(", ")}
+          </p>
+        )}
+      </section>
+
       {/* ── Customer ─────────────────────────────────────────────── */}
       <section className="mt-6">
         <h2 className="text-[13px] font-semibold tracking-wide text-[color:var(--color-ink-500)] uppercase">
@@ -210,6 +362,15 @@ export default function EstimateBuilder() {
                 <div className="flex items-start justify-between gap-2">
                   <p className="m-0 text-[15px] font-semibold text-[color:var(--color-navy-900,#1b2437)]">
                     {l.item.label}
+                    {l.unverified ? (
+                      <span className="ml-2 align-middle text-[11px] font-bold text-[#8a5a00]">
+                        CHECK THIS
+                      </span>
+                    ) : l.fromSpeech ? (
+                      <span className="ml-2 align-middle text-[11px] font-bold text-[color:var(--color-ink-500)]">
+                        FROM SPEECH
+                      </span>
+                    ) : null}
                   </p>
                   <button
                     type="button"
