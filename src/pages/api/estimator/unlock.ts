@@ -1,10 +1,7 @@
 import type { APIRoute } from "astro";
-import { rateLimit, clientKey } from "~/lib/rate-limit";
 import {
   ESTIMATOR_COOKIE,
   ESTIMATOR_MAX_AGE_SECONDS,
-  MAX_PIN_ATTEMPTS,
-  PIN_LOCKOUT_SECONDS,
   checkPin,
   createEstimatorToken,
   isEstimatorEnabled,
@@ -28,15 +25,21 @@ export const prerender = false;
  * BOTH shapes: a normal form submission (redirect back, cookie set) and JSON
  * (for anything programmatic later).
  *
- * FAIL CLOSED IN EVERY DIRECTION. No ESTIMATOR_PIN configured → 404, the same
+ * FAIL CLOSED WHERE IT COUNTS. No ESTIMATOR_PIN configured → 404, the same
  * answer an unknown route gives, so probing cannot distinguish "disabled" from
- * "does not exist". Wrong code → no detail. Too many wrong codes from one
- * address → locked out for fifteen minutes.
+ * "does not exist". A wrong code is refused with no detail.
  *
- * WHY THE LOCKOUT MATTERS MORE THAN THE CODE'S LENGTH. Six digits is a million
- * combinations, which a script exhausts in minutes if it may ask freely. Five
- * attempts per quarter-hour turns that into years. The lockout is doing most of
- * the security work on this door.
+ * NO LOCKOUT — THE OWNER'S CALL, MADE KNOWINGLY (2026-11-25). An earlier
+ * version locked an address out for fifteen minutes after five wrong codes,
+ * and it was removed because it locks out the crew too.
+ *
+ * THE CONSEQUENCE, RECORDED SO NOBODY RE-DERIVES IT: with no lockout, the
+ * length of the code is the ONLY thing standing between this page and anyone
+ * who scripts it. Unlimited guesses against six digits is a million
+ * combinations — hours, not years. If this door is ever worth hardening again,
+ * lengthening ESTIMATOR_PIN is the cheapest fix and needs no code change; a
+ * short delay on a wrong answer would be the next one, since it costs a human
+ * nothing and costs a script everything.
  */
 export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   const env = {
@@ -54,15 +57,8 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     contentType.includes("application/x-www-form-urlencoded") ||
     contentType.includes("multipart/form-data");
 
-  const fail = (reason: "wrong" | "locked", status: number) =>
-    isForm ? redirect(`/estimator?e=${reason}`, 303) : json({ ok: false, error: reason }, status);
-
-  const key = `estimator-pin:${clientKey(request.headers)}`;
-  const limited = rateLimit(key, {
-    limit: MAX_PIN_ATTEMPTS,
-    windowMs: PIN_LOCKOUT_SECONDS * 1000,
-  });
-  if (!limited.allowed) return fail("locked", 429);
+  const fail = () =>
+    isForm ? redirect("/estimator?e=wrong", 303) : json({ ok: false, error: "wrong" }, 401);
 
   let submitted = "";
   try {
@@ -77,7 +73,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     return isForm ? redirect("/estimator?e=wrong", 303) : json({ ok: false }, 400);
   }
 
-  if (!checkPin(submitted, env)) return fail("wrong", 401);
+  if (!checkPin(submitted, env)) return fail();
 
   cookies.set(
     ESTIMATOR_COOKIE,

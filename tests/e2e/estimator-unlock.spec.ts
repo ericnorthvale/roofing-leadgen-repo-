@@ -63,12 +63,12 @@ test.describe("estimator unlock", () => {
     expect(names).toContain("nv_estimator_session");
   });
 
-  test("a wrong code is refused, says so, and leaves the button usable", async ({ page }) => {
+  test("a wrong code is refused and you can try again immediately", async ({ page }) => {
     await page.goto("/estimator");
     await page.fill("#pin", "000000");
     await page.click("button[type=submit]");
 
-    await expect(page.locator("#pin-error")).toHaveText(/didn't work|Too many tries/);
+    await expect(page.locator("#pin-error")).toHaveText(/didn't work/);
     // Still on the code screen, and able to try again.
     await expect(page.locator("form")).toBeVisible();
     await expect(page.locator("button[type=submit]")).toBeEnabled();

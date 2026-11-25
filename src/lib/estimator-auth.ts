@@ -22,8 +22,13 @@
  * WHAT A LEAKED CODE WOULD COST. The estimator can put Northvale's name and
  * branding on a document and send it to a customer. The realistic harm is not
  * someone reading prices, it is someone issuing a fraudulent estimate in the
- * company's name — which is why attempts are rate-limited, the comparison is
- * constant-time, and the session is short.
+ * company's name. The comparison is constant-time and the session is short.
+ *
+ * THERE IS DELIBERATELY NO LOCKOUT (owner, 2026-11-25) — it locked out the
+ * crew as readily as anyone else. That makes the LENGTH of ESTIMATOR_PIN the
+ * only real defence: unlimited guesses against six digits is a million
+ * combinations, which is hours of scripting, not years. Lengthening the code
+ * is the fix and needs no code change.
  */
 
 /** Cookie holding the signed estimator session. Distinct from the admin one. */
@@ -34,11 +39,6 @@ export const ESTIMATOR_COOKIE = "nv_estimator_session";
  * a truck overnight should not still be signed in.
  */
 export const ESTIMATOR_MAX_AGE_SECONDS = 60 * 60 * 12; // 12 hours
-
-/** Wrong codes allowed from one address before it is locked out. */
-export const MAX_PIN_ATTEMPTS = 5;
-/** How long a lockout lasts. */
-export const PIN_LOCKOUT_SECONDS = 15 * 60;
 
 /** Minimum length we will accept for a configured code. */
 export const MIN_PIN_LENGTH = 4;
