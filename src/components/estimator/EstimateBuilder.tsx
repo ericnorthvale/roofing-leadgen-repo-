@@ -19,7 +19,7 @@
  * lump sum catches the fat-fingered zero before the customer sees it. A rep who
  * meant $450 a square sees "$38/square" and stops.
  */
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   BLOCK_LABEL,
   ESTIMATE_ITEMS,
@@ -80,6 +80,63 @@ export default function EstimateBuilder() {
   const [drafting, setDrafting] = useState(false);
   const [draftNote, setDraftNote] = useState<string | null>(null);
   const [unmatched, setUnmatched] = useState<string[]>([]);
+
+  /**
+   * THE PRE-HYDRATION TRAP.
+   *
+   * This page is server-rendered and then hydrated, so there is a window in
+   * which the boxes are real but React is not yet behind them. Anything typed
+   * in that window lives only in the DOM. Worse than being ignored, it is
+   * actively destroyed: these are controlled inputs, so React's first render
+   * after hydration writes its own (empty) state back over whatever is there.
+   * The rep watches their words vanish, or taps a button gated on state that
+   * never enables and gives no reason.
+   *
+   * It is the silent dead button from the unlock screen in a new costume, and
+   * on a cheap phone on bad signal that window is wide. A browser test filling
+   * the boxes faster than the server could hydrate is what caught it.
+   *
+   * THE FIX IS TO ADOPT THE DOM ON MOUNT — before React can overwrite it. That
+   * is what this does, for every field, not just the one that happened to be
+   * under test. Reading the live value at submit time (see buildFromSpeech) is
+   * a second guard, but it is NOT sufficient on its own: proved by removing
+   * this effect and watching the test go red anyway, because by submit time
+   * React has already blanked the box.
+   */
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    const read = (name: string) =>
+      rootRef.current
+        ?.querySelector<HTMLInputElement | HTMLTextAreaElement>(`[name="nv-${name}"]`)
+        ?.value?.trim() ?? "";
+
+    const said = read("transcript");
+    if (said) setTranscript(said);
+
+    const squaresTyped = read("squares");
+    if (squaresTyped) setSquares(squaresTyped);
+
+    const early = {
+      name: read("name"),
+      address: read("address"),
+      phone: read("phone"),
+      email: read("email"),
+    };
+    if (early.name || early.address || early.phone || early.email) {
+      setCustomer((prev) => ({
+        name: early.name || prev.name,
+        address: early.address || prev.address,
+        phone: early.phone || prev.phone,
+        email: early.email || prev.email,
+      }));
+    }
+
+    const notesTyped = read("notes");
+    if (notesTyped) setNotes(notesTyped);
+
+    setHydrated(true);
+  }, []);
 
   const total = useMemo(
     () => lines.reduce((sum, l) => sum + Math.round(toQty(l.qty) * toCents(l.price)), 0),
@@ -182,14 +239,22 @@ export default function EstimateBuilder() {
 
   /** Send what the rep said to the draft endpoint. */
   async function buildFromSpeech() {
-    if (transcript.trim().length < 3 || drafting) return;
+    if (drafting) return;
+    // The box itself is the source of truth, not our copy of it.
+    const live =
+      rootRef.current?.querySelector<HTMLTextAreaElement>('[name="nv-transcript"]')?.value ?? "";
+    const said = (live || transcript).trim();
+    if (said.length < 3) {
+      setDraftNote("Say what you're quoting first, then tap this again.");
+      return;
+    }
     setDrafting(true);
     setDraftNote(null);
     try {
       const res = await fetch("/api/estimator/draft", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ transcript }),
+        body: JSON.stringify({ transcript: said }),
       });
       const data = await res.json().catch(() => null);
 
@@ -235,14 +300,17 @@ export default function EstimateBuilder() {
   const ready = customer.name.trim() && customer.address.trim() && total > 0;
 
   return (
-    <div className="mx-auto max-w-2xl px-4 pb-32">
+    <div ref={rootRef} className="mx-auto max-w-2xl px-4 pb-32">
       {/* ── Talk it through ──────────────────────────────────────────
           No speech code here on purpose. Every phone keyboard already has a
           microphone button that dictates into any box, it works offline-ish on
           bad signal, it needs no permission prompt we have to design around,
           and it cannot fail to attach the way a script can. The rep taps the
           mic they already know; this box just collects the words. */}
-      <section className="mt-6 rounded-xl border border-[color:var(--color-gold-600)]/40 bg-white p-4">
+      <section
+        data-hydrated={hydrated ? "true" : "false"}
+        className="mt-6 rounded-xl border border-[color:var(--color-gold-600)]/40 bg-white p-4"
+      >
         <h2 className="m-0 text-[15px] font-bold text-[color:var(--color-navy-900,#1b2437)]">
           Talk it through
         </h2>
@@ -252,6 +320,7 @@ export default function EstimateBuilder() {
           pipe boots at ninety.&rdquo; Only numbers you actually say get filled in.
         </p>
         <textarea
+          name="nv-transcript"
           value={transcript}
           onChange={(e) => setTranscript(e.target.value)}
           rows={4}
@@ -262,7 +331,7 @@ export default function EstimateBuilder() {
         <button
           type="button"
           onClick={buildFromSpeech}
-          disabled={drafting || transcript.trim().length < 3}
+          disabled={drafting}
           className="mt-3 w-full rounded-lg bg-[color:var(--color-navy-900,#1b2437)] px-5 py-3 text-[15px] font-bold text-white disabled:opacity-40"
         >
           {drafting ? "Building…" : "Build the estimate"}
@@ -274,7 +343,8 @@ export default function EstimateBuilder() {
         )}
         {unmatched.length > 0 && (
           <p className="mt-2 mb-0 text-[13px] text-[#8a5a00]">
-            Not on the list, add it yourself if you need it: {unmatched.join(", ")}
+            Not on the list, add it yourself if you need it:{" "}
+            {unmatched.map((u) => u.replace(/-/g, " ")).join(", ")}
           </p>
         )}
       </section>
@@ -287,12 +357,14 @@ export default function EstimateBuilder() {
         <div className="mt-3 grid gap-3">
           <Field
             label="Name"
+            name="nv-name"
             value={customer.name}
             onChange={(v) => setCustomer({ ...customer, name: v })}
             autoComplete="name"
           />
           <Field
             label="Property address"
+            name="nv-address"
             value={customer.address}
             onChange={(v) => setCustomer({ ...customer, address: v })}
             autoComplete="street-address"
@@ -300,6 +372,7 @@ export default function EstimateBuilder() {
           <div className="grid grid-cols-2 gap-3">
             <Field
               label="Phone"
+              name="nv-phone"
               type="tel"
               value={customer.phone}
               onChange={(v) => setCustomer({ ...customer, phone: v })}
@@ -307,6 +380,7 @@ export default function EstimateBuilder() {
             />
             <Field
               label="Email"
+              name="nv-email"
               type="email"
               value={customer.email}
               onChange={(v) => setCustomer({ ...customer, email: v })}
@@ -325,6 +399,7 @@ export default function EstimateBuilder() {
           <div className="w-32">
             <Field
               label="Squares"
+              name="nv-squares"
               type="text"
               value={squares}
               onChange={setSquares}
@@ -453,6 +528,7 @@ export default function EstimateBuilder() {
           What you found
         </h2>
         <textarea
+          name="nv-notes"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           rows={5}
@@ -501,6 +577,8 @@ function Field(props: {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  /** Used to recover anything typed before hydration — see the mount effect. */
+  name?: string;
   type?: string;
   autoComplete?: string;
   inputMode?: "decimal" | "text";
@@ -512,6 +590,7 @@ function Field(props: {
       </span>
       <input
         type={props.type ?? "text"}
+        name={props.name}
         value={props.value}
         autoComplete={props.autoComplete}
         inputMode={props.inputMode}

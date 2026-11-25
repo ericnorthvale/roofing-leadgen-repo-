@@ -39,6 +39,18 @@ on a busy person.
       insurance claim, roof age, timeline (→ different nurture tracks); a no-answer ×3 →
       90-day recycle cadence; a quote-follow-up sequence (20–30% of signable jobs are lost
       to post-estimate silence). Cheap now, expensive to retrofit.
+- [ ] **Switch on the crew estimator's talk-it-through feature.** The estimator at
+      `/estimator` works today: a rep types the figures in by hand. What is switched off
+      is the part where they talk and it fills itself in. Two settings turn it on, both in
+      Vercel, and the whole thing takes about ten minutes. **Steps:
+      `docs/setup-estimator-ai.md`.**
+
+      _This is deliberately not the Tier 4 "do not provision `ANTHROPIC_API_KEY` yet"
+      decision being reversed by the back door._ That decision was about the automated
+      blog-drafting pipeline — scale-phase work with no near-term revenue. This is a rep
+      standing in a driveway writing a quote faster, which is about as near-term as
+      revenue gets. Same key, opposite side of the cost/benefit line. (Original decision:
+      `docs/decision-log.md`, 2026-07-04.)
 
 ## Tier 1 — blocks anything going live
 
