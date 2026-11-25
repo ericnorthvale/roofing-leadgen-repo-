@@ -232,7 +232,7 @@ export default function EstimateBuilder() {
       d.lines.length === 0
         ? "Nothing picked up from that. Try naming the work — “tear off, thirty squares, four fifty a square”."
         : blanks > 0
-          ? `Added ${d.lines.length} item${d.lines.length === 1 ? "" : "s"}. ${blanks} still need${blanks === 1 ? "s" : ""} a price — only what you said out loud gets filled in.`
+          ? `Added ${d.lines.length} item${d.lines.length === 1 ? "" : "s"}. ${blanks} still need${blanks === 1 ? "s" : ""} a price.`
           : `Added ${d.lines.length} item${d.lines.length === 1 ? "" : "s"}. Check every figure before you send.`,
     );
   }
@@ -317,7 +317,7 @@ export default function EstimateBuilder() {
         <p className="mt-1 mb-3 text-[13px] text-[color:var(--color-ink-500)]">
           Tap the microphone on your keyboard and say what you&rsquo;re doing and what you&rsquo;re
           charging &mdash; &ldquo;tear off and replace, thirty squares, four fifty a square, two
-          pipe boots at ninety.&rdquo; Only numbers you actually say get filled in.
+          pipe boots at ninety.&rdquo;
         </p>
         <textarea
           name="nv-transcript"

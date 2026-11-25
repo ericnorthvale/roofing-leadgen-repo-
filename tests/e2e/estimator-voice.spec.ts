@@ -133,7 +133,8 @@ test.describe("estimator — talk it through", () => {
 
     // Three of the four lines survive: the made-up id is gone.
     await expect(page.getByText(/Added 3 items/)).toBeVisible({ timeout: 15_000 });
-    await expect(page.getByText("solar-panel-install")).toBeVisible();
+    // Shown with the dashes taken out of the id, so it reads as words to a rep.
+    await expect(page.getByText("solar panel install")).toBeVisible();
     await expect(page.getByText("$9,000")).toHaveCount(0);
 
     await expect(
