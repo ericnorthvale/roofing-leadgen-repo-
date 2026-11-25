@@ -190,6 +190,10 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
+      // Shared code for the crew estimator (/estimator). NEVER commit a value —
+      // set it in Vercel. Unset = the estimator route 404s. Session cookies for
+      // it are signed with ADMIN_SESSION_SECRET; see src/lib/estimator-auth.ts.
+      ESTIMATOR_PIN: envField.string({ context: "server", access: "secret", optional: true }),
       // Lead alerts (SMS via Twilio + email via Resend). Day-one safety net — see docs/setup-leads.md.
       TWILIO_ACCOUNT_SID: envField.string({ context: "server", access: "secret", optional: true }),
       TWILIO_AUTH_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),

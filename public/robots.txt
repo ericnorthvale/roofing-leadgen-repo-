@@ -6,6 +6,10 @@ Disallow: /thank-you
 Disallow: /thank-you/
 Disallow: /api/
 
+# Internal crew tool, code-gated. Not for search.
+Disallow: /estimator
+Disallow: /estimator/
+
 # AI crawlers we allow (we want our content surfaced in Claude, Perplexity, Google AI Overviews).
 User-agent: ClaudeBot
 Allow: /

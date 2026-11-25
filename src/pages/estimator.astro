@@ -1,0 +1,129 @@
+---
+/**
+ * The crew estimator — internal, code-gated, never indexed.
+ *
+ * Two states in one route: the code screen, or the builder. Which one renders
+ * is decided by middleware (see src/middleware.ts and src/lib/estimator-auth.ts),
+ * which verifies the signed cookie and sets `locals.estimatorUnlocked`. If the
+ * estimator is not configured at all the middleware 404s before this file runs,
+ * so there is no "coming soon" state to probe.
+ *
+ * `bare` layout on purpose: a rep on a phone in a driveway does not need the
+ * marketing header, the nav or the footer. They need big targets and a total.
+ *
+ * SSR, never prerendered — the whole page depends on a per-request cookie.
+ */
+import BaseLayout from "@layouts/BaseLayout.astro";
+import EstimateBuilder from "@components/estimator/EstimateBuilder.tsx";
+import { BRAND } from "~/lib/brand";
+
+export const prerender = false;
+
+const unlocked = Astro.locals.estimatorUnlocked === true;
+---
+
+<BaseLayout
+  seo={{
+    title: "Estimator",
+    description: "Internal tool.",
+    pathname: "/estimator",
+    noindex: true,
+  }}
+  bare
+>
+  <main class="min-h-screen bg-[color:var(--color-sand-50,#faf8f5)]">
+    {
+      unlocked ? (
+        <>
+          <header class="border-b border-[color:var(--color-ink-200,#e4e6e9)] bg-white">
+            <div class="mx-auto flex max-w-2xl items-center justify-between px-4 py-3">
+              <p class="m-0 text-[15px] font-bold text-[color:var(--color-navy-900,#1b2437)]">
+                New estimate
+              </p>
+              <a
+                href="/api/estimator/logout"
+                class="text-[13px] font-semibold text-[color:var(--color-ink-500)] no-underline"
+              >
+                Lock
+              </a>
+            </div>
+          </header>
+          <EstimateBuilder client:load />
+        </>
+      ) : (
+        <div class="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6">
+          <h1 class="m-0 text-center text-2xl font-bold text-[color:var(--color-navy-900,#1b2437)]">
+            {BRAND.name}
+          </h1>
+          <p class="mt-1 mb-7 text-center text-[14px] text-[color:var(--color-ink-500)]">
+            Crew estimator
+          </p>
+
+          <form id="pin-form" class="grid gap-3" autocomplete="off">
+            <label class="block">
+              <span class="text-[13px] font-semibold text-[color:var(--color-ink-700)]">Code</span>
+              <input
+                id="pin"
+                name="pin"
+                type="password"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                required
+                class="mt-1 w-full rounded-lg border border-[color:var(--color-ink-200,#e4e6e9)] px-3 py-3 text-center text-xl tracking-[0.3em]"
+              />
+            </label>
+            <button
+              type="submit"
+              id="pin-submit"
+              class="rounded-lg bg-[color:var(--color-gold-600)] px-5 py-3 text-[15px] font-bold text-white"
+            >
+              Unlock
+            </button>
+            <p
+              id="pin-error"
+              role="alert"
+              aria-live="polite"
+              class="m-0 min-h-[1.25rem] text-center text-[13px] font-semibold text-[#b3261e]"
+            />
+          </form>
+        </div>
+      )
+    }
+  </main>
+</BaseLayout>
+
+{
+  !unlocked && (
+    <script is:inline>
+      {`
+      (function () {
+        var form = document.getElementById("pin-form");
+        if (!form) return;
+        var err = document.getElementById("pin-error");
+        var btn = document.getElementById("pin-submit");
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+          err.textContent = "";
+          btn.disabled = true;
+          try {
+            var res = await fetch("/api/estimator/unlock", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify({ pin: document.getElementById("pin").value }),
+            });
+            if (res.ok) { location.reload(); return; }
+            if (res.status === 429) {
+              err.textContent = "Too many tries. Wait 15 minutes.";
+            } else {
+              err.textContent = "That code didn't work.";
+            }
+          } catch (_) {
+            err.textContent = "No connection. Try again.";
+          }
+          btn.disabled = false;
+        });
+      })();
+    `}
+    </script>
+  )
+}

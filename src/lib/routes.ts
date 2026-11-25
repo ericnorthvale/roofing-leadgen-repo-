@@ -29,7 +29,12 @@ import {
 export const HAS_REAL_TEAM = false;
 
 /** Utility pages excluded from search (mirror the Disallow rules in public/robots.txt). */
-const STATIC_EXCLUDED = new Set(["/thank-you", ...(HAS_REAL_TEAM ? [] : ["/team"])]);
+const STATIC_EXCLUDED = new Set([
+  "/thank-you",
+  // Internal crew estimator — code-gated, never indexable.
+  "/estimator",
+  ...(HAS_REAL_TEAM ? [] : ["/team"]),
+]);
 
 /**
  * Route prefixes whose DETAIL pages canonicalize WITH a trailing slash.
