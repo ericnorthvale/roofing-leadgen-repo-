@@ -23,24 +23,38 @@ const PIN = process.env.E2E_ESTIMATOR_PIN;
 test.describe("estimator unlock", () => {
   test.skip(!PIN, "set E2E_ESTIMATOR_PIN (and ESTIMATOR_PIN on the server) to run");
 
-  test("the Unlock button actually submits — the handler is attached", async ({ page }) => {
+  test("submitting the code actually issues a POST", async ({ page }) => {
     await page.goto("/estimator");
-    await expect(page.locator("#pin-form")).toBeVisible();
+    await expect(page.locator("form")).toBeVisible();
 
-    // The regression: a click that produces NO request at all.
+    // The original regression was a click that produced NO request at all.
     const request = page.waitForRequest(
       (r) => r.url().includes("/api/estimator/unlock") && r.method() === "POST",
       { timeout: 5_000 },
     );
     await page.fill("#pin", PIN!);
-    await page.click("#pin-submit");
+    await page.click("button[type=submit]");
     await expect(request).resolves.toBeTruthy();
+  });
+
+  test("the code screen works with JavaScript disabled", async ({ browser }) => {
+    // The whole reason this is a native form: a driveway tool must not depend
+    // on a script that might never attach.
+    const ctx = await browser.newContext({ javaScriptEnabled: false });
+    const page = await ctx.newPage();
+    await page.goto("/estimator");
+    await page.fill("#pin", PIN!);
+    await page.click("button[type=submit]");
+    await expect(page.locator("header p", { hasText: "New estimate" })).toBeVisible({
+      timeout: 10_000,
+    });
+    await ctx.close();
   });
 
   test("a correct code opens the builder and sets a session cookie", async ({ page, context }) => {
     await page.goto("/estimator");
     await page.fill("#pin", PIN!);
-    await page.click("#pin-submit");
+    await page.click("button[type=submit]");
 
     await expect(page.locator("header p", { hasText: "New estimate" })).toBeVisible({
       timeout: 10_000,
@@ -52,11 +66,11 @@ test.describe("estimator unlock", () => {
   test("a wrong code is refused, says so, and leaves the button usable", async ({ page }) => {
     await page.goto("/estimator");
     await page.fill("#pin", "000000");
-    await page.click("#pin-submit");
+    await page.click("button[type=submit]");
 
     await expect(page.locator("#pin-error")).toHaveText(/didn't work|Too many tries/);
     // Still on the code screen, and able to try again.
-    await expect(page.locator("#pin-form")).toBeVisible();
-    await expect(page.locator("#pin-submit")).toBeEnabled();
+    await expect(page.locator("form")).toBeVisible();
+    await expect(page.locator("button[type=submit]")).toBeEnabled();
   });
 });
