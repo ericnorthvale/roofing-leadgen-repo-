@@ -189,6 +189,7 @@ describe("carrying the conversation", () => {
       lines: [{ id: "tear-off", qty: 30, price: 450 }],
       squares: 30,
       deposit: null,
+      shingle: null,
       notes: "",
       unmatched: [],
     };

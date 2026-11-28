@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { EstimateDraft } from "~/lib/estimate-draft";
 import { missingFacts } from "~/lib/proposal-copy";
+import type { ProposalPhoto } from "~/lib/proposal-pdf";
 
 /**
  * Turns the estimate into the document the customer keeps.
@@ -45,7 +46,36 @@ export default function ProposalButton(props: {
 }) {
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<string | null>(null);
+  const [cover, setCover] = useState<ProposalPhoto | null>(null);
+  const [extras, setExtras] = useState<ProposalPhoto[]>([]);
+  const coverInput = useRef<HTMLInputElement>(null);
+  const extraInput = useRef<HTMLInputElement>(null);
   const gaps = missingFacts();
+
+  /**
+   * A phone camera file is 3–6 MB and 4000px wide. Embedded raw, four of them
+   * make a 20 MB proposal that will not send as an email attachment — so each
+   * is re-encoded down to something a printer still renders cleanly.
+   */
+  async function readPhoto(file: File): Promise<ProposalPhoto | null> {
+    try {
+      const bitmap = await createImageBitmap(file);
+      const maxW = 1600;
+      const scale = Math.min(1, maxW / bitmap.width);
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(bitmap.width * scale);
+      canvas.height = Math.round(bitmap.height * scale);
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
+      ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      const blob: Blob | null = await new Promise((r) => canvas.toBlob(r, "image/jpeg", 0.82));
+      if (!blob) return null;
+      return { bytes: new Uint8Array(await blob.arrayBuffer()), type: "jpg" };
+    } catch {
+      // HEIC from an iPhone that the browser cannot decode is the usual cause.
+      return null;
+    }
+  }
 
   async function coverPhoto(): Promise<{
     image: { bytes: Uint8Array; type: "jpg" | "png" } | null;
@@ -86,13 +116,19 @@ export default function ProposalButton(props: {
     setBusy(true);
     setNote(null);
     try {
-      const { image, credit } = withPhoto ? await coverPhoto() : { image: null, credit: null };
+      // A photo the rep chose always beats one we looked up.
+      const { image, credit } = cover
+        ? { image: cover, credit: null }
+        : withPhoto
+          ? await coverPhoto()
+          : { image: null, credit: null };
       const { buildProposalPdf } = await import("~/lib/proposal-pdf");
       const bytes = await buildProposalPdf({
         customer: props.customer,
         draft: props.draft,
         coverImage: image,
         coverCredit: credit,
+        photos: extras,
       });
 
       const blob = new Blob([bytes as BlobPart], { type: "application/pdf" });
@@ -108,7 +144,7 @@ export default function ProposalButton(props: {
       setTimeout(() => URL.revokeObjectURL(url), 60_000);
 
       if (withPhoto && !image) {
-        setNote("No photo found for that address — the proposal is ready without one.");
+        setNote("No photo found for that address — add one with Cover photo, or send it as is.");
       }
     } catch {
       setNote("Couldn't build the proposal. Try again.");
@@ -117,8 +153,59 @@ export default function ProposalButton(props: {
     }
   }
 
+  async function pickCover(files: FileList | null) {
+    const file = files?.[0];
+    if (!file) return;
+    const photo = await readPhoto(file);
+    setCover(photo);
+    setNote(photo ? "Cover photo added." : "Couldn't read that image — try a JPG or PNG.");
+  }
+
+  async function addExtras(files: FileList | null) {
+    if (!files?.length) return;
+    const read = await Promise.all([...files].slice(0, 8).map(readPhoto));
+    const ok = read.filter(Boolean) as ProposalPhoto[];
+    setExtras((prev) => [...prev, ...ok].slice(0, 8));
+    setNote(
+      ok.length
+        ? `${ok.length} photo${ok.length === 1 ? "" : "s"} added.`
+        : "Couldn't read those images — try JPGs.",
+    );
+  }
+
   return (
     <div className="ml-auto text-right">
+      <input
+        ref={coverInput}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => pickCover(e.target.files)}
+      />
+      <input
+        ref={extraInput}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={(e) => addExtras(e.target.files)}
+      />
+      <div className="mb-1.5 flex justify-end gap-3">
+        <button
+          type="button"
+          onClick={() => coverInput.current?.click()}
+          className="text-[12px] font-semibold text-[color:var(--color-ink-500)] underline"
+        >
+          {cover ? "Cover photo ✓" : "Cover photo"}
+        </button>
+        <button
+          type="button"
+          onClick={() => extraInput.current?.click()}
+          className="text-[12px] font-semibold text-[color:var(--color-ink-500)] underline"
+        >
+          {extras.length ? `Photos (${extras.length})` : "Add photos"}
+        </button>
+      </div>
       <button
         type="button"
         disabled={props.disabled || busy}

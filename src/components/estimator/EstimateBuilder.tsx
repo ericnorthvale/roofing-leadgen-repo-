@@ -42,6 +42,7 @@ const EMPTY: EstimateDraft = {
   lines: [],
   squares: null,
   deposit: null,
+  shingle: null,
   notes: "",
   unmatched: [],
 };

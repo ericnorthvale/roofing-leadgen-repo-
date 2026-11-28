@@ -32,6 +32,23 @@
  * number is not.
  */
 import { ESTIMATE_ITEMS } from "./estimate-items";
+import { STUDIO_LINES } from "./design-studio";
+
+/**
+ * Every shingle the rep can name, as one closed vocabulary.
+ *
+ * Same safety model as the line items: the model picks an id from this list or
+ * it picks nothing. It cannot name a colour IKO does not make, or put a Nordic
+ * colour on a Dynasty roof, because the pairing is baked into the id.
+ */
+export const SHINGLE_CHOICES = STUDIO_LINES.flatMap((line) =>
+  line.colors.map((c) => ({
+    id: `${line.key}:${c.slug}`,
+    label: `${line.name} — ${c.name}`,
+  })),
+);
+
+const VALID_SHINGLES = new Set(SHINGLE_CHOICES.map((s) => s.id));
 
 /** One line the model proposes. Nulls are expected and fine. */
 export interface DraftLine {
@@ -47,6 +64,8 @@ export interface EstimateDraft {
   squares: number | null;
   /** Optional, and only when the rep says one — deposits are case by case. */
   deposit: number | null;
+  /** "<line>:<colour>" from SHINGLE_CHOICES, when the rep named one. */
+  shingle: string | null;
   notes: string;
   /** Things the rep mentioned that match no catalogue item. Shown, never dropped. */
   unmatched: string[];
@@ -73,7 +92,7 @@ const VALID_IDS = new Set(ESTIMATE_ITEMS.map((i) => i.id));
 export const DRAFT_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["lines", "squares", "deposit", "notes", "unmatched"],
+  required: ["lines", "squares", "deposit", "shingle", "notes", "unmatched"],
   properties: {
     squares: {
       type: ["number", "null"],
@@ -83,6 +102,12 @@ export const DRAFT_SCHEMA = {
       type: ["number", "null"],
       description:
         "Deposit in dollars, ONLY if the rep asked for one and said the amount. Otherwise null.",
+    },
+    shingle: {
+      type: ["string", "null"],
+      enum: [...SHINGLE_CHOICES.map((s) => s.id), null],
+      description:
+        "The shingle line and colour the rep named, e.g. IKO Dynasty in Granite Black. Null if they did not name one. Never guess a colour.",
     },
     lines: {
       type: "array",
@@ -135,13 +160,22 @@ Rules:
 4. List an item the rep asked for even when they gave no numbers for it. Nulls are expected.
 5. "notes" is what the rep described seeing on the roof, written plainly for a homeowner to read. Use only what the rep said. Add no findings, no causes, no recommendations and no sales language of your own. No prices in the notes. If the rep described nothing, return an empty string.
 6. Never return the customer's name, address, phone number or email anywhere in your answer, even if the rep says them.
-7. You are given everything the rep has said so far and the estimate as it stands. Return the COMPLETE updated estimate every time, not just what changed. Carry forward every line and figure that is still correct. When the rep corrects something, use the new value. When they say to take something off, leave it out. When they say nothing about a line, leave it exactly as it was.
+7. If the rep names a shingle line and colour ("IKO Dynasty in Granite Black"), set "shingle" to the matching id. If they name a line but no colour, or a colour you cannot match exactly, leave it null — a colour the customer did not choose is as wrong as a price nobody said.
+8. You are given everything the rep has said so far and the estimate as it stands. Return the COMPLETE updated estimate every time, not just what changed. Carry forward every line and figure that is still correct. When the rep corrects something, use the new value. When they say to take something off, leave it out. When they say nothing about a line, leave it exactly as it was.
+
+The shingles you may name:
+__SHINGLE_LIST__
 
 The catalogue:
 `;
 
 export function buildDraftSystem(): string {
-  return DRAFT_SYSTEM_PROMPT + buildCatalogue();
+  return (
+    DRAFT_SYSTEM_PROMPT.replace(
+      "__SHINGLE_LIST__",
+      SHINGLE_CHOICES.map((s) => `${s.id} | ${s.label}`).join("\n"),
+    ) + buildCatalogue()
+  );
 }
 
 /**
@@ -291,6 +325,7 @@ export function validateDraft(raw: unknown, transcript = ""): EstimateDraft {
     lines: [],
     squares: null,
     deposit: null,
+    shingle: null,
     notes: "",
     unmatched: [],
   };
@@ -353,7 +388,12 @@ export function validateDraft(raw: unknown, transcript = ""): EstimateDraft {
   const depositRaw = cleanNumber(obj.deposit, MAX_PRICE);
   const deposit = depositRaw !== null && grounded(depositRaw, spoken) ? depositRaw : null;
 
+  // A shingle outside the catalogue is dropped, not corrected: a colour the
+  // customer did not choose is as wrong as a price nobody said.
+  const shingle =
+    typeof obj.shingle === "string" && VALID_SHINGLES.has(obj.shingle) ? obj.shingle : null;
+
   const notes = typeof obj.notes === "string" ? obj.notes.trim().slice(0, MAX_NOTES) : "";
 
-  return { lines, squares, deposit, notes, unmatched };
+  return { lines, squares, deposit, shingle, notes, unmatched };
 }
