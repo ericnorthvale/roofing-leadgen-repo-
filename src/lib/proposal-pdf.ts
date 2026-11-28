@@ -625,12 +625,19 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
             : "Not included in this quote.";
 
         const eaveY = artTop - anchor.y;
-        // MUTED, not FAINT, for a layer that is not in the quote. It has to
-        // read as a deliberate "you are not getting this" rather than as type
-        // that failed to print — the owner's first reaction to the old, paler
-        // treatment was to ask what had gone wrong with the page.
-        const labelCol = on ? NAVY : MUTED;
-        const lineCol = on ? GOLD_DEEP : { r: 0.82, g: 0.83, b: 0.84 };
+        // EVERY LABEL IS SET THE SAME (owner, 2026-11-28). A layer that is
+        // not in the quote used to be greyed in the margin as well as on the
+        // drawing, and dimming the words twice made the page look faulty
+        // rather than informative. The sentence under the label already says
+        // "Not included in this quote." in plain English, and the layer
+        // itself is washed back in the art — that is the distinction made
+        // twice already. Type weight is not the place to make it a third
+        // time.
+        const labelCol = NAVY;
+        // The leader belongs to the label, so it matches it. Leaving this one
+        // hairline faded under a full-strength label would put the "looks
+        // broken" impression straight back.
+        const lineCol = GOLD_DEEP;
 
         if (side === "l") {
           page.drawText(label, {
@@ -646,7 +653,7 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
               y: eaveY - 3 - i * 7.6,
               size: 6.4,
               font: body,
-              color: col(on ? MUTED : FAINT),
+              color: col(MUTED),
             });
           });
           page.drawLine({
@@ -671,7 +678,7 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
               y: eaveY - 3 - i * 7.6,
               size: 6.4,
               font: body,
-              color: col(on ? MUTED : FAINT),
+              color: col(MUTED),
             });
           });
           page.drawLine({
