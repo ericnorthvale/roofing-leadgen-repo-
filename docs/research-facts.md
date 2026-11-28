@@ -294,6 +294,52 @@ Limited Warranty PDF.
 | Marathon "10-year algae protection"              | Retail listing                | IKO's page states AR granules with no term.                                                                                                                                                         |
 | "3-tab is rated 60–70 mph"                       | Roofing blogs generally       | See UNVERIFIED #8 — the generic claim traces to no manufacturer document. The 60 mph figure published here is Marathon's own warranty figure, not the generic blog claim, and is published as such. |
 
+### IKO installation sequence (what order the products actually go on)
+
+Researched 2026-11-28 because the owner asked for the roof diagram's layer
+order to be checked against the products rather than asserted from memory.
+All of this is IKO's own published application instruction.
+
+**The documented order, deck upward:**
+
+1. **Drip edge at the EAVES**, fastened to the deck — the first thing on the
+   roof — SOURCE: https://www.iko.com/na/blog/how-to-install-shingles/
+   ("the first material installed at the eave is the drip edge")
+2. **Ice & water protector / eave protection**, lapping over that eave drip
+   edge, and in the valleys. IKO recommends eave protection in all
+   situations; where local code does not require it, the first course of
+   underlayment may be used instead — SOURCE: as above
+3. **Underlayment** (e.g. IKO Stormtite), in horizontal courses lapping the
+   eave protection by 4" and valley membrane by 6" — SOURCE: as above
+4. **Drip edge at the RAKES**, which goes ON TOP of the underlayment, unlike
+   the eave drip edge — SOURCE:
+   https://www.iko.com/na/document/leading-edge-plus-application-instructions/
+5. **Starter course** (IKO Leading Edge Plus), at all eaves AND rakes.
+   **This is where the starter goes: AFTER the underlayment, not before it.**
+   IKO's Leading Edge Plus bulletin says to "apply any underlayment, eave
+   protection, valley flashings, or drip edges required" before the starter —
+   SOURCE: https://www.iko.com/na/document/tbr36-leading-edge-plus-application-product-bulletin/
+   Four nails per strip, 3"–4" from the eave edge; overhang 1/4"–3/4". Starter
+   must be used at all eaves and rakes to keep the High Wind Resistance
+   Limited Warranty in force — SOURCE: as above
+6. **Field shingles**, bottom-up from the eave
+7. **Ridge vent**, then **hip & ridge caps** over it
+
+**Why this was checked twice.** The owner gave the order as deck, starter,
+ice & water, underlayment, shingles, ridge vent, ridge cap — putting the
+starter second. IKO's documents place it fifth, above the underlayment, and
+the diagram follows IKO. A proposal page whose purpose is proving Northvale
+knows roofs cannot print a sequence a roofer or an inspector would catch.
+
+**Armourshake is an exception** worth knowing if it is ever quoted: it needs
+TWO starter courses, one Leading Edge Plus or EdgeSeal and one Armour Starter
+in matching colour — SOURCE: IKO Armourshake application instructions.
+
+**SOURCING NOTE:** as with the Marathon figures above, these were read out of
+IKO's own documents through web search, because this build environment cannot
+reach iko.com. The sequence is consistent across IKO's how-to guide, the
+Leading Edge Plus bulletin and several per-product application instructions.
+
 ### IKO warranty facts (CRITICAL — publish exactly)
 
 - **Iron Clad® Protection** = the first **15 years** of **full, non-prorated**

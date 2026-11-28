@@ -68,6 +68,21 @@ export interface RoofLayer {
    * the drawing says is included, and nothing about the money.
    */
   standardOnReplacement?: boolean;
+  /**
+   * HOW MUCH OF THE ROOF THIS LAYER ACTUALLY COVERS.
+   *
+   * "full" covers the deck. "perimeter" is a strip along the eaves and rakes
+   * — a starter course. "patches" is local: valleys and around penetrations,
+   * which is where a leak barrier goes.
+   *
+   * IT LIVES IN THE DATA, NOT IN THE RENDERER, because it is a statement
+   * about the scope and not a drawing style. The starter and the leak barrier
+   * were both drawn as full roof planes until the owner caught it on
+   * 2026-11-28, and a homeowner could fairly have read that as "my whole roof
+   * is getting an ice-and-water membrane" — which is neither what is quoted
+   * nor what gets installed. Here, a test can hold it.
+   */
+  coverage?: "full" | "perimeter" | "patches";
 }
 
 const C = (hex: string) => ({
@@ -95,6 +110,7 @@ export const ROOF_LAYERS: RoofLayer[] = [
     itemIds: ["leak-barrier"],
     label: "Leak barrier",
     standardOnReplacement: true,
+    coverage: "patches",
     note: "Self-sealing membrane in the valleys and around penetrations — where roofs actually leak.",
     thickness: 11,
     fill: C("#7d4f3a"),
@@ -113,6 +129,7 @@ export const ROOF_LAYERS: RoofLayer[] = [
     itemIds: ["starter"],
     label: "Starter course",
     standardOnReplacement: true,
+    coverage: "perimeter",
     note: "A bonded first course at the eaves and rakes. It is what stops the edge lifting in wind.",
     thickness: 10,
     fill: C("#2f3f55"),
@@ -168,4 +185,4 @@ export const EDGE_CALLOUTS: Array<{ itemIds: string[]; label: string; note: stri
 ];
 
 export const DIAGRAM_DISCLAIMER =
-  "Cross-section is illustrative and not to scale; layer thicknesses are exaggerated for legibility. Components shown reflect the scope quoted in this proposal.";
+  "Illustrative and not to scale; layer thicknesses are exaggerated for legibility. Coverage is drawn as installed — the starter course runs along the eaves and rakes, and the leak barrier goes in the valleys and around penetrations, not across the whole deck. Components shown reflect the scope quoted in this proposal.";

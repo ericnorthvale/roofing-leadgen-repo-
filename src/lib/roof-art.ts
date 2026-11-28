@@ -54,6 +54,8 @@ export interface ArtLayer {
   key: string;
   kind: LayerKind;
   included: boolean;
+  /** How much of the roof it covers. Set in proposal-diagram.ts. */
+  coverage?: "full" | "perimeter" | "patches";
 }
 
 export interface ArtAnchor {
@@ -93,7 +95,7 @@ const GEO = {
   STEP: 38, // vertical gap between exploded layers
   PAD_TOP: 24,
   PAD_BOTTOM: 12,
-  WALL: 62, // the house body the layers are lifted off
+  WALL: 56, // the house body the layers are lifted off
 };
 
 /**
@@ -472,6 +474,185 @@ export async function renderRoofArt(
       ctx.stroke();
     };
 
+    /**
+     * LAYERS THAT DO NOT COVER THE ROOF (owner, 2026-11-28).
+     *
+     * The starter is one strip along the eaves and rakes; the leak barrier
+     * goes in the valleys and around penetrations. Both were being drawn as
+     * full roof planes, which is not a stylisation — it is a false statement
+     * about the scope, on a page whose entire job is showing a homeowner
+     * exactly what goes on their deck and what does not. A customer could
+     * reasonably read the old drawing as "my whole roof is getting an
+     * ice-and-water membrane", and then be right to feel misled.
+     *
+     * Each is now drawn where it actually goes, over a faint outline of the
+     * plane so the layer still reads as a layer in the stack.
+     */
+    /** Draws the layer and reports where its label should point. */
+    const drawPartial = (): { leftX: number; rightX: number; y: number } => {
+      const { left, right } = planes(top);
+      const hex = EDGE_HEX[layer.kind];
+
+      // The ghost of the plane: where this layer sits, not what it covers.
+      ctx.save();
+      ctx.strokeStyle = muted ? "rgba(178,183,189,0.4)" : "rgba(126,136,150,0.34)";
+      ctx.lineWidth = 0.5;
+      ctx.setLineDash([2, 4]);
+      ctx.stroke(left);
+      ctx.stroke(right);
+      ctx.setLineDash([]);
+      ctx.restore();
+
+      /** One piece of material: a cut face, the material, then an outline. */
+      const piece = (pts: Array<[number, number]>, lit: number) => {
+        const path = new Path2D();
+        pts.forEach(([px, py], i) => (i ? path.lineTo(px, py) : path.moveTo(px, py)));
+        path.closePath();
+
+        const face = new Path2D();
+        pts.forEach(([px, py], i) => (i ? face.lineTo(px, py + t) : face.moveTo(px, py + t)));
+        face.closePath();
+
+        ctx.save();
+        ctx.shadowColor = "rgba(20,26,36,0.26)";
+        ctx.shadowBlur = 3;
+        ctx.shadowOffsetY = 2.5;
+        ctx.fillStyle = muted ? "#c3c6ca" : shade(hex, 0.5);
+        ctx.fill(face);
+        ctx.restore();
+
+        const xs = pts.map((q) => q[0]);
+        const ys = pts.map((q) => q[1]);
+        const box = {
+          x: Math.min(...xs) - 2,
+          y: Math.min(...ys) - 2,
+          width: Math.max(...xs) - Math.min(...xs) + 4,
+          height: Math.max(...ys) - Math.min(...ys) + 4,
+        } as DOMRect;
+        paintPlane(path, lit, box);
+
+        ctx.strokeStyle = "rgba(0,0,0,0.38)";
+        ctx.lineWidth = 0.6;
+        ctx.stroke(path);
+      };
+
+      // The four corners of each plane, in order. The RIDGE edge of each is
+      // named so it can be skipped: nothing in this group goes at the ridge.
+      const L: Array<[number, number]> = [
+        [cx - W, top],
+        [cx, top - H],
+        [cx + D, top - H - DY],
+        [cx - W + D, top - DY],
+      ];
+      const R: Array<[number, number]> = [
+        [cx, top - H],
+        [cx + W, top],
+        [cx + W + D, top - DY],
+        [cx + D, top - H - DY],
+      ];
+      const ridgeEdge = { L: 1, R: 3 }; // index of the edge starting at corner i
+
+      const centroid = (c: Array<[number, number]>): [number, number] => [
+        c.reduce((a, q) => a + q[0], 0) / c.length,
+        c.reduce((a, q) => a + q[1], 0) / c.length,
+      ];
+      /** A point pulled toward the middle of its plane. */
+      const inset = (q: [number, number], mid: [number, number], f: number): [number, number] => [
+        q[0] + (mid[0] - q[0]) * f,
+        q[1] + (mid[1] - q[1]) * f,
+      ];
+
+      if (layer.coverage === "perimeter") {
+        // A band following the eaves and the rakes — every edge except the
+        // ridge. This is the shape of the real course.
+        for (const [corners, skip, lit] of [
+          [L, ridgeEdge.L, 0.74],
+          [R, ridgeEdge.R, 1],
+        ] as const) {
+          const mid = centroid(corners as Array<[number, number]>);
+          for (let i = 0; i < 4; i++) {
+            if (i === skip) continue;
+            const a = corners[i];
+            const b = corners[(i + 1) % 4];
+            piece([a, b, inset(b, mid, 0.3), inset(a, mid, 0.3)], lit);
+          }
+        }
+        // The band follows the rakes, so mid-slope lands squarely on it.
+        return {
+          leftX: cx - W / 2,
+          rightX: cx + W + Math.min(D, (D * (H / 2)) / DY),
+          y: top - H / 2,
+        };
+      }
+
+      // Leak barrier: collars around the penetrations. Parametric positions
+      // on each plane so they sit ON the slope rather than floating over it.
+      const at = (corners: Array<[number, number]>, u: number, v: number): [number, number] => {
+        const [ax, ay] = corners[0];
+        const [bx, by] = corners[1];
+        const [dx, dy] = corners[3];
+        return [ax + (bx - ax) * u + (dx - ax) * v, ay + (by - ay) * u + (dy - ay) * v];
+      };
+      const collar = (corners: Array<[number, number]>, u: number, v: number, lit: number) => {
+        const c0 = at(corners, u, v);
+        const du: [number, number] = [
+          (corners[1][0] - corners[0][0]) * 0.15,
+          (corners[1][1] - corners[0][1]) * 0.15,
+        ];
+        const dv: [number, number] = [
+          (corners[3][0] - corners[0][0]) * 0.26,
+          (corners[3][1] - corners[0][1]) * 0.26,
+        ];
+        piece(
+          [
+            [c0[0] - du[0] - dv[0], c0[1] - du[1] - dv[1]],
+            [c0[0] + du[0] - dv[0], c0[1] + du[1] - dv[1]],
+            [c0[0] + du[0] + dv[0], c0[1] + du[1] + dv[1]],
+            [c0[0] - du[0] + dv[0], c0[1] - du[1] + dv[1]],
+          ],
+          lit,
+        );
+        // The pipe the collar is sealing around, standing proud of it. A
+        // patch of membrane on its own looks like a stain; a patch with a
+        // pipe through it is self-explanatory.
+        if (!muted) {
+          ctx.fillStyle = "rgba(52,58,66,0.95)";
+          ctx.fillRect(c0[0] - 2, c0[1] - 7, 4, 7);
+          ctx.fillStyle = "rgba(96,104,114,0.95)";
+          ctx.beginPath();
+          ctx.ellipse(c0[0], c0[1] - 7, 2, 1.1, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "rgba(14,18,24,0.8)";
+          ctx.beginPath();
+          ctx.ellipse(c0[0], c0[1] - 7, 1.1, 0.6, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      };
+      // Spaced so no two patches touch: they read as separate penetrations,
+      // which is the point. Kept inside 0..1 on both axes so none hangs off
+      // the edge of the plane it is supposed to be lying on.
+      const LU = 0.45;
+      const LV = 0.35;
+      const RU2 = 0.7;
+      const RV2 = 0.72;
+      collar(L, LU, LV, 0.74);
+      collar(R, 0.33, 0.33, 1);
+      collar(R, RU2, RV2, 1);
+
+      // Anchored ON the collars: this layer has no material at the silhouette,
+      // so a leader aimed at the plane edge would point at nothing.
+      return {
+        leftX: at(L, LU, LV)[0],
+        rightX: at(R, RU2, RV2)[0],
+        y: top - LU * H - LV * DY,
+      };
+    };
+
+    if (layer.coverage === "perimeter" || layer.coverage === "patches") {
+      anchors.push({ key: layer.key, ...drawPartial() });
+      return;
+    }
+
     if (layer.kind === "vent" || layer.kind === "cap") {
       // Ridge-only elements: a narrow band riding the peak, not a full plane.
       // The vent is narrower than the cap that covers it — drawn any wider
@@ -560,9 +741,9 @@ export async function renderRoofArt(
 
       anchors.push({
         key: layer.key,
-        leftX: cx - halfRun,
-        rightX: cx + halfRun + D,
-        y: top - H + drop + t / 2,
+        leftX: cx - halfRun / 2,
+        rightX: cx + halfRun + D / 2,
+        y: top - H + drop / 2,
       });
       return;
     }
@@ -578,7 +759,19 @@ export async function renderRoofArt(
     ctx.stroke(left);
     ctx.stroke(right);
 
-    anchors.push({ key: layer.key, leftX: cx - W, rightX: cx + W + D, y: top + t / 2 });
+    // ANCHORED AT MID-SLOPE, NOT AT THE EAVE. The eave is a layer's LOWEST
+    // point, so a leader line drawn to it arrives at the bottom edge of this
+    // layer — which on the page sits right beside the layer BELOW, and reads
+    // as labelling that one. Half way up the slope the leader lands in the
+    // middle of the material it names. The x values follow the silhouette at
+    // that same height so the line stops at the material rather than short of
+    // it or through it.
+    anchors.push({
+      key: layer.key,
+      leftX: cx - W / 2,
+      rightX: cx + W + Math.min(D, (D * (H / 2)) / DY),
+      y: top - H / 2,
+    });
   }
 
   /**
@@ -733,8 +926,25 @@ export async function renderRoofArt(
   const bottomEave = GEO.PAD_TOP + (layers.length - 1) * GEO.STEP + H;
   drawHouse(bottomEave + 18);
 
-  // Bottom layer first, so each one overlaps the one below it.
-  layers.forEach((layer, i) => drawLayer(layer, GEO.PAD_TOP + i * GEO.STEP + H));
+  /**
+   * PAINTED BOTTOM-UP, WHICH IS NOT THE ORDER THE ARRAY ARRIVES IN.
+   *
+   * `layers` comes in page order — the ridge cap first, because it is drawn
+   * highest up the page. Painting in that order meant each lower layer was
+   * painted LAST, so wherever two layers overlapped on the page the lower one
+   * covered the higher one: the starter course appeared in front of the
+   * shingles that go on top of it, and the deck in front of the leak barrier.
+   * Stacked seven deep, the whole assembly read back to front, which is
+   * exactly what it looked like — the layers in the wrong order.
+   *
+   * Lifted plates seen from above overlap the other way round: the higher one
+   * is nearer the eye and hides part of the one below. So the deck is painted
+   * first and the ridge cap last, while each layer keeps the SAME position on
+   * the page. Position comes from the index; only the painting order changes.
+   */
+  for (let i = layers.length - 1; i >= 0; i--) {
+    drawLayer(layers[i], GEO.PAD_TOP + i * GEO.STEP + H);
+  }
 
   const blob: Blob | null = await new Promise((r) => canvas.toBlob(r, "image/png"));
   if (!blob) return null;

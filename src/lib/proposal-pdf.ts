@@ -551,7 +551,7 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
     kicker("What goes on your deck");
     sectionHeading("The Anatomy of Your Roof");
     text(
-      "A roof is six layers, installed in this order. Every one of them does a job, and the order cannot be changed afterwards — which is why what is included matters more than the headline price.",
+      "Six things go on your deck, bottom-up, in the order numbered below. Each does a job, and the order cannot be changed afterwards — which is why what is included matters more than the headline price.",
       { size: 9.5, lead: 15 },
     );
     gap(16);
@@ -577,6 +577,7 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
       key: l.label,
       kind: (l.kind ?? "shingles") as ArtLayer["kind"],
       included: layerIncluded(l),
+      coverage: l.coverage,
     }));
 
     const art = await renderRoofArt(artLayers, {
@@ -610,7 +611,13 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
         const anchor = art.anchors.find((a) => a.key === layer.label);
         if (!anchor) continue;
         const on = layerIncluded(layer);
-        const label = layer.label.replace("&amp;", "&");
+        // NUMBERED FROM THE DECK UP, so the install order cannot be misread.
+        // The page reads top-down but the roof is built bottom-up, and
+        // "installed in this order" over a top-down list is ambiguous at
+        // best. The deck is not numbered because it is not installed — it is
+        // already there.
+        const step = ROOF_LAYERS.filter((l) => !l.existing).indexOf(layer) + 1;
+        const label = (step > 0 ? `${step}. ` : "") + layer.label.replace("&amp;", "&");
         const note = layer.existing
           ? "Your existing structure — inspected and re-nailed."
           : on
