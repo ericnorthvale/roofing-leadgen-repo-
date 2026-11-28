@@ -45,6 +45,7 @@ const EMPTY: EstimateDraft = {
   shingle: null,
   notes: "",
   unmatched: [],
+  questions: [],
 };
 
 export default function EstimateBuilder() {
@@ -123,10 +124,29 @@ export default function EstimateBuilder() {
       setNote("Say something about the job first.");
       return;
     }
+    setSaying("");
+    await submit(text);
+  }
 
+  /**
+   * Answer one of the assistant's own questions.
+   *
+   * The question travels with the answer because every turn is re-read from
+   * scratch on the next build — "Granite Black" on its own means nothing a
+   * turn later, but "Which Dynasty colour? — Granite Black" always does. This
+   * is the whole point of the feature: the rep fills ONE blank without
+   * re-dictating the job.
+   */
+  async function answer(question: string, text: string) {
+    const body = text.trim();
+    if (!body) return;
+    await submit(`${question} — ${body}`);
+  }
+
+  async function submit(text: string) {
+    if (working) return;
     const next = [...turns, text];
     setTurns(next);
-    setSaying("");
     setWorking(true);
     setNote(null);
     setDetail(null);
@@ -279,6 +299,23 @@ export default function EstimateBuilder() {
         )}
       </section>
 
+      {/* ── What the assistant still needs ─────────────────────────── */}
+      {draft.questions.length > 0 && !working && (
+        <section className="mt-5 rounded-xl border border-[#e3c98f] bg-[#fdf8ee] p-4">
+          <h2 className="m-0 text-[13px] font-semibold tracking-wide text-[#85612D] uppercase">
+            {draft.questions.length === 1 ? "One thing to fill in" : "A few things to fill in"}
+          </h2>
+          <p className="mt-1 mb-0 text-[13px] text-[color:var(--color-ink-700)]">
+            Answer just the blank — you don&rsquo;t have to say the whole job again.
+          </p>
+          <div className="mt-3 grid gap-3">
+            {draft.questions.map((q) => (
+              <QuestionCard key={q} question={q} onAnswer={answer} />
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* ── The estimate ───────────────────────────────────────────── */}
       <section className="mt-8">
         <h2 className="text-[13px] font-semibold tracking-wide text-[color:var(--color-ink-500)] uppercase">
@@ -405,5 +442,53 @@ function Field(props: {
         className="mt-1 w-full rounded-lg border border-[color:var(--color-ink-200,#e4e6e9)] px-3 py-2.5 text-[15px]"
       />
     </label>
+  );
+}
+
+/**
+ * One blank, one answer.
+ *
+ * Its own input rather than a shared one, so three open questions can be
+ * answered in any order without the rep losing their place — and so the
+ * question stays on screen WHILE it is being answered, which is the
+ * difference between this and simply typing into the main box.
+ */
+function QuestionCard({
+  question,
+  onAnswer,
+}: {
+  question: string;
+  onAnswer: (question: string, text: string) => void;
+}) {
+  const [text, setText] = useState("");
+  return (
+    <div className="rounded-lg border border-[#e3c98f] bg-white p-3">
+      <p className="m-0 text-[15px] font-semibold text-[color:var(--color-navy-900,#1b2437)]">
+        {question}
+      </p>
+      <div className="mt-2 flex gap-2">
+        <input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              onAnswer(question, text);
+            }
+          }}
+          aria-label={question}
+          placeholder="Say it or type it…"
+          className="min-w-0 flex-1 rounded-lg border border-[color:var(--color-ink-200,#e4e6e9)] p-2 text-[15px]"
+        />
+        <button
+          type="button"
+          onClick={() => onAnswer(question, text)}
+          disabled={!text.trim()}
+          className="shrink-0 rounded-lg bg-[#85612D] px-4 py-2 text-[14px] font-bold text-white disabled:opacity-40"
+        >
+          Add
+        </button>
+      </div>
+    </div>
   );
 }

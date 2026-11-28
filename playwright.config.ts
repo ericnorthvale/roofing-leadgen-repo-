@@ -27,7 +27,10 @@ export default defineConfig({
   webServer: process.env.CI
     ? undefined
     : {
+        // E2E=1 turns off the Astro dev toolbar, whose shadow-root UI Playwright
+        // locators otherwise pierce. See astro.config.mjs.
         command: "pnpm dev",
+        env: { ...process.env, E2E: "1" },
         url: BASE_URL,
         reuseExistingServer: true,
         timeout: 60_000,

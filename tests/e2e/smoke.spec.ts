@@ -39,9 +39,9 @@ for (const path of CORE_PATHS) {
 
 test("homepage h1 carries the primary keyword", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "The Woodlands Roofing Company",
-  );
+  // The h1 became the photographic hero's promise in #38; what it must still
+  // carry is the place, which is the query this page is for.
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("The Woodlands");
 });
 
 test("homepage still surfaces the house tagline", async ({ page }) => {
@@ -49,9 +49,13 @@ test("homepage still surfaces the house tagline", async ({ page }) => {
   await expect(page.locator("body")).toContainText("Same day. In writing.");
 });
 
-test("draft city page is noindex; flagship city page is not", async ({ page }) => {
-  await page.goto("/spring");
-  await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(1);
+test("a completed city page is indexable", async ({ page }) => {
+  // This once asserted that /spring was noindex. Every area record has since
+  // been completed, so there is no draft city page left to point at — and a
+  // test that asserts a page is noindex when it is not is worse than no test.
+  // The gate itself (incomplete record -> noindex) is covered exhaustively in
+  // tests/unit/quality-gate.test.ts, which does not depend on which records
+  // happen to be finished today.
   await page.goto("/the-woodlands");
   await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(0);
 });

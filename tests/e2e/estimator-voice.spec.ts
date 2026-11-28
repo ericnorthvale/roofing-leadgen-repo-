@@ -35,6 +35,9 @@ import type { Server } from "node:http";
 const PIN = process.env.E2E_ESTIMATOR_PIN;
 const STUB = process.env.E2E_ANTHROPIC_STUB === "1";
 
+/** The blank the assistant raises rather than guesses at. */
+const COLOUR_Q = "Which Dynasty colour — Granite Black, Summit Grey or Shadow Brown?";
+
 /** After turn one. Ridge vent was named but never priced. */
 const DRAFT_1 = {
   squares: 30,
@@ -48,6 +51,7 @@ const DRAFT_1 = {
   ],
   notes: "Granule loss across the south slope and two cracked pipe boots.",
   unmatched: [],
+  questions: [COLOUR_Q],
 };
 
 /** After turn two: ridge vent gets its price, gutter guards are added. */
@@ -62,6 +66,13 @@ const DRAFT_2 = {
   ],
   notes: "Granule loss across the south slope and two cracked pipe boots.",
   unmatched: [],
+};
+
+/** What comes back once the colour question has been answered. */
+const DRAFT_3 = {
+  ...DRAFT_2,
+  shingle: "dynasty:granite-black",
+  questions: [],
 };
 
 const TURN_1 =
@@ -90,7 +101,16 @@ test.describe("estimator — talking out an estimate", () => {
       let body = "";
       req.on("data", (c) => (body += c));
       req.on("end", () => {
-        const draft = body.includes("gutter guards") ? DRAFT_2 : DRAFT_1;
+        // Matched on "Shadow Brown? —", not on the colour name: the system
+        // prompt carries the whole shingle catalogue, so "Granite Black" is in
+        // EVERY request. Only the answered question has the question mark and
+        // the dash. (And order matters, because the answer turn also carries
+        // the words of every earlier turn, "gutter guards" among them.)
+        const draft = body.includes("Shadow Brown? \u2014")
+          ? DRAFT_3
+          : body.includes("gutter guards")
+            ? DRAFT_2
+            : DRAFT_1;
         // Identifies this stub to the guard below.
         res.writeHead(200, { "content-type": "application/json", "x-nv-stub": "spec" });
         res.end(
@@ -158,6 +178,47 @@ test.describe("estimator — talking out an estimate", () => {
       failOnStatusCode: false,
     });
     expect(res.status()).toBe(401);
+  });
+
+  test("a blank gets asked for, and filling it in does not mean saying the job again", async ({
+    page,
+  }) => {
+    await unlock(page);
+    await page.getByLabel(/What you're quoting/i).fill(TURN_1);
+    await page.getByRole("button", { name: "Build the estimate" }).click();
+
+    // The estimate lands first — so a failure below is about the question,
+    // not about the response never arriving.
+    await expect(page.getByText("$13,500.00")).toBeVisible({ timeout: 20_000 });
+
+    // The assistant asks rather than guessing, and names the real choices.
+    await expect(page.getByText(/thing(s)? to fill in/i)).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByLabel(COLOUR_Q)).toBeVisible();
+
+    // The answer goes in the question's OWN box — the whole point: the rep
+    // types two words, not the job over again.
+    const posted = page.waitForRequest(
+      (r) => r.url().includes("/api/estimator/draft") && r.method() === "POST",
+      { timeout: 10_000 },
+    );
+    await page.getByLabel(COLOUR_Q).fill("Granite Black");
+    await page.getByRole("button", { name: "Add", exact: true }).click();
+    const req = await posted;
+
+    // Every earlier turn is still there, and the answer arrives attached to
+    // the question it answers — "Granite Black" alone would mean nothing.
+    const sent = JSON.parse(req.postData() ?? "{}");
+    expect(sent.turns).toHaveLength(2);
+    expect(sent.turns[0]).toBe(TURN_1);
+    expect(sent.turns[1]).toContain("Granite Black");
+    expect(sent.turns[1]).toContain("Which Dynasty colour");
+
+    // Answered, so it stops being asked. The question's own input is what
+    // goes away — the words survive in the turn list, which is the record of
+    // what the rep said and must not be rewritten.
+    await expect(page.getByLabel(COLOUR_Q)).toHaveCount(0, { timeout: 15_000 });
+    await expect(page.getByText(/thing(s)? to fill in/i)).toHaveCount(0);
+    await expect(page.getByText(COLOUR_Q)).toBeVisible();
   });
 
   test("talking once builds the estimate, and nothing that was not said gets on it", async ({

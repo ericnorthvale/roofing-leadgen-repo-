@@ -48,6 +48,12 @@ function keystaticWithHostFix() {
 }
 
 export default defineConfig({
+  // THE DEV TOOLBAR BREAKS E2E LOCATORS, not the site. It mounts its own UI in
+  // a shadow root, and Playwright's locators pierce shadow DOM — so
+  // `locator("h1")` on any page resolves to the toolbar's headings as well as
+  // the page's, and a strict-mode violation reads exactly like the page having
+  // five h1s. It loads asynchronously, so it fails some runs and not others.
+  devToolbar: { enabled: process.env.E2E !== "1" },
   site: SITE,
   output: "static",
   /**

@@ -69,6 +69,14 @@ export interface EstimateDraft {
   notes: string;
   /** Things the rep mentioned that match no catalogue item. Shown, never dropped. */
   unmatched: string[];
+  /**
+   * What the assistant still needs, as short questions the rep can answer in
+   * a few words. This is how a blank gets filled without re-dictating the
+   * whole job — and, crucially, how a figure gets ASKED FOR rather than
+   * guessed. The no-invention rule leaves holes by design; questions are how
+   * those holes close.
+   */
+  questions: string[];
 }
 
 /**
@@ -79,6 +87,8 @@ const MAX_QTY = 100_000;
 const MAX_PRICE = 1_000_000;
 const MAX_NOTES = 4_000;
 const MAX_UNMATCHED = 20;
+/** More than a few questions at once is an interrogation, not a help. */
+const MAX_QUESTIONS = 3;
 
 const VALID_IDS = new Set(ESTIMATE_ITEMS.map((i) => i.id));
 
@@ -92,7 +102,7 @@ const VALID_IDS = new Set(ESTIMATE_ITEMS.map((i) => i.id));
 export const DRAFT_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["lines", "squares", "deposit", "shingle", "notes", "unmatched"],
+  required: ["lines", "squares", "deposit", "shingle", "notes", "unmatched", "questions"],
   properties: {
     squares: {
       type: ["number", "null"],
@@ -150,6 +160,12 @@ export const DRAFT_SCHEMA = {
       items: { type: "string" },
       description: "Work the rep mentioned that matches no catalogue item.",
     },
+    questions: {
+      type: "array",
+      items: { type: "string" },
+      description:
+        "Up to 3 short questions you need answered to finish the estimate. Each must be answerable in a few words. Ask about prices you were not given, a colour named only vaguely, a missing quantity or roof size. NEVER ask about the customer's name, address, phone or email.",
+    },
   },
 } as const;
 
@@ -172,7 +188,8 @@ Rules:
 5. "notes" is what the rep described seeing on the roof, written plainly for a homeowner to read. Use only what the rep said. Add no findings, no causes, no recommendations and no sales language of your own. No prices in the notes. If the rep described nothing, return an empty string.
 6. Never return the customer's name, address, phone number or email anywhere in your answer, even if the rep says them.
 7. If the rep names a shingle line and colour ("IKO Dynasty in Granite Black"), set "shingle" to the matching id. If they name a line but no colour, or a colour you cannot match exactly, set it to "none" — a colour the customer did not choose is as wrong as a price nobody said.
-8. You are given everything the rep has said so far and the estimate as it stands. Return the COMPLETE updated estimate every time, not just what changed. Carry forward every line and figure that is still correct. When the rep corrects something, use the new value. When they say to take something off, leave it out. When they say nothing about a line, leave it exactly as it was.
+8. ASK FOR WHAT YOU ARE MISSING instead of leaving it silently blank. Put up to three short questions in "questions" — a price you were not given, a quantity you need, the roof size, or a colour named only loosely. Name the choices when you can: if the rep said "the dark grey one", ask which, and list the colours that line actually comes in. Each question must be answerable in a few words. Never ask about the customer's name, address, phone number or email — the rep types those. Never ask a question whose answer would not change the estimate, and never re-ask something already answered.
+9. You are given everything the rep has said so far and the estimate as it stands. Return the COMPLETE updated estimate every time, not just what changed. Carry forward every line and figure that is still correct. When the rep corrects something, use the new value. When they say to take something off, leave it out. When they say nothing about a line, leave it exactly as it was.
 
 The shingles you may name:
 __SHINGLE_LIST__
@@ -339,6 +356,7 @@ export function validateDraft(raw: unknown, transcript = ""): EstimateDraft {
     shingle: null,
     notes: "",
     unmatched: [],
+    questions: [],
   };
   if (!raw || typeof raw !== "object") return empty;
 
@@ -408,5 +426,16 @@ export function validateDraft(raw: unknown, transcript = ""): EstimateDraft {
 
   const notes = typeof obj.notes === "string" ? obj.notes.trim().slice(0, MAX_NOTES) : "";
 
-  return { lines, squares, deposit, shingle, notes, unmatched };
+  // Questions are shown to the rep verbatim, so they are capped and trimmed
+  // but not otherwise policed — the only real risk is volume.
+  const questions: string[] = [];
+  if (Array.isArray(obj.questions)) {
+    for (const q of obj.questions) {
+      if (typeof q === "string" && q.trim() && questions.length < MAX_QUESTIONS) {
+        questions.push(q.trim().slice(0, 180));
+      }
+    }
+  }
+
+  return { lines, squares, deposit, shingle, notes, unmatched, questions };
 }

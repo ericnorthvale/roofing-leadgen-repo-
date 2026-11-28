@@ -192,6 +192,7 @@ describe("carrying the conversation", () => {
       shingle: null,
       notes: "",
       unmatched: [],
+      questions: [],
     };
     const p = buildConversationPrompt(["thirty squares"], current);
     expect(p).toContain("tear-off");
@@ -286,5 +287,36 @@ describe("the schema is one the API will actually accept", () => {
       "dynasty:granite-black",
     );
     expect(validateDraft({ shingle: "dynasty:not-a-colour" }, "").shingle).toBeNull();
+  });
+
+  /* ── Questions ─────────────────────────────────────────────────── */
+
+  it("carries the assistant's questions through, trimmed", () => {
+    const d = validateDraft(
+      { questions: ["  Which Dynasty colour?  ", "", "   ", "What is the price?"] },
+      "",
+    );
+    expect(d.questions).toEqual(["Which Dynasty colour?", "What is the price?"]);
+  });
+
+  it("caps questions so a blank transcript cannot produce an interrogation", () => {
+    const d = validateDraft({ questions: ["a?", "b?", "c?", "d?", "e?"] }, "");
+    expect(d.questions).toHaveLength(3);
+  });
+
+  it("never leaves questions undefined, whatever the model returns", () => {
+    expect(validateDraft({}, "").questions).toEqual([]);
+    expect(validateDraft({ questions: "not an array" }, "").questions).toEqual([]);
+    expect(validateDraft({ questions: [1, true, null] }, "").questions).toEqual([]);
+  });
+
+  it("asks the model for questions, since a blank it never raises is a blank forever", () => {
+    expect(DRAFT_SCHEMA.required).toContain("questions");
+    expect(DRAFT_SCHEMA.properties.questions.type).toBe("array");
+    const sys = buildDraftSystem();
+    expect(sys).toMatch(/ASK FOR WHAT YOU ARE MISSING/);
+    // The rep types the customer; asking for it would be noise at best and a
+    // second, conflicting source of those fields at worst.
+    expect(sys).toMatch(/Never ask about the customer/);
   });
 });
