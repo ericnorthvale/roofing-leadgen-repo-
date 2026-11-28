@@ -2882,6 +2882,21 @@ workmanship-versus-materials distinction, and the note that coverage assumes
 correct ventilation and installation and that registration is handled. It does
 not add an exclusions list — none was given, and the note above still stands.
 
+**The twelve jobsite standards — signed off as written (2026-11-28).** Asked
+to read the list and strike anything the crew would not do every single time,
+the owner's answer was "the standars are good rn". So all twelve in
+`src/lib/proposal-standards.ts` are approved and print on every proposal: the
+five he supplied (protection before tear-off, magnet sweep every evening, no
+smoking or profanity, communication morning and evening, clean driveway) and
+the seven proposed here (photographs of the hidden work, never asking to use
+the bathroom, a named crew lead with a phone number, asking before opening a
+gate, gutters cleared as part of the job, walkthrough before the crew leaves,
+fixing what gets damaged).
+
+These are commitments a customer can hold the company to — which is the whole
+reason they work — so adding a thirteenth is not a drafting decision. Anything
+new goes to the owner before it is printed.
+
 **IKO Marathon spec sheet — NEEDS DATA.** The proposal's "Architectural vs
 3-Tab" page names Marathon as the 3-tab being compared against, and leaves its
 impact rating, wind warranty, product warranty and algae coverage as em-dashes,

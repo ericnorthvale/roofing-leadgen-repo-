@@ -16,9 +16,15 @@
  * use your bathroom" on a document a customer keeps, and then asking, is worse
  * than never having said it.
  *
- * The owner supplied the first few (clean jobsite, magnet sweep, no cursing,
- * no smoking, updates through the build) and asked for the list to be thought
- * through properly. The rest are proposed, not agreed — see TASKS_FOR_ERIC.md.
+ * STATUS: AGREED. The owner supplied the first few (clean jobsite, magnet
+ * sweep, no cursing, no smoking, updates through the build) and asked for the
+ * list to be thought through properly; the rest were proposed here and signed
+ * off as written on 2026-11-28 ("the standards are good rn"). All twelve are
+ * now live commitments printed on every proposal.
+ *
+ * SO ADDING ONE IS NO LONGER A DRAFTING DECISION. Anything new in this list
+ * goes to the owner first, because the crew has to keep it on every job
+ * before a customer ever reads it. Removing one is his call alone.
  */
 
 export interface Standard {

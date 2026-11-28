@@ -56,7 +56,10 @@ on a busy person.
       revenue gets. Same key, opposite side of the cost/benefit line. (Original decision:
       `docs/decision-log.md`, 2026-07-04.)
 
-- [ ] **Sign off the jobsite standards before a proposal goes to a customer.**
+- [x] **Sign off the jobsite standards before a proposal goes to a customer.**
+      _Done 2026-11-28 — all twelve approved as written. Recorded in
+      `docs/research-facts.md` Sheet 18. Adding a thirteenth needs your say-so;
+      removing one is yours alone._
       `src/lib/proposal-standards.ts` prints twelve promises on every proposal —
       magnet sweep every evening, photographs of the hidden work, no smoking or
       profanity, a named crew lead with his number, we never ask to use your
