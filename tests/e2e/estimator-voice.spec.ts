@@ -203,6 +203,42 @@ test.describe("estimator — talking out an estimate", () => {
     await expect(page.getByText(TURN_2)).toBeVisible();
   });
 
+  test("the proposal downloads as a real PDF", async ({ page }) => {
+    // The cover photo needs two Google-keyed endpoints this suite has no keys
+    // for, so they are stood in for here. The point is not the photo — it is
+    // that the button produces a PDF at all, since everything before this is
+    // only an estimate on a screen.
+    await page.route("**/api/geocode**", (r) =>
+      r.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ available: true, rooftop: true, lat: 30.3118, lng: -95.4561 }),
+      }),
+    );
+    // 204 is how property-image says "nothing for this address" — and 204 is a
+    // success status, so this also checks it isn't mistaken for an image.
+    await page.route("**/api/property-image**", (r) => r.fulfill({ status: 204, body: "" }));
+
+    await unlock(page);
+    await page.getByLabel("Name").fill("Dale Whitaker");
+    await page.getByLabel("Property address").fill("118 Red Cedar Dr, Conroe TX 77302");
+    await page.getByLabel(/What you're quoting/i).fill(TURN_1);
+    await page.getByRole("button", { name: "Build the estimate" }).click();
+    await expect(page.getByText("$13,680.00")).toBeVisible({ timeout: 15_000 });
+
+    const download = page.waitForEvent("download", { timeout: 60_000 });
+    await page.getByRole("button", { name: "Proposal" }).click();
+    const file = await download;
+
+    expect(file.suggestedFilename()).toBe("Northvale-proposal-Dale-Whitaker.pdf");
+    const path = await file.path();
+    const { readFileSync } = await import("node:fs");
+    const bytes = readFileSync(path!);
+    expect(bytes.subarray(0, 5).toString()).toBe("%PDF-");
+    // A PDF that is only a header is not a proposal.
+    expect(bytes.byteLength).toBeGreaterThan(20_000);
+  });
+
   test("words typed before React wakes up are not lost", async ({ page }) => {
     // THE REGRESSION THIS GUARDS. The page is server-rendered, so a rep can be
     // typing before it has hydrated. React does not adopt a DOM value it never

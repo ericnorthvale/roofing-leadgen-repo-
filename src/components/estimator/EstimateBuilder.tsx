@@ -29,6 +29,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ESTIMATE_ITEMS } from "~/lib/estimate-items";
 import type { EstimateDraft } from "~/lib/estimate-draft";
 import AddressField from "./AddressField";
+import ProposalButton from "./ProposalButton";
 
 const ITEM_BY_ID = new Map(ESTIMATE_ITEMS.map((i) => [i.id, i]));
 
@@ -363,14 +364,7 @@ export default function EstimateBuilder() {
               </p>
             )}
           </div>
-          <button
-            type="button"
-            disabled={!ready}
-            onClick={() => window.print()}
-            className="ml-auto rounded-lg bg-[color:var(--color-gold-600)] px-5 py-3 text-[15px] font-bold text-white disabled:opacity-40"
-          >
-            Review &amp; send
-          </button>
+          <ProposalButton customer={customer} draft={draft} disabled={!ready} />
         </div>
       </div>
     </div>
