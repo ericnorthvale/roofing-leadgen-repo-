@@ -29,6 +29,30 @@ import {
 export const HAS_REAL_TEAM = false;
 
 /** Utility pages excluded from search (mirror the Disallow rules in public/robots.txt). */
+/**
+ * Routes that must NEVER be served from Vercel's ISR cache.
+ *
+ * A page here decides what to render from the request itself — a cookie, a
+ * header, a query parameter. Cache one and the CDN hands the first visitor's
+ * copy to everyone else, which is not a stale-content problem but a
+ * correctness and security one: one person's session or CSRF `state` shared
+ * with strangers, and an auth callback that can never work because it gets
+ * unique parameters on every call.
+ *
+ * THIS HAS NOW GONE WRONG TWICE. PR #10 fixed it for the Keystatic admin, and
+ * it happened again when the crew estimator shipped (2026-11-28): the code
+ * screen was cached, so entering the right code set the session cookie and
+ * then landed the rep back on a cached logged-out page. It looked exactly like
+ * a dead button, and it came and went with the cache, which is what made it so
+ * hard to see.
+ *
+ * The list lives here rather than inline in astro.config.mjs so a test can
+ * check it against the pages that actually declare `prerender = false` — see
+ * tests/unit/isr-exclusions.test.ts. Adding a server-rendered page without
+ * adding it here now fails the build instead of shipping.
+ */
+export const ISR_EXCLUDE: RegExp[] = [/^\/api\//, /^\/keystatic/, /^\/estimator/];
+
 const STATIC_EXCLUDED = new Set([
   "/thank-you",
   // Internal crew estimator — code-gated, never indexable.

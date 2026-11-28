@@ -6,7 +6,7 @@ import react from "@astrojs/react";
 import keystatic from "@keystatic/astro";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
-import { isAllowedInSitemap, canonicalPath } from "./src/lib/routes";
+import { isAllowedInSitemap, canonicalPath, ISR_EXCLUDE } from "./src/lib/routes";
 import { contentLastmod } from "./scripts/sitemap-lastmod.mjs";
 
 // Keep SITE in one place. Eric will set PUBLIC_SITE_URL in Vercel env after domain purchase.
@@ -99,12 +99,11 @@ export default defineConfig({
     isr: {
       // content pages (blog, neighborhood, services) regenerate hourly when traffic hits
       expiration: 60 * 60,
-      // NEVER ISR-cache dynamic routes. The /api endpoints and the Keystatic admin
-      // set per-request cookies and must run fresh every time — caching them shares
-      // one user's CSRF `state`/session across everyone and outright breaks the
-      // OAuth callback (it gets unique code/state query params each call). Only the
-      // static content pages get ISR.
-      exclude: [/^\/api\//, /^\/keystatic/],
+      // NEVER ISR-cache a route that reads the request. The list and the reasons
+      // live in src/lib/routes.ts, next to a test that checks it covers every
+      // page declaring `prerender = false` — keeping it inline here is how
+      // /estimator came to be missing from it.
+      exclude: ISR_EXCLUDE,
     },
   }),
   integrations: [
