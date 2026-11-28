@@ -59,12 +59,18 @@ describe("warranty section", () => {
 });
 
 describe("credentials", () => {
-  it("claims only the certification status on file", async () => {
+  it("makes no certification claim at all", async () => {
+    // The licensing/credentials line was removed from the proposal at the
+    // owner's request (2026-11-28): it opened by telling the customer what the
+    // company is NOT, which reads as apology at the moment they are deciding
+    // to sign. It still belongs on /warranty and /certifications, where a
+    // homeowner is researching rather than signing. Making no claim is
+    // strictly safer than making a hedged one, so this now asserts silence.
     const { aboutSection } = await withBusinessInfo({ certStatus: "IKO ROOFPRO applicant" });
     const prose = aboutSection().body.join(" ");
-    expect(prose).toContain("IKO ROOFPRO applicant");
-    // Named ROOFPRO tiers are not held and must never be asserted.
-    expect(prose).not.toMatch(/ROOFPRO (Select|Premium|Craftsman)/i);
+    expect(prose).not.toMatch(/ROOFPRO/i);
+    expect(prose).not.toMatch(/licen[cs]/i);
+    expect(prose).not.toMatch(/certif/i);
   });
 
   it("carries no competitor brand onto the proposal", async () => {
@@ -107,5 +113,34 @@ describe("blanks surfaced to the rep", () => {
       financing: "Financing available",
     });
     expect(missingFacts()).toEqual([]);
+  });
+});
+
+describe("which comparison page appears", () => {
+  it("shows Class 3 vs Class 4 when Nordic was quoted", async () => {
+    const { comparisonFor } = await import("~/lib/proposal-compare");
+    expect(comparisonFor("nordic")?.heading).toMatch(/Class 3 vs Class 4/);
+  });
+
+  it("shows architectural vs 3-tab when Dynasty was quoted", async () => {
+    const { comparisonFor } = await import("~/lib/proposal-compare");
+    expect(comparisonFor("dynasty")?.heading).toMatch(/Architectural vs 3-Tab/);
+  });
+
+  it("shows nothing for a line with no agreed comparison", async () => {
+    const { comparisonFor } = await import("~/lib/proposal-compare");
+    expect(comparisonFor("cambridge")).toBeNull();
+    expect(comparisonFor(undefined)).toBeNull();
+  });
+
+  it("never states a Marathon figure nobody has sourced", async () => {
+    // UNVERIFIED #8 in research-facts.md: the 3-tab wind rating every blog
+    // repeats has no manufacturer document behind it. The 3-tab column must
+    // stay empty rather than plausible.
+    const { ARCHITECTURAL_COMPARISON } = await import("~/lib/proposal-compare");
+    const theirs = ARCHITECTURAL_COMPARISON.rows.map((r) => r.theirs).join(" ");
+    expect(theirs).not.toMatch(/\bmph\b/i);
+    expect(theirs).not.toMatch(/Class [1-4]/i);
+    expect(theirs).not.toMatch(/Lifetime/i);
   });
 });

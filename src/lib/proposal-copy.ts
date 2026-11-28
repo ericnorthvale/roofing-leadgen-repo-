@@ -79,15 +79,18 @@ export function warrantySection(): ProposalSection | null {
  *
  * NOT A COMPANY HISTORY, because there are no verified numbers to tell one
  * with — no years in business, no job count, no named certification tier.
- * `licenseNote` is the honest version of a credentials line and is built from
- * business-info.json, so it changes when the facts do rather than when
- * somebody feels like claiming more.
+ *
+ * BRAND.licenseNote IS DELIBERATELY NOT HERE (owner, 2026-11-28). It reads
+ * "Texas does not license residential roofing contractors. Northvale Roofing
+ * LLC is an IKO ROOFPRO applicant." True, and right for the website, where a
+ * homeowner is researching. Wrong for a proposal: it opens by telling the
+ * customer what the company is not, which reads as apology at the exact
+ * moment they are deciding to sign. It stays on /warranty and /certifications.
  */
 export function aboutSection(): ProposalSection {
   return {
     heading: "About this estimate",
     body: [
-      BRAND.licenseNote,
       "This proposal is an estimate of the work described above at the prices shown. If we open the roof and find something neither of us could see from the ground — rotten decking is the usual one — we will stop, show you, and agree the cost before carrying on. You will not find a change on the final invoice that you did not approve first.",
     ],
   };

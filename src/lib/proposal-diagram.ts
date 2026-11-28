@@ -26,6 +26,9 @@
  */
 
 /** One layer of the assembly, bottom (deck) to top (ridge cap). */
+/** Kept as its own constant because the array below references it. */
+const RIDGE_VENT_ITEM_ID = "ridge-vent";
+
 export interface RoofLayer {
   /** Catalogue ids that mean this layer is part of the job. */
   itemIds: string[];
@@ -34,6 +37,8 @@ export interface RoofLayer {
   note: string;
   /** Drawn thickness in points — legibility, not scale. */
   thickness: number;
+  /** How the canvas renderer paints this layer. */
+  kind?: "deck" | "membrane" | "underlayment" | "starter" | "shingles" | "vent" | "cap";
   fill: { r: number; g: number; b: number };
   /** Drawn as a repeating edge rather than a solid band (shingle courses). */
   courses?: boolean;
@@ -64,6 +69,7 @@ export const ROOF_LAYERS: RoofLayer[] = [
     note: "The plywood your whole roof is fastened to. Inspected and re-nailed once the old roof is off.",
     thickness: 22,
     fill: C("#c8a97e"),
+    kind: "deck",
     existing: true,
   },
   {
@@ -72,6 +78,7 @@ export const ROOF_LAYERS: RoofLayer[] = [
     note: "Self-sealing membrane in the valleys and around penetrations — where roofs actually leak.",
     thickness: 11,
     fill: C("#7d4f3a"),
+    kind: "membrane",
   },
   {
     itemIds: ["underlayment"],
@@ -79,6 +86,7 @@ export const ROOF_LAYERS: RoofLayer[] = [
     note: "A second water-resistant plane over the whole deck, under the shingles.",
     thickness: 11,
     fill: C("#4a5568"),
+    kind: "underlayment",
   },
   {
     itemIds: ["starter"],
@@ -86,6 +94,7 @@ export const ROOF_LAYERS: RoofLayer[] = [
     note: "A bonded first course at the eaves and rakes. It is what stops the edge lifting in wind.",
     thickness: 10,
     fill: C("#2f3f55"),
+    kind: "starter",
   },
   {
     itemIds: ["shingles-dynasty", "shingles-nordic"],
@@ -93,7 +102,16 @@ export const ROOF_LAYERS: RoofLayer[] = [
     note: "The roof you see. Nailed to the manufacturer's pattern so the wind warranty stands.",
     thickness: 20,
     fill: C("#3a3f45"),
+    kind: "shingles",
     courses: true,
+  },
+  {
+    itemIds: [RIDGE_VENT_ITEM_ID],
+    label: "Ridge vent",
+    note: "Lets hot attic air out at the peak. It goes on over the shingles and under the cap.",
+    thickness: 9,
+    fill: C("#6f5a3a"),
+    kind: "vent",
   },
   {
     itemIds: ["hip-ridge"],
@@ -101,11 +119,12 @@ export const ROOF_LAYERS: RoofLayer[] = [
     note: "Purpose-made caps along the ridges — not cut-up field shingles.",
     thickness: 14,
     fill: C("#22262b"),
+    kind: "cap",
   },
 ];
 
 /** Ridge ventilation sits at the peak rather than in the stack. */
-export const RIDGE_VENT_ITEM = "ridge-vent";
+export const RIDGE_VENT_ITEM = RIDGE_VENT_ITEM_ID;
 
 /**
  * Called out at the eave rather than drawn as a layer — it is an edge detail,

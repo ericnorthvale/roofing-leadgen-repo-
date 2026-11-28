@@ -33,12 +33,9 @@ import type { EstimateDraft } from "./estimate-draft";
 import { ESTIMATE_ITEMS, BLOCK_LABEL, type EstimateBlock } from "./estimate-items";
 import { STUDIO_LINES } from "./design-studio";
 import { BRAND } from "./brand";
-import {
-  ROOF_LAYERS,
-  RIDGE_VENT_ITEM,
-  EDGE_CALLOUTS,
-  DIAGRAM_DISCLAIMER,
-} from "./proposal-diagram";
+import { ROOF_LAYERS, EDGE_CALLOUTS, DIAGRAM_DISCLAIMER } from "./proposal-diagram";
+import { renderRoofArt, type ArtLayer } from "./roof-art";
+import { comparisonFor } from "./proposal-compare";
 import {
   ACCEPTANCE,
   aboutSection,
@@ -59,7 +56,6 @@ const inInstallOrder = <T extends { id: string }>(lines: T[]): T[] =>
   [...lines].sort((a, b) => (ITEM_ORDER.get(a.id) ?? 999) - (ITEM_ORDER.get(b.id) ?? 999));
 
 const NAVY = { r: 0x0e / 255, g: 0x18 / 255, b: 0x2f / 255 };
-const NAVY_SOFT = { r: 0x1b / 255, g: 0x24 / 255, b: 0x37 / 255 };
 const GOLD = { r: 0xc9 / 255, g: 0xa2 / 255, b: 0x6c / 255 };
 const GOLD_DEEP = { r: 0x85 / 255, g: 0x61 / 255, b: 0x2d / 255 };
 const INK = { r: 0.16, g: 0.18, b: 0.22 };
@@ -560,206 +556,134 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
     gap(16);
 
     /**
-     * EXPLODED ISOMETRIC, to the owner's reference (2026-11-28). The first
-     * version was a flat stack of bars, which reads as a chart. A homeowner
-     * recognises a house: each layer is the same gable roof, drawn in
-     * projection and lifted clear of the one below, so the order is obvious
-     * at a glance and so is anything missing from it.
-     *
-     * Each layer is two parallelograms sharing a ridge — the left slope in
-     * shadow, the right in light — plus a thin front edge that gives the
-     * sheet its thickness. Drawn as paths, so it stays sharp at any print
-     * size. No rafters: the owner does not want the structure shown, and this
-     * proposal is not selling it.
+     * The drawing is rendered on a canvas (see roof-art.ts) and embedded as
+     * one image; the labels stay here as live PDF text. pdf-lib cannot clip a
+     * path or fill one with a pattern, so every layer it drew came out flat —
+     * which is why a roof drawn in flat colour looked like a chart of a roof.
+     * A canvas can clip, so a shingle can be filled with IKO's own photograph
+     * of the colour being quoted. Text baked into the bitmap would go soft in
+     * print, so only the art is an image.
      */
-    const GEO = { W: 86, H: 26, D: 26, DY: 13, STEP: 34 };
-    // Sized so BOTH leader lines have room to travel. The first version put
-    // the house 4pt from the right column and the right-hand leaders rendered
-    // as dashes.
-    const cx = 232;
-    const LEFT_COL = 0;
+    const stackLayers = [...ROOF_LAYERS].reverse(); // page top = last installed
+    const artLayers = stackLayers.map((l) => ({
+      key: l.label,
+      kind: (l.kind ?? "shingles") as ArtLayer["kind"],
+      included: Boolean(l.existing) || l.itemIds.some((id) => quoted.has(id)),
+    }));
+
+    const art = await renderRoofArt(artLayers, {
+      cx: 232,
+      widthPt: CONTENT_W,
+      shingleHex: shingleEntry?.colour.chip ?? "#3a3f45",
+      swatchUrl: shingleEntry?.colour.swatch ?? null,
+    });
+
+    const edges = EDGE_CALLOUTS.filter((e) => e.itemIds.some((id) => quoted.has(id)));
     const LEFT_W = 130;
     const RIGHT_X = 366;
     const RIGHT_W = CONTENT_W - RIGHT_X;
 
-    const stackLayers = [...ROOF_LAYERS].reverse(); // page top = last installed
-    const ventQuoted = quoted.has(RIDGE_VENT_ITEM);
-    const edges = EDGE_CALLOUTS.filter((e) => e.itemIds.some((id) => quoted.has(id)));
+    if (art) {
+      need(art.heightPt + 18);
+      const artTop = y;
+      const img = await pdf.embedPng(art.bytes);
+      page.drawImage(img, {
+        x: M.left,
+        y: artTop - art.heightPt,
+        width: art.widthPt,
+        height: art.heightPt,
+      });
 
-    const rows = stackLayers.length + (ventQuoted ? 1 : 0);
-    const drawH = rows * GEO.STEP + edges.length * 26 + GEO.H + GEO.DY + 24;
-    need(drawH + 16);
-    const panelTop = y;
+      let side: "l" | "r" = "r";
+      for (const layer of stackLayers) {
+        const anchor = art.anchors.find((a) => a.key === layer.label);
+        if (!anchor) continue;
+        const on = Boolean(layer.existing) || layer.itemIds.some((id) => quoted.has(id));
+        const label = layer.label.replace("&amp;", "&");
+        const note = layer.existing
+          ? "Your existing structure — inspected and re-nailed."
+          : on
+            ? layer.note
+            : "Not included in this quote.";
 
-    /** A polygon in panel-local coordinates, y increasing downward. */
-    const poly = (pts: Array<[number, number]>, fill: Col) => {
-      const d =
-        `M ${pts[0][0]} ${pts[0][1]} ` +
-        pts
-          .slice(1)
-          .map((q) => `L ${q[0]} ${q[1]}`)
-          .join(" ") +
-        " Z";
-      page.drawSvgPath(d, { x: M.left, y: panelTop, color: col(fill), borderWidth: 0 });
-    };
+        const eaveY = artTop - anchor.y;
+        const labelCol = on ? NAVY : FAINT;
+        const lineCol = on ? GOLD_DEEP : { r: 0.82, g: 0.83, b: 0.84 };
 
-    const shade = (c: Col, k: number): Col => ({
-      r: Math.min(1, c.r * k),
-      g: Math.min(1, c.g * k),
-      b: Math.min(1, c.b * k),
-    });
+        if (side === "l") {
+          page.drawText(label, {
+            x: M.left,
+            y: eaveY + 6,
+            size: 8.6,
+            font: bold,
+            color: col(labelCol),
+          });
+          wrap(note, body, 6.4, LEFT_W - 6).forEach((ln, i) => {
+            page.drawText(ln, {
+              x: M.left,
+              y: eaveY - 3 - i * 7.6,
+              size: 6.4,
+              font: body,
+              color: col(on ? MUTED : FAINT),
+            });
+          });
+          page.drawLine({
+            start: { x: M.left + LEFT_W - 8, y: eaveY },
+            end: { x: M.left + anchor.leftX, y: eaveY },
+            thickness: 0.7,
+            color: col(lineCol),
+          });
+        } else {
+          const lw = bold.widthOfTextAtSize(label, 8.6);
+          page.drawText(label, {
+            x: M.left + CONTENT_W - lw,
+            y: eaveY + 6,
+            size: 8.6,
+            font: bold,
+            color: col(labelCol),
+          });
+          wrap(note, body, 6.4, RIGHT_W - 6).forEach((ln, i) => {
+            const w = body.widthOfTextAtSize(ln, 6.4);
+            page.drawText(ln, {
+              x: M.left + CONTENT_W - w,
+              y: eaveY - 3 - i * 7.6,
+              size: 6.4,
+              font: body,
+              color: col(on ? MUTED : FAINT),
+            });
+          });
+          page.drawLine({
+            start: { x: M.left + RIGHT_X - 6, y: eaveY },
+            end: { x: M.left + anchor.rightX, y: eaveY },
+            thickness: 0.7,
+            color: col(lineCol),
+          });
+        }
+        side = side === "l" ? "r" : "l";
+      }
 
-    /** One roof plane set at local vertical position `top`. */
-    function gable(top: number, fill: Col, thickness = 4) {
-      const { W, H, D, DY } = GEO;
-      const eaveL: [number, number] = [cx - W, top];
-      const ridgeF: [number, number] = [cx, top - H];
-      const eaveR: [number, number] = [cx + W, top];
-      const eaveLB: [number, number] = [cx - W + D, top - DY];
-      const ridgeB: [number, number] = [cx + D, top - H - DY];
-      const eaveRB: [number, number] = [cx + W + D, top - DY];
+      y = artTop - art.heightPt - 10;
 
-      // Front edge thickness, drawn first so the planes sit on top of it.
-      poly(
-        [
-          [eaveL[0], eaveL[1] + thickness],
-          [ridgeF[0], ridgeF[1] + thickness],
-          [eaveR[0], eaveR[1] + thickness],
-          eaveR,
-          ridgeF,
-          eaveL,
-        ],
-        shade(fill, 0.62),
-      );
-      poly([eaveL, ridgeF, ridgeB, eaveLB], shade(fill, 0.82)); // left slope, shadow
-      poly([ridgeF, eaveR, eaveRB, ridgeB], fill); // right slope, light
-    }
-
-    /** Callout with a leader line back to the roof at this height. */
-    function callout(side: "l" | "r", top: number, label: string, note: string, on: boolean) {
-      const labelCol = on ? NAVY : FAINT;
-      const lineCol = on ? GOLD_DEEP : { r: 0.82, g: 0.83, b: 0.84 };
-      // Anchor on the eave — the lowest, outermost point of this layer — so
-      // the line actually meets the shape instead of stopping in white space.
-      const eaveY = panelTop - top;
-      const baseY = eaveY + 6;
-
-      if (side === "l") {
-        page.drawText(label, {
-          x: M.left + LEFT_COL,
-          y: baseY,
+      // Eave details hang below the drawing rather than joining the stack.
+      for (const e of edges) {
+        need(22);
+        page.drawText(e.label, {
+          x: M.left,
+          y: y - 9,
           size: 8.6,
           font: bold,
-          color: col(labelCol),
+          color: col(NAVY),
         });
-        wrap(note, body, 6.4, LEFT_W - 6).forEach((ln, i) => {
-          page.drawText(ln, {
-            x: M.left + LEFT_COL,
-            y: baseY - 9 - i * 7.6,
-            size: 6.4,
-            font: body,
-            color: col(on ? MUTED : FAINT),
-          });
+        page.drawText(e.note, {
+          x: M.left + 70,
+          y: y - 9,
+          size: 7,
+          font: body,
+          color: col(MUTED),
         });
-        page.drawLine({
-          start: { x: M.left + LEFT_COL + LEFT_W - 8, y: eaveY },
-          end: { x: M.left + cx - GEO.W, y: eaveY },
-          thickness: 0.7,
-          color: col(lineCol),
-        });
-      } else {
-        const lw = bold.widthOfTextAtSize(label, 8.6);
-        page.drawText(label, {
-          x: M.left + CONTENT_W - lw,
-          y: baseY,
-          size: 8.6,
-          font: bold,
-          color: col(labelCol),
-        });
-        wrap(note, body, 6.4, RIGHT_W - 6).forEach((ln, i) => {
-          const w = body.widthOfTextAtSize(ln, 6.4);
-          page.drawText(ln, {
-            x: M.left + CONTENT_W - w,
-            y: baseY - 9 - i * 7.6,
-            size: 6.4,
-            font: body,
-            color: col(on ? MUTED : FAINT),
-          });
-        });
-        page.drawLine({
-          start: { x: M.left + RIGHT_X - 6, y: eaveY },
-          end: { x: M.left + cx + GEO.W + GEO.D, y: eaveY },
-          thickness: 0.7,
-          color: col(lineCol),
-        });
+        y -= 16;
       }
     }
-
-    let top = 40;
-    let side: "l" | "r" = "r";
-
-    if (ventQuoted) {
-      // A low ridge cap riding the peak, with air leaving it.
-      const vy = top;
-      poly(
-        [
-          [cx - 34, vy],
-          [cx, vy - 13],
-          [cx + 34, vy],
-          [cx + 34 + GEO.D, vy - GEO.DY],
-          [cx + GEO.D, vy - 13 - GEO.DY],
-          [cx - 34 + GEO.D, vy - GEO.DY],
-        ],
-        GOLD_DEEP,
-      );
-      for (let i = 0; i < 3; i++) {
-        const ax = M.left + cx - 16 + i * 16;
-        const ay = panelTop - vy + 20;
-        page.drawLine({
-          start: { x: ax, y: ay },
-          end: { x: ax, y: ay + 11 },
-          thickness: 1,
-          color: col(GOLD_DEEP),
-        });
-        page.drawLine({
-          start: { x: ax - 3, y: ay + 7 },
-          end: { x: ax, y: ay + 11 },
-          thickness: 1,
-          color: col(GOLD_DEEP),
-        });
-        page.drawLine({
-          start: { x: ax + 3, y: ay + 7 },
-          end: { x: ax, y: ay + 11 },
-          thickness: 1,
-          color: col(GOLD_DEEP),
-        });
-      }
-      callout("r", vy, "Ridge vent", "Releases heat and moisture from the attic.", true);
-      top += GEO.STEP;
-      side = "l";
-    }
-
-    for (const layer of stackLayers) {
-      const on = layer.existing || layer.itemIds.some((id) => quoted.has(id));
-      gable(top, on ? layer.fill : { r: 0.86, g: 0.86, b: 0.87 }, layer.courses ? 6 : 4);
-      const note = layer.existing
-        ? "Your existing structure — inspected and re-nailed."
-        : on
-          ? layer.note
-          : "Not included in this quote.";
-      callout(side, top, layer.label.replace("&amp;", "&"), note, on);
-      side = side === "l" ? "r" : "l";
-      top += GEO.STEP;
-    }
-
-    // Eave details hang off the bottom layer rather than joining the stack.
-    for (const e of edges) {
-      callout(side, top, e.label, e.note, true);
-      side = side === "l" ? "r" : "l";
-      top += 26;
-    }
-
-    y = panelTop - drawH - 12;
 
     // A summary box, in the spirit of the navy callout on the owner's gutter
     // proposal. It states plainly what is and is not in the quote, which is
@@ -917,6 +841,128 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
     );
   }
 
+  /* ── Why this shingle ─────────────────────────────────────────── */
+
+  const comparison = comparisonFor(shingleEntry?.line.key);
+  if (comparison) {
+    newPage();
+    kicker(comparison.kicker);
+    sectionHeading(comparison.heading);
+    text(comparison.intro, { size: 9.5, lead: 15 });
+    gap(16);
+
+    // Two columns: what is quoted on the left, what it is measured against on
+    // the right. The quoted product gets the navy header; the comparison gets
+    // a plain one, so the page cannot be mistaken for a neutral review.
+    const colW2 = (CONTENT_W - 14) / 2;
+    const headH2 = 42;
+    need(headH2 + comparison.rows.length * 22 + 20);
+    const tTop = y;
+
+    page.drawRectangle({
+      x: M.left + 150,
+      y: tTop - headH2,
+      width: colW2 - 75,
+      height: headH2,
+      color: col(NAVY),
+    });
+    page.drawRectangle({
+      x: M.left + 150 + colW2 - 75 + 8,
+      y: tTop - headH2,
+      width: colW2 - 75,
+      height: headH2,
+      color: col(TINT),
+    });
+
+    const colAx = M.left + 150;
+    const colBx = M.left + 150 + colW2 - 75 + 8;
+    const colInner = colW2 - 75;
+
+    const centred = (
+      txt: string,
+      x: number,
+      w: number,
+      yy: number,
+      size: number,
+      f: Font,
+      c: Col,
+    ) => {
+      const tw = f.widthOfTextAtSize(txt, size);
+      page.drawText(txt, { x: x + (w - tw) / 2, y: yy, size, font: f, color: col(c) });
+    };
+    centred(comparison.oursLabel, colAx, colInner, tTop - 20, 11, display, WHITE);
+    centred(comparison.oursSub, colAx, colInner, tTop - 32, 6.2, body, GOLD);
+    centred(comparison.theirsLabel, colBx, colInner, tTop - 20, 11, display, NAVY);
+    centred(comparison.theirsSub, colBx, colInner, tTop - 32, 6.2, body, MUTED);
+
+    y = tTop - headH2;
+    comparison.rows.forEach((row, i) => {
+      const h = row.source ? 30 : 22;
+      need(h);
+      if (i % 2 === 0) {
+        page.drawRectangle({
+          x: M.left,
+          y: y - h,
+          width: CONTENT_W,
+          height: h,
+          color: col(TINT),
+        });
+      }
+      page.drawText(row.label, {
+        x: M.left + 4,
+        y: y - 15,
+        size: 8,
+        font: mid,
+        color: col(NAVY),
+      });
+      centred(row.ours, colAx, colInner, y - 15, 8.4, bold, NAVY);
+      centred(row.theirs, colBx, colInner, y - 15, 8.4, body, MUTED);
+      if (row.source) {
+        page.drawText(row.source, {
+          x: M.left + 4,
+          y: y - 25,
+          size: 6.2,
+          font: body,
+          color: col(FAINT),
+        });
+      }
+      y -= h;
+    });
+
+    gap(16);
+    const pbH = 62;
+    need(pbH + 14);
+    const pbTop = y;
+    page.drawRectangle({
+      x: M.left,
+      y: pbTop - pbH,
+      width: CONTENT_W,
+      height: pbH,
+      color: col(NAVY),
+    });
+    page.drawRectangle({ x: M.left, y: pbTop - pbH, width: 3, height: pbH, color: col(GOLD) });
+    tracked(comparison.pointHeading, {
+      x: M.left + 16,
+      y: pbTop - 22,
+      size: 7.4,
+      font: mid,
+      color: GOLD,
+      tracking: 1.1,
+    });
+    wrap(comparison.point, body, 8, CONTENT_W - 32).forEach((ln, i) => {
+      page.drawText(ln, {
+        x: M.left + 16,
+        y: pbTop - 36 - i * 11,
+        size: 8,
+        font: body,
+        color: col(WHITE),
+      });
+    });
+    y = pbTop - pbH - 14;
+
+    text(comparison.footnote, { size: 6.6, color: FAINT, lead: 9 });
+  }
+
   /* ── Job photos ───────────────────────────────────────────────── */
 
   if (input.photos?.length) {
@@ -944,8 +990,13 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
     height: headH,
     color: col(NAVY),
   });
-  const qtyX = M.left + CONTENT_W - 190;
-  const amtRight = PAGE.w - M.right - 10;
+  /**
+   * NO PRICE PER LINE (owner, 2026-11-28) — the quantity and the final figure
+   * only. A column of line prices invites a customer to argue the roof apart
+   * item by item, and to compare a single component against a competitor who
+   * bundled it. The scope says what is included; the total says what it costs.
+   */
+  const qtyRight = PAGE.w - M.right - 12;
   tracked("Description", {
     x: M.left + 10,
     y: y - 15,
@@ -954,10 +1005,9 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
     color: WHITE,
     tracking: 0.9,
   });
-  tracked("Quantity", { x: qtyX, y: y - 15, size: 6.6, font: mid, color: WHITE, tracking: 0.9 });
-  const amtLabelW = trackedWidth("AMOUNT", mid, 6.6, 0.9);
-  tracked("Amount", {
-    x: amtRight - amtLabelW,
+  const qtyLabelW = trackedWidth("QUANTITY", mid, 6.6, 0.9);
+  tracked("Quantity", {
+    x: qtyRight - qtyLabelW,
     y: y - 15,
     size: 6.6,
     font: mid,
@@ -983,23 +1033,24 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
         color: col(TINT),
       });
     }
-    let label = item.label;
+    const qty = l.qty !== null && l.qty !== 1 ? `${l.qty} ${item.unit}` : "";
+    const qw = qty ? body.widthOfTextAtSize(qty, 8.4) : 0;
+
+    const label = item.label;
     let size = 8.4;
-    while (body.widthOfTextAtSize(label, size) > qtyX - M.left - 20 && size > 6.4) size -= 0.2;
+    const labelMax = CONTENT_W - 20 - qw - 24;
+    while (body.widthOfTextAtSize(label, size) > labelMax && size > 6.4) size -= 0.2;
     page.drawText(label, { x: M.left + 10, y: y - 17, size, font: body, color: col(INK) });
 
-    const qty = l.qty !== null && l.qty !== 1 ? `${l.qty} ${item.unit}` : l.qty === 1 ? "1" : "—";
-    page.drawText(qty, { x: qtyX, y: y - 17, size: 8.4, font: body, color: col(MUTED) });
-
-    const amount = cents === null ? "Included" : money(cents);
-    const aw = (cents === null ? body : bold).widthOfTextAtSize(amount, 8.6);
-    page.drawText(amount, {
-      x: amtRight - aw,
-      y: y - 17,
-      size: 8.6,
-      font: cents === null ? body : bold,
-      color: col(cents === null ? MUTED : NAVY),
-    });
+    if (qty) {
+      page.drawText(qty, {
+        x: qtyRight - qw,
+        y: y - 17,
+        size: 8.4,
+        font: body,
+        color: col(MUTED),
+      });
+    }
     y -= rowH;
   });
 
@@ -1046,13 +1097,11 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
       { size: 8.6, lead: 13 },
     );
   }
-  const unpriced = input.draft.lines.filter((l) => l.price === null).length;
-  if (unpriced > 0) {
-    text(
-      `${unpriced === 1 ? "One item is" : `${unpriced} items are`} marked Included — covered by the pricing above at no separate charge.`,
-      { size: 7.8, color: MUTED, lead: 11 },
-    );
-  }
+  text("Every item listed above is included in the figure quoted.", {
+    size: 7.8,
+    color: MUTED,
+    lead: 11,
+  });
   gap(14);
 
   /* ── Warranty seal ────────────────────────────────────────────── */

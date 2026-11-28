@@ -2855,6 +2855,15 @@ which is what the page already promised. Do not write a coverage list for this
 warranty until the owner provides one — a warranty's exclusions are exactly the
 part a customer will hold the company to.
 
+**IKO Marathon spec sheet — NEEDS DATA.** The proposal's "Architectural vs
+3-Tab" page names Marathon as the 3-tab being compared against, and leaves its
+impact rating, wind warranty, product warranty and algae coverage as em-dashes,
+with a note on the page saying why. That is deliberate: UNVERIFIED #8 above
+records that the "3-tab is rated 60–70 mph" figure every roofing blog repeats
+traces to no manufacturer document, and says to contrast verified manufacturer
+warranties instead. Supply IKO's current Marathon warranty document and those
+cells can be filled; until then they stay empty rather than plausible.
+
 **Still outstanding on this sheet** (needed before the proposal PDF reads as a
 finished document): the licence / insurance line for the document footer, and
 confirmation of whether the IKO manufacturer warranty figures already published
