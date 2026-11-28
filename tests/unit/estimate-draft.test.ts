@@ -229,3 +229,62 @@ describe("the prompt and schema stay in step with the catalogue", () => {
     expect(buildDraftSystem()).toMatch(/do not price work|not an estimator/i);
   });
 });
+
+describe("the schema is one the API will actually accept", () => {
+  /**
+   * WRITTEN FROM A REAL REJECTION. The first live call ever made came back
+   * with:
+   *
+   *   400 invalid_request_error: output_config.format.schema: Invalid schema:
+   *   Enum value 'cambridge:driftwood' does not match declared type
+   *   '['string', 'null']'
+   *
+   * `type: ["string","null"]` with an enum is ordinary JSON Schema and the
+   * structured-output validator refuses it: an enum must sit on a single
+   * type. Nothing local could catch that — the schema is syntactically fine,
+   * TypeScript is happy, and there was no key here to validate it against. So
+   * the rule the API taught us is asserted here instead, over the whole tree.
+   */
+  function walk(
+    node: unknown,
+    path: string,
+    visit: (n: Record<string, unknown>, p: string) => void,
+  ) {
+    if (!node || typeof node !== "object") return;
+    const obj = node as Record<string, unknown>;
+    if ("type" in obj || "enum" in obj) visit(obj, path);
+    for (const [k, v] of Object.entries(obj)) {
+      if (v && typeof v === "object") walk(v, `${path}.${k}`, visit);
+    }
+  }
+
+  it("never puts an enum on a union type", () => {
+    const offenders: string[] = [];
+    walk(DRAFT_SCHEMA, "schema", (node, path) => {
+      if (Array.isArray(node.enum) && Array.isArray(node.type)) offenders.push(path);
+    });
+    expect(offenders).toEqual([]);
+  });
+
+  it("never puts null inside an enum", () => {
+    const offenders: string[] = [];
+    walk(DRAFT_SCHEMA, "schema", (node, path) => {
+      if (Array.isArray(node.enum) && node.enum.some((v) => v === null)) offenders.push(path);
+    });
+    expect(offenders).toEqual([]);
+  });
+
+  it("offers 'none' so a shingle can be left unnamed without null", () => {
+    const shingle = DRAFT_SCHEMA.properties.shingle;
+    expect(shingle.type).toBe("string");
+    expect([...shingle.enum]).toContain("none");
+  });
+
+  it("turns the sentinel back into null before anything renders it", () => {
+    expect(validateDraft({ shingle: "none" }, "").shingle).toBeNull();
+    expect(validateDraft({ shingle: "dynasty:granite-black" }, "").shingle).toBe(
+      "dynasty:granite-black",
+    );
+    expect(validateDraft({ shingle: "dynasty:not-a-colour" }, "").shingle).toBeNull();
+  });
+});

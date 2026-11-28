@@ -91,7 +91,8 @@ test.describe("estimator — talking out an estimate", () => {
       req.on("data", (c) => (body += c));
       req.on("end", () => {
         const draft = body.includes("gutter guards") ? DRAFT_2 : DRAFT_1;
-        res.writeHead(200, { "content-type": "application/json" });
+        // Identifies this stub to the guard below.
+        res.writeHead(200, { "content-type": "application/json", "x-nv-stub": "spec" });
         res.end(
           JSON.stringify({
             id: "msg_stub",
@@ -106,16 +107,35 @@ test.describe("estimator — talking out an estimate", () => {
         );
       });
     });
-    await new Promise<void>((done) => {
+    await new Promise<void>((done, fail) => {
       stub!.once("error", (err: NodeJS.ErrnoException) => {
+        // Port already held. Normally that is a sibling worker's copy of this
+        // same stub, which is fine — it is stateless and answers identically.
+        // But a hand-run stub left over from debugging also holds this port,
+        // and then the whole suite quietly tests against someone else's
+        // fixture. That has cost two debugging cycles, so it is checked.
         if (err.code === "EADDRINUSE") done();
-        else throw err;
+        else fail(err);
       });
       stub!.listen(4555, () => {
         ownsStub = true;
         done();
       });
     });
+
+    if (!ownsStub) {
+      const probe = await fetch("http://localhost:4555/v1/messages", {
+        method: "POST",
+        body: "{}",
+      }).catch(() => null);
+      if (probe?.headers.get("x-nv-stub") !== "spec") {
+        throw new Error(
+          "Something other than this spec's stub is listening on :4555. " +
+            "A leftover hand-run stub will serve its own fixture and every " +
+            "assertion here will be about the wrong data. Stop it and re-run.",
+        );
+      }
+    }
   });
 
   test.afterAll(async () => {

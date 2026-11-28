@@ -104,10 +104,21 @@ export const DRAFT_SCHEMA = {
         "Deposit in dollars, ONLY if the rep asked for one and said the amount. Otherwise null.",
     },
     shingle: {
-      type: ["string", "null"],
-      enum: [...SHINGLE_CHOICES.map((s) => s.id), null],
+      // A SENTINEL RATHER THAN null, and the live API is why.
+      //
+      // This read `type: ["string", "null"]` with null inside the enum, which
+      // is ordinary JSON Schema and which the structured-output validator
+      // rejects outright: "Enum value 'cambridge:driftwood' does not match
+      // declared type '['string', 'null']'". An enum has to sit on a single
+      // type. So the absence of a shingle is the string "none", and
+      // validateDraft turns it back into null before anything else sees it.
+      //
+      // It shipped because there was no API key to validate the schema
+      // against; the first real call found it in one request.
+      type: "string",
+      enum: [...SHINGLE_CHOICES.map((s) => s.id), "none"],
       description:
-        "The shingle line and colour the rep named, e.g. IKO Dynasty in Granite Black. Null if they did not name one. Never guess a colour.",
+        'The shingle line and colour the rep named, e.g. IKO Dynasty in Granite Black. Use "none" if they did not name one. Never guess a colour.',
     },
     lines: {
       type: "array",
@@ -160,7 +171,7 @@ Rules:
 4. List an item the rep asked for even when they gave no numbers for it. Nulls are expected.
 5. "notes" is what the rep described seeing on the roof, written plainly for a homeowner to read. Use only what the rep said. Add no findings, no causes, no recommendations and no sales language of your own. No prices in the notes. If the rep described nothing, return an empty string.
 6. Never return the customer's name, address, phone number or email anywhere in your answer, even if the rep says them.
-7. If the rep names a shingle line and colour ("IKO Dynasty in Granite Black"), set "shingle" to the matching id. If they name a line but no colour, or a colour you cannot match exactly, leave it null — a colour the customer did not choose is as wrong as a price nobody said.
+7. If the rep names a shingle line and colour ("IKO Dynasty in Granite Black"), set "shingle" to the matching id. If they name a line but no colour, or a colour you cannot match exactly, set it to "none" — a colour the customer did not choose is as wrong as a price nobody said.
 8. You are given everything the rep has said so far and the estimate as it stands. Return the COMPLETE updated estimate every time, not just what changed. Carry forward every line and figure that is still correct. When the rep corrects something, use the new value. When they say to take something off, leave it out. When they say nothing about a line, leave it exactly as it was.
 
 The shingles you may name:
@@ -390,6 +401,8 @@ export function validateDraft(raw: unknown, transcript = ""): EstimateDraft {
 
   // A shingle outside the catalogue is dropped, not corrected: a colour the
   // customer did not choose is as wrong as a price nobody said.
+  // "none" is the schema's way of saying no shingle was named (see the schema
+  // comment); anything unrecognised lands in the same place.
   const shingle =
     typeof obj.shingle === "string" && VALID_SHINGLES.has(obj.shingle) ? obj.shingle : null;
 
