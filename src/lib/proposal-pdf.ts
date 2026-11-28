@@ -37,6 +37,7 @@ import { ROOF_LAYERS, EDGE_CALLOUTS, DIAGRAM_DISCLAIMER } from "./proposal-diagr
 import { renderRoofArt, type ArtLayer } from "./roof-art";
 import { comparisonFor } from "./proposal-compare";
 import { JOBSITE_STANDARDS, buildSequenceFor } from "./proposal-standards";
+import { grandTotal, perSquareCents, tradeSubtotals } from "./proposal-totals";
 import {
   ACCEPTANCE,
   aboutSection,
@@ -90,7 +91,6 @@ export interface ProposalInput {
 
 const money = (cents: number) =>
   (cents / 100).toLocaleString("en-US", { style: "currency", currency: "USD" });
-const lineCents = (qty: number | null, price: number) => Math.round((qty ?? 1) * price * 100);
 
 async function fetchBytes(url: string): Promise<Uint8Array | null> {
   try {
@@ -1131,43 +1131,112 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
   });
   y -= headH;
 
-  let total = 0;
-  inInstallOrder(input.draft.lines).forEach((l, i) => {
-    const item = ITEM_BY_ID.get(l.id);
-    if (!item) return;
-    const cents = l.price === null ? null : lineCents(l.qty, l.price);
-    if (cents !== null) total += cents;
+  /**
+   * PRICED BY JOB, NOT BY LINE (owner, 2026-11-28).
+   *
+   * Individual items never carry a price — that invites a customer to argue
+   * the roof apart component by component, and to compare one line against a
+   * competitor who bundled it. But a roof and a set of gutters are two
+   * different jobs, and a homeowner is entitled to know what each costs
+   * before deciding to do both. So the scope lists the work with no prices,
+   * each TRADE carries its own figure, and the total is the sum.
+   *
+   * With only one trade the subtotal would be the total printed twice two
+   * inches apart, so it is left out.
+   */
+  const subtotals = tradeSubtotals(input.draft.lines);
+  const total = grandTotal(input.draft.lines);
 
-    need(rowH);
-    if (i % 2 === 0) {
-      page.drawRectangle({
-        x: M.left,
-        y: y - rowH,
-        width: CONTENT_W,
-        height: rowH,
-        color: col(TINT),
+  const tradesPresent = order.filter((b) =>
+    input.draft.lines.some((l) => ITEM_BY_ID.get(l.id)?.block === b),
+  );
+  const showSubtotals = tradesPresent.length > 1;
+
+  let striped = 0;
+  for (const block of tradesPresent) {
+    const lines = inInstallOrder(
+      input.draft.lines.filter((l) => ITEM_BY_ID.get(l.id)?.block === block),
+    );
+    const subtotal = subtotals.get(block) ?? 0;
+
+    if (showSubtotals) {
+      need(rowH + 20);
+      gap(8);
+      tracked(BLOCK_LABEL[block].toUpperCase(), {
+        x: M.left + 10,
+        y: y - 10,
+        size: 6.6,
+        font: bold,
+        color: GOLD_DEEP,
+        tracking: 1.1,
       });
+      y -= 16;
+      striped = 0;
     }
-    const qty = l.qty !== null && l.qty !== 1 ? `${l.qty} ${item.unit}` : "";
-    const qw = qty ? body.widthOfTextAtSize(qty, 8.4) : 0;
 
-    const label = item.label;
-    let size = 8.4;
-    const labelMax = CONTENT_W - 20 - qw - 24;
-    while (body.widthOfTextAtSize(label, size) > labelMax && size > 6.4) size -= 0.2;
-    page.drawText(label, { x: M.left + 10, y: y - 17, size, font: body, color: col(INK) });
+    for (const l of lines) {
+      const item = ITEM_BY_ID.get(l.id)!;
+      need(rowH);
+      if (striped % 2 === 0) {
+        page.drawRectangle({
+          x: M.left,
+          y: y - rowH,
+          width: CONTENT_W,
+          height: rowH,
+          color: col(TINT),
+        });
+      }
+      striped++;
 
-    if (qty) {
-      page.drawText(qty, {
-        x: qtyRight - qw,
-        y: y - 17,
-        size: 8.4,
-        font: body,
-        color: col(MUTED),
+      const qty = l.qty !== null && l.qty !== 1 ? `${l.qty} ${item.unit}` : "";
+      const qw = qty ? body.widthOfTextAtSize(qty, 8.4) : 0;
+
+      const label = item.label;
+      let size = 8.4;
+      const labelMax = CONTENT_W - 20 - qw - 24;
+      while (body.widthOfTextAtSize(label, size) > labelMax && size > 6.4) size -= 0.2;
+      page.drawText(label, { x: M.left + 10, y: y - 17, size, font: body, color: col(INK) });
+
+      if (qty) {
+        page.drawText(qty, {
+          x: qtyRight - qw,
+          y: y - 17,
+          size: 8.4,
+          font: body,
+          color: col(MUTED),
+        });
+      }
+      y -= rowH;
+    }
+
+    if (showSubtotals) {
+      need(24);
+      const label = BLOCK_LABEL[block];
+      const amount = money(subtotal);
+      const aw = bold.widthOfTextAtSize(amount, 10);
+      page.drawLine({
+        start: { x: M.left, y: y - 1 },
+        end: { x: PAGE.w - M.right, y: y - 1 },
+        thickness: 0.6,
+        color: col(NAVY),
       });
+      page.drawText(label, {
+        x: M.left + 10,
+        y: y - 15,
+        size: 8.8,
+        font: mid,
+        color: col(NAVY),
+      });
+      page.drawText(amount, {
+        x: PAGE.w - M.right - 12 - aw,
+        y: y - 16,
+        size: 10,
+        font: bold,
+        color: col(NAVY),
+      });
+      y -= 24;
     }
-    y -= rowH;
-  });
+  }
 
   // Total bar
   const barH = 42;
@@ -1200,9 +1269,16 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
   });
   y -= barH + 14;
 
-  if (input.draft.squares && total > 0) {
+  /**
+   * Per square is a ROOF figure. Dividing a total that includes gutters by the
+   * roof's squares produces a number that is simply wrong — it read $1,017 a
+   * square on a roof quoted at $870 — and it is the one figure a homeowner
+   * will take to another contractor to compare.
+   */
+  const perSquare = perSquareCents(input.draft.lines, input.draft.squares);
+  if (perSquare !== null) {
     text(
-      `${money(Math.round(total / input.draft.squares))} per square on ${input.draft.squares} squares.`,
+      `${money(perSquare)} per square on ${input.draft.squares} squares, for the roof replacement.`,
       { size: 7.8, color: MUTED, lead: 11 },
     );
   }

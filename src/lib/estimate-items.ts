@@ -291,7 +291,9 @@ export const ESTIMATE_ITEMS: EstimateItem[] = [
     label: "Downspouts",
     detail:
       "Sized and placed to carry what this roof actually sheds, and turned away from the slab.",
-    unit: "foot",
+    // Counted, not measured — the owner's own gutter proposals quote these
+    // "7 EA", and "7 foot of downspouts" is not something anyone says.
+    unit: "each",
   },
   {
     id: "gutter-guards",
