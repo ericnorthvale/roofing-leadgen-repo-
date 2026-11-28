@@ -131,6 +131,13 @@ function shade(hex: string, k: number): string {
   return `rgb(${r},${g},${b})`;
 }
 
+/** A shaded colour faded toward white — a material that is present but not quoted. */
+function tint(hex: string, k: number, wash: number): string {
+  const n = parseInt(hex.slice(1), 16);
+  const mix = (c: number) => Math.round(c * k + (255 - c * k) * wash);
+  return `rgb(${mix((n >> 16) & 255)},${mix((n >> 8) & 255)},${mix(n & 255)})`;
+}
+
 /** The body colour of each material, used for its cut faces. */
 const EDGE_HEX: Record<LayerKind, string> = {
   deck: "#c09255",
@@ -239,207 +246,215 @@ export async function renderRoofArt(
         height: H + DY + t + 14,
       };
       textured(path, () => {
-        if (muted) {
-          // Not quoted: a flat, obviously-blank material. It must read as an
-          // absence at a glance, so it carries no texture at all.
-          ctx.fillStyle = "#dcdee0";
-          ctx.fillRect(b.x, b.y, b.width, b.height);
-          ctx.strokeStyle = "rgba(120,126,134,0.5)";
-          ctx.lineWidth = 0.5;
-          ctx.setLineDash([3, 3]);
-          for (let x = b.x - b.height; x < b.x + b.width; x += 7) {
-            ctx.beginPath();
-            ctx.moveTo(x, b.y + b.height);
-            ctx.lineTo(x + b.height, b.y);
-            ctx.stroke();
-          }
-          ctx.setLineDash([]);
-          return;
-        }
-
-        switch (layer.kind) {
-          case "deck": {
-            // Oriented strand board laid in SHEETS, with the seams visible —
-            // a speckled field reads as sand, not as a deck.
-            ctx.fillStyle = shade("#c9a978", lit);
-            ctx.fillRect(b.x, b.y, b.width, b.height);
-            for (let i = 0; i < 900; i++) {
-              const x = b.x + rand() * b.width;
-              const yy = b.y + rand() * b.height;
-              const len = 4 + rand() * 11;
-              const ang = (rand() - 0.5) * 1.1;
-              ctx.strokeStyle = shade(rand() > 0.5 ? "#b2895c" : "#dcc097", lit);
-              ctx.lineWidth = 0.6 + rand() * 1.1;
-              ctx.beginPath();
-              ctx.moveTo(x, yy);
-              ctx.lineTo(x + Math.cos(ang) * len, yy + Math.sin(ang) * len);
-              ctx.stroke();
-            }
-            // Sheet joints running up the slope, with fasteners along them.
-            ctx.strokeStyle = "rgba(92,66,38,0.5)";
-            ctx.lineWidth = 0.9;
-            for (let k = 1; k < 6; k++) {
-              const x = b.x + (b.width * k) / 6;
-              ctx.beginPath();
-              ctx.moveTo(x, b.y);
-              ctx.lineTo(x - DY * 0.6, b.y + b.height);
-              ctx.stroke();
-            }
-            break;
-          }
-          case "membrane": {
-            // Self-adhered SBS-modified bitumen on a glass-fibre mat, SANDED on
-            // top (IKO GoldShield / StormShield, per the Florida evaluation
-            // report). Sanded means matte and finely speckled — not a glossy
-            // black sheet. IKO publishes no colour for it, so this stays a
-            // neutral dark rather than inventing one.
-            ctx.fillStyle = shade("#403c39", lit);
-            ctx.fillRect(b.x, b.y, b.width, b.height);
-            for (let i = 0; i < 3200; i++) {
-              const g = 0.04 + rand() * 0.13;
-              ctx.fillStyle = `rgba(226,219,208,${g})`;
-              ctx.fillRect(b.x + rand() * b.width, b.y + rand() * b.height, 0.9, 0.9);
-            }
-            // The selvedge lap line down the roll — how it actually goes on.
-            ctx.strokeStyle = "rgba(0,0,0,0.3)";
-            ctx.lineWidth = 1;
-            for (let k = 1; k < 3; k++) {
-              const yy = b.y + (b.height * k) / 3;
-              ctx.beginPath();
-              ctx.moveTo(b.x, yy);
-              ctx.lineTo(b.x + b.width, yy - DY * 0.5);
-              ctx.stroke();
-            }
-            break;
-          }
-          case "underlayment": {
-            // Woven synthetic, PRINTED SIDE UP. IKO's data sheets describe lay
-            // lines printed along the roll with bold dots at the recommended
-            // fastener positions, and say to install printed side up — that
-            // print is what makes a synthetic underlayment recognisable, so it
-            // is drawn rather than left a plain grey field.
-            ctx.fillStyle = shade("#9aa1a8", lit);
-            ctx.fillRect(b.x, b.y, b.width, b.height);
-            ctx.strokeStyle = "rgba(255,255,255,0.09)";
-            ctx.lineWidth = 0.35;
-            for (let x = b.x; x < b.x + b.width; x += 2.4) {
-              ctx.beginPath();
-              ctx.moveTo(x, b.y);
-              ctx.lineTo(x + 6, b.y + b.height);
-              ctx.stroke();
-            }
-            for (let k = 1; k < 5; k++) {
-              const yy = b.y + (b.height * k) / 5;
-              ctx.strokeStyle = "rgba(28,36,48,0.5)";
-              ctx.lineWidth = 0.55;
-              ctx.setLineDash([2.5, 2]);
-              ctx.beginPath();
-              ctx.moveTo(b.x, yy);
-              ctx.lineTo(b.x + b.width, yy - DY * 0.6);
-              ctx.stroke();
-              ctx.setLineDash([]);
-              if (k % 2 === 0) {
-                for (let x = b.x + 9; x < b.x + b.width; x += 20) {
-                  ctx.fillStyle = "rgba(28,36,48,0.55)";
-                  ctx.beginPath();
-                  ctx.arc(x, yy - ((x - b.x) / b.width) * DY * 0.6, 1, 0, Math.PI * 2);
-                  ctx.fill();
-                }
-              }
-            }
-            break;
-          }
-          case "starter": {
-            // A starter is a SHINGLE — fibreglass asphalt, granule side up,
-            // with a sealant band along the edge that goes at the eave (IKO
-            // Leading Edge Plus). IKO publishes no colour for it and its own
-            // blog says starter granules are generally natural and darker, so
-            // this is a dark granulated strip, and the sealant band is drawn
-            // because it is the entire reason the course exists.
-            ctx.fillStyle = shade("#3b3833", lit);
-            ctx.fillRect(b.x, b.y, b.width, b.height);
-            for (let i = 0; i < 2200; i++) {
-              ctx.fillStyle = `rgba(255,250,240,${0.03 + rand() * 0.08})`;
-              ctx.fillRect(b.x + rand() * b.width, b.y + rand() * b.height, 1, 1);
-            }
-            break;
-          }
-          case "shingles":
-          case "cap": {
-            if (swatch) {
-              // IKO's own photograph of the colour, tiled across the plane.
-              const tileW = layer.kind === "cap" ? 40 : 58;
-              const tileH = (swatch.height / swatch.width) * tileW;
-              for (let yy = b.y - tileH; yy < b.y + b.height + tileH; yy += tileH * 0.9) {
-                for (let x = b.x - tileW; x < b.x + b.width + tileW; x += tileW) {
-                  ctx.drawImage(swatch, x, yy, tileW, tileH);
-                }
-              }
-              ctx.fillStyle = lit < 1 ? "rgba(0,0,0,0.26)" : "rgba(0,0,0,0.03)";
+        /**
+         * NOT QUOTED = THE REAL MATERIAL, FADED. Not a blank.
+         *
+         * This used to be a flat grey panel with hatching over it, on the
+         * theory that an absence should look like an absence. In practice the
+         * one unquoted layer in a stack of seven just looked broken — the
+         * owner's first reaction to it was to ask what had gone wrong with
+         * the drawing, which is the whole design failing: a signal nobody
+         * reads as a signal is noise.
+         *
+         * So the layer is now drawn as itself and then washed back. It still
+         * recedes at a glance next to six solid layers, but it reads as a
+         * ridge vent that is not in the quote rather than as a glitch — and
+         * it shows the customer the thing they are being offered, which is
+         * the point of putting it on the page at all.
+         */
+        const paintMaterial = () => {
+          switch (layer.kind) {
+            case "deck": {
+              // Oriented strand board laid in SHEETS, with the seams visible —
+              // a speckled field reads as sand, not as a deck.
+              ctx.fillStyle = shade("#c9a978", lit);
               ctx.fillRect(b.x, b.y, b.width, b.height);
-            } else {
-              ctx.fillStyle = shade(opts.shingleHex, lit);
-              ctx.fillRect(b.x, b.y, b.width, b.height);
-              for (let i = 0; i < 2400; i++) {
-                ctx.fillStyle = `rgba(255,255,255,${0.02 + rand() * 0.07})`;
-                ctx.fillRect(b.x + rand() * b.width, b.y + rand() * b.height, 1, 1);
+              for (let i = 0; i < 900; i++) {
+                const x = b.x + rand() * b.width;
+                const yy = b.y + rand() * b.height;
+                const len = 4 + rand() * 11;
+                const ang = (rand() - 0.5) * 1.1;
+                ctx.strokeStyle = shade(rand() > 0.5 ? "#b2895c" : "#dcc097", lit);
+                ctx.lineWidth = 0.6 + rand() * 1.1;
+                ctx.beginPath();
+                ctx.moveTo(x, yy);
+                ctx.lineTo(x + Math.cos(ang) * len, yy + Math.sin(ang) * len);
+                ctx.stroke();
               }
+              // Sheet joints running up the slope, with fasteners along them.
+              ctx.strokeStyle = "rgba(92,66,38,0.5)";
+              ctx.lineWidth = 0.9;
+              for (let k = 1; k < 6; k++) {
+                const x = b.x + (b.width * k) / 6;
+                ctx.beginPath();
+                ctx.moveTo(x, b.y);
+                ctx.lineTo(x - DY * 0.6, b.y + b.height);
+                ctx.stroke();
+              }
+              break;
             }
-            if (layer.kind === "shingles") {
-              // Course shadows and STAGGERED BUTT JOINTS — the offset between
-              // courses is what makes a laminated roof read as shingles rather
-              // than as a textured sheet.
-              const courses = 4;
-              for (let k = 1; k <= courses; k++) {
-                const yy = b.y + (b.height * k) / (courses + 1);
-                ctx.strokeStyle = "rgba(0,0,0,0.42)";
-                ctx.lineWidth = 1;
+            case "membrane": {
+              // Self-adhered SBS-modified bitumen on a glass-fibre mat, SANDED on
+              // top (IKO GoldShield / StormShield, per the Florida evaluation
+              // report). Sanded means matte and finely speckled — not a glossy
+              // black sheet. IKO publishes no colour for it, so this stays a
+              // neutral dark rather than inventing one.
+              ctx.fillStyle = shade("#403c39", lit);
+              ctx.fillRect(b.x, b.y, b.width, b.height);
+              for (let i = 0; i < 3200; i++) {
+                const g = 0.04 + rand() * 0.13;
+                ctx.fillStyle = `rgba(226,219,208,${g})`;
+                ctx.fillRect(b.x + rand() * b.width, b.y + rand() * b.height, 0.9, 0.9);
+              }
+              // The selvedge lap line down the roll — how it actually goes on.
+              ctx.strokeStyle = "rgba(0,0,0,0.3)";
+              ctx.lineWidth = 1;
+              for (let k = 1; k < 3; k++) {
+                const yy = b.y + (b.height * k) / 3;
+                ctx.beginPath();
+                ctx.moveTo(b.x, yy);
+                ctx.lineTo(b.x + b.width, yy - DY * 0.5);
+                ctx.stroke();
+              }
+              break;
+            }
+            case "underlayment": {
+              // Woven synthetic, PRINTED SIDE UP. IKO's data sheets describe lay
+              // lines printed along the roll with bold dots at the recommended
+              // fastener positions, and say to install printed side up — that
+              // print is what makes a synthetic underlayment recognisable, so it
+              // is drawn rather than left a plain grey field.
+              ctx.fillStyle = shade("#9aa1a8", lit);
+              ctx.fillRect(b.x, b.y, b.width, b.height);
+              ctx.strokeStyle = "rgba(255,255,255,0.09)";
+              ctx.lineWidth = 0.35;
+              for (let x = b.x; x < b.x + b.width; x += 2.4) {
+                ctx.beginPath();
+                ctx.moveTo(x, b.y);
+                ctx.lineTo(x + 6, b.y + b.height);
+                ctx.stroke();
+              }
+              for (let k = 1; k < 5; k++) {
+                const yy = b.y + (b.height * k) / 5;
+                ctx.strokeStyle = "rgba(28,36,48,0.5)";
+                ctx.lineWidth = 0.55;
+                ctx.setLineDash([2.5, 2]);
                 ctx.beginPath();
                 ctx.moveTo(b.x, yy);
                 ctx.lineTo(b.x + b.width, yy - DY * 0.6);
                 ctx.stroke();
-                ctx.strokeStyle = "rgba(255,255,255,0.08)";
-                ctx.lineWidth = 0.6;
-                ctx.beginPath();
-                ctx.moveTo(b.x, yy + 1);
-                ctx.lineTo(b.x + b.width, yy - DY * 0.6 + 1);
-                ctx.stroke();
-                // Butt joints, offset half a tab each course.
-                ctx.strokeStyle = "rgba(0,0,0,0.3)";
-                ctx.lineWidth = 0.7;
-                const off = k % 2 ? 0 : 11;
-                for (let x = b.x + off; x < b.x + b.width; x += 22) {
-                  const slope = ((x - b.x) / b.width) * DY * 0.6;
-                  ctx.beginPath();
-                  ctx.moveTo(x, yy - slope);
-                  ctx.lineTo(x - 2, yy - slope + b.height / (courses + 1));
-                  ctx.stroke();
+                ctx.setLineDash([]);
+                if (k % 2 === 0) {
+                  for (let x = b.x + 9; x < b.x + b.width; x += 20) {
+                    ctx.fillStyle = "rgba(28,36,48,0.55)";
+                    ctx.beginPath();
+                    ctx.arc(x, yy - ((x - b.x) / b.width) * DY * 0.6, 1, 0, Math.PI * 2);
+                    ctx.fill();
+                  }
                 }
               }
+              break;
             }
-            break;
-          }
-          case "vent": {
-            // Rolled ridge vent: a corrugated polymer core under a weather
-            // filter, which reads as a close ribbed band at the peak.
-            ctx.fillStyle = shade("#43474d", lit);
-            ctx.fillRect(b.x, b.y, b.width, b.height);
-            for (let x = b.x; x < b.x + b.width; x += 3) {
-              ctx.strokeStyle = "rgba(0,0,0,0.32)";
-              ctx.lineWidth = 0.8;
-              ctx.beginPath();
-              ctx.moveTo(x, b.y);
-              ctx.lineTo(x + 4, b.y + b.height);
-              ctx.stroke();
-              ctx.strokeStyle = "rgba(255,255,255,0.1)";
-              ctx.lineWidth = 0.5;
-              ctx.beginPath();
-              ctx.moveTo(x + 1.4, b.y);
-              ctx.lineTo(x + 5.4, b.y + b.height);
-              ctx.stroke();
+            case "starter": {
+              // A starter is a SHINGLE — fibreglass asphalt, granule side up,
+              // with a sealant band along the edge that goes at the eave (IKO
+              // Leading Edge Plus). IKO publishes no colour for it and its own
+              // blog says starter granules are generally natural and darker, so
+              // this is a dark granulated strip, and the sealant band is drawn
+              // because it is the entire reason the course exists.
+              ctx.fillStyle = shade("#3b3833", lit);
+              ctx.fillRect(b.x, b.y, b.width, b.height);
+              for (let i = 0; i < 2200; i++) {
+                ctx.fillStyle = `rgba(255,250,240,${0.03 + rand() * 0.08})`;
+                ctx.fillRect(b.x + rand() * b.width, b.y + rand() * b.height, 1, 1);
+              }
+              break;
             }
-            break;
+            case "shingles":
+            case "cap": {
+              if (swatch) {
+                // IKO's own photograph of the colour, tiled across the plane.
+                const tileW = layer.kind === "cap" ? 40 : 58;
+                const tileH = (swatch.height / swatch.width) * tileW;
+                for (let yy = b.y - tileH; yy < b.y + b.height + tileH; yy += tileH * 0.9) {
+                  for (let x = b.x - tileW; x < b.x + b.width + tileW; x += tileW) {
+                    ctx.drawImage(swatch, x, yy, tileW, tileH);
+                  }
+                }
+                ctx.fillStyle = lit < 1 ? "rgba(0,0,0,0.26)" : "rgba(0,0,0,0.03)";
+                ctx.fillRect(b.x, b.y, b.width, b.height);
+              } else {
+                ctx.fillStyle = shade(opts.shingleHex, lit);
+                ctx.fillRect(b.x, b.y, b.width, b.height);
+                for (let i = 0; i < 2400; i++) {
+                  ctx.fillStyle = `rgba(255,255,255,${0.02 + rand() * 0.07})`;
+                  ctx.fillRect(b.x + rand() * b.width, b.y + rand() * b.height, 1, 1);
+                }
+              }
+              if (layer.kind === "shingles") {
+                // Course shadows and STAGGERED BUTT JOINTS — the offset between
+                // courses is what makes a laminated roof read as shingles rather
+                // than as a textured sheet.
+                const courses = 4;
+                for (let k = 1; k <= courses; k++) {
+                  const yy = b.y + (b.height * k) / (courses + 1);
+                  ctx.strokeStyle = "rgba(0,0,0,0.42)";
+                  ctx.lineWidth = 1;
+                  ctx.beginPath();
+                  ctx.moveTo(b.x, yy);
+                  ctx.lineTo(b.x + b.width, yy - DY * 0.6);
+                  ctx.stroke();
+                  ctx.strokeStyle = "rgba(255,255,255,0.08)";
+                  ctx.lineWidth = 0.6;
+                  ctx.beginPath();
+                  ctx.moveTo(b.x, yy + 1);
+                  ctx.lineTo(b.x + b.width, yy - DY * 0.6 + 1);
+                  ctx.stroke();
+                  // Butt joints, offset half a tab each course.
+                  ctx.strokeStyle = "rgba(0,0,0,0.3)";
+                  ctx.lineWidth = 0.7;
+                  const off = k % 2 ? 0 : 11;
+                  for (let x = b.x + off; x < b.x + b.width; x += 22) {
+                    const slope = ((x - b.x) / b.width) * DY * 0.6;
+                    ctx.beginPath();
+                    ctx.moveTo(x, yy - slope);
+                    ctx.lineTo(x - 2, yy - slope + b.height / (courses + 1));
+                    ctx.stroke();
+                  }
+                }
+              }
+              break;
+            }
+            case "vent": {
+              // Rolled ridge vent: a corrugated polymer core under a weather
+              // filter, which reads as a close ribbed band at the peak.
+              ctx.fillStyle = shade("#43474d", lit);
+              ctx.fillRect(b.x, b.y, b.width, b.height);
+              for (let x = b.x; x < b.x + b.width; x += 3) {
+                ctx.strokeStyle = "rgba(0,0,0,0.32)";
+                ctx.lineWidth = 0.8;
+                ctx.beginPath();
+                ctx.moveTo(x, b.y);
+                ctx.lineTo(x + 4, b.y + b.height);
+                ctx.stroke();
+                ctx.strokeStyle = "rgba(255,255,255,0.1)";
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(x + 1.4, b.y);
+                ctx.lineTo(x + 5.4, b.y + b.height);
+                ctx.stroke();
+              }
+              break;
+            }
           }
+        };
+
+        paintMaterial();
+        if (muted) {
+          // The wash. Strong enough that six solid layers clearly outrank it,
+          // light enough that the material is still recognisable underneath.
+          ctx.fillStyle = "rgba(252,252,253,0.64)";
+          ctx.fillRect(b.x, b.y, b.width, b.height);
         }
       });
     };
@@ -455,11 +470,11 @@ export async function renderRoofArt(
       ctx.shadowColor = "rgba(20,26,36,0.34)";
       ctx.shadowBlur = 7;
       ctx.shadowOffsetY = 5;
-      ctx.fillStyle = muted ? "#c3c6ca" : shade(hex, 0.52);
+      ctx.fillStyle = muted ? tint(hex, 0.52, 0.62) : shade(hex, 0.52);
       ctx.fill(front);
       ctx.restore();
 
-      ctx.fillStyle = muted ? "#b9bcc1" : shade(hex, 0.4);
+      ctx.fillStyle = muted ? tint(hex, 0.4, 0.62) : shade(hex, 0.4);
       ctx.fill(side);
 
       // A fine highlight along the very top arris of the cut, which is what
@@ -517,7 +532,7 @@ export async function renderRoofArt(
         ctx.shadowColor = "rgba(20,26,36,0.26)";
         ctx.shadowBlur = 3;
         ctx.shadowOffsetY = 2.5;
-        ctx.fillStyle = muted ? "#c3c6ca" : shade(hex, 0.5);
+        ctx.fillStyle = muted ? tint(hex, 0.5, 0.62) : shade(hex, 0.5);
         ctx.fill(face);
         ctx.restore();
 
@@ -682,7 +697,9 @@ export async function renderRoofArt(
       ctx.shadowColor = "rgba(20,26,36,0.36)";
       ctx.shadowBlur = 7;
       ctx.shadowOffsetY = 5;
-      ctx.fillStyle = muted ? "#c3c6ca" : shade(EDGE_HEX[layer.kind], 0.5);
+      ctx.fillStyle = muted
+        ? tint(EDGE_HEX[layer.kind], 0.5, 0.62)
+        : shade(EDGE_HEX[layer.kind], 0.5);
       ctx.fill(face);
       ctx.restore();
 

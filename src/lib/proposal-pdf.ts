@@ -625,7 +625,11 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
             : "Not included in this quote.";
 
         const eaveY = artTop - anchor.y;
-        const labelCol = on ? NAVY : FAINT;
+        // MUTED, not FAINT, for a layer that is not in the quote. It has to
+        // read as a deliberate "you are not getting this" rather than as type
+        // that failed to print — the owner's first reaction to the old, paler
+        // treatment was to ask what had gone wrong with the page.
+        const labelCol = on ? NAVY : MUTED;
         const lineCol = on ? GOLD_DEEP : { r: 0.82, g: 0.83, b: 0.84 };
 
         if (side === "l") {
