@@ -58,6 +58,8 @@ export interface Comparison {
   pointHeading: string;
   point: string;
   footnote: string;
+  /** Draw a diagram between the intro and the table. */
+  art?: "gutter";
 }
 
 /** Nordic was quoted: show what Class 4 actually buys. */
@@ -177,4 +179,85 @@ export function comparisonFor(lineKey: string | undefined): Comparison | null {
   // Cambridge, ArmourShake and the metal line have no agreed comparison yet,
   // and an invented one is worse than none.
   return null;
+}
+
+/**
+ * Gutters were quoted: show what the bigger size actually buys.
+ *
+ * EVERY CAPACITY CLAIM ABOUT GUTTERS ON THE INTERNET IS UNSOURCED, and they
+ * contradict each other wildly — the same search returns 0.73, 1.15, 1.20 and
+ * 2.00 gallons per foot for a 5-inch K-style. So this page does not use any
+ * of them. It uses two things that can be checked:
+ *
+ *   1. ARITHMETIC. A 2x3 downspout is 6 square inches of opening and a 3x4 is
+ *      12. That is multiplication on the products' own names, and it is also
+ *      the single most decision-relevant number on the page, because the
+ *      downspout is where a gutter system actually backs up.
+ *   2. THE PLUMBING CODE. IPC Table 1106.6 rates gutters in gallons per
+ *      minute. The figures quoted are the code's, and the row says so,
+ *      including that they are the SEMICIRCULAR numbers — a K-style of the
+ *      same nominal width holds more, so the comparison is conservative in
+ *      both columns and the ratio between them is the honest part.
+ *
+ * WHAT IS DELIBERATELY ABSENT: any "handles a roof of N square feet" figure.
+ * The code derives that from the 100-year one-hour rainfall at the property
+ * (IPC Equation 11-1), and nobody has yet supplied that number for Montgomery
+ * County from NOAA Atlas 14. It is on the NEEDS DATA list in
+ * docs/research-facts.md. A square-footage claim is exactly what a homeowner
+ * would repeat to the next contractor, so it waits for its source.
+ */
+export const GUTTER_COMPARISON: Comparison = {
+  kicker: "Why the upgrade matters",
+  heading: "5-Inch vs 6-Inch Gutters",
+  intro:
+    "Drawn below end-on at the same scale, with their downspouts underneath. An inch sounds like nothing until you see the two sections side by side — and the six-inch downspout is twice the opening.",
+  art: "gutter",
+  oursLabel: "6-inch K-style",
+  oursSub: "With 3x4 downspouts",
+  theirsLabel: "5-inch K-style",
+  theirsSub: "The builder standard",
+  rows: [
+    {
+      label: "Downspout opening",
+      ours: "12 sq in (3x4)",
+      theirs: "6 sq in (2x3)",
+      source: "Twice the opening. This is where a gutter system backs up first.",
+    },
+    {
+      label: "Code-rated capacity",
+      ours: "110 gpm",
+      theirs: "74 gpm",
+      source:
+        "IPC Table 1106.6, at 1/8 in. per ft of fall. These are the semicircular figures; a K-style of either width holds more.",
+    },
+    { label: "Profile", ours: "K-style", theirs: "K-style", source: "The same shape, scaled." },
+    {
+      label: "Seams",
+      ours: "Formed on site, seamless",
+      theirs: "Formed on site, seamless",
+      source: "Identical. Joints are where gutters leak, so neither has any except at corners.",
+    },
+    {
+      label: "Hangers",
+      ours: "Hidden, screwed to fascia",
+      theirs: "Hidden, screwed to fascia",
+      source: "Identical.",
+    },
+    {
+      label: "Colour range",
+      ours: "The same range",
+      theirs: "The same range",
+      source: "Identical, and so is the fascia work — going up a size is not a structural change.",
+    },
+  ],
+  pointHeading: "The downspout decides it, not the gutter",
+  point:
+    "Four of those rows are identical, and we have left them in: the material, the hangers, the seamless forming and the colours are the same whichever size you pick. What changes is how much water the system moves — and most of that is the downspout, not the trough. A six-inch gutter fed into 2x3 downspouts performs barely better than a five-inch, which is why ours go on 3x4.",
+  footnote:
+    "Capacity figures are the International Plumbing Code's (Table 1106.6, semicircular, 1/8 in. per ft), not a manufacturer's. Downspout areas are the nominal sizes. The cross-sections are drawn to true relative scale to each other; the K-style profile shape is illustrative and no sub-dimension is stated.",
+};
+
+/** Shown when gutters are part of the job. */
+export function gutterComparisonFor(blocks: Set<string>): Comparison | null {
+  return blocks.has("gutters") ? GUTTER_COMPARISON : null;
 }

@@ -35,7 +35,8 @@ import { STUDIO_LINES } from "./design-studio";
 import { BRAND } from "./brand";
 import { ROOF_LAYERS, EDGE_CALLOUTS, DIAGRAM_DISCLAIMER } from "./proposal-diagram";
 import { renderRoofArt, type ArtLayer } from "./roof-art";
-import { comparisonFor } from "./proposal-compare";
+import { comparisonFor, gutterComparisonFor } from "./proposal-compare";
+import { renderGutterArt } from "./gutter-art";
 import { JOBSITE_STANDARDS, buildSequenceFor } from "./proposal-standards";
 import { grandTotal, perSquareCents, tradeSubtotals } from "./proposal-totals";
 import {
@@ -872,12 +873,52 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
 
   /* ── Why this shingle ─────────────────────────────────────────── */
 
-  const comparison = comparisonFor(shingleEntry?.line.key);
-  if (comparison) {
+  // A proposal can earn more than one of these: a roof-and-gutters job gets
+  // the shingle comparison AND the gutter comparison, each on its own page.
+  const comparisons = [comparisonFor(shingleEntry?.line.key), gutterComparisonFor(blocks)].filter(
+    (c): c is NonNullable<typeof c> => Boolean(c),
+  );
+
+  for (const comparison of comparisons) {
     newPage();
     kicker(comparison.kicker);
     sectionHeading(comparison.heading);
     text(comparison.intro, { size: 9.5, lead: 15 });
+    gap(14);
+
+    if (comparison.art === "gutter") {
+      const art = await renderGutterArt({ widthPt: CONTENT_W });
+      if (art) {
+        need(art.heightPt + 26);
+        const aTop = y;
+        const img = await pdf.embedPng(art.bytes);
+        page.drawImage(img, {
+          x: M.left,
+          y: aTop - art.heightPt,
+          width: art.widthPt,
+          height: art.heightPt,
+        });
+        // ONE BASELINE FOR BOTH CAPTIONS. They hang off their own downspout
+        // otherwise, and a 3-inch and a 4-inch downspout end at different
+        // heights — so the labels staggered, which read as a mistake rather
+        // than as the size difference it actually was.
+        const capBottom = Math.max(...art.marks.map((m) => m.bottom));
+        for (const mark of art.marks) {
+          const cap = mark.key === "six" ? "6-inch + 3x4" : "5-inch + 2x3";
+          const w = mid.widthOfTextAtSize(cap, 9);
+          page.drawText(cap, {
+            x: M.left + mark.cx - w / 2,
+            y: aTop - capBottom - 13,
+            size: 9,
+            font: mid,
+            color: col(mark.key === "six" ? NAVY : MUTED),
+          });
+        }
+        y = aTop - Math.max(art.heightPt, capBottom + 18);
+      }
+      gap(10);
+    }
+
     gap(16);
 
     // Two columns: what is quoted on the left, what it is measured against on

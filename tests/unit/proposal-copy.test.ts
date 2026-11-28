@@ -242,3 +242,58 @@ describe("the company email", () => {
     expect(src).not.toMatch(/@northvaleroofing\.com/);
   });
 });
+
+describe("the gutter comparison", () => {
+  it("appears when gutters are quoted, and not otherwise", async () => {
+    const { gutterComparisonFor } = await import("~/lib/proposal-compare");
+    expect(gutterComparisonFor(new Set(["gutters"]))?.heading).toMatch(/5-Inch vs 6-Inch/);
+    expect(gutterComparisonFor(new Set(["replacement"]))).toBeNull();
+    expect(gutterComparisonFor(new Set())).toBeNull();
+  });
+
+  it("states the downspout areas, which are arithmetic rather than a claim", async () => {
+    const { GUTTER_COMPARISON } = await import("~/lib/proposal-compare");
+    const row = GUTTER_COMPARISON.rows.find((r) => r.label === "Downspout opening");
+    expect(row?.ours).toContain("12 sq in");
+    expect(row?.theirs).toContain("6 sq in");
+  });
+
+  it("attributes the capacity figures to the code, and admits they are semicircular", async () => {
+    // A K-style holds more than a semicircular of the same nominal width, so
+    // quoting the semicircular numbers understates BOTH columns. That is fine
+    // — the ratio is the point — but only if the page says so, because a
+    // homeowner may well look the table up.
+    const { GUTTER_COMPARISON } = await import("~/lib/proposal-compare");
+    const row = GUTTER_COMPARISON.rows.find((r) => r.label === "Code-rated capacity");
+    expect(row?.ours).toBe("110 gpm");
+    expect(row?.theirs).toBe("74 gpm");
+    expect(row?.source).toMatch(/IPC Table 1106\.6/);
+    expect(row?.source).toMatch(/semicircular/i);
+  });
+
+  it("never states a roof area, because the local rainfall rate is NEEDS DATA", async () => {
+    // The code derives roof area from the 100-year one-hour rainfall at the
+    // property, and nobody has supplied it for Montgomery County yet. A
+    // square-footage claim is exactly what a homeowner repeats to the next
+    // contractor. See docs/research-facts.md, "Gutter sizing".
+    const { GUTTER_COMPARISON } = await import("~/lib/proposal-compare");
+    const all = JSON.stringify(GUTTER_COMPARISON);
+    expect(all).not.toMatch(/sq\s?ft|square feet/i);
+    expect(all).not.toMatch(/gallons? per (linear )?foot|gal\/ft/i);
+  });
+
+  it("keeps the rows where the two sizes are identical", async () => {
+    const { GUTTER_COMPARISON } = await import("~/lib/proposal-compare");
+    const same = GUTTER_COMPARISON.rows.filter((r) => r.ours === r.theirs);
+    expect(same.length).toBeGreaterThanOrEqual(3);
+    expect(GUTTER_COMPARISON.point).toMatch(/identical/i);
+  });
+
+  it("says the drawing is to true relative scale, because it has to be", async () => {
+    // The page's whole persuasive force is that the two sections are honestly
+    // proportioned to each other. See the header of src/lib/gutter-art.ts.
+    const { GUTTER_COMPARISON } = await import("~/lib/proposal-compare");
+    expect(GUTTER_COMPARISON.footnote).toMatch(/true relative scale/i);
+    expect(GUTTER_COMPARISON.art).toBe("gutter");
+  });
+});

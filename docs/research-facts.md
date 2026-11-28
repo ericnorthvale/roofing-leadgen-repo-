@@ -340,6 +340,55 @@ IKO's own documents through web search, because this build environment cannot
 reach iko.com. The sequence is consistent across IKO's how-to guide, the
 Leading Edge Plus bulletin and several per-product application instructions.
 
+### Gutter sizing: 5-inch vs 6-inch (for the proposal's gutter page)
+
+Researched 2026-11-28. **The headline finding is that almost every gutter
+capacity figure on the internet is unsourced and they contradict each other.**
+A single search returned 0.73, 1.15, 1.20 and 2.00 gallons per linear foot for
+the same 5-inch K-style, and roof-area ratings ranging from 1,200 to 5,520 sq
+ft for the same product. None of those numbers is published here. This is the
+same failure mode as UNVERIFIED #8 (the "3-tab is rated 60-70 mph" claim).
+
+**What IS published, and why it can be:**
+
+- **Downspout opening: 2x3 = 6 sq in; 3x4 = 12 sq in.** Arithmetic on the
+  products' own nominal names. Exactly double, and it is the number that
+  decides whether a system backs up, because the downspout is the restriction.
+- **IPC Table 1106.6 gutter capacity, 1/8 in. per ft of fall: 5-inch = 74 gpm,
+  6-inch = 110 gpm** (about 49% more) — SOURCE: International Plumbing Code
+  Table 1106.6, as reproduced in state adoptions, e.g.
+  https://up.codes/viewer/north_carolina/ipc-2015/chapter/11/storm-drainage ;
+  https://law.lis.virginia.gov/admincode/title13/agency5/chapter63/section320/
+  **These are the SEMICIRCULAR figures.** A K-style of the same nominal width
+  holds more than a semicircular one, so both columns understate — which is
+  why the page says so in the row, and why the RATIO is the honest part.
+- **IPC Equation 11-1:** flow (gpm) = roof area (sq ft) x rainfall (in/hr) x
+  0.0104 — SOURCE: IPC Section 1106.2.1, same references.
+- **Trade pairing:** 5-inch gutters are normally hung with 2x3 downspouts and
+  6-inch with 3x4. A 6-inch gutter fed into 2x3 downspouts is a recognised
+  bottleneck — the trough gets bigger and the outlet does not.
+
+**NEEDS DATA — the local design rainfall.** The code derives a roof-area
+rating from the **100-year, 1-hour rainfall at the property** (IPC Figure
+1106.1 / NOAA Atlas 14). Montgomery County's drainage manual cites NOAA Atlas
+14 Vol 11 v2 (2018) at the Conroe station (41-1956; 30.3303, -95.4831), but
+the 1-hour depth was not obtainable from this environment — iko.com and most
+other hosts are DNS-blocked here, and the county manual's Table 2-2 did not
+come back in search results. **Until that number is in hand, the proposal
+must NOT state any "handles a roof of N square feet" figure.** That is
+precisely the claim a homeowner repeats to the next contractor. To get it:
+NOAA PFDS at https://hdsc.nws.noaa.gov/pfds/ for those coordinates, or Table
+2-2 of https://cms1files.revize.com/montgomerycountytx/MoCo%20Drainage%20Criteria%20Manual%20adopted%208-26-2025%20Signed.pdf
+
+**Rejected figures, recorded so nobody re-adds them:**
+
+| Claim                                          | Why rejected                                                                                    |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| "5-inch holds 1.20 gal/ft, 6-inch 2.00 gal/ft" | Contractor blogs; inconsistent with the cross-section geometry the same sources give.           |
+| "5-inch K-style handles 5,520 sq ft"           | No rainfall rate or slope stated, so the figure means nothing on its own.                       |
+| "6-inch carries 40% more" / "58% more"         | Both widely repeated, neither sourced to a standard. The IPC figures give ~49% and are citable. |
+| Any gallons-per-foot figure                    | No two sources agree and none cites a standard.                                                 |
+
 ### IKO warranty facts (CRITICAL — publish exactly)
 
 - **Iron Clad® Protection** = the first **15 years** of **full, non-prorated**
