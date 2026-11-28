@@ -2,6 +2,12 @@ import { defineMiddleware } from "astro:middleware";
 import { parseUtmFromUrl, hasAnyUtm } from "~/lib/utm";
 import { evaluateEmailAccess, isAdminPath } from "~/lib/admin-auth";
 import { verifySessionToken, SESSION_COOKIE } from "~/lib/admin-session";
+import {
+  ESTIMATOR_COOKIE,
+  isEstimatorEnabled,
+  isEstimatorPath,
+  verifyEstimatorToken,
+} from "~/lib/estimator-auth";
 import { noStoreRedirect } from "~/lib/site-url";
 
 /**
@@ -82,6 +88,30 @@ export const onRequest = defineMiddleware(async (context, next) => {
         );
       }
     }
+  }
+
+  // 1b. Crew estimator gate — a shared code, not a Google account (see
+  // estimator-auth.ts for why the two doors differ). Unconfigured = 404, so a
+  // probe cannot tell a disabled feature from a route that never existed.
+  if (isEstimatorPath(url.pathname)) {
+    const estimatorEnv = {
+      ESTIMATOR_PIN: import.meta.env.ESTIMATOR_PIN,
+      ADMIN_SESSION_SECRET: import.meta.env.ADMIN_SESSION_SECRET,
+    };
+    if (!isEstimatorEnabled(estimatorEnv)) {
+      return new Response("Not found", {
+        status: 404,
+        headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" },
+      });
+    }
+    // The page itself renders either the code screen or the estimator, so the
+    // session is resolved here and handed down rather than redirected on.
+    const session = await verifyEstimatorToken(
+      context.cookies.get(ESTIMATOR_COOKIE)?.value,
+      estimatorEnv.ADMIN_SESSION_SECRET ?? "",
+      Math.floor(Date.now() / 1000),
+    );
+    context.locals.estimatorUnlocked = !!session;
   }
 
   // 2. UTM capture.

@@ -6,7 +6,7 @@ import react from "@astrojs/react";
 import keystatic from "@keystatic/astro";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
-import { isAllowedInSitemap, canonicalPath } from "./src/lib/routes";
+import { isAllowedInSitemap, canonicalPath, ISR_EXCLUDE } from "./src/lib/routes";
 import { contentLastmod } from "./scripts/sitemap-lastmod.mjs";
 
 // Keep SITE in one place. Eric will set PUBLIC_SITE_URL in Vercel env after domain purchase.
@@ -48,6 +48,12 @@ function keystaticWithHostFix() {
 }
 
 export default defineConfig({
+  // THE DEV TOOLBAR BREAKS E2E LOCATORS, not the site. It mounts its own UI in
+  // a shadow root, and Playwright's locators pierce shadow DOM — so
+  // `locator("h1")` on any page resolves to the toolbar's headings as well as
+  // the page's, and a strict-mode violation reads exactly like the page having
+  // five h1s. It loads asynchronously, so it fails some runs and not others.
+  devToolbar: { enabled: process.env.E2E !== "1" },
   site: SITE,
   output: "static",
   /**
@@ -99,12 +105,11 @@ export default defineConfig({
     isr: {
       // content pages (blog, neighborhood, services) regenerate hourly when traffic hits
       expiration: 60 * 60,
-      // NEVER ISR-cache dynamic routes. The /api endpoints and the Keystatic admin
-      // set per-request cookies and must run fresh every time — caching them shares
-      // one user's CSRF `state`/session across everyone and outright breaks the
-      // OAuth callback (it gets unique code/state query params each call). Only the
-      // static content pages get ISR.
-      exclude: [/^\/api\//, /^\/keystatic/],
+      // NEVER ISR-cache a route that reads the request. The list and the reasons
+      // live in src/lib/routes.ts, next to a test that checks it covers every
+      // page declaring `prerender = false` — keeping it inline here is how
+      // /estimator came to be missing from it.
+      exclude: ISR_EXCLUDE,
     },
   }),
   integrations: [
@@ -190,6 +195,10 @@ export default defineConfig({
         access: "secret",
         optional: true,
       }),
+      // Shared code for the crew estimator (/estimator). NEVER commit a value —
+      // set it in Vercel. Unset = the estimator route 404s. Session cookies for
+      // it are signed with ADMIN_SESSION_SECRET; see src/lib/estimator-auth.ts.
+      ESTIMATOR_PIN: envField.string({ context: "server", access: "secret", optional: true }),
       // Lead alerts (SMS via Twilio + email via Resend). Day-one safety net — see docs/setup-leads.md.
       TWILIO_ACCOUNT_SID: envField.string({ context: "server", access: "secret", optional: true }),
       TWILIO_AUTH_TOKEN: envField.string({ context: "server", access: "secret", optional: true }),

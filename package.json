@@ -27,6 +27,7 @@
   },
   "packageManager": "pnpm@9.15.0",
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.14.0",
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.0.3",
     "@astrojs/react": "^4",
@@ -36,6 +37,7 @@
     "@fontsource/montserrat": "^5.3.0",
     "@keystatic/astro": "^5.1.0",
     "@keystatic/core": "^0.5.50",
+    "@pdf-lib/fontkit": "^1.1.1",
     "@tailwindcss/vite": "^4.0.0",
     "@vercel/blob": "^2.5.0",
     "astro": "^5.1.2",
@@ -46,7 +48,6 @@
     "typescript": "^5.7.2"
   },
   "devDependencies": {
-    "@anthropic-ai/sdk": "^0.35.0",
     "@lhci/cli": "^0.14.0",
     "@playwright/test": "^1.49.1",
     "@types/node": "^22.10.2",

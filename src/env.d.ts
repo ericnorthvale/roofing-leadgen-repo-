@@ -19,5 +19,7 @@ declare namespace App {
       country?: string;
       zip?: string;
     };
+    /** Set by middleware on /estimator: has this device entered the crew code? */
+    estimatorUnlocked?: boolean;
   }
 }

@@ -16,9 +16,11 @@ plus SSR for `/api/*` and the `/keystatic` admin). pnpm + Node 20.
 - **Domain:** northvaleroofing.com
 - **NAP must be byte-for-byte identical everywhere.** Single source:
   `src/lib/brand.ts`. Never hardcode phone/address in a page or component.
-- The real phone `(713) 449-7661` is live in `src/data/business-info.json` and
-  satisfies the NAP index gate. The street address is still blank — schema
-  omits it automatically; never invent one. All contact facts flow from
+- The real phone `(713) 449-7661` and the street address
+  `25700 Interstate 45 N, Suite 4018, The Woodlands, TX 77386` are both live in
+  `src/data/business-info.json` and satisfy the NAP index gate. (This line said
+  the address was blank until 2026-11-28; it was filled earlier and the note
+  went stale.) Never invent contact facts. All of them flow from
   `business-info.json` → `brand.ts`; edit them there only.
 - Visual identity (colors/type/logo rules): `docs/brand-guidelines.md` — live
   on the site since 2026-07. Key rules: brand gold `#C9A26C` fails WCAG on

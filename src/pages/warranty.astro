@@ -6,9 +6,10 @@ import RelatedLinks from "@components/RelatedLinks.astro";
 import { BRAND } from "~/lib/brand";
 import { serviceLinks } from "~/lib/internal-links";
 
-// NEEDS OWNER: specific written workmanship-warranty term (years/coverage) —
-// stated on estimates today; publish here once Eric confirms the standard term.
-// See TASKS_FOR_ERIC.md. Never invent a number.
+// Workmanship term confirmed by the owner 2026-11-28: five years. Recorded in
+// src/data/business-info.json (the single source) and docs/research-facts.md.
+// The COVERAGE detail was not given and is not invented here — the page says
+// the term and leaves per-job coverage to the written estimate.
 ---
 
 <BaseLayout
@@ -83,9 +84,10 @@ import { serviceLinks } from "~/lib/internal-links";
 
       <h2>Our workmanship warranty</h2>
       <p>
-        Every Northvale estimate states the workmanship warranty for that job in writing — term and
-        coverage, on paper, before you sign anything. No verbal "don't worry, we'll take care of
-        you." If a written promise isn't in the estimate, it doesn't exist; ours are.
+        Ours is <strong>five years</strong> on workmanship — our installation, as distinct from the manufacturer's
+        cover on the shingles themselves. Every Northvale estimate states it in writing, with the coverage
+        for that job, on paper, before you sign anything. No verbal "don't worry, we'll take care of you."
+        If a written promise isn't in the estimate, it doesn't exist; ours are.
       </p>
 
       <h2>What voids warranties (and how we protect yours)</h2>

@@ -39,13 +39,64 @@ on a busy person.
       insurance claim, roof age, timeline (→ different nurture tracks); a no-answer ×3 →
       90-day recycle cadence; a quote-follow-up sequence (20–30% of signable jobs are lost
       to post-estimate silence). Cheap now, expensive to retrofit.
+- [ ] **Switch on the crew estimator.** A rep opens `/estimator`, puts in the crew code,
+      types the customer's details and talks through the job; the estimate builds as they
+      speak. One setting in Vercel turns it on, about ten minutes. **Steps:
+      `docs/setup-estimator-ai.md`.**
+
+      **It does not work at all until you do this.** The manual version — ticking items off
+      a list and typing a figure into each — was removed at your request on 2026-11-25, so
+      there is no by-hand fallback behind it any more. Worth knowing before a rep is sent
+      to a roof expecting to use it.
+
+      _This is deliberately not the Tier 4 "do not provision `ANTHROPIC_API_KEY` yet"
+      decision being reversed by the back door._ That decision was about the automated
+      blog-drafting pipeline — scale-phase work with no near-term revenue. This is a rep
+      standing in a driveway writing a quote faster, which is about as near-term as
+      revenue gets. Same key, opposite side of the cost/benefit line. (Original decision:
+      `docs/decision-log.md`, 2026-07-04.)
+
+- [x] **Sign off the jobsite standards before a proposal goes to a customer.**
+      _Done 2026-11-28 — all twelve approved as written. Recorded in
+      `docs/research-facts.md` Sheet 18. Adding a thirteenth needs your say-so;
+      removing one is yours alone._
+      `src/lib/proposal-standards.ts` prints twelve promises on every proposal —
+      magnet sweep every evening, photographs of the hidden work, no smoking or
+      profanity, a named crew lead with his number, we never ask to use your
+      bathroom, we fix what we damage. You gave five of these; the rest are
+      proposed. **Every one is a commitment a customer can hold you to, which is
+      exactly why they work.** Read the list and strike anything the crew will
+      not do every single time. A promise kept eleven times out of twelve is
+      worse than one never made.
+- [ ] **Confirm which IKO accessories you actually install** — Stormtite or
+      RoofGard underlayment, GoldShield or StormShield ice-and-water, Hip &
+      Ridge 12 or Ultra HP caps. The proposal names no accessory brand today
+      because nobody has said. Naming them is itself a trust signal: most
+      contractors write "synthetic underlayment" and leave the homeowner
+      wondering which. (`docs/research-facts.md` Sheet 19.)
+- [ ] **Optional, and only if you want the IKO figures double-checked at the
+      source.** The proposal's shingle comparison now prints IKO's real numbers
+      for Marathon, Dynasty and Nordic. Dynasty's and Nordic's came from IKO's
+      pages directly; Marathon's were read out of IKO's pages through a web
+      search, because this build environment cannot reach iko.com. If you want
+      them verified against the warranty PDF itself, add `www.iko.com` and
+      `ikowarranty.com` to the allowed sites on the "northvale-roofing
+      research" environment (claude.ai → Settings → the environment's network
+      settings) and say so — it takes one re-check. Nothing is wrong with the
+      figures as published; this would just make their sourcing as strong as
+      the rest.
 
 ## Tier 1 — blocks anything going live
 
 - [ ] **Register `Northvale Roofing LLC`** with TX Secretary of State (~$300, 3–5 business days). See `docs/trademark-clearance.md` for why LLC-first.
 - [x] **Purchase `northvaleroofing.com`**. _Registered at Squarespace Domains 2026-04-23. DNS managed via Squarespace's built-in manager; records for Vercel + Google Workspace added during launch._
 - [x] **Create Vercel project** from this repo. Set `PUBLIC_SITE_URL=https://northvaleroofing.com`. _Project created 2026-04-23; preview builds auto-deploy on every push to this branch. `PUBLIC_SITE_URL` still needs to be set to the real domain once it's registered._
-- [ ] **Set up Google Workspace** or at minimum `hello@northvaleroofing.com` with MX/SPF/DKIM/DMARC records.
+- [ ] **Set up Google Workspace** with MX/SPF/DKIM/DMARC records. _The site now
+      publishes `greg@northvaleroofing.com` (owner, 2026-11-28) rather than the
+      `hello@` address that was never created — a real mailbox beats a tidy one.
+      SPF/DKIM/DMARC still matter: without them, mail Northvale sends to
+      customers lands in spam. If a `hello@` or `office@` is created later,
+      change it in `src/data/business-info.json` and it moves everywhere._
 - [ ] **Create dedicated phone number** (Twilio or Google Voice Business). Update `BRAND.phoneE164` + `phoneDisplay` in `src/lib/brand.ts`.
 
 ## Tier 2 — analytics + CRM wiring (blocks attribution)

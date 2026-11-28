@@ -1,0 +1,121 @@
+---
+/**
+ * The crew estimator — internal, code-gated, never indexed.
+ *
+ * Two states in one route: the code screen, or the builder. Which one renders
+ * is decided by middleware (see src/middleware.ts and src/lib/estimator-auth.ts),
+ * which verifies the signed cookie and sets `locals.estimatorUnlocked`. If the
+ * estimator is not configured at all the middleware 404s before this file runs,
+ * so there is no "coming soon" state to probe.
+ *
+ * `bare` layout on purpose: a rep on a phone in a driveway does not need the
+ * marketing header, the nav or the footer. They need big targets and a total.
+ *
+ * SSR, never prerendered — the whole page depends on a per-request cookie.
+ *
+ * THE CODE SCREEN USES NO JAVASCRIPT. It is a plain form that POSTs to
+ * /api/estimator/unlock, which sets the cookie and redirects back here.
+ *
+ * That is a correction, not a style choice. The first two versions ran the
+ * unlock through fetch() in a client script. Version one shipped with its body
+ * wrapped in a template literal that Astro emitted verbatim, so the handler
+ * never attached and the button silently did nothing. Version two fixed that
+ * and passed three browser tests locally — and the owner still got nothing on
+ * the deployed site. A mechanism I cannot observe failing is a mechanism to
+ * remove: a native form submission has no handler to miss, no bundle to
+ * mis-emit and nothing to hydrate, and it works on the signal you actually get
+ * behind someone's house.
+ *
+ * The error message comes back as a query parameter and is rendered server
+ * side, so even that needs no script.
+ */
+import BaseLayout from "@layouts/BaseLayout.astro";
+import EstimateBuilder from "@components/estimator/EstimateBuilder.tsx";
+import { BRAND } from "~/lib/brand";
+
+export const prerender = false;
+
+const unlocked = Astro.locals.estimatorUnlocked === true;
+
+const errorCode = Astro.url.searchParams.get("e");
+const errorMessage =
+  errorCode === "locked"
+    ? "Too many tries. Wait 15 minutes."
+    : errorCode === "wrong"
+      ? "That code didn't work."
+      : null;
+---
+
+<BaseLayout
+  seo={{
+    title: "Estimator",
+    description: "Internal tool.",
+    pathname: "/estimator",
+    noindex: true,
+  }}
+  bare
+>
+  {/* BaseLayout already provides <main id="main">, so this is a plain wrapper. */}
+  <div class="min-h-screen bg-[color:var(--color-sand-50,#faf8f5)]">
+    {
+      unlocked ? (
+        <>
+          <header class="border-b border-[color:var(--color-ink-200,#e4e6e9)] bg-white">
+            <div class="mx-auto flex max-w-2xl items-center justify-between px-4 py-3">
+              <p class="m-0 text-[15px] font-bold text-[color:var(--color-navy-900,#1b2437)]">
+                New estimate
+              </p>
+              <a
+                href="/api/estimator/logout"
+                class="text-[13px] font-semibold text-[color:var(--color-ink-500)] no-underline"
+              >
+                Lock
+              </a>
+            </div>
+          </header>
+          <EstimateBuilder client:load />
+        </>
+      ) : (
+        <div class="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-6">
+          <h1 class="m-0 text-center text-2xl font-bold text-[color:var(--color-navy-900,#1b2437)]">
+            {BRAND.name}
+          </h1>
+          <p class="mt-1 mb-7 text-center text-[14px] text-[color:var(--color-ink-500)]">
+            Crew estimator
+          </p>
+
+          <form method="POST" action="/api/estimator/unlock" class="grid gap-3" autocomplete="off">
+            <label class="block">
+              <span class="text-[13px] font-semibold text-[color:var(--color-ink-700)]">Code</span>
+              <input
+                id="pin"
+                name="pin"
+                type="password"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                required
+                autofocus
+                class="mt-1 w-full rounded-lg border border-[color:var(--color-ink-200,#e4e6e9)] px-3 py-3 text-center text-xl tracking-[0.3em]"
+              />
+            </label>
+            <button
+              type="submit"
+              class="rounded-lg bg-[color:var(--color-gold-600)] px-5 py-3 text-[15px] font-bold text-white"
+            >
+              Unlock
+            </button>
+            {errorMessage && (
+              <p
+                id="pin-error"
+                role="alert"
+                class="m-0 text-center text-[13px] font-semibold text-[#b3261e]"
+              >
+                {errorMessage}
+              </p>
+            )}
+          </form>
+        </div>
+      )
+    }
+  </div>
+</BaseLayout>

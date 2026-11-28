@@ -8,6 +8,7 @@ import TrustBar from "@components/TrustBar.astro";
 import Faq from "@components/Faq.astro";
 import { faqPageJsonLd } from "~/lib/seo";
 import { slopeFactor, COMMON_SLOPE_FACTORS } from "~/lib/roof-report";
+import { MAPS_BROWSER_KEY } from "~/lib/google-maps";
 
 /**
  * Slope reference table, generated from the SAME function the measurement
@@ -38,9 +39,9 @@ const SLOPE_ROWS = COMMON_SLOPE_FACTORS.map((rise) => ({
  * PUBLIC_GOOGLE_MAPS_BROWSER_KEY env var, if ever set in Vercel, overrides it.
  */
 
-const mapsKey =
-  (import.meta.env.PUBLIC_GOOGLE_MAPS_BROWSER_KEY ?? "").trim() ||
-  "AIzaSyBjYX0eqE0U1oMRtoQoSaTRxgab-S4zQFI";
+// Single source for the public browser key — see src/lib/google-maps.ts for
+// why it is committed and what makes that safe.
+const mapsKey = MAPS_BROWSER_KEY;
 
 const FAQS = [
   {

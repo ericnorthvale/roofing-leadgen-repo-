@@ -2,7 +2,7 @@
   "phoneDisplay": "(713) 449-7661",
   "phoneE164": "+17134497661",
   "smsDisplay": "(713) 449-7661",
-  "email": "hello@northvaleroofing.com",
+  "email": "greg@northvaleroofing.com",
   "addressLine1": "25700 Interstate 45 N, Suite 4018",
   "city": "The Woodlands",
   "region": "TX",
@@ -11,7 +11,9 @@
   "foundedYear": 2026,
   "yearsExperience": "",
   "certStatus": "IKO ROOFPRO applicant",
-  "warranties": "",
+  "warranties": "5-year workmanship warranty",
+  "_deckingPerSheet": "Owner-supplied 2026-11-28. Standard charge for replacing a sheet of rotten or delaminated decking, billed only for sheets actually removed. Printed on every proposal so the one unknowable cost is a known number before the roof is opened.",
+  "deckingPerSheet": 85,
   "financing": "Third-party options homeowners can compare (Acorn Finance, LightStream, Frost Bank, TDECU, Figure) — listed with details on /financing. Northvale is not a lender.",
   "socialProfiles": []
 }

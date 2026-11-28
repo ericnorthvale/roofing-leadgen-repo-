@@ -245,6 +245,150 @@ ONLY shingle brand Northvale publishes. Everything below traces to iko.com.
   Summit Grey, Glacier, Driftshake — SOURCE:
   https://www.iko.com/na/product/nordic/
 
+### IKO Marathon / Marathon Plus AR (3-tab — the comparison product, NOT sold)
+
+Added 2026-11-28 because the proposal's "Architectural vs 3-Tab" page had an
+empty right-hand column and said so on the page, which the owner rightly
+called useless. These are the figures that fill it.
+
+**US FIGURES ONLY. Canada differs and must never be mixed in** — IKO's Canadian
+Marathon wind coverage is 70 mph standard / 80 mph upgraded, against 60 mph in
+the US. Publishing a Canadian figure on a Texas proposal would overstate a
+competing product, which is its own kind of dishonest.
+
+- **Limited 25 year** product warranty (NOT Limited Lifetime) — SOURCE:
+  https://www.iko.com/na/product/marathon-plus-ar-traditional-3-tab-shingles/ ;
+  https://www.iko.com/na/residential-roofing-shingles/three-tab/marathon-plus-ar
+- **Limited Wind Warranty: 60 mph (97 km/h)**, and **there is no High Wind
+  Application warranty for Marathon in the US** — SOURCE: product page above;
+  IKO Industries Unified Warranty Booklet
+- **Iron Clad® Protection: 5 years** (against 15 on Dynasty/Nordic) — SOURCE:
+  product page above
+- **Class A fire** (ASTM E108 / UL 790); **ASTM D3161 Class F** — SOURCE:
+  product page above
+- **No UL 2218 impact class is published** for Marathon. State it as "no rating
+  published", never as "fails" or "Class 1" — IKO publishes no class, which is
+  not the same as a low one.
+- **Algae: AR granules, no warranty term published.** Dynasty and Nordic carry a
+  10-year Limited Algae Resistance Warranty; IKO's Marathon page describes
+  embedded algae-resistant granules without stating a term. Publish the absence
+  of a term, not a term of zero.
+
+**PROVENANCE — read this before changing these figures.** The build environment
+cannot reach iko.com (DNS blocked; verified 2026-11-28, the allowlist is five
+Texas .gov hosts). These figures were therefore read out of IKO's own product
+and warranty pages **via web search rather than a direct fetch**, and confirmed
+across two independent searches returning the same numbers from the same IKO
+URLs. That is weaker than the direct-fetch sourcing behind the Dynasty and
+Nordic sections above, and it is recorded here so nobody mistakes one for the
+other. **To upgrade it:** add `www.iko.com` and `ikowarranty.com` to the
+`northvale-roofing research` environment's allowed hosts and re-fetch the
+Limited Warranty PDF.
+
+**Conflicting third-party figures, and why they are rejected:**
+
+| Claim                                            | Source                        | Why rejected                                                                                                                                                                                        |
+| ------------------------------------------------ | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Marathon Plus AR "wind resistance up to 110 MPH" | BRS Roofing Supply (retailer) | Contradicts IKO's own 60 mph. A retailer listing does not outrank the manufacturer's warranty page.                                                                                                 |
+| Marathon "Class 4 impact, 130 mph"               | Various retail listings       | Describes an architectural shingle. Marathon is a 3-tab; IKO publishes no UL 2218 class for it.                                                                                                     |
+| Marathon "10-year algae protection"              | Retail listing                | IKO's page states AR granules with no term.                                                                                                                                                         |
+| "3-tab is rated 60–70 mph"                       | Roofing blogs generally       | See UNVERIFIED #8 — the generic claim traces to no manufacturer document. The 60 mph figure published here is Marathon's own warranty figure, not the generic blog claim, and is published as such. |
+
+### IKO installation sequence (what order the products actually go on)
+
+Researched 2026-11-28 because the owner asked for the roof diagram's layer
+order to be checked against the products rather than asserted from memory.
+All of this is IKO's own published application instruction.
+
+**The documented order, deck upward:**
+
+1. **Drip edge at the EAVES**, fastened to the deck — the first thing on the
+   roof — SOURCE: https://www.iko.com/na/blog/how-to-install-shingles/
+   ("the first material installed at the eave is the drip edge")
+2. **Ice & water protector / eave protection**, lapping over that eave drip
+   edge, and in the valleys. IKO recommends eave protection in all
+   situations; where local code does not require it, the first course of
+   underlayment may be used instead — SOURCE: as above
+3. **Underlayment** (e.g. IKO Stormtite), in horizontal courses lapping the
+   eave protection by 4" and valley membrane by 6" — SOURCE: as above
+4. **Drip edge at the RAKES**, which goes ON TOP of the underlayment, unlike
+   the eave drip edge — SOURCE:
+   https://www.iko.com/na/document/leading-edge-plus-application-instructions/
+5. **Starter course** (IKO Leading Edge Plus), at all eaves AND rakes.
+   **This is where the starter goes: AFTER the underlayment, not before it.**
+   IKO's Leading Edge Plus bulletin says to "apply any underlayment, eave
+   protection, valley flashings, or drip edges required" before the starter —
+   SOURCE: https://www.iko.com/na/document/tbr36-leading-edge-plus-application-product-bulletin/
+   Four nails per strip, 3"–4" from the eave edge; overhang 1/4"–3/4". Starter
+   must be used at all eaves and rakes to keep the High Wind Resistance
+   Limited Warranty in force — SOURCE: as above
+6. **Field shingles**, bottom-up from the eave
+7. **Ridge vent**, then **hip & ridge caps** over it
+
+**Why this was checked twice.** The owner gave the order as deck, starter,
+ice & water, underlayment, shingles, ridge vent, ridge cap — putting the
+starter second. IKO's documents place it fifth, above the underlayment, and
+the diagram follows IKO. A proposal page whose purpose is proving Northvale
+knows roofs cannot print a sequence a roofer or an inspector would catch.
+
+**Armourshake is an exception** worth knowing if it is ever quoted: it needs
+TWO starter courses, one Leading Edge Plus or EdgeSeal and one Armour Starter
+in matching colour — SOURCE: IKO Armourshake application instructions.
+
+**SOURCING NOTE:** as with the Marathon figures above, these were read out of
+IKO's own documents through web search, because this build environment cannot
+reach iko.com. The sequence is consistent across IKO's how-to guide, the
+Leading Edge Plus bulletin and several per-product application instructions.
+
+### Gutter sizing: 5-inch vs 6-inch (for the proposal's gutter page)
+
+Researched 2026-11-28. **The headline finding is that almost every gutter
+capacity figure on the internet is unsourced and they contradict each other.**
+A single search returned 0.73, 1.15, 1.20 and 2.00 gallons per linear foot for
+the same 5-inch K-style, and roof-area ratings ranging from 1,200 to 5,520 sq
+ft for the same product. None of those numbers is published here. This is the
+same failure mode as UNVERIFIED #8 (the "3-tab is rated 60-70 mph" claim).
+
+**What IS published, and why it can be:**
+
+- **Downspout opening: 2x3 = 6 sq in; 3x4 = 12 sq in.** Arithmetic on the
+  products' own nominal names. Exactly double, and it is the number that
+  decides whether a system backs up, because the downspout is the restriction.
+- **IPC Table 1106.6 gutter capacity, 1/8 in. per ft of fall: 5-inch = 74 gpm,
+  6-inch = 110 gpm** (about 49% more) — SOURCE: International Plumbing Code
+  Table 1106.6, as reproduced in state adoptions, e.g.
+  https://up.codes/viewer/north_carolina/ipc-2015/chapter/11/storm-drainage ;
+  https://law.lis.virginia.gov/admincode/title13/agency5/chapter63/section320/
+  **These are the SEMICIRCULAR figures.** A K-style of the same nominal width
+  holds more than a semicircular one, so both columns understate — which is
+  why the page says so in the row, and why the RATIO is the honest part.
+- **IPC Equation 11-1:** flow (gpm) = roof area (sq ft) x rainfall (in/hr) x
+  0.0104 — SOURCE: IPC Section 1106.2.1, same references.
+- **Trade pairing:** 5-inch gutters are normally hung with 2x3 downspouts and
+  6-inch with 3x4. A 6-inch gutter fed into 2x3 downspouts is a recognised
+  bottleneck — the trough gets bigger and the outlet does not.
+
+**NEEDS DATA — the local design rainfall.** The code derives a roof-area
+rating from the **100-year, 1-hour rainfall at the property** (IPC Figure
+1106.1 / NOAA Atlas 14). Montgomery County's drainage manual cites NOAA Atlas
+14 Vol 11 v2 (2018) at the Conroe station (41-1956; 30.3303, -95.4831), but
+the 1-hour depth was not obtainable from this environment — iko.com and most
+other hosts are DNS-blocked here, and the county manual's Table 2-2 did not
+come back in search results. **Until that number is in hand, the proposal
+must NOT state any "handles a roof of N square feet" figure.** That is
+precisely the claim a homeowner repeats to the next contractor. To get it:
+NOAA PFDS at https://hdsc.nws.noaa.gov/pfds/ for those coordinates, or Table
+2-2 of https://cms1files.revize.com/montgomerycountytx/MoCo%20Drainage%20Criteria%20Manual%20adopted%208-26-2025%20Signed.pdf
+
+**Rejected figures, recorded so nobody re-adds them:**
+
+| Claim                                          | Why rejected                                                                                    |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| "5-inch holds 1.20 gal/ft, 6-inch 2.00 gal/ft" | Contractor blogs; inconsistent with the cross-section geometry the same sources give.           |
+| "5-inch K-style handles 5,520 sq ft"           | No rainfall rate or slope stated, so the figure means nothing on its own.                       |
+| "6-inch carries 40% more" / "58% more"         | Both widely repeated, neither sourced to a standard. The IPC figures give ~49% and are citable. |
+| Any gallons-per-foot figure                    | No two sources agree and none cites a standard.                                                 |
+
 ### IKO warranty facts (CRITICAL — publish exactly)
 
 - **Iron Clad® Protection** = the first **15 years** of **full, non-prorated**
@@ -2828,3 +2972,127 @@ SOURCE: https://www.tdi.texas.gov/tips/getting-your-insurance-claim-paid.html
 - `/conroe/insurance-claims` gained the roof-age rule (Sheet 17, TDI 29 Sep 2026) — and, importantly, the caveat that it governs UNDERWRITING (declining
   or not renewing) and not whether an individual claim is paid. The page says
   so explicitly so no reader quotes it at an adjuster expecting it to work.
+
+## Sheet 18 — Company facts stated by the owner (not researched)
+
+Everything above this sheet is externally sourced and checkable. These are not:
+they are facts about Northvale that only the owner can supply, and the "source"
+is him saying so. They are recorded here anyway, with a date, because they get
+published on the site and printed on documents a customer keeps — so there has
+to be a written trail of who said what and when, rather than a number that
+appeared in a commit one day.
+
+**Rule for this sheet: record exactly what was said, and nothing adjacent to
+it.** If the owner gives a term but not the coverage, the term goes in and the
+coverage stays blank. Rounding a vague answer up into a specific one is the
+same failure as inventing it.
+
+| Fact                      | Value                     | Stated by                | Date       | Where it is used                                                                              |
+| ------------------------- | ------------------------- | ------------------------ | ---------- | --------------------------------------------------------------------------------------------- |
+| Workmanship warranty term | 5 years                   | Greg (owner), in session | 2026-11-28 | `src/data/business-info.json` → `BRAND.warranties`; `/warranty`; the proposal PDF             |
+| Decking replacement rate  | $85 per sheet             | Greg (owner), in session | 2026-11-28 | `src/data/business-info.json` → `BRAND.deckingPerSheet`; the proposal's "About this estimate" |
+| Company email             | greg@northvaleroofing.com | Greg (owner), in session | 2026-11-28 | `src/data/business-info.json` → `BRAND.email`; sitewide NAP; `/legal/accessibility`           |
+
+**Workmanship warranty — what was and was not said.** Asked for "how many years,
+what's covered", the answer given was "its 5 years". So the TERM is confirmed at
+five years and is published. The COVERAGE detail was not given: `/warranty`
+therefore states the term and leaves per-job coverage to the written estimate,
+which is what the page already promised. Do not write a coverage list for this
+warranty until the owner provides one — a warranty's exclusions are exactly the
+part a customer will hold the company to.
+
+**Decking at $85 a sheet — what was and was not said.** The rate was given
+flat, with no minimum, no allowance and no "up to N sheets included". So the
+proposal states the rate and that the customer is charged for sheets actually
+removed, and states nothing else. It does NOT say how many sheets a typical
+roof needs — that figure was not given and inventing it would be the same
+failure as inventing the rate. The estimator still makes the rep type the
+quantity and price on any decking line; this number is a published standard
+rate, not a default the assistant may fill in by itself.
+
+**Company email changed from `hello@` to `greg@` (2026-11-28).** The site had
+been publishing `hello@northvaleroofing.com`, which was aspirational — Tier 1
+of `TASKS_FOR_ERIC.md` still lists setting that mailbox up as not done, so
+anything a customer sent there had nowhere to land. The owner gave
+`greg@northvaleroofing.com` as the company address. A real mailbox beats a
+tidy-looking one. If a `hello@` or `office@` is created later, change it in
+`business-info.json` and it moves everywhere at once.
+
+**Workmanship warranty wording — approved as written (2026-11-28).** Asked to
+review the warranty section the proposal prints, the owner's answer was
+"warranty right now looks good". That approves the WORDING as it stands in
+`src/lib/proposal-copy.ts` → `warrantySection()`: the five-year term, the
+workmanship-versus-materials distinction, and the note that coverage assumes
+correct ventilation and installation and that registration is handled. It does
+not add an exclusions list — none was given, and the note above still stands.
+
+**The twelve jobsite standards — signed off as written (2026-11-28).** Asked
+to read the list and strike anything the crew would not do every single time,
+the owner's answer was "the standars are good rn". So all twelve in
+`src/lib/proposal-standards.ts` are approved and print on every proposal: the
+five he supplied (protection before tear-off, magnet sweep every evening, no
+smoking or profanity, communication morning and evening, clean driveway) and
+the seven proposed here (photographs of the hidden work, never asking to use
+the bathroom, a named crew lead with a phone number, asking before opening a
+gate, gutters cleared as part of the job, walkthrough before the crew leaves,
+fixing what gets damaged).
+
+These are commitments a customer can hold the company to — which is the whole
+reason they work — so adding a thirteenth is not a drafting decision. Anything
+new goes to the owner before it is printed.
+
+**IKO Marathon spec sheet — RESOLVED 2026-11-28.** This used to say the
+proposal's "Architectural vs 3-Tab" page left Marathon's impact rating, wind
+warranty, product warranty and algae coverage as em-dashes, with a note on the
+page explaining why. The owner's verdict was that a comparison which compares
+nothing is useless, and he was right. Marathon's US figures are now recorded
+above under "IKO Marathon / Marathon Plus AR" and published in the table, with
+their sourcing caveat recorded alongside them. UNVERIFIED #8 still stands and
+is NOT contradicted by this: the generic "3-tab is rated 60–70 mph" claim still
+traces to no manufacturer document, and what is published here is Marathon's
+own warranty figure for a named product, which is a different thing.
+
+**Still outstanding on this sheet** (needed before the proposal PDF reads as a
+finished document): the licence / insurance line for the document footer;
+confirmation of whether the IKO manufacturer warranty figures already published
+on `/` (130-mph wind, 10-year algae) should also be restated on the proposal;
+sign-off on the twelve jobsite standards; payment terms; and which IKO
+accessories are actually installed.
+
+## Sheet 19 — What the products actually look like (for the roof diagram)
+
+The exploded roof drawing in the proposal (`src/lib/roof-art.ts`) used to render
+each layer in an invented colour. The owner's objection on 2026-11-28 was fair:
+a drawing that says "this is your roof" should show the products that go on it.
+So the surface of each layer is now drawn from documented appearance, and this
+sheet records what was documented and what was not.
+
+**iko.com is NOT reachable from the cloud session** — DNS is blocked by the
+environment's allowlist — so these come from search results quoting IKO's own
+data sheets and brochures plus a Florida evaluation report, not from fetching
+the pages directly. Anything below should be re-checked against the live data
+sheets when someone has them to hand.
+
+| Layer                  | Documented appearance                                                                                                                                                                                                                                                           | Source                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Synthetic underlayment | Pre-printed with side-lap lay lines and bold dots at recommended fastener positions; dashed lines every 2″ from centre; installed printed side up. RoofGard-SB is a woven black polypropylene core with polyolefin coating; RoofGard-Cool Grey is grey with lay lines every 1″. | IKO Stormtite product page + brochure; IKO RoofGard-Cool Grey TDS                 |
+| Ice & water protector  | Non-woven glass-fibre mat, SBS-modified bitumen, **sanded on top**, non-slip; self-adhesive backing with a silicone release sheet.                                                                                                                                              | Florida Building Code evaluation FL34896; IKO GoldShield / StormShield literature |
+| Starter strip          | Fibreglass-reinforced asphalt **starter strip shingle**, perforated down the centre to make two strips, FastLock sealant band along the edge that goes at the eave, installed **granule side up**.                                                                              | IKO Leading Edge Plus product page + TDS                                          |
+| Hip & ridge cap        | Perforated and **tapered** — one shingle yields three caps — with algae-resistant granules embedded in the surface.                                                                                                                                                             | IKO Hip & Ridge 12 product page + TDS (Dec 2025)                                  |
+
+**COLOURS ARE MOSTLY NOT PUBLISHED, and the drawing does not pretend
+otherwise.** No source found states a colour for Stormtite, for GoldShield or
+StormShield, or for Leading Edge Plus granules. IKO's own blog says starter
+shingles generally use "natural, darker, uncoloured" granules — general
+industry context, not a product spec. The drawing therefore uses neutral darks
+for those layers and leans on the documented _texture_ (printed lines, sanded
+finish, granules, taper), which is what actually distinguishes them. The field
+shingle is the one layer drawn from a real photograph: IKO's own swatch of the
+colour being quoted, already in `public/design-center/`.
+
+**NEEDS DATA — which accessories Northvale actually installs.** The drawing
+shows product _types_, and the proposal names no accessory brand, because
+nobody has said whether Northvale runs Stormtite or RoofGard, GoldShield or
+StormShield, Hip & Ridge 12 or Ultra HP. Confirm those and the proposal can
+name them by product, which is itself a trust signal — most contractors write
+"synthetic underlayment" and leave the homeowner to wonder which.
