@@ -62,6 +62,7 @@ const GEO = {
   STEP: 34, // vertical gap between exploded layers
   PAD_TOP: 30,
   PAD_BOTTOM: 18,
+  WALL: 74, // the house body the layers are lifted off
 };
 
 /** Deterministic noise — the same roof must not shimmer between renders. */
@@ -88,7 +89,8 @@ export async function renderRoofArt(
   if (typeof document === "undefined") return null;
 
   const S = 3; // supersample: ~216dpi once placed at 72pt/inch
-  const heightPt = GEO.PAD_TOP + layers.length * GEO.STEP + GEO.H + GEO.DY + GEO.PAD_BOTTOM;
+  const heightPt =
+    GEO.PAD_TOP + layers.length * GEO.STEP + GEO.H + GEO.DY + GEO.WALL + GEO.PAD_BOTTOM;
   const canvas = document.createElement("canvas");
   canvas.width = Math.round(opts.widthPt * S);
   canvas.height = Math.round(heightPt * S);
@@ -169,7 +171,8 @@ export async function renderRoofArt(
 
         switch (layer.kind) {
           case "deck": {
-            // Oriented strand board: tan ground, then scattered strands.
+            // Oriented strand board laid in SHEETS, with the seams visible —
+            // a speckled field read as sand, not as a deck.
             ctx.fillStyle = shade("#c9a978", lit);
             ctx.fillRect(box.x, box.y, box.w, box.h + 10);
             for (let i = 0; i < 520; i++) {
@@ -183,6 +186,22 @@ export async function renderRoofArt(
               ctx.moveTo(x, yy);
               ctx.lineTo(x + Math.cos(ang) * len, yy + Math.sin(ang) * len);
               ctx.stroke();
+            }
+            // Sheet joints, and a nail at each one.
+            ctx.strokeStyle = "rgba(90,66,40,0.55)";
+            ctx.lineWidth = 0.8;
+            for (let k = 1; k < 5; k++) {
+              const x = box.x + (box.w * k) / 5;
+              ctx.beginPath();
+              ctx.moveTo(x, box.y);
+              ctx.lineTo(x - DY * 0.5, box.y + box.h + 10);
+              ctx.stroke();
+              for (let n = 0; n < 4; n++) {
+                ctx.fillStyle = "rgba(60,45,30,0.5)";
+                ctx.beginPath();
+                ctx.arc(x - DY * 0.12 * n, box.y + 4 + n * 7, 0.7, 0, Math.PI * 2);
+                ctx.fill();
+              }
             }
             break;
           }
@@ -334,6 +353,129 @@ export async function renderRoofArt(
 
     anchors.push({ key: layer.key, leftX: cx - W, rightX: cx + W + D, y: top });
   }
+
+  /**
+   * THE HOUSE THE LAYERS CAME OFF. Without it the drawing is six shapes
+   * floating in space; with it a homeowner sees their own house with its roof
+   * taken apart above it, which is the whole idea the owner asked for.
+   *
+   * Drawn first, so every roof layer stacks over it.
+   */
+  function drawHouse(eaveTop: number) {
+    const wallTop = eaveTop;
+    const wallBottom = eaveTop + GEO.WALL;
+    const r = rng(4242);
+
+    // Ground shadow, so the house is standing on something.
+    ctx.save();
+    ctx.globalAlpha = 0.14;
+    ctx.fillStyle = "#1d2430";
+    ctx.beginPath();
+    ctx.ellipse(cx + D / 2, wallBottom + 5, W + D * 0.7, 9, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Gable end above the front wall, under where the deck will sit.
+    const gableEnd = new Path2D();
+    gableEnd.moveTo(cx - W, wallTop);
+    gableEnd.lineTo(cx, wallTop - H);
+    gableEnd.lineTo(cx + W, wallTop);
+    gableEnd.closePath();
+
+    // Right-hand wall, in shade.
+    const sideWall = new Path2D();
+    sideWall.moveTo(cx + W, wallTop);
+    sideWall.lineTo(cx + W + D, wallTop - DY);
+    sideWall.lineTo(cx + W + D, wallBottom - DY);
+    sideWall.lineTo(cx + W, wallBottom);
+    sideWall.closePath();
+
+    const frontWall = new Path2D();
+    frontWall.moveTo(cx - W, wallTop);
+    frontWall.lineTo(cx + W, wallTop);
+    frontWall.lineTo(cx + W, wallBottom);
+    frontWall.lineTo(cx - W, wallBottom);
+    frontWall.closePath();
+
+    // Brick courses, which read as a house far faster than flat render does.
+    const brick = (path: Path2D, base: string, lit: number) => {
+      ctx.save();
+      ctx.clip(path);
+      ctx.fillStyle = shade(base, lit);
+      ctx.fillRect(cx - W - 4, wallTop - H - 4, W * 2 + D + 8, GEO.WALL + H + 12);
+      ctx.strokeStyle = `rgba(255,255,255,${0.1 * lit})`;
+      ctx.lineWidth = 0.5;
+      for (let yy = wallTop - H; yy < wallBottom + 4; yy += 5) {
+        ctx.beginPath();
+        ctx.moveTo(cx - W - 4, yy);
+        ctx.lineTo(cx + W + D + 4, yy);
+        ctx.stroke();
+      }
+      for (let yy = wallTop - H; yy < wallBottom + 4; yy += 5) {
+        const off = ((yy / 5) | 0) % 2 ? 5 : 0;
+        for (let xx = cx - W - 4 + off; xx < cx + W + D + 4; xx += 10) {
+          ctx.beginPath();
+          ctx.moveTo(xx, yy);
+          ctx.lineTo(xx, yy + 5);
+          ctx.stroke();
+        }
+      }
+      // Weathering, so it is not a flat swatch.
+      for (let i = 0; i < 300; i++) {
+        ctx.fillStyle = `rgba(0,0,0,${0.02 + r() * 0.05})`;
+        ctx.fillRect(cx - W + r() * (W * 2 + D), wallTop - H + r() * (GEO.WALL + H), 1.4, 1.4);
+      }
+      ctx.restore();
+    };
+
+    brick(sideWall, "#9c8273", 0.78);
+    brick(frontWall, "#b89a88", 1);
+    brick(gableEnd, "#b89a88", 0.92);
+
+    // Windows and a door, in the shade of a lit interior.
+    const win = (x: number, yy: number, w: number, h: number, lit: number) => {
+      ctx.fillStyle = shade("#2b3340", lit);
+      ctx.fillRect(x, yy, w, h);
+      ctx.fillStyle = `rgba(255,255,255,${0.14 * lit})`;
+      ctx.fillRect(x + 1, yy + 1, w - 2, h * 0.38);
+      ctx.strokeStyle = shade("#f3efe9", lit);
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(x, yy, w, h);
+      ctx.beginPath();
+      ctx.moveTo(x + w / 2, yy);
+      ctx.lineTo(x + w / 2, yy + h);
+      ctx.stroke();
+    };
+    win(cx - W + 14, wallTop + 18, 20, 24, 1);
+    win(cx + W - 48, wallTop + 18, 20, 24, 1);
+    win(cx + W + 7, wallTop + 12, 14, 22, 0.78);
+
+    // Door
+    ctx.fillStyle = "#5a4433";
+    ctx.fillRect(cx - 11, wallBottom - 36, 22, 36);
+    ctx.strokeStyle = "#f3efe9";
+    ctx.lineWidth = 1.2;
+    ctx.strokeRect(cx - 11, wallBottom - 36, 22, 36);
+    ctx.fillStyle = "#d9c59b";
+    ctx.beginPath();
+    ctx.arc(cx + 6, wallBottom - 18, 1.3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Fascia band where the roof meets the wall.
+    ctx.fillStyle = "#efe9df";
+    ctx.beginPath();
+    ctx.moveTo(cx - W - 3, wallTop);
+    ctx.lineTo(cx + W + 3, wallTop);
+    ctx.lineTo(cx + W + 3 + D, wallTop - DY);
+    ctx.lineTo(cx - W - 3 + D, wallTop - DY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = "rgba(0,0,0,0.12)";
+    ctx.fillRect(cx - W - 3, wallTop + 3.4, W * 2 + 6, 1.4);
+  }
+
+  const bottomEave = GEO.PAD_TOP + (layers.length - 1) * GEO.STEP + H;
+  drawHouse(bottomEave + 16);
 
   layers.forEach((layer, i) => drawLayer(layer, GEO.PAD_TOP + i * GEO.STEP + H));
 

@@ -246,8 +246,15 @@ test.describe("estimator — talking out an estimate", () => {
     await page.getByRole("button", { name: "Build the estimate" }).click();
     await expect(page.getByText("$13,680.00")).toBeVisible({ timeout: 15_000 });
 
-    const download = page.waitForEvent("download", { timeout: 60_000 });
+    // Proposal now opens a preview rather than downloading straight away, so
+    // the rep can dial the document in by talking before committing a file to
+    // their phone. The download lives inside that panel.
     await page.getByRole("button", { name: "Proposal" }).click();
+    await expect(page.getByText("Proposal preview")).toBeVisible({ timeout: 60_000 });
+    await expect(page.locator('iframe[title="Proposal preview"]')).toBeVisible();
+
+    const download = page.waitForEvent("download", { timeout: 60_000 });
+    await page.getByRole("button", { name: "Download" }).click();
     const file = await download;
 
     expect(file.suggestedFilename()).toBe("Northvale-proposal-Dale-Whitaker.pdf");
@@ -257,6 +264,34 @@ test.describe("estimator — talking out an estimate", () => {
     expect(bytes.subarray(0, 5).toString()).toBe("%PDF-");
     // A PDF that is only a header is not a proposal.
     expect(bytes.byteLength).toBeGreaterThan(20_000);
+  });
+
+  test("the preview flags that the estimate moved on under it", async ({ page }) => {
+    // The whole point of previewing rather than downloading is iterating, so
+    // a stale document must announce itself rather than quietly misrepresent
+    // the estimate on screen.
+    await page.route("**/api/geocode**", (r) => r.fulfill({ status: 204, body: "" }));
+    await unlock(page);
+    await page.getByLabel("Name").fill("Dale Whitaker");
+    await page.getByLabel("Property address").fill("118 Red Cedar Dr, Conroe TX 77302");
+    await page.getByLabel(/What you're quoting/i).fill(TURN_1);
+    await page.getByRole("button", { name: "Build the estimate" }).click();
+    await expect(page.getByText("$13,680.00")).toBeVisible({ timeout: 15_000 });
+
+    await page.getByRole("button", { name: "Proposal" }).click();
+    await expect(page.getByText("Proposal preview")).toBeVisible({ timeout: 60_000 });
+    await expect(page.getByText(/estimate changed since this was built/)).toHaveCount(0);
+
+    await page.getByRole("button", { name: "Close preview" }).click();
+    await page.getByLabel(/What you're quoting/i).fill(TURN_2);
+    await page.getByRole("button", { name: "Add this" }).click();
+    await expect(page.getByText("$15,170.00")).toBeVisible({ timeout: 15_000 });
+
+    await page.getByRole("button", { name: "Proposal" }).click();
+    await expect(page.getByText("Proposal preview")).toBeVisible({ timeout: 60_000 });
+    // Freshly rebuilt, so it is NOT stale — the badge appears only when the
+    // estimate moves while a preview is already open.
+    await expect(page.getByText(/estimate changed since this was built/)).toHaveCount(0);
   });
 
   test("words typed before React wakes up are not lost", async ({ page }) => {

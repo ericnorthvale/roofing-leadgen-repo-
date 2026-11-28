@@ -291,7 +291,6 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
 
   // One-line summary built only from figures the rep gave.
   const summaryBits: string[] = [];
-  if (input.draft.squares) summaryBits.push(`${input.draft.squares} squares`);
   const shingleEntry = (() => {
     if (!input.draft.shingle) return null;
     const [lineKey, slug] = input.draft.shingle.split(":");

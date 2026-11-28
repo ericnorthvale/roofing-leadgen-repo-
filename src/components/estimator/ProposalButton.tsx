@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { EstimateDraft } from "~/lib/estimate-draft";
 import { missingFacts } from "~/lib/proposal-copy";
 import type { ProposalPhoto } from "~/lib/proposal-pdf";
@@ -45,12 +46,34 @@ export default function ProposalButton(props: {
   disabled: boolean;
 }) {
   const [busy, setBusy] = useState(false);
+  /**
+   * PREVIEW, SO THE PROPOSAL CAN BE DIALLED IN BY TALKING.
+   *
+   * Before this the only way to see the document was to download it, which
+   * means a file per attempt in a phone's downloads folder and no way to
+   * judge a change without leaving the page. Now the same bytes render in a
+   * panel: talk, rebuild, look, repeat, and download once at the end.
+   *
+   * The blob URL is revoked when it is replaced or the panel closes —
+   * otherwise every rebuild leaks a whole PDF for the life of the page.
+   */
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [stale, setStale] = useState(false);
+  const builtFrom = useRef<string>("");
   const [note, setNote] = useState<string | null>(null);
   const [cover, setCover] = useState<ProposalPhoto | null>(null);
   const [extras, setExtras] = useState<ProposalPhoto[]>([]);
   const coverInput = useRef<HTMLInputElement>(null);
   const extraInput = useRef<HTMLInputElement>(null);
   const gaps = missingFacts();
+
+  // The estimate changed since the open preview was rendered.
+  const signature = JSON.stringify(props.draft) + JSON.stringify(props.customer);
+  useEffect(() => {
+    if (previewUrl && builtFrom.current !== signature) setStale(true);
+  }, [signature, previewUrl]);
+
+  useEffect(() => () => void (previewUrl && URL.revokeObjectURL(previewUrl)), [previewUrl]);
 
   /**
    * A phone camera file is 3–6 MB and 4000px wide. Embedded raw, four of them
@@ -108,6 +131,39 @@ export default function ProposalButton(props: {
       };
     } catch {
       return { image: null, credit: null };
+    }
+  }
+
+  async function buildBytes(): Promise<Uint8Array | null> {
+    const { image, credit } = cover ? { image: cover, credit: null } : await coverPhoto();
+    const { buildProposalPdf } = await import("~/lib/proposal-pdf");
+    return buildProposalPdf({
+      customer: props.customer,
+      draft: props.draft,
+      coverImage: image,
+      coverCredit: credit,
+      photos: extras,
+    });
+  }
+
+  async function preview() {
+    if (busy) return;
+    setBusy(true);
+    setNote(null);
+    try {
+      const bytes = await buildBytes();
+      if (!bytes) throw new Error("no bytes");
+      const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type: "application/pdf" }));
+      setPreviewUrl((old) => {
+        if (old) URL.revokeObjectURL(old);
+        return url;
+      });
+      builtFrom.current = signature;
+      setStale(false);
+    } catch {
+      setNote("Couldn't build the proposal. Try again.");
+    } finally {
+      setBusy(false);
     }
   }
 
@@ -209,7 +265,7 @@ export default function ProposalButton(props: {
       <button
         type="button"
         disabled={props.disabled || busy}
-        onClick={() => download(true)}
+        onClick={preview}
         className="rounded-lg bg-[color:var(--color-gold-600)] px-5 py-3 text-[15px] font-bold text-white disabled:opacity-40"
       >
         {busy ? "Building…" : "Proposal"}
@@ -222,6 +278,72 @@ export default function ProposalButton(props: {
           {note}
         </p>
       )}
+      {/*
+        PORTALLED TO THE BODY, and it has to be. This button lives inside the
+        sticky total bar, which uses backdrop-blur — and a backdrop-filter
+        creates a containing block, so `position: fixed` inside it resolves
+        against that 70px bar instead of the viewport. The panel rendered as a
+        sliver along the bottom of the screen with a zero-height iframe.
+      */}
+      {previewUrl &&
+        createPortal(
+          <div className="fixed inset-0 z-50 flex flex-col bg-[color:var(--color-navy-900,#0e182f)]/95 text-left">
+            <div className="flex items-center gap-3 px-4 py-3">
+              <p className="m-0 flex-1 text-[14px] font-bold text-white">
+                Proposal preview
+                {stale && (
+                  <span className="ml-2 text-[11px] font-semibold text-[color:var(--color-gold-600)]">
+                    estimate changed since this was built
+                  </span>
+                )}
+              </p>
+              <button
+                type="button"
+                onClick={preview}
+                disabled={busy}
+                className={`rounded-lg px-3 py-2 text-[13px] font-bold disabled:opacity-40 ${
+                  stale ? "bg-[color:var(--color-gold-600)] text-white" : "bg-white/15 text-white"
+                }`}
+              >
+                {busy ? "Building…" : "Rebuild"}
+              </button>
+              <button
+                type="button"
+                onClick={() => download(true)}
+                disabled={busy}
+                className="rounded-lg bg-white px-3 py-2 text-[13px] font-bold text-[color:var(--color-navy-900,#0e182f)] disabled:opacity-40"
+              >
+                Download
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPreviewUrl((old) => {
+                    if (old) URL.revokeObjectURL(old);
+                    return null;
+                  });
+                  setStale(false);
+                }}
+                aria-label="Close preview"
+                className="rounded-lg px-3 py-2 text-[15px] font-bold text-white"
+              >
+                ✕
+              </button>
+            </div>
+            <iframe src={previewUrl} title="Proposal preview" className="min-h-0 flex-1 bg-white" />
+            {/* iOS Safari will not render a PDF in an iframe; this always works. */}
+            <a
+              href={previewUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="bg-black/40 px-4 py-2 text-center text-[12px] text-white underline"
+            >
+              Not showing? Open it in a new tab
+            </a>
+          </div>,
+          document.body,
+        )}
+
       {gaps.length > 0 && (
         <p className="m-0 mt-1 max-w-[220px] text-[11px] text-[#8a5a00]">
           Office still to supply: {gaps.map((g) => g.split("—")[0].trim()).join(", ")}
