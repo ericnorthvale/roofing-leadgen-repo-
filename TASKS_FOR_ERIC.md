@@ -74,6 +74,17 @@ on a busy person.
       because nobody has said. Naming them is itself a trust signal: most
       contractors write "synthetic underlayment" and leave the homeowner
       wondering which. (`docs/research-facts.md` Sheet 19.)
+- [ ] **Optional, and only if you want the IKO figures double-checked at the
+      source.** The proposal's shingle comparison now prints IKO's real numbers
+      for Marathon, Dynasty and Nordic. Dynasty's and Nordic's came from IKO's
+      pages directly; Marathon's were read out of IKO's pages through a web
+      search, because this build environment cannot reach iko.com. If you want
+      them verified against the warranty PDF itself, add `www.iko.com` and
+      `ikowarranty.com` to the allowed sites on the "northvale-roofing
+      research" environment (claude.ai → Settings → the environment's network
+      settings) and say so — it takes one re-check. Nothing is wrong with the
+      figures as published; this would just make their sourcing as strong as
+      the rest.
 
 ## Tier 1 — blocks anything going live
 

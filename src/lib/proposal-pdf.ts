@@ -543,6 +543,7 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
   /* ── Roof anatomy diagram ─────────────────────────────────────── */
 
   const quoted = new Set(input.draft.lines.map((l) => l.id));
+  const isReplacement = blocks.has("replacement");
   const showDiagram = ROOF_LAYERS.some((l) => l.itemIds.some((id) => quoted.has(id)));
 
   if (showDiagram) {
@@ -564,15 +565,25 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
      * of the colour being quoted. Text baked into the bitmap would go soft in
      * print, so only the art is an image.
      */
+    // On a replacement, the standard layers are in the job and in the price
+    // whether or not the rep named each one aloud. See `standardOnReplacement`.
+    const layerIncluded = (l: (typeof ROOF_LAYERS)[number]) =>
+      Boolean(l.existing) ||
+      l.itemIds.some((id) => quoted.has(id)) ||
+      (isReplacement && Boolean(l.standardOnReplacement));
+
     const stackLayers = [...ROOF_LAYERS].reverse(); // page top = last installed
     const artLayers = stackLayers.map((l) => ({
       key: l.label,
       kind: (l.kind ?? "shingles") as ArtLayer["kind"],
-      included: Boolean(l.existing) || l.itemIds.some((id) => quoted.has(id)),
+      included: layerIncluded(l),
     }));
 
     const art = await renderRoofArt(artLayers, {
-      cx: 232,
+      // Centred in the gap between the label columns, allowing for the depth
+      // skew, which only extends to the RIGHT: the drawing runs from cx-W to
+      // cx+W+D, so the centre of its ink is cx + D/2, not cx.
+      cx: 225,
       widthPt: CONTENT_W,
       shingleHex: shingleEntry?.colour.chip ?? "#3a3f45",
       swatchUrl: shingleEntry?.colour.swatch ?? null,
@@ -598,7 +609,7 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
       for (const layer of stackLayers) {
         const anchor = art.anchors.find((a) => a.key === layer.label);
         if (!anchor) continue;
-        const on = Boolean(layer.existing) || layer.itemIds.some((id) => quoted.has(id));
+        const on = layerIncluded(layer);
         const label = layer.label.replace("&amp;", "&");
         const note = layer.existing
           ? "Your existing structure — inspected and re-nailed."
@@ -688,9 +699,9 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
     // A summary box, in the spirit of the navy callout on the owner's gutter
     // proposal. It states plainly what is and is not in the quote, which is
     // the question the drawing raises and should therefore answer.
-    const missing = ROOF_LAYERS.filter(
-      (l) => !l.existing && !l.itemIds.some((id) => quoted.has(id)),
-    ).map((l) => l.label.replace("&amp;", "&").toLowerCase());
+    const missing = ROOF_LAYERS.filter((l) => !layerIncluded(l)).map((l) =>
+      l.label.replace("&amp;", "&").toLowerCase(),
+    );
 
     gap(8);
     const boxH2 = 56;
@@ -930,7 +941,14 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
     });
 
     gap(16);
-    const pbH = 62;
+    // SIZED TO ITS TEXT, not to a guess. This box was a fixed 62pt, which fit
+    // the copy that happened to be in it the day it was written; the first
+    // time the copy grew, the last line was silently cut off inside a navy
+    // rectangle on a document going to a customer. Nothing in the build would
+    // have caught that — the PDF renders perfectly, it is just missing a
+    // sentence — so the height is now derived from the wrapped lines.
+    const pointLines = wrap(comparison.point, body, 8, CONTENT_W - 32);
+    const pbH = Math.max(62, 36 + pointLines.length * 11 + 8);
     need(pbH + 14);
     const pbTop = y;
     page.drawRectangle({
@@ -949,7 +967,7 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
       color: GOLD,
       tracking: 1.1,
     });
-    wrap(comparison.point, body, 8, CONTENT_W - 32).forEach((ln, i) => {
+    pointLines.forEach((ln, i) => {
       page.drawText(ln, {
         x: M.left + 16,
         y: pbTop - 36 - i * 11,

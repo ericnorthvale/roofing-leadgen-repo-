@@ -245,6 +245,55 @@ ONLY shingle brand Northvale publishes. Everything below traces to iko.com.
   Summit Grey, Glacier, Driftshake — SOURCE:
   https://www.iko.com/na/product/nordic/
 
+### IKO Marathon / Marathon Plus AR (3-tab — the comparison product, NOT sold)
+
+Added 2026-11-28 because the proposal's "Architectural vs 3-Tab" page had an
+empty right-hand column and said so on the page, which the owner rightly
+called useless. These are the figures that fill it.
+
+**US FIGURES ONLY. Canada differs and must never be mixed in** — IKO's Canadian
+Marathon wind coverage is 70 mph standard / 80 mph upgraded, against 60 mph in
+the US. Publishing a Canadian figure on a Texas proposal would overstate a
+competing product, which is its own kind of dishonest.
+
+- **Limited 25 year** product warranty (NOT Limited Lifetime) — SOURCE:
+  https://www.iko.com/na/product/marathon-plus-ar-traditional-3-tab-shingles/ ;
+  https://www.iko.com/na/residential-roofing-shingles/three-tab/marathon-plus-ar
+- **Limited Wind Warranty: 60 mph (97 km/h)**, and **there is no High Wind
+  Application warranty for Marathon in the US** — SOURCE: product page above;
+  IKO Industries Unified Warranty Booklet
+- **Iron Clad® Protection: 5 years** (against 15 on Dynasty/Nordic) — SOURCE:
+  product page above
+- **Class A fire** (ASTM E108 / UL 790); **ASTM D3161 Class F** — SOURCE:
+  product page above
+- **No UL 2218 impact class is published** for Marathon. State it as "no rating
+  published", never as "fails" or "Class 1" — IKO publishes no class, which is
+  not the same as a low one.
+- **Algae: AR granules, no warranty term published.** Dynasty and Nordic carry a
+  10-year Limited Algae Resistance Warranty; IKO's Marathon page describes
+  embedded algae-resistant granules without stating a term. Publish the absence
+  of a term, not a term of zero.
+
+**PROVENANCE — read this before changing these figures.** The build environment
+cannot reach iko.com (DNS blocked; verified 2026-11-28, the allowlist is five
+Texas .gov hosts). These figures were therefore read out of IKO's own product
+and warranty pages **via web search rather than a direct fetch**, and confirmed
+across two independent searches returning the same numbers from the same IKO
+URLs. That is weaker than the direct-fetch sourcing behind the Dynasty and
+Nordic sections above, and it is recorded here so nobody mistakes one for the
+other. **To upgrade it:** add `www.iko.com` and `ikowarranty.com` to the
+`northvale-roofing research` environment's allowed hosts and re-fetch the
+Limited Warranty PDF.
+
+**Conflicting third-party figures, and why they are rejected:**
+
+| Claim                                            | Source                        | Why rejected                                                                                                                                                                                        |
+| ------------------------------------------------ | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Marathon Plus AR "wind resistance up to 110 MPH" | BRS Roofing Supply (retailer) | Contradicts IKO's own 60 mph. A retailer listing does not outrank the manufacturer's warranty page.                                                                                                 |
+| Marathon "Class 4 impact, 130 mph"               | Various retail listings       | Describes an architectural shingle. Marathon is a 3-tab; IKO publishes no UL 2218 class for it.                                                                                                     |
+| Marathon "10-year algae protection"              | Retail listing                | IKO's page states AR granules with no term.                                                                                                                                                         |
+| "3-tab is rated 60–70 mph"                       | Roofing blogs generally       | See UNVERIFIED #8 — the generic claim traces to no manufacturer document. The 60 mph figure published here is Marathon's own warranty figure, not the generic blog claim, and is published as such. |
+
 ### IKO warranty facts (CRITICAL — publish exactly)
 
 - **Iron Clad® Protection** = the first **15 years** of **full, non-prorated**
@@ -2897,14 +2946,16 @@ These are commitments a customer can hold the company to — which is the whole
 reason they work — so adding a thirteenth is not a drafting decision. Anything
 new goes to the owner before it is printed.
 
-**IKO Marathon spec sheet — NEEDS DATA.** The proposal's "Architectural vs
-3-Tab" page names Marathon as the 3-tab being compared against, and leaves its
-impact rating, wind warranty, product warranty and algae coverage as em-dashes,
-with a note on the page saying why. That is deliberate: UNVERIFIED #8 above
-records that the "3-tab is rated 60–70 mph" figure every roofing blog repeats
-traces to no manufacturer document, and says to contrast verified manufacturer
-warranties instead. Supply IKO's current Marathon warranty document and those
-cells can be filled; until then they stay empty rather than plausible.
+**IKO Marathon spec sheet — RESOLVED 2026-11-28.** This used to say the
+proposal's "Architectural vs 3-Tab" page left Marathon's impact rating, wind
+warranty, product warranty and algae coverage as em-dashes, with a note on the
+page explaining why. The owner's verdict was that a comparison which compares
+nothing is useless, and he was right. Marathon's US figures are now recorded
+above under "IKO Marathon / Marathon Plus AR" and published in the table, with
+their sourcing caveat recorded alongside them. UNVERIFIED #8 still stands and
+is NOT contradicted by this: the generic "3-tab is rated 60–70 mph" claim still
+traces to no manufacturer document, and what is published here is Marathon's
+own warranty figure for a named product, which is a different thing.
 
 **Still outstanding on this sheet** (needed before the proposal PDF reads as a
 finished document): the licence / insurance line for the document footer;

@@ -133,15 +133,68 @@ describe("which comparison page appears", () => {
     expect(comparisonFor(undefined)).toBeNull();
   });
 
-  it("never states a Marathon figure nobody has sourced", async () => {
-    // UNVERIFIED #8 in research-facts.md: the 3-tab wind rating every blog
-    // repeats has no manufacturer document behind it. The 3-tab column must
-    // stay empty rather than plausible.
+  it("states Marathon's US figures, exactly as recorded in research-facts", async () => {
+    // This test used to assert the opposite — that the 3-tab column stayed
+    // EMPTY, because nobody had sourced Marathon's warranty. It is sourced
+    // now (research-facts.md, "IKO Marathon / Marathon Plus AR"), so the
+    // guard moves rather than disappears: these are claims about a competing
+    // product on a document a customer keeps, and the one thing they cannot
+    // be is approximately true.
     const { ARCHITECTURAL_COMPARISON } = await import("~/lib/proposal-compare");
-    const theirs = ARCHITECTURAL_COMPARISON.rows.map((r) => r.theirs).join(" ");
-    expect(theirs).not.toMatch(/\bmph\b/i);
-    expect(theirs).not.toMatch(/Class [1-4]/i);
-    expect(theirs).not.toMatch(/Lifetime/i);
+    const by = (label: string) => ARCHITECTURAL_COMPARISON.rows.find((r) => r.label === label);
+
+    expect(by("Wind warranty")?.theirs).toBe("60 mph");
+    expect(by("Product warranty")?.theirs).toBe("Limited 25 years");
+    expect(by("Iron Clad period")?.theirs).toBe("5 years");
+    expect(by("Fire rating")?.theirs).toBe("Class A");
+  });
+
+  it("never lets a Canadian Marathon figure onto a Texas proposal", async () => {
+    // IKO covers Canadian Marathon to 70 mph standard and 80 upgraded. Either
+    // number here would OVERSTATE a competitor's product on a document a
+    // homeowner keeps, which is its own kind of dishonest and the sort of
+    // error nobody would ever catch by eye.
+    const { ARCHITECTURAL_COMPARISON } = await import("~/lib/proposal-compare");
+    const all = JSON.stringify(ARCHITECTURAL_COMPARISON);
+    expect(all).not.toMatch(/\b(70|80|110)\s*mph/i);
+    expect(all).toMatch(/Canadian Marathon figures differ/i);
+  });
+
+  it("does not claim a UL 2218 class IKO never published for Marathon", async () => {
+    // "No rating published" and "Class 1" are completely different claims.
+    // IKO publishes no class for a 3-tab; saying it rates low would be an
+    // invention, and a disparaging one.
+    const { ARCHITECTURAL_COMPARISON } = await import("~/lib/proposal-compare");
+    const impact = ARCHITECTURAL_COMPARISON.rows.find((r) => r.label === "Impact rating");
+    expect(impact?.theirs).toMatch(/no rating published/i);
+    expect(impact?.theirs).not.toMatch(/class\s*[1-4]/i);
+  });
+
+  it("keeps the rows where the two products are equal", async () => {
+    // A table where every row favours the thing being sold reads as a sales
+    // sheet. On the Class 4 page four rows are genuinely identical, and
+    // cropping them would turn an honest page into a misleading one — the
+    // upgrade is the impact class, not a longer warranty.
+    const { CLASS_4_COMPARISON } = await import("~/lib/proposal-compare");
+    const same = CLASS_4_COMPARISON.rows.filter((r) => r.ours === r.theirs);
+    expect(same.length).toBeGreaterThanOrEqual(4);
+    expect(CLASS_4_COMPARISON.point).toMatch(/identical/i);
+
+    // And it must not promise hail cover that no shingle warranty gives.
+    const hail = CLASS_4_COMPARISON.rows.find((r) => r.label === "Hail damage");
+    expect(hail?.ours).toMatch(/not covered/i);
+    expect(hail?.theirs).toMatch(/not covered/i);
+  });
+
+  it("no longer tells the customer the table has gaps", async () => {
+    const { ARCHITECTURAL_COMPARISON } = await import("~/lib/proposal-compare");
+    const all = JSON.stringify(ARCHITECTURAL_COMPARISON);
+    expect(all).not.toMatch(/gaps|from memory|bring the spec sheet/i);
+    // No em-dash placeholders left in either column.
+    for (const row of ARCHITECTURAL_COMPARISON.rows) {
+      expect(row.ours.trim()).not.toBe("\u2014");
+      expect(row.theirs.trim()).not.toBe("\u2014");
+    }
   });
 });
 

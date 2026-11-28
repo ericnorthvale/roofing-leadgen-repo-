@@ -17,10 +17,22 @@
  * is a page of claims about a competing product; the one thing it cannot be
  * is approximately true.
  *
- * IKO MARATHON'S OWN WARRANTY FIGURES ARE NOT HERE because nobody has
- * supplied the spec sheet. The 3-tab column therefore carries only what is
- * either definitional (single-layer construction) or independently sourced
- * (InterNACHI service life). See Sheet 18 of research-facts.md.
+ * BOTH COLUMNS ARE NOW FILLED (2026-11-28). The 3-tab column used to be a row
+ * of em-dashes under a box explaining why, which the owner correctly called
+ * useless: a comparison that compares nothing persuades nobody. Marathon's own
+ * US warranty figures are now recorded in research-facts.md and published
+ * here — including the one that matters most on the Gulf Coast, which is that
+ * IKO warrants a Marathon roof against 60 mph wind and a Dynasty roof against
+ * 130.
+ *
+ * THE TABLES DELIBERATELY SHOW WHERE THE TWO PRODUCTS ARE EQUAL. Both carry
+ * Class A fire; Nordic and Dynasty carry identical wind, product, Iron Clad
+ * and algae terms. Printing "same" in those rows costs a little drama and buys
+ * the whole page's credibility — a table where every row favours the thing
+ * being sold reads as a sales sheet, and a homeowner holding three bids can
+ * tell the difference. It also puts the real reason for the Class 4 upgrade
+ * where it belongs: the impact rating and what an insurer does with it, not an
+ * invented warranty advantage.
  */
 
 export interface CompareRow {
@@ -63,20 +75,38 @@ export const CLASS_4_COMPARISON: Comparison = {
       label: "Impact rating",
       ours: "FM 4473 / UL 2218 Class 4",
       theirs: "UL 2218 Class 3",
+      source: "Class 4 survives a 2-inch steel ball; Class 3, a 1.75-inch ball.",
     },
     {
       label: "Asphalt",
       ours: "Polymer-modified (SBS)",
       theirs: "Standard asphalt",
+      source: "SBS stays flexible in cold and resists tearing — why Nordic takes the harder hit.",
     },
-    { label: "Wind warranty", ours: "130 mph", theirs: "130 mph" },
-    { label: "Product warranty", ours: "Limited Lifetime", theirs: "Limited Lifetime" },
-    { label: "Iron Clad period", ours: "15 years", theirs: "15 years" },
-    { label: "Algae coverage", ours: "10 years", theirs: "10 years" },
+    { label: "Wind warranty", ours: "130 mph", theirs: "130 mph", source: "Identical." },
+    {
+      label: "Product warranty",
+      ours: "Limited Lifetime",
+      theirs: "Limited Lifetime",
+      source: "Identical.",
+    },
+    {
+      label: "Iron Clad period",
+      ours: "15 years",
+      theirs: "15 years",
+      source: "Identical. Full, non-prorated cover for manufacturing defects.",
+    },
+    { label: "Algae coverage", ours: "10 years", theirs: "10 years", source: "Identical." },
+    {
+      label: "Hail damage",
+      ours: "Not covered",
+      theirs: "Not covered",
+      source: "No asphalt shingle warranty covers hail. That is what your insurance is for.",
+    },
   ],
-  pointHeading: "The part worth asking your insurer about",
+  pointHeading: "What you are actually buying, said plainly",
   point:
-    "Many Texas carriers offer a premium discount for a Class 4 roof, and the discount runs every year you own it. We cannot tell you what yours will allow — ask them, with the Class 4 rating in hand, before you decide.",
+    "Four of those rows are identical, and we have left them in rather than crop the table. The upgrade is not buying you a longer warranty — it is buying a shingle built to take a harder hit, and a Class 4 rating to put in front of your insurer. IKO is blunt about the second part: it states the impact rating is \u201csolely for the purpose of enabling residential property owners to obtain a reduction in their residential insurance premium, if available.\u201d Many Texas carriers offer that discount and it runs every year you own the roof. Ask yours, with the Class 4 rating in hand, before you decide.",
   footnote:
     "Impact classifications and warranty terms are IKO's, per the IKO Limited Warranty (US). Warranty coverage is subject to IKO's own terms and to installation per its application requirements.",
 };
@@ -103,16 +133,41 @@ export const ARCHITECTURAL_COMPARISON: Comparison = {
       theirs: "~20 years",
       source: "InterNACHI life-expectancy chart — and hot climates shorten both.",
     },
-    { label: "Impact rating", ours: "UL 2218 Class 3", theirs: "—" },
-    { label: "Wind warranty", ours: "130 mph", theirs: "—" },
-    { label: "Product warranty", ours: "Limited Lifetime", theirs: "—" },
-    { label: "Algae coverage", ours: "10 years", theirs: "—" },
+    {
+      label: "Wind warranty",
+      ours: "130 mph",
+      theirs: "60 mph",
+      source: "IKO's own figures. Marathon has no high-wind upgrade available in the US.",
+    },
+    {
+      label: "Product warranty",
+      ours: "Limited Lifetime",
+      theirs: "Limited 25 years",
+    },
+    {
+      label: "Iron Clad period",
+      ours: "15 years",
+      theirs: "5 years",
+      source: "The years your cover is full and non-prorated, before it starts reducing.",
+    },
+    {
+      label: "Impact rating",
+      ours: "UL 2218 Class 3",
+      theirs: "No rating published",
+      source: "IKO publishes no UL 2218 class for Marathon. That is not the same as a low one.",
+    },
+    {
+      label: "Algae coverage",
+      ours: "10-year limited warranty",
+      theirs: "Granules, no warranty term",
+    },
+    { label: "Fire rating", ours: "Class A", theirs: "Class A", source: "Identical." },
   ],
-  pointHeading: "Why the right-hand column has gaps",
+  pointHeading: "Sixty miles an hour",
   point:
-    "We have not reproduced IKO's warranty figures for Marathon here, because we would be quoting them from memory. The Dynasty figures are from the IKO Limited Warranty. If you want the Marathon terms side by side, ask and we will bring the spec sheet.",
+    "That is the wind IKO warrants a Marathon roof against, and it is worth sitting with for a moment. A Gulf Coast thunderstorm gusts past 60 most summers; a named storm is not close. The Dynasty going on this roof is warranted to 130, by the same manufacturer, in the same document. Both figures are IKO's, not ours — and the 3-tab is cheaper for exactly the reasons in this table.",
   footnote:
-    "Dynasty warranty terms are IKO's, per the IKO Limited Warranty (US), and are subject to its terms and to installation per its application requirements. Service-life figures are InterNACHI's general chart for asphalt shingles, not a manufacturer warranty.",
+    "All warranty terms and ratings are IKO's own, for the US market, and are subject to IKO's terms and to installation per its application requirements. Canadian Marathon figures differ and are not used here. Service-life figures are InterNACHI's general chart for asphalt shingles, not a manufacturer warranty.",
 };
 
 /** Which comparison belongs in this proposal, if any. */

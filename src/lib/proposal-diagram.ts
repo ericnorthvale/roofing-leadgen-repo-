@@ -50,6 +50,24 @@ export interface RoofLayer {
    * as noise.
    */
   existing?: boolean;
+  /**
+   * Part of EVERY Northvale roof replacement, whether or not the rep said so
+   * out loud.
+   *
+   * THIS EXISTS BECAUSE THE PAGE WAS PRINTING SOMETHING FALSE. The rep now
+   * dictates the job in their own words, and the assistant only lists what it
+   * actually heard — so a perfectly normal "tear off and replace, thirty
+   * squares at four fifty" produced a diagram captioning leak barrier,
+   * underlayment, starter and ridge cap as "Not included in this quote". They
+   * are included; they are in the price; Northvale fits them on every
+   * replacement. Telling a customer in writing that their new roof has no
+   * underlayment is a worse lie than any of the ones the no-invention rule
+   * guards against, because this one is printed and signed.
+   *
+   * The flag is NOT a licence to price things nobody quoted. It affects what
+   * the drawing says is included, and nothing about the money.
+   */
+  standardOnReplacement?: boolean;
 }
 
 const C = (hex: string) => ({
@@ -66,6 +84,7 @@ export const ROOF_LAYERS: RoofLayer[] = [
   {
     itemIds: ["deck-inspect", "deck-replace"],
     label: "Roof deck",
+    standardOnReplacement: true,
     note: "The plywood your whole roof is fastened to. Inspected and re-nailed once the old roof is off.",
     thickness: 22,
     fill: C("#c8a97e"),
@@ -75,6 +94,7 @@ export const ROOF_LAYERS: RoofLayer[] = [
   {
     itemIds: ["leak-barrier"],
     label: "Leak barrier",
+    standardOnReplacement: true,
     note: "Self-sealing membrane in the valleys and around penetrations — where roofs actually leak.",
     thickness: 11,
     fill: C("#7d4f3a"),
@@ -83,6 +103,7 @@ export const ROOF_LAYERS: RoofLayer[] = [
   {
     itemIds: ["underlayment"],
     label: "Synthetic underlayment",
+    standardOnReplacement: true,
     note: "A second water-resistant plane over the whole deck, under the shingles.",
     thickness: 11,
     fill: C("#4a5568"),
@@ -91,6 +112,7 @@ export const ROOF_LAYERS: RoofLayer[] = [
   {
     itemIds: ["starter"],
     label: "Starter course",
+    standardOnReplacement: true,
     note: "A bonded first course at the eaves and rakes. It is what stops the edge lifting in wind.",
     thickness: 10,
     fill: C("#2f3f55"),
@@ -99,6 +121,7 @@ export const ROOF_LAYERS: RoofLayer[] = [
   {
     itemIds: ["shingles-dynasty", "shingles-nordic"],
     label: "Architectural shingles",
+    standardOnReplacement: true,
     note: "The roof you see. Nailed to the manufacturer's pattern so the wind warranty stands.",
     thickness: 20,
     fill: C("#3a3f45"),
@@ -116,6 +139,7 @@ export const ROOF_LAYERS: RoofLayer[] = [
   {
     itemIds: ["hip-ridge"],
     label: "Hip &amp; ridge cap",
+    standardOnReplacement: true,
     note: "Purpose-made caps along the ridges — not cut-up field shingles.",
     thickness: 14,
     fill: C("#22262b"),
