@@ -144,3 +144,48 @@ describe("which comparison page appears", () => {
     expect(theirs).not.toMatch(/Lifetime/i);
   });
 });
+
+describe("the decking rate", () => {
+  it("prints the owner's rate, and what it is charged against", async () => {
+    const { aboutSection } = await withBusinessInfo({ deckingPerSheet: 85 });
+    const prose = aboutSection().body.join(" ");
+    expect(prose).toContain("$85 per sheet");
+    // The rate alone invites "per sheet of what, and how many?". The sentence
+    // that answers it is the part that buys the trust.
+    expect(prose).toMatch(/sheets that actually come out/i);
+  });
+
+  it("says nothing at all when no rate has been given", async () => {
+    for (const value of [undefined, null, 0, "85"]) {
+      const { aboutSection } = await withBusinessInfo({ deckingPerSheet: value });
+      const prose = aboutSection().body.join(" ");
+      expect(prose).not.toMatch(/per sheet/i);
+    }
+  });
+
+  it("never implies a sheet count, which nobody has supplied", async () => {
+    const { aboutSection } = await withBusinessInfo({ deckingPerSheet: 85 });
+    const prose = aboutSection().body.join(" ");
+    expect(prose).not.toMatch(/\btypical(ly)?\b|\busually\b|\baverage\b|\bup to \d/i);
+  });
+
+  it("still promises nothing changes without approval", async () => {
+    const { aboutSection } = await withBusinessInfo({ deckingPerSheet: 85 });
+    expect(aboutSection().body.join(" ")).toMatch(/did not approve first/i);
+  });
+});
+
+describe("the company email", () => {
+  it("is never spelled out in compliance copy, only sourced from BRAND", async () => {
+    const { LEGAL } = await import("~/lib/legal");
+    const { BRAND } = await import("~/lib/brand");
+    expect(LEGAL.accessibilityContact).toContain(BRAND.email);
+
+    // The failure this guards is silent: a mailbox changed in one place and
+    // left stale in another, on the page whose whole job is to be reachable.
+    const src = await import("node:fs").then((fs) =>
+      fs.readFileSync(new URL("../../src/lib/legal.ts", import.meta.url), "utf8"),
+    );
+    expect(src).not.toMatch(/@northvaleroofing\.com/);
+  });
+});

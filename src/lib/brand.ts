@@ -30,6 +30,7 @@ export const BRAND = {
   yearsExperience: businessInfo.yearsExperience,
   certStatus: businessInfo.certStatus,
   warranties: businessInfo.warranties,
+  deckingPerSheet: businessInfo.deckingPerSheet,
   financing: businessInfo.financing,
   /** Owner's real profile URLs (GBP, Facebook, …) — feeds JSON-LD sameAs. */
   socialProfiles: (businessInfo as { socialProfiles?: string[] }).socialProfiles ?? [],

@@ -2843,9 +2843,11 @@ it.** If the owner gives a term but not the coverage, the term goes in and the
 coverage stays blank. Rounding a vague answer up into a specific one is the
 same failure as inventing it.
 
-| Fact                      | Value   | Stated by                | Date       | Where it is used                                                                  |
-| ------------------------- | ------- | ------------------------ | ---------- | --------------------------------------------------------------------------------- |
-| Workmanship warranty term | 5 years | Greg (owner), in session | 2026-11-28 | `src/data/business-info.json` → `BRAND.warranties`; `/warranty`; the proposal PDF |
+| Fact                      | Value                     | Stated by                | Date       | Where it is used                                                                              |
+| ------------------------- | ------------------------- | ------------------------ | ---------- | --------------------------------------------------------------------------------------------- |
+| Workmanship warranty term | 5 years                   | Greg (owner), in session | 2026-11-28 | `src/data/business-info.json` → `BRAND.warranties`; `/warranty`; the proposal PDF             |
+| Decking replacement rate  | $85 per sheet             | Greg (owner), in session | 2026-11-28 | `src/data/business-info.json` → `BRAND.deckingPerSheet`; the proposal's "About this estimate" |
+| Company email             | greg@northvaleroofing.com | Greg (owner), in session | 2026-11-28 | `src/data/business-info.json` → `BRAND.email`; sitewide NAP; `/legal/accessibility`           |
 
 **Workmanship warranty — what was and was not said.** Asked for "how many years,
 what's covered", the answer given was "its 5 years". So the TERM is confirmed at
@@ -2854,6 +2856,31 @@ therefore states the term and leaves per-job coverage to the written estimate,
 which is what the page already promised. Do not write a coverage list for this
 warranty until the owner provides one — a warranty's exclusions are exactly the
 part a customer will hold the company to.
+
+**Decking at $85 a sheet — what was and was not said.** The rate was given
+flat, with no minimum, no allowance and no "up to N sheets included". So the
+proposal states the rate and that the customer is charged for sheets actually
+removed, and states nothing else. It does NOT say how many sheets a typical
+roof needs — that figure was not given and inventing it would be the same
+failure as inventing the rate. The estimator still makes the rep type the
+quantity and price on any decking line; this number is a published standard
+rate, not a default the assistant may fill in by itself.
+
+**Company email changed from `hello@` to `greg@` (2026-11-28).** The site had
+been publishing `hello@northvaleroofing.com`, which was aspirational — Tier 1
+of `TASKS_FOR_ERIC.md` still lists setting that mailbox up as not done, so
+anything a customer sent there had nowhere to land. The owner gave
+`greg@northvaleroofing.com` as the company address. A real mailbox beats a
+tidy-looking one. If a `hello@` or `office@` is created later, change it in
+`business-info.json` and it moves everywhere at once.
+
+**Workmanship warranty wording — approved as written (2026-11-28).** Asked to
+review the warranty section the proposal prints, the owner's answer was
+"warranty right now looks good". That approves the WORDING as it stands in
+`src/lib/proposal-copy.ts` → `warrantySection()`: the five-year term, the
+workmanship-versus-materials distinction, and the note that coverage assumes
+correct ventilation and installation and that registration is handled. It does
+not add an exclusions list — none was given, and the note above still stands.
 
 **IKO Marathon spec sheet — NEEDS DATA.** The proposal's "Architectural vs
 3-Tab" page names Marathon as the 3-tab being compared against, and leaves its
@@ -2865,9 +2892,11 @@ warranties instead. Supply IKO's current Marathon warranty document and those
 cells can be filled; until then they stay empty rather than plausible.
 
 **Still outstanding on this sheet** (needed before the proposal PDF reads as a
-finished document): the licence / insurance line for the document footer, and
+finished document): the licence / insurance line for the document footer;
 confirmation of whether the IKO manufacturer warranty figures already published
-on `/` (130-mph wind, 10-year algae) should also be restated on the proposal.
+on `/` (130-mph wind, 10-year algae) should also be restated on the proposal;
+sign-off on the twelve jobsite standards; payment terms; and which IKO
+accessories are actually installed.
 
 ## Sheet 19 — What the products actually look like (for the roof diagram)
 

@@ -77,7 +77,12 @@ on a busy person.
 - [ ] **Register `Northvale Roofing LLC`** with TX Secretary of State (~$300, 3–5 business days). See `docs/trademark-clearance.md` for why LLC-first.
 - [x] **Purchase `northvaleroofing.com`**. _Registered at Squarespace Domains 2026-04-23. DNS managed via Squarespace's built-in manager; records for Vercel + Google Workspace added during launch._
 - [x] **Create Vercel project** from this repo. Set `PUBLIC_SITE_URL=https://northvaleroofing.com`. _Project created 2026-04-23; preview builds auto-deploy on every push to this branch. `PUBLIC_SITE_URL` still needs to be set to the real domain once it's registered._
-- [ ] **Set up Google Workspace** or at minimum `hello@northvaleroofing.com` with MX/SPF/DKIM/DMARC records.
+- [ ] **Set up Google Workspace** with MX/SPF/DKIM/DMARC records. _The site now
+      publishes `greg@northvaleroofing.com` (owner, 2026-11-28) rather than the
+      `hello@` address that was never created — a real mailbox beats a tidy one.
+      SPF/DKIM/DMARC still matter: without them, mail Northvale sends to
+      customers lands in spam. If a `hello@` or `office@` is created later,
+      change it in `src/data/business-info.json` and it moves everywhere._
 - [ ] **Create dedicated phone number** (Twilio or Google Voice Business). Update `BRAND.phoneE164` + `phoneDisplay` in `src/lib/brand.ts`.
 
 ## Tier 2 — analytics + CRM wiring (blocks attribution)

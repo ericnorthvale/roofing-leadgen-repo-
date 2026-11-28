@@ -88,12 +88,28 @@ export function warrantySection(): ProposalSection | null {
  * moment they are deciding to sign. It stays on /warranty and /certifications.
  */
 export function aboutSection(): ProposalSection {
-  return {
-    heading: "About this estimate",
-    body: [
-      "This proposal is an estimate of the work described above at the prices shown. If we open the roof and find something neither of us could see from the ground — rotten decking is the usual one — we will stop, show you, and agree the cost before carrying on. You will not find a change on the final invoice that you did not approve first.",
-    ],
-  };
+  const body = [
+    "This proposal is an estimate of the work described above at the prices shown. If we open the roof and find something neither of us could see from the ground — rotten decking is the usual one — we will stop, show you, and agree the cost before carrying on. You will not find a change on the final invoice that you did not approve first.",
+  ];
+
+  // THE ONE COST NOBODY CAN QUOTE UP FRONT, QUOTED UP FRONT. Decking is the
+  // standard place a roofing bill grows after the contract is signed, and it
+  // genuinely cannot be measured until the old roof is off. Most proposals
+  // therefore leave it open, which is where the homeowner's distrust lives.
+  // Naming the rate converts the open-ended worry into arithmetic they can do
+  // themselves. Printed only when the owner has given a rate — never guessed.
+  const perSheet = BRAND.deckingPerSheet;
+  if (typeof perSheet === "number" && perSheet > 0) {
+    body.push(
+      `Should decking need replacing, it is ${perSheet.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        minimumFractionDigits: 0,
+      })} per sheet, and you are charged for the sheets that actually come out — not an allowance, not a rounded-up estimate. The price is set here, before the roof is opened, so it cannot be decided at the point when you have no roof and no leverage.`,
+    );
+  }
+
+  return { heading: "About this estimate", body };
 }
 
 /** Signature block labels. Not a contract — the owner's paperwork governs. */

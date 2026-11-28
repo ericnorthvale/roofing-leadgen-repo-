@@ -2,6 +2,7 @@
  * Compliance shorthand referenced in docs/compliance.md. Kept as a code module
  * so the values that surface in footer/disclaimer copy come from one place.
  */
+import { BRAND } from "./brand";
 
 /**
  * Version tag for the consent disclaimer below. Bump the date whenever the
@@ -16,8 +17,11 @@ export const LEGAL = {
   smsDisclaimer:
     "Reply STOP to cancel SMS. Reply HELP for help. Message and data rates may apply. Message frequency varies.",
   emailFooterAddress: "",
-  accessibilityContact:
-    "Accessibility questions or requests: hello@northvaleroofing.com or call during business hours.",
+  // Built from BRAND, not typed out. This line had the company address
+  // spelled into it, so changing the mailbox in business-info.json left the
+  // accessibility page quietly pointing at the old one — exactly the drift
+  // Hard Rule #3 is there to prevent.
+  accessibilityContact: `Accessibility questions or requests: ${BRAND.email} or call during business hours.`,
   // NEEDS OWNER CONFIRMATION: state only certifications actually held. Add RCAT
   // membership/certification back here once confirmed by the owner.
   licenseLine:
