@@ -107,5 +107,22 @@ export const ROOF_LAYERS: RoofLayer[] = [
 /** Ridge ventilation sits at the peak rather than in the stack. */
 export const RIDGE_VENT_ITEM = "ridge-vent";
 
+/**
+ * Called out at the eave rather than drawn as a layer — it is an edge detail,
+ * and stacking it would imply it covers the whole deck.
+ */
+export const EDGE_CALLOUTS: Array<{ itemIds: string[]; label: string; note: string }> = [
+  {
+    itemIds: ["drip-edge"],
+    label: "Drip edge",
+    note: "Directs water off the deck and into the gutter.",
+  },
+  {
+    itemIds: ["step-flashing", "chimney-flashing", "valley-metal"],
+    label: "Flashing",
+    note: "Seals the joints and penetrations where roofs meet walls and chimneys.",
+  },
+];
+
 export const DIAGRAM_DISCLAIMER =
   "Cross-section is illustrative and not to scale; layer thicknesses are exaggerated for legibility. Components shown reflect the scope quoted in this proposal.";

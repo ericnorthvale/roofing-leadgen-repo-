@@ -33,7 +33,12 @@ import type { EstimateDraft } from "./estimate-draft";
 import { ESTIMATE_ITEMS, BLOCK_LABEL, type EstimateBlock } from "./estimate-items";
 import { STUDIO_LINES } from "./design-studio";
 import { BRAND } from "./brand";
-import { ROOF_LAYERS, RIDGE_VENT_ITEM, DIAGRAM_DISCLAIMER } from "./proposal-diagram";
+import {
+  ROOF_LAYERS,
+  RIDGE_VENT_ITEM,
+  EDGE_CALLOUTS,
+  DIAGRAM_DISCLAIMER,
+} from "./proposal-diagram";
 import {
   ACCEPTANCE,
   aboutSection,
@@ -554,186 +559,255 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
     );
     gap(16);
 
-    // Panel sized from the stack it holds, rather than a guessed height that
-    // left the drawing stranded at the bottom of a mostly empty box.
-    const GAP_BETWEEN = 6;
-    const stackH =
-      ROOF_LAYERS.reduce((h, l) => h + l.thickness, 0) + (ROOF_LAYERS.length - 1) * GAP_BETWEEN;
-    const ventH = quoted.has(RIDGE_VENT_ITEM) ? 34 : 0;
-    const panelH = stackH + ventH + 52;
+    /**
+     * EXPLODED ISOMETRIC, to the owner's reference (2026-11-28). The first
+     * version was a flat stack of bars, which reads as a chart. A homeowner
+     * recognises a house: each layer is the same gable roof, drawn in
+     * projection and lifted clear of the one below, so the order is obvious
+     * at a glance and so is anything missing from it.
+     *
+     * Each layer is two parallelograms sharing a ridge — the left slope in
+     * shadow, the right in light — plus a thin front edge that gives the
+     * sheet its thickness. Drawn as paths, so it stays sharp at any print
+     * size. No rafters: the owner does not want the structure shown, and this
+     * proposal is not selling it.
+     */
+    const GEO = { W: 86, H: 26, D: 26, DY: 13, STEP: 34 };
+    // Sized so BOTH leader lines have room to travel. The first version put
+    // the house 4pt from the right column and the right-hand leaders rendered
+    // as dashes.
+    const cx = 232;
+    const LEFT_COL = 0;
+    const LEFT_W = 130;
+    const RIGHT_X = 366;
+    const RIGHT_W = CONTENT_W - RIGHT_X;
 
-    need(panelH + 16);
+    const stackLayers = [...ROOF_LAYERS].reverse(); // page top = last installed
+    const ventQuoted = quoted.has(RIDGE_VENT_ITEM);
+    const edges = EDGE_CALLOUTS.filter((e) => e.itemIds.some((id) => quoted.has(id)));
+
+    const rows = stackLayers.length + (ventQuoted ? 1 : 0);
+    const drawH = rows * GEO.STEP + edges.length * 26 + GEO.H + GEO.DY + 24;
+    need(drawH + 16);
     const panelTop = y;
-    page.drawRectangle({
-      x: M.left,
-      y: panelTop - panelH,
-      width: CONTENT_W,
-      height: panelH,
-      color: col(TINT),
+
+    /** A polygon in panel-local coordinates, y increasing downward. */
+    const poly = (pts: Array<[number, number]>, fill: Col) => {
+      const d =
+        `M ${pts[0][0]} ${pts[0][1]} ` +
+        pts
+          .slice(1)
+          .map((q) => `L ${q[0]} ${q[1]}`)
+          .join(" ") +
+        " Z";
+      page.drawSvgPath(d, { x: M.left, y: panelTop, color: col(fill), borderWidth: 0 });
+    };
+
+    const shade = (c: Col, k: number): Col => ({
+      r: Math.min(1, c.r * k),
+      g: Math.min(1, c.g * k),
+      b: Math.min(1, c.b * k),
     });
 
-    const stackX = M.left + 30;
-    const stackW = 250;
-    const labelX = stackX + stackW + 20;
-    let layerY = panelTop - panelH + 26;
+    /** One roof plane set at local vertical position `top`. */
+    function gable(top: number, fill: Col, thickness = 4) {
+      const { W, H, D, DY } = GEO;
+      const eaveL: [number, number] = [cx - W, top];
+      const ridgeF: [number, number] = [cx, top - H];
+      const eaveR: [number, number] = [cx + W, top];
+      const eaveLB: [number, number] = [cx - W + D, top - DY];
+      const ridgeB: [number, number] = [cx + D, top - H - DY];
+      const eaveRB: [number, number] = [cx + W + D, top - DY];
 
-    for (const layer of ROOF_LAYERS) {
-      // The deck is the customer's own house. It is always drawn as present,
-      // and never captioned "not included" — that caption is reserved for
-      // things actually absent from the quote, and it loses all its force if
-      // it also appears beside the structure they already own.
-      const included = layer.existing || layer.itemIds.some((id) => quoted.has(id));
-      const fill = included ? layer.fill : { r: 0.84, g: 0.84, b: 0.85 };
-
-      if (layer.courses) {
-        const tabs = 6;
-        const tw = stackW / tabs;
-        for (let i = 0; i < tabs; i++) {
-          page.drawRectangle({
-            x: stackX + i * tw,
-            y: layerY,
-            width: tw - 2,
-            height: layer.thickness,
-            color: col(fill),
-          });
-        }
-      } else {
-        page.drawRectangle({
-          x: stackX,
-          y: layerY,
-          width: stackW,
-          height: layer.thickness,
-          color: col(fill),
-        });
-      }
-
-      const midY = layerY + layer.thickness / 2;
-      page.drawLine({
-        start: { x: stackX + stackW + 4, y: midY },
-        end: { x: labelX - 7, y: midY },
-        thickness: 0.6,
-        color: col(included ? MUTED : FAINT),
-      });
-      page.drawText(layer.label.replace("&amp;", "&"), {
-        x: labelX,
-        y: midY - 3,
-        size: 8.6,
-        font: mid,
-        color: col(included ? NAVY : FAINT),
-      });
-      if (layer.existing) {
-        page.drawText("your existing structure", {
-          x: labelX + mid.widthOfTextAtSize(layer.label.replace("&amp;", "&"), 8.6) + 6,
-          y: midY - 2.4,
-          size: 6,
-          font: body,
-          color: col(MUTED),
-        });
-      } else if (!included) {
-        page.drawText("not in this quote", {
-          x: labelX + mid.widthOfTextAtSize(layer.label.replace("&amp;", "&"), 8.6) + 6,
-          y: midY - 2.4,
-          size: 6,
-          font: body,
-          color: col(FAINT),
-        });
-      }
-
-      layerY += layer.thickness + GAP_BETWEEN;
+      // Front edge thickness, drawn first so the planes sit on top of it.
+      poly(
+        [
+          [eaveL[0], eaveL[1] + thickness],
+          [ridgeF[0], ridgeF[1] + thickness],
+          [eaveR[0], eaveR[1] + thickness],
+          eaveR,
+          ridgeF,
+          eaveL,
+        ],
+        shade(fill, 0.62),
+      );
+      poly([eaveL, ridgeF, ridgeB, eaveLB], shade(fill, 0.82)); // left slope, shadow
+      poly([ridgeF, eaveR, eaveRB, ridgeB], fill); // right slope, light
     }
 
-    if (quoted.has(RIDGE_VENT_ITEM)) {
-      const vy = layerY + 4;
-      page.drawRectangle({
-        x: stackX + stackW / 2 - 40,
-        y: vy,
-        width: 80,
-        height: 10,
-        color: col(GOLD_DEEP),
-      });
-      // Airflow arrows leaving the ridge.
-      for (let i = 0; i < 4; i++) {
-        const ax = stackX + stackW / 2 - 24 + i * 16;
-        page.drawLine({
-          start: { x: ax, y: vy + 13 },
-          end: { x: ax, y: vy + 23 },
-          thickness: 1,
-          color: col(GOLD_DEEP),
-        });
-        page.drawLine({
-          start: { x: ax - 3, y: vy + 19 },
-          end: { x: ax, y: vy + 23 },
-          thickness: 1,
-          color: col(GOLD_DEEP),
-        });
-        page.drawLine({
-          start: { x: ax + 3, y: vy + 19 },
-          end: { x: ax, y: vy + 23 },
-          thickness: 1,
-          color: col(GOLD_DEEP),
-        });
-      }
-      page.drawLine({
-        start: { x: stackX + stackW + 4, y: vy + 5 },
-        end: { x: labelX - 7, y: vy + 5 },
-        thickness: 0.6,
-        color: col(MUTED),
-      });
-      page.drawText("Ridge ventilation", {
-        x: labelX,
-        y: vy + 7,
-        size: 8.6,
-        font: mid,
-        color: col(NAVY),
-      });
-      page.drawText("hot attic air leaves here", {
-        x: labelX,
-        y: vy - 3,
-        size: 6,
-        font: body,
-        color: col(MUTED),
-      });
-    }
+    /** Callout with a leader line back to the roof at this height. */
+    function callout(side: "l" | "r", top: number, label: string, note: string, on: boolean) {
+      const labelCol = on ? NAVY : FAINT;
+      const lineCol = on ? GOLD_DEEP : { r: 0.82, g: 0.83, b: 0.84 };
+      // Anchor on the eave — the lowest, outermost point of this layer — so
+      // the line actually meets the shape instead of stopping in white space.
+      const eaveY = panelTop - top;
+      const baseY = eaveY + 6;
 
-    y = panelTop - panelH - 14;
-
-    // Layer notes, two columns.
-    const noteW = (CONTENT_W - 20) / 2;
-    const included = ROOF_LAYERS.filter((l) => l.itemIds.some((id) => quoted.has(id)));
-    for (let i = 0; i < included.length; i += 2) {
-      const pair = included.slice(i, i + 2);
-      const heights = pair.map((l) => 13 + wrap(l.note, body, 7.8, noteW - 14).length * 10.5 + 8);
-      need(Math.max(...heights));
-      const rowTop = y;
-      pair.forEach((layer, j) => {
-        const x = M.left + j * (noteW + 20);
-        page.drawCircle({
-          x: x + 5,
-          y: rowTop - 6,
-          size: 5,
-          color: col(layer.fill),
+      if (side === "l") {
+        page.drawText(label, {
+          x: M.left + LEFT_COL,
+          y: baseY,
+          size: 8.6,
+          font: bold,
+          color: col(labelCol),
         });
-        page.drawText(layer.label.replace("&amp;", "&"), {
-          x: x + 14,
-          y: rowTop - 9,
-          size: 8,
-          font: mid,
-          color: col(NAVY),
-        });
-        wrap(layer.note, body, 7.8, noteW - 14).forEach((ln, k) => {
+        wrap(note, body, 6.4, LEFT_W - 6).forEach((ln, i) => {
           page.drawText(ln, {
-            x: x + 14,
-            y: rowTop - 21 - k * 10.5,
-            size: 7.8,
+            x: M.left + LEFT_COL,
+            y: baseY - 9 - i * 7.6,
+            size: 6.4,
             font: body,
-            color: col(INK),
+            color: col(on ? MUTED : FAINT),
           });
         });
-      });
-      y = rowTop - Math.max(...heights);
+        page.drawLine({
+          start: { x: M.left + LEFT_COL + LEFT_W - 8, y: eaveY },
+          end: { x: M.left + cx - GEO.W, y: eaveY },
+          thickness: 0.7,
+          color: col(lineCol),
+        });
+      } else {
+        const lw = bold.widthOfTextAtSize(label, 8.6);
+        page.drawText(label, {
+          x: M.left + CONTENT_W - lw,
+          y: baseY,
+          size: 8.6,
+          font: bold,
+          color: col(labelCol),
+        });
+        wrap(note, body, 6.4, RIGHT_W - 6).forEach((ln, i) => {
+          const w = body.widthOfTextAtSize(ln, 6.4);
+          page.drawText(ln, {
+            x: M.left + CONTENT_W - w,
+            y: baseY - 9 - i * 7.6,
+            size: 6.4,
+            font: body,
+            color: col(on ? MUTED : FAINT),
+          });
+        });
+        page.drawLine({
+          start: { x: M.left + RIGHT_X - 6, y: eaveY },
+          end: { x: M.left + cx + GEO.W + GEO.D, y: eaveY },
+          thickness: 0.7,
+          color: col(lineCol),
+        });
+      }
     }
 
-    gap(6);
+    let top = 40;
+    let side: "l" | "r" = "r";
+
+    if (ventQuoted) {
+      // A low ridge cap riding the peak, with air leaving it.
+      const vy = top;
+      poly(
+        [
+          [cx - 34, vy],
+          [cx, vy - 13],
+          [cx + 34, vy],
+          [cx + 34 + GEO.D, vy - GEO.DY],
+          [cx + GEO.D, vy - 13 - GEO.DY],
+          [cx - 34 + GEO.D, vy - GEO.DY],
+        ],
+        GOLD_DEEP,
+      );
+      for (let i = 0; i < 3; i++) {
+        const ax = M.left + cx - 16 + i * 16;
+        const ay = panelTop - vy + 20;
+        page.drawLine({
+          start: { x: ax, y: ay },
+          end: { x: ax, y: ay + 11 },
+          thickness: 1,
+          color: col(GOLD_DEEP),
+        });
+        page.drawLine({
+          start: { x: ax - 3, y: ay + 7 },
+          end: { x: ax, y: ay + 11 },
+          thickness: 1,
+          color: col(GOLD_DEEP),
+        });
+        page.drawLine({
+          start: { x: ax + 3, y: ay + 7 },
+          end: { x: ax, y: ay + 11 },
+          thickness: 1,
+          color: col(GOLD_DEEP),
+        });
+      }
+      callout("r", vy, "Ridge vent", "Releases heat and moisture from the attic.", true);
+      top += GEO.STEP;
+      side = "l";
+    }
+
+    for (const layer of stackLayers) {
+      const on = layer.existing || layer.itemIds.some((id) => quoted.has(id));
+      gable(top, on ? layer.fill : { r: 0.86, g: 0.86, b: 0.87 }, layer.courses ? 6 : 4);
+      const note = layer.existing
+        ? "Your existing structure — inspected and re-nailed."
+        : on
+          ? layer.note
+          : "Not included in this quote.";
+      callout(side, top, layer.label.replace("&amp;", "&"), note, on);
+      side = side === "l" ? "r" : "l";
+      top += GEO.STEP;
+    }
+
+    // Eave details hang off the bottom layer rather than joining the stack.
+    for (const e of edges) {
+      callout(side, top, e.label, e.note, true);
+      side = side === "l" ? "r" : "l";
+      top += 26;
+    }
+
+    y = panelTop - drawH - 12;
+
+    // A summary box, in the spirit of the navy callout on the owner's gutter
+    // proposal. It states plainly what is and is not in the quote, which is
+    // the question the drawing raises and should therefore answer.
+    const missing = ROOF_LAYERS.filter(
+      (l) => !l.existing && !l.itemIds.some((id) => quoted.has(id)),
+    ).map((l) => l.label.replace("&amp;", "&").toLowerCase());
+
+    gap(8);
+    const boxH2 = 56;
+    need(boxH2 + 16);
+    const bTop = y;
+    page.drawRectangle({
+      x: M.left,
+      y: bTop - boxH2,
+      width: CONTENT_W,
+      height: boxH2,
+      color: col(NAVY),
+    });
+    page.drawRectangle({
+      x: M.left,
+      y: bTop - boxH2,
+      width: 3,
+      height: boxH2,
+      color: col(GOLD),
+    });
+    tracked(missing.length ? "What this quote does not include" : "Every layer shown is included", {
+      x: M.left + 16,
+      y: bTop - 22,
+      size: 7.4,
+      font: mid,
+      color: GOLD,
+      tracking: 1.1,
+    });
+    const boxCopy = missing.length
+      ? `This proposal does not include ${missing.join(", ")}. Ask us what adding it would cost — it is far cheaper now than after the roof is on.`
+      : "Deck to ridge, every layer in the drawing above is part of the price quoted in this proposal. When you compare bids, this is the list to compare.";
+    wrap(boxCopy, body, 8, CONTENT_W - 32).forEach((ln, i) => {
+      page.drawText(ln, {
+        x: M.left + 16,
+        y: bTop - 36 - i * 11,
+        size: 8,
+        font: body,
+        color: col(WHITE),
+      });
+    });
+    y = bTop - boxH2 - 14;
+
     text(DIAGRAM_DISCLAIMER, { size: 6.6, color: FAINT, lead: 9 });
   }
 
