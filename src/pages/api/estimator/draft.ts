@@ -121,12 +121,40 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     // Everything the model said is re-checked here before it reaches a screen.
     return json({ ok: true, draft: validateDraft(parsed, transcript) });
-  } catch {
-    // Deliberately no detail to the client. A rep cannot act on an API error
-    // code, and the message could carry request internals.
-    return json({ ok: false, reason: "failed" }, 502);
+  } catch (err) {
+    /**
+     * THE REP GETS A SENTENCE; THE PAGE ALSO GETS THE REASON.
+     *
+     * This used to swallow the error entirely, on the grounds that a rep
+     * cannot act on an API error code. That was right about the rep and wrong
+     * about everything else: the first time the live call failed, "Couldn't
+     * take that in" was all anyone had, and the actual cause — which is
+     * usually one of three boring billing or access problems — was invisible
+     * from the only place it could be observed.
+     *
+     * So the cause travels back as `detail` and is shown in small print. This
+     * page is behind the crew code and no customer ever sees it. Anthropic's
+     * error bodies carry a type and a human-readable message, neither of which
+     * contains the key; the message is truncated anyway.
+     */
+    const detail = describeApiError(err);
+    // Also to the server log, where it survives the rep closing the page.
+    console.error("[estimator/draft] call failed:", detail);
+    return json({ ok: false, reason: "failed", detail }, 502);
   }
 };
+
+/** A short, safe description of why a call failed. Never includes the key. */
+function describeApiError(err: unknown): string {
+  if (err instanceof Anthropic.APIError) {
+    const body = err.error as { error?: { type?: string; message?: string } } | undefined;
+    const type = body?.error?.type ?? "api_error";
+    const message = body?.error?.message ?? err.message ?? "";
+    return `${err.status ?? "?"} ${type}: ${message}`.slice(0, 300);
+  }
+  if (err instanceof Error) return `${err.name}: ${err.message}`.slice(0, 300);
+  return "unknown error";
+}
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {

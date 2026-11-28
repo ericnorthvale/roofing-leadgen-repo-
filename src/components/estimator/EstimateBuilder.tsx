@@ -54,6 +54,7 @@ export default function EstimateBuilder() {
   const [draft, setDraft] = useState<EstimateDraft>(EMPTY);
   const [working, setWorking] = useState(false);
   const [note, setNote] = useState<string | null>(null);
+  const [detail, setDetail] = useState<string | null>(null);
 
   /**
    * THE PRE-HYDRATION TRAP.
@@ -128,6 +129,7 @@ export default function EstimateBuilder() {
     setSaying("");
     setWorking(true);
     setNote(null);
+    setDetail(null);
 
     try {
       const res = await fetch("/api/estimator/draft", {
@@ -148,6 +150,9 @@ export default function EstimateBuilder() {
             ? "Your session timed out. Reload the page and put the code in again."
             : "Couldn't take that in. Say it again, or try once you're back on data.",
       );
+      // Shown small, to the crew only, because "couldn't take that in" is not
+      // enough to fix anything by.
+      setDetail(typeof data?.detail === "string" ? data.detail : null);
     } catch {
       setNote("No signal. Say it again once you're back on data — nothing is lost.");
     } finally {
@@ -265,6 +270,11 @@ export default function EstimateBuilder() {
         {note && (
           <p role="status" className="mt-3 mb-0 text-[13px] text-[color:var(--color-ink-700)]">
             {note}
+          </p>
+        )}
+        {detail && (
+          <p className="mt-1 mb-0 font-mono text-[11px] break-words text-[color:var(--color-ink-500)]">
+            {detail}
           </p>
         )}
       </section>
