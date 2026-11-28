@@ -28,6 +28,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ESTIMATE_ITEMS } from "~/lib/estimate-items";
 import type { EstimateDraft } from "~/lib/estimate-draft";
+import AddressField from "./AddressField";
 
 const ITEM_BY_ID = new Map(ESTIMATE_ITEMS.map((i) => [i.id, i]));
 
@@ -174,12 +175,11 @@ export default function EstimateBuilder() {
             onChange={(v) => setCustomer({ ...customer, name: v })}
             autoComplete="name"
           />
-          <Field
+          <AddressField
             label="Property address"
             name="nv-address"
             value={customer.address}
             onChange={(v) => setCustomer({ ...customer, address: v })}
-            autoComplete="street-address"
           />
           <div className="grid grid-cols-2 gap-3">
             <Field

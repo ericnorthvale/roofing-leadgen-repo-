@@ -2828,3 +2828,34 @@ SOURCE: https://www.tdi.texas.gov/tips/getting-your-insurance-claim-paid.html
 - `/conroe/insurance-claims` gained the roof-age rule (Sheet 17, TDI 29 Sep 2026) — and, importantly, the caveat that it governs UNDERWRITING (declining
   or not renewing) and not whether an individual claim is paid. The page says
   so explicitly so no reader quotes it at an adjuster expecting it to work.
+
+## Sheet 18 — Company facts stated by the owner (not researched)
+
+Everything above this sheet is externally sourced and checkable. These are not:
+they are facts about Northvale that only the owner can supply, and the "source"
+is him saying so. They are recorded here anyway, with a date, because they get
+published on the site and printed on documents a customer keeps — so there has
+to be a written trail of who said what and when, rather than a number that
+appeared in a commit one day.
+
+**Rule for this sheet: record exactly what was said, and nothing adjacent to
+it.** If the owner gives a term but not the coverage, the term goes in and the
+coverage stays blank. Rounding a vague answer up into a specific one is the
+same failure as inventing it.
+
+| Fact                      | Value   | Stated by                | Date       | Where it is used                                                                  |
+| ------------------------- | ------- | ------------------------ | ---------- | --------------------------------------------------------------------------------- |
+| Workmanship warranty term | 5 years | Greg (owner), in session | 2026-11-28 | `src/data/business-info.json` → `BRAND.warranties`; `/warranty`; the proposal PDF |
+
+**Workmanship warranty — what was and was not said.** Asked for "how many years,
+what's covered", the answer given was "its 5 years". So the TERM is confirmed at
+five years and is published. The COVERAGE detail was not given: `/warranty`
+therefore states the term and leaves per-job coverage to the written estimate,
+which is what the page already promised. Do not write a coverage list for this
+warranty until the owner provides one — a warranty's exclusions are exactly the
+part a customer will hold the company to.
+
+**Still outstanding on this sheet** (needed before the proposal PDF reads as a
+finished document): the licence / insurance line for the document footer, and
+confirmation of whether the IKO manufacturer warranty figures already published
+on `/` (130-mph wind, 10-year algae) should also be restated on the proposal.
