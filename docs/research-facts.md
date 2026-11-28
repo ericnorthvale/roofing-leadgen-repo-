@@ -2868,3 +2868,41 @@ cells can be filled; until then they stay empty rather than plausible.
 finished document): the licence / insurance line for the document footer, and
 confirmation of whether the IKO manufacturer warranty figures already published
 on `/` (130-mph wind, 10-year algae) should also be restated on the proposal.
+
+## Sheet 19 — What the products actually look like (for the roof diagram)
+
+The exploded roof drawing in the proposal (`src/lib/roof-art.ts`) used to render
+each layer in an invented colour. The owner's objection on 2026-11-28 was fair:
+a drawing that says "this is your roof" should show the products that go on it.
+So the surface of each layer is now drawn from documented appearance, and this
+sheet records what was documented and what was not.
+
+**iko.com is NOT reachable from the cloud session** — DNS is blocked by the
+environment's allowlist — so these come from search results quoting IKO's own
+data sheets and brochures plus a Florida evaluation report, not from fetching
+the pages directly. Anything below should be re-checked against the live data
+sheets when someone has them to hand.
+
+| Layer                  | Documented appearance                                                                                                                                                                                                                                                           | Source                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Synthetic underlayment | Pre-printed with side-lap lay lines and bold dots at recommended fastener positions; dashed lines every 2″ from centre; installed printed side up. RoofGard-SB is a woven black polypropylene core with polyolefin coating; RoofGard-Cool Grey is grey with lay lines every 1″. | IKO Stormtite product page + brochure; IKO RoofGard-Cool Grey TDS                 |
+| Ice & water protector  | Non-woven glass-fibre mat, SBS-modified bitumen, **sanded on top**, non-slip; self-adhesive backing with a silicone release sheet.                                                                                                                                              | Florida Building Code evaluation FL34896; IKO GoldShield / StormShield literature |
+| Starter strip          | Fibreglass-reinforced asphalt **starter strip shingle**, perforated down the centre to make two strips, FastLock sealant band along the edge that goes at the eave, installed **granule side up**.                                                                              | IKO Leading Edge Plus product page + TDS                                          |
+| Hip & ridge cap        | Perforated and **tapered** — one shingle yields three caps — with algae-resistant granules embedded in the surface.                                                                                                                                                             | IKO Hip & Ridge 12 product page + TDS (Dec 2025)                                  |
+
+**COLOURS ARE MOSTLY NOT PUBLISHED, and the drawing does not pretend
+otherwise.** No source found states a colour for Stormtite, for GoldShield or
+StormShield, or for Leading Edge Plus granules. IKO's own blog says starter
+shingles generally use "natural, darker, uncoloured" granules — general
+industry context, not a product spec. The drawing therefore uses neutral darks
+for those layers and leans on the documented _texture_ (printed lines, sanded
+finish, granules, taper), which is what actually distinguishes them. The field
+shingle is the one layer drawn from a real photograph: IKO's own swatch of the
+colour being quoted, already in `public/design-center/`.
+
+**NEEDS DATA — which accessories Northvale actually installs.** The drawing
+shows product _types_, and the proposal names no accessory brand, because
+nobody has said whether Northvale runs Stormtite or RoofGard, GoldShield or
+StormShield, Hip & Ridge 12 or Ultra HP. Confirm those and the proposal can
+name them by product, which is itself a trust signal — most contractors write
+"synthetic underlayment" and leave the homeowner to wonder which.

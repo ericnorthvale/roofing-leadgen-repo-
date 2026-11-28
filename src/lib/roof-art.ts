@@ -206,46 +206,78 @@ export async function renderRoofArt(
             break;
           }
           case "membrane": {
-            // Self-adhering leak barrier: near-black, faint granular sheen.
-            ctx.fillStyle = shade("#3a2f29", lit);
+            // Self-adhered SBS-modified bitumen on a glass-fibre mat, SANDED on
+            // top (IKO GoldShield / StormShield, per the Florida evaluation
+            // report). Sanded means matte and finely speckled — not the glossy
+            // black sheet it used to be drawn as. IKO does not publish a colour
+            // for it, so this stays a neutral dark rather than inventing one.
+            ctx.fillStyle = shade("#454046", lit);
             ctx.fillRect(box.x, box.y, box.w, box.h + 10);
-            for (let i = 0; i < 900; i++) {
-              ctx.fillStyle = `rgba(255,235,210,${0.03 + rand() * 0.05})`;
-              ctx.fillRect(box.x + rand() * box.w, box.y + rand() * (box.h + 10), 1.1, 1.1);
+            for (let i = 0; i < 2600; i++) {
+              const g = 0.05 + rand() * 0.14;
+              ctx.fillStyle = `rgba(228,222,214,${g})`;
+              ctx.fillRect(box.x + rand() * box.w, box.y + rand() * (box.h + 10), 0.9, 0.9);
             }
             break;
           }
           case "underlayment": {
-            // Synthetic roll goods: grey-blue with woven grain and roll seams.
-            ctx.fillStyle = shade("#5d6b7c", lit);
+            // Woven synthetic, PRINTED SIDE UP. IKO's data sheets describe lay
+            // lines printed along the roll with bold dots at the recommended
+            // fastener positions, and say to install printed side up — that
+            // print is the thing that makes a synthetic underlayment
+            // recognisable, so it is drawn rather than a plain grey field.
+            ctx.fillStyle = shade("#8c9298", lit);
             ctx.fillRect(box.x, box.y, box.w, box.h + 10);
-            ctx.strokeStyle = `rgba(255,255,255,0.10)`;
-            ctx.lineWidth = 0.4;
-            for (let x = box.x; x < box.x + box.w; x += 2.4) {
+            // Woven texture.
+            ctx.strokeStyle = `rgba(255,255,255,0.08)`;
+            ctx.lineWidth = 0.35;
+            for (let x = box.x; x < box.x + box.w; x += 2) {
               ctx.beginPath();
               ctx.moveTo(x, box.y);
-              ctx.lineTo(x + 6, box.y + box.h + 10);
+              ctx.lineTo(x + 5, box.y + box.h + 10);
               ctx.stroke();
             }
-            ctx.strokeStyle = `rgba(0,0,0,0.22)`;
-            ctx.lineWidth = 0.9;
-            for (let k = 1; k < 3; k++) {
-              const yy = box.y + ((box.h + 10) * k) / 3;
+            // Printed lay lines, and the fastener dots on them.
+            for (let k = 1; k < 5; k++) {
+              const yy = box.y + ((box.h + 10) * k) / 5;
+              ctx.strokeStyle = "rgba(30,38,50,0.55)";
+              ctx.lineWidth = 0.5;
+              ctx.setLineDash([2.5, 2]);
               ctx.beginPath();
               ctx.moveTo(box.x, yy);
               ctx.lineTo(box.x + box.w, yy - DY);
               ctx.stroke();
+              ctx.setLineDash([]);
+              if (k % 2 === 0) {
+                for (let x = box.x + 8; x < box.x + box.w; x += 18) {
+                  ctx.fillStyle = "rgba(30,38,50,0.6)";
+                  ctx.beginPath();
+                  ctx.arc(x, yy - ((x - box.x) / box.w) * DY, 0.9, 0, Math.PI * 2);
+                  ctx.fill();
+                }
+              }
             }
             break;
           }
           case "starter": {
-            ctx.fillStyle = shade("#34404f", lit);
+            // A starter is a SHINGLE — fibreglass asphalt, installed granule
+            // side up, with a sealant band along the edge that goes at the
+            // eave (IKO Leading Edge Plus). IKO publishes no colour for it and
+            // its own blog says starter granules are generally natural and
+            // darker, so this is a dark granulated strip, not a blue-grey
+            // sheet, and the sealant band is drawn because it is the whole
+            // reason the course exists.
+            ctx.fillStyle = shade("#3c3a38", lit);
             ctx.fillRect(box.x, box.y, box.w, box.h + 10);
-            ctx.strokeStyle = "rgba(0,0,0,0.3)";
-            ctx.lineWidth = 1;
+            for (let i = 0; i < 1400; i++) {
+              ctx.fillStyle = `rgba(255,255,255,${0.03 + rand() * 0.07})`;
+              ctx.fillRect(box.x + rand() * box.w, box.y + rand() * (box.h + 10), 1, 1);
+            }
+            ctx.strokeStyle = "rgba(120,86,40,0.85)";
+            ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(box.x, top - 2);
-            ctx.lineTo(box.x + box.w, top - 2 - DY);
+            ctx.moveTo(box.x, top - 3);
+            ctx.lineTo(box.x + box.w, top - 3 - DY);
             ctx.stroke();
             break;
           }
@@ -316,6 +348,23 @@ export async function renderRoofArt(
       band.lineTo(cx - halfRun, top - H + halfRun * (H / W) + 6);
       band.closePath();
       paintPlane(band, 1);
+      if (layer.kind === "cap" && layer.included) {
+        // IKO's Hip & Ridge 12 is perforated and TAPERED — one shingle makes
+        // three caps — so a ridge is a run of overlapping tapered pieces, not
+        // a smooth strip. The joints are what make it read as cap shingles.
+        ctx.save();
+        ctx.clip(band);
+        ctx.strokeStyle = "rgba(0,0,0,0.45)";
+        ctx.lineWidth = 0.8;
+        for (let x = cx - halfRun; x < cx + halfRun + D; x += 11) {
+          const t = (x - (cx - halfRun)) / (halfRun * 2);
+          ctx.beginPath();
+          ctx.moveTo(x, top - H + Math.abs(t - 0.5) * 2 * halfRun * (H / W) - 4);
+          ctx.lineTo(x - 3, top - H + halfRun * (H / W) + 8);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
       ctx.strokeStyle = "rgba(0,0,0,0.35)";
       ctx.lineWidth = 0.7;
       ctx.stroke(band);

@@ -56,6 +56,22 @@ on a busy person.
       revenue gets. Same key, opposite side of the cost/benefit line. (Original decision:
       `docs/decision-log.md`, 2026-07-04.)
 
+- [ ] **Sign off the jobsite standards before a proposal goes to a customer.**
+      `src/lib/proposal-standards.ts` prints twelve promises on every proposal —
+      magnet sweep every evening, photographs of the hidden work, no smoking or
+      profanity, a named crew lead with his number, we never ask to use your
+      bathroom, we fix what we damage. You gave five of these; the rest are
+      proposed. **Every one is a commitment a customer can hold you to, which is
+      exactly why they work.** Read the list and strike anything the crew will
+      not do every single time. A promise kept eleven times out of twelve is
+      worse than one never made.
+- [ ] **Confirm which IKO accessories you actually install** — Stormtite or
+      RoofGard underlayment, GoldShield or StormShield ice-and-water, Hip &
+      Ridge 12 or Ultra HP caps. The proposal names no accessory brand today
+      because nobody has said. Naming them is itself a trust signal: most
+      contractors write "synthetic underlayment" and leave the homeowner
+      wondering which. (`docs/research-facts.md` Sheet 19.)
+
 ## Tier 1 — blocks anything going live
 
 - [ ] **Register `Northvale Roofing LLC`** with TX Secretary of State (~$300, 3–5 business days). See `docs/trademark-clearance.md` for why LLC-first.

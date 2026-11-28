@@ -36,6 +36,7 @@ import { BRAND } from "./brand";
 import { ROOF_LAYERS, EDGE_CALLOUTS, DIAGRAM_DISCLAIMER } from "./proposal-diagram";
 import { renderRoofArt, type ArtLayer } from "./roof-art";
 import { comparisonFor } from "./proposal-compare";
+import { JOBSITE_STANDARDS, buildSequenceFor } from "./proposal-standards";
 import {
   ACCEPTANCE,
   aboutSection,
@@ -971,6 +972,121 @@ export async function buildProposalPdf(input: ProposalInput): Promise<Uint8Array
     for (const photo of input.photos.slice(0, 8)) {
       await placePhoto(photo, 200);
     }
+  }
+
+  /* ── How the work goes ────────────────────────────────────────── */
+
+  const sequence = buildSequenceFor(new Set(blocks));
+  if (sequence) {
+    newPage();
+    kicker("Step by step");
+    sectionHeading(sequence.heading);
+    text("So you know what happens on your property, and when.", { size: 9.5, lead: 15 });
+    gap(10);
+
+    for (const stage of sequence.stages) {
+      const stepLines = stage.steps.map((st) => wrap(st, body, 8.4, CONTENT_W - 142));
+      const blockH = 17 + stepLines.reduce((h, l) => h + l.length * 10.4 + 2, 0) + 8;
+      need(blockH);
+      const sTop = y;
+
+      // The stage label sits in its own column, so the eye can run down the
+      // left edge and read the shape of the job without reading the detail.
+      tracked(stage.when.toUpperCase(), {
+        x: M.left,
+        y: sTop - 10,
+        size: 6.4,
+        font: mid,
+        color: GOLD_DEEP,
+        tracking: 0.9,
+      });
+      page.drawText(stage.title, {
+        x: M.left + 128,
+        y: sTop - 11,
+        size: 10.5,
+        font: display,
+        color: col(NAVY),
+      });
+
+      let sy = sTop - 21;
+      stepLines.forEach((lines) => {
+        page.drawCircle({ x: M.left + 133, y: sy + 3, size: 1.6, color: col(GOLD) });
+        lines.forEach((ln, i) => {
+          page.drawText(ln, {
+            x: M.left + 142,
+            y: sy - i * 10.4,
+            size: 8.4,
+            font: body,
+            color: col(INK),
+          });
+        });
+        sy -= lines.length * 10.4 + 2;
+      });
+
+      page.drawLine({
+        start: { x: M.left, y: sy - 4 },
+        end: { x: PAGE.w - M.right, y: sy - 4 },
+        thickness: 0.4,
+        color: col(RULE),
+      });
+      y = sy - 8;
+    }
+  }
+
+  /* ── Jobsite standards ────────────────────────────────────────── */
+
+  if (JOBSITE_STANDARDS.length) {
+    newPage();
+    kicker("What you should not have to ask for");
+    sectionHeading("How We Work On Your Property");
+    text(
+      "None of what follows costs extra and none of it is unusual to ask for. It is written down because almost nobody writes it down, and because a promise on paper is one you can hold us to.",
+      { size: 9.5, lead: 15 },
+    );
+    gap(14);
+
+    const colW3 = (CONTENT_W - 18) / 2;
+    let colIndex = 0;
+    let rowTop = y;
+    let rowMax = 0;
+
+    for (const std of JOBSITE_STANDARDS) {
+      const titleLines = wrap(std.title, mid, 8.8, colW3 - 14);
+      const detailLines = wrap(std.detail, body, 7.6, colW3 - 14);
+      const h = titleLines.length * 11 + detailLines.length * 10 + 16;
+
+      if (colIndex === 0) {
+        need(h);
+        rowTop = y;
+        rowMax = 0;
+      }
+      const x = M.left + colIndex * (colW3 + 18);
+
+      page.drawCircle({ x: x + 3.5, y: rowTop - 6, size: 2.6, color: col(GOLD) });
+      titleLines.forEach((ln, i) => {
+        page.drawText(ln, {
+          x: x + 13,
+          y: rowTop - 9 - i * 11,
+          size: 8.8,
+          font: mid,
+          color: col(NAVY),
+        });
+      });
+      detailLines.forEach((ln, i) => {
+        page.drawText(ln, {
+          x: x + 13,
+          y: rowTop - 11 - titleLines.length * 11 - i * 10,
+          size: 7.6,
+          font: body,
+          color: col(INK),
+        });
+      });
+
+      rowMax = Math.max(rowMax, h);
+      colIndex = colIndex === 0 ? 1 : 0;
+      if (colIndex === 0) y = rowTop - rowMax;
+    }
+    if (colIndex === 1) y = rowTop - rowMax;
   }
 
   /* ── Investment summary ───────────────────────────────────────── */
